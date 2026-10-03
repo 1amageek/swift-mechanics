@@ -6,6 +6,8 @@ This root owns both the proposed system and repository/package-level design. The
 
 Parent: none. Implemented children: none. Proposed responsibility scopes are listed below. Actual SwiftPM products/targets and component directories will be created only after their subordinate contracts are verified. Each real target/component will own its `DESIGN.md` beside its implementation and be indexed here. This proposal is not a claim that those child designs or their runtime behavior have already been validated.
 
+[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) is the canonical owner of future work IDs, prerequisite edges, per-requirement implementation ownership and parallel dispatch checks. Its work scopes are not existing modules. This root retains architectural composition authority; the plan sequences the work needed to establish and verify its child contracts.
+
 The result sought is an engineering computation library that applications can use to compile mechanisms, simulate admitted models, obtain physical quantities and detect failures. GUI, document interaction, rendering, CAD geometry construction and robotics-learning infrastructure remain owned by their applications or dependencies.
 
 ## Responsibilities and Boundaries
@@ -35,6 +37,7 @@ The application owns assembly/document edits, visual presentation, user interact
 |---|---|---|---|---|
 | [SPEC.md](SPEC.md) | Requirements authority | Stable feature IDs, shared numerical/failure contracts and delivery gates | Defines what implementation must prove | Planned requirements do not establish implementation readiness |
 | [SOURCES.md](SOURCES.md) | Evidence inventory | Official capability observations and local CAD inspection provenance | Supports scope and dependency judgments | Moving upstream pages are not pinned runtime oracles |
+| [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | Implementation coordination | Prerequisite DAG, requirement owners, producer handoffs and parallel readiness | Sequences contract validation and independent implementation scopes | An acyclic planned graph does not establish a verified API or dispatch readiness |
 | [swift-CAD repository](https://github.com/1amageek/swift-CAD) | Proposed dependency of CAD integration | Evaluated geometry/topology, units and future required geometric moment/query capabilities | Geometry authority and shape source | Clean revision, actual public products and full moments remain to be selected/verified |
 | Future child `DESIGN.md` documents | Proposed children, none created | Their verified public assumptions/guarantees | Will compose into this system | Implementation cannot start from unverified names or diagram boxes alone |
 
@@ -72,6 +75,14 @@ flowchart TD
 Control/optimization consumers use public mechanical and derivative contracts. They must not read solver-private workspaces or infer unreported reactions. Contact owns its constitutive law; a numerical solver cannot silently replace it with a different approximation. Domain extensions compose these same mechanical ports and publish their extra constitutive/clock requirements.
 
 Proposed dependency rule: the CAD adapter imports CAD and mechanics contracts; baseline mechanics does not import the CAD adapter, GUI or application. A top-level distribution may expose CAD integration as a separate SwiftPM product with a remote swift-CAD dependency. Final package partitioning must account for SwiftPM graph resolution as well as target linkage; importing a core target is not, by itself, proof that an umbrella package will avoid resolving other dependencies.
+
+### Implementation dependency interpretation
+
+The dataflow above includes feedback and retry. It is not the acyclic implementation dependency graph. Direct work prerequisites are defined once in [the implementation plan](IMPLEMENTATION_PLAN.md#3-canonical-prerequisite-and-ownership-table). Dependency edges consume specific validated contracts; composition does not reverse them merely because a simulation has feedback.
+
+Numerical integrators consume equation-provider contracts rather than concrete gears. Contact laws consume framed witness data rather than collision-world internals. Rigid and flexible equation contributors supply operators to a composing evolution owner rather than mutating one another's state. Feedback controllers consume accepted observations and submit scheduled inputs; the plant does not import a controller implementation. CAD and exchange adapt into mechanical input; dynamics does not import those adapters.
+
+Each actual module must document and enforce the selected direction through its public protocols. IM00 owns the real package/path mapping and shared registration changes; provider owners own their contracts. These directions are proposed composition constraints pending verified child contracts, not a finalized target graph.
 
 ## Contracts and Invariants
 
@@ -180,3 +191,5 @@ Target-specific conditional compilation is restricted to real API/ABI/runtime di
 Scenario definitions and their numerical evidence policy are owned by SPEC §5. Test target/component ownership is added only when actual implementation boundaries exist. A child contract change triggers revalidation of the parent assumptions it affects, not unrelated suites or speculative concerns.
 
 For this repository setup, verification is limited to document integrity, requirement IDs, references, ownership consistency, scope/gate semantics and clean Git history. No numerical model, source adapter, physics algorithm or platform capability has passed runtime verification. Completing this documentation task does not complete any feature delivery gate.
+
+For dependency planning, evidence additionally covers all requirement owners, prerequisite existence/acyclicity and independence of candidate parallel groups. The plan's handoff/path/runtime checks remain implementation readiness conditions. Neither a DAG check nor hypothetical non-overlapping paths proves real concurrency safety.

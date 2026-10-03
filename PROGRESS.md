@@ -1,5 +1,5 @@
 # Progress
-- [x] SM1 Source-backed coverage and 210 canonical requirements with domains, failures and acceptance evidence; commit `24b9748`. `depends:none` `parallel:none`
-- [x] SM2 Proposed ownership, CAD dependency, runtime flow and delivery gates; commit `24b9748`. `depends:SM1` `parallel:none`
-- [x] SM3 Complete review and document-integrity verification; specification commit `24b9748`. `depends:SM1,SM2` `parallel:none`
-- [x] SM4 Verified the committed local repository against the reviewed artifacts; no GitHub publication was authorized by a destination/visibility answer. `depends:SM1,SM2,SM3` `parallel:none`
+- [x] DP1 Derive the prerequisite graph and unique work ownership for all 210 requirements, separating contract, implementation and integrated capability dependencies. `depends:none` `parallel:none`
+- [x] DP2 Define 49 planned work items, candidate parallel groups, single-writer handoffs and integration order; align DESIGN.md, SPEC.md and README.md. `depends:DP1` `parallel:none`
+- [x] DP3 Review and validate all 210 unique requirement owners, 49 acyclic work items, 14 antichain cohorts and document consistency; commit the dependency plan. `depends:DP1,DP2` `parallel:none`
+- [ ] DP4 Verify the committed dependency-planning artifacts and repository state as a whole. `depends:DP1,DP2,DP3` `parallel:none`

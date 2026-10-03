@@ -6,7 +6,7 @@ Status: proposed requirements, revision 0.1, 2026-10-03. **Every requirement bel
 
 Build a Swift engineering mechanics library covering mechanisms, rigid and flexible multibody dynamics, transmission systems, contact, control, optimization and selected coupled engineering systems. A torque-driven gear assembly must produce motion and engineering quantities such as bearing reactions and transmitted torque, with declared physical assumptions and numerical error.
 
-Every requirement row is mandatory for the complete target scope. Delivery gates sequence work; an early gate does not redefine full completion. Required domain-specific extensions may be separately installed products, but remain part of the target. A backend adapter to an existing engine may enable interoperability or serve as a reference; it does not establish implementation of the native Swift solver requirements.
+Every requirement row is mandatory for the complete target scope. Delivery gates sequence integrated capability claims; independent implementation follows the prerequisite DAG in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), not a global stage barrier. An early gate does not redefine full completion. Required domain-specific extensions may be separately installed products, but remain part of the target. A backend adapter to an existing engine may enable interoperability or serve as a reference; it does not establish implementation of the native Swift solver requirements.
 
 Requirements describe semantics rather than freezing public Swift type names. Public APIs, protocol requirements, ownership, model equations and child designs must be finalized before their implementation. Each implemented requirement must link its design owner, implementation path, applicable capabilities, and behavioral evidence. A declaration or successful compilation is insufficient.
 
@@ -453,6 +453,8 @@ Owner: each domain extension with its own subordinate design. References: CH-VEH
 ## 4. Delivery gates and dependency order
 
 These gates are capability claims, not dates. Every listed family must be checked at the feature/model/target level. Mixed-gate families complete their foundational contracts first and remain partially planned until all their rows pass. Supporting rows in RT, IO, PF and CA apply wherever a gate uses their paths.
+
+The G0–G5 chain below orders qualification of integrated capability sets. It does not require all G1 implementation to finish before collision/material kernels start, or all G3 implementation before smooth derivatives and feedback systems start. The canonical work prerequisites and parallel isolation checks are in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). Local source/API completion never substitutes for the gate's integrated evidence.
 
 ```mermaid
 flowchart LR
