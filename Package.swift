@@ -5,7 +5,7 @@ let package = Package(
     name: "swift-mechanics",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "SwiftMechanics", targets: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads", "MechanicsCompiler", "MechanicsCollision"]),
+        .library(name: "SwiftMechanics", targets: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads", "MechanicsCompiler", "MechanicsCollision", "MechanicsDynamics"]),
         .library(name: "MechanicsCore", targets: ["MechanicsCore"]),
         .library(name: "MechanicsModel", targets: ["MechanicsModel"]),
         .library(name: "MechanicsNumerics", targets: ["MechanicsNumerics"]),
@@ -16,6 +16,7 @@ let package = Package(
         .library(name: "MechanicsLoads", targets: ["MechanicsLoads"]),
         .library(name: "MechanicsCompiler", targets: ["MechanicsCompiler"]),
         .library(name: "MechanicsCollision", targets: ["MechanicsCollision"]),
+        .library(name: "MechanicsDynamics", targets: ["MechanicsDynamics"]),
         .executable(name: "mechanics-core-verification", targets: ["CoreVerification"]),
         .executable(name: "mechanics-foundation-verification", targets: ["FoundationVerification"]),
     ],
@@ -47,8 +48,10 @@ let package = Package(
                 exclude: ["DESIGN.md", "CompilationRecords/DESIGN.md", "Capabilities/DESIGN.md", "Validation/DESIGN.md", "Revisions/DESIGN.md"]),
         .target(name: "MechanicsCollision", dependencies: ["MechanicsCore", "MechanicsModel"],
                 exclude: ["DESIGN.md", "Shapes/DESIGN.md", "Geometry/DESIGN.md", "Discovery/DESIGN.md", "Persistence/DESIGN.md", "Sweep/DESIGN.md"]),
+        .target(name: "MechanicsDynamics", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsJoints", "MechanicsLoads"],
+                exclude: ["DESIGN.md", "RigidEquations/DESIGN.md", "DenseDynamics/DESIGN.md"]),
         .executableTarget(name: "CoreVerification", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
-        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads", "MechanicsCompiler", "MechanicsCollision"], exclude: ["DESIGN.md"]),
+        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads", "MechanicsCompiler", "MechanicsCollision", "MechanicsDynamics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsModelTests", dependencies: ["MechanicsModel", "MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsMaterialsTests", dependencies: ["MechanicsMaterials", "MechanicsCore"], exclude: ["DESIGN.md"]),
@@ -59,6 +62,7 @@ let package = Package(
         .testTarget(name: "MechanicsLoadsTests", dependencies: ["MechanicsLoads", "MechanicsCore", "MechanicsModel", "MechanicsJoints"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsCompilerTests", dependencies: ["MechanicsCompiler", "MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsJoints"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsCollisionTests", dependencies: ["MechanicsCollision", "MechanicsCore", "MechanicsModel"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsDynamicsTests", dependencies: ["MechanicsDynamics", "MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsJoints", "MechanicsLoads"], exclude: ["DESIGN.md"]),
     ],
     swiftLanguageModes: [.v6]
 )

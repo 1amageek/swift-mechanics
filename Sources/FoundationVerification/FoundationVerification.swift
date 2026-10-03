@@ -13,13 +13,14 @@ struct FoundationVerification {
             try verifyLoads()
             try verifyCompiler()
             try verifyCollision()
+            try verifyDynamics()
         } catch {
             throw .unexpectedFailure
         }
-        print("Foundation runtime verification passed: inertia, solves, materials, kinematics, loads, compiler and collision.")
+        print("Foundation runtime verification passed: inertia, solves, materials, kinematics, loads, compiler, collision and dynamics.")
     }
 
-    private static func require(_ condition: Bool) throws(FoundationVerificationError) {
+    static func require(_ condition: Bool) throws(FoundationVerificationError) {
         guard condition else { throw .analyticCheckFailed }
     }
 

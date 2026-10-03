@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-This root owns system and repository/package-level design. Implementation is active under the full 210-requirement goal. The current SwiftPM graph registers MechanicsCore, MechanicsModel, MechanicsNumerics, MechanicsMaterials, MechanicsNonlinear, MechanicsComplementarity, MechanicsJoints, MechanicsLoads, MechanicsCompiler and MechanicsCollision with real local tests and selected public-protocol runtime verification. Profile qualification is recorded in each child handoff. No complete mechanism simulator, CAD adapter or feature gate is claimed. The target and acceptance authority is [SPEC.md](SPEC.md); factual dependency/reference observations are owned by [SOURCES.md](SOURCES.md).
+This root owns system and repository/package-level design. Implementation is active under the full 210-requirement goal. The current SwiftPM graph registers MechanicsCore, MechanicsModel, MechanicsNumerics, MechanicsMaterials, MechanicsNonlinear, MechanicsComplementarity, MechanicsJoints, MechanicsLoads, MechanicsCompiler, MechanicsCollision and MechanicsDynamics with real local tests and selected public-protocol runtime verification. Profile qualification is recorded in each child handoff. No complete mechanism simulator, CAD adapter or feature gate is claimed. The target and acceptance authority is [SPEC.md](SPEC.md); factual dependency/reference observations are owned by [SOURCES.md](SOURCES.md).
 
 Parent: none. Current children are indexed below. Additional responsibility scopes remain planned until their actual contracts and behavior are verified. Each real target/component owns its DESIGN.md beside its implementation. Implemented source and passing tests do not imply all required profiles or whole feature families are supported.
 
@@ -22,7 +22,7 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsCompiler](Sources/MechanicsCompiler/DESIGN.md) | IM07 verified initial descriptor/kinematic handoff; consumes Core, Model, Numerics, Joints |
 | [MechanicsLoads](Sources/MechanicsLoads/DESIGN.md) | IM11 verified initial handoff; consumes Core, Model, Joints |
 | [MechanicsCollision](Sources/MechanicsCollision/DESIGN.md) | IM10 verified initial geometry/CCD handoff; consumes Core, Model |
-| [MechanicsDynamics](Sources/MechanicsDynamics/DESIGN.md) | IM15 active AF06 ownership; consumes Core, Model, Numerics, Joints, Loads |
+| [MechanicsDynamics](Sources/MechanicsDynamics/DESIGN.md) | IM15 verified initial spatial dynamics handoff; consumes Core, Model, Numerics, Joints, Loads |
 | [MechanicsRuntime](Sources/MechanicsRuntime/DESIGN.md) | IM08 active AF06 ownership; consumes Core, Model, Compiler and its published layouts |
 | [MechanicsContactLaws](Sources/MechanicsContactLaws/DESIGN.md) | IM20 active AF06 ownership; consumes Core, Model; collision translation belongs to IM21 |
 
