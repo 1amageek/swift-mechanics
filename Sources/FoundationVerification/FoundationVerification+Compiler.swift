@@ -59,7 +59,7 @@ extension FoundationVerification {
         guard staleRejected, poseRejected else { throw FoundationVerificationError.analyticCheckFailed }
     }
 
-    private static var compilerVerificationTarget: CompilerTarget {
+    static var compilerVerificationTarget: CompilerTarget {
         #if arch(wasm32)
         #if hasFeature(Embedded)
         .embeddedWasiPreview1
@@ -76,7 +76,7 @@ extension FoundationVerification {
         catch { throw .one(.invalidCoordinates, .coordinates, message: "Verification state construction failed.") }
     }
 
-    private static func compilerDescriptor(inertiaPolicy: InertiaValidationPolicy,
+    static func compilerDescriptor(inertiaPolicy: InertiaValidationPolicy,
                                            displacedChild: Bool,
                                            extensions: [MechanicalExtensionRecord] = []) throws(CompilationFailure) -> MechanicalDescriptor {
         do {
