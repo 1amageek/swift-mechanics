@@ -5,8 +5,9 @@ let package = Package(
     name: "swift-mechanics",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "SwiftMechanics", targets: ["MechanicsCore"]),
+        .library(name: "SwiftMechanics", targets: ["MechanicsCore", "MechanicsModel"]),
         .library(name: "MechanicsCore", targets: ["MechanicsCore"]),
+        .library(name: "MechanicsModel", targets: ["MechanicsModel"]),
         .executable(name: "mechanics-core-verification", targets: ["CoreVerification"]),
     ],
     targets: [
@@ -17,8 +18,11 @@ let package = Package(
         ),
         .target(name: "MechanicsCore", dependencies: ["CMechanicsMath"],
                 exclude: ["DESIGN.md", "Diagnostics/DESIGN.md", "Geometry/DESIGN.md", "Spatial/DESIGN.md", "Units/DESIGN.md"]),
+        .target(name: "MechanicsModel", dependencies: ["MechanicsCore"],
+                exclude: ["DESIGN.md", "Identity/DESIGN.md", "Representations/DESIGN.md", "Inertia/DESIGN.md", "Bodies/DESIGN.md", "Coordinates/DESIGN.md"]),
         .executableTarget(name: "CoreVerification", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsModelTests", dependencies: ["MechanicsModel", "MechanicsCore"], exclude: ["DESIGN.md"]),
     ],
     swiftLanguageModes: [.v6]
 )
