@@ -59,6 +59,9 @@ extension FoundationVerification {
         let evaluation = try evaluator.evaluate(system, position: [0.8, 0.2], velocity: [1, 0], time: 0, policy: policy.evaluation, work: &work)
         let sample = VelocityConstraintSample(layout: system.layout, rowIDs: evaluation.rowIDs, rows: evaluation.jacobian,
             drift: evaluation.timeDerivative, accelerationBias: evaluation.accelerationBias, isIntegrable: true)
+        let ranker: any ConstraintRankAnalyzing=WeightedConstraintAssembler()
+        let rank=try ranker.rank(sample,policy:policy,work:&work)
+        try require(rank.rank == 1 && rank.independentRows == [0] && rank.dependentRowIDs == [2] && rank.reactionNullity == 1)
         let result = try service.projectVelocity(sample, initialVelocity: [1, 0], policy: policy, work: &work, linearWork: &linearWork)
         try require(abs(result.velocity[0] - 0.2) < 1e-9 && abs(result.velocity[1] + 0.2) < 1e-9)
         try require(abs(result.introducedKineticEnergy + 2) < 1e-9 && result.originalResidual < 1e-8)

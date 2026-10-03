@@ -25,3 +25,4 @@ Timeout180, private .build/constraint-kernels after root target registration. No
 
 ## Verification and Change Impact
 Focus the closed published algorithms, original residual, rank and resources; rerun affected contracts after causal changes.
+`RankAnalysisTests` exercises the required standalone protocol on retained independent/dependent/zero rows, explicit independence policy, nonzero drift, stale and malformed samples, finite admission, cancellation and bounded workspace/work. Rank evidence never certifies force or feasibility. Existing assembly/projection tests cover the shared sample-validation path changed for the additive operation.

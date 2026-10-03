@@ -2,13 +2,28 @@ import MechanicsCore
 import MechanicsNumerics
 import MechanicsNonlinear
 
-public struct WeightedConstraintAssembler: ConstraintAssembling {
+public struct WeightedConstraintAssembler: ConstraintAssembling, ConstraintRankAnalyzing {
     private let evaluator: any ConstraintEvaluating
     private let nonlinear: any NonlinearSolving<Double>
     private let linear: any LinearSolving<Double>
     public init(nonlinear: any NonlinearSolving<Double> = ReferenceNonlinearSolver<Double>(),
                 linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
         self.evaluator=QuadraticConstraintEvaluator(); self.nonlinear=nonlinear; self.linear=linear
+    }
+    @inline(never)
+    public func rank(_ sample: VelocityConstraintSample, policy: ConstraintSolvePolicy,
+                     work: inout NumericalWork) throws(ConstraintError) -> ConstraintRankEvidence {
+        let n=sample.layout.scales.count, m=sample.rowIDs.count
+        try admit(layout:sample.layout,rows:m,policy:policy,work:&work)
+        let entries=try ConstraintArithmetic.product(m,n)
+        let storage=try ConstraintArithmetic.sum(ConstraintArithmetic.product(2,entries),
+            ConstraintArithmetic.sum(ConstraintArithmetic.product(3,n),ConstraintArithmetic.product(4,m)))
+        try ConstraintArithmetic.storage(storage,&work)
+        try validateSample(sample,velocity:nil,policy:policy,work:&work)
+        let result=try ConstraintRowRank.compute(rows:sample.rows,ids:sample.rowIDs,
+            metric:policy.diagonalMetric,policy:policy,work:&work)
+        try ConstraintArithmetic.check(policy.evaluation)
+        return result
     }
     @inline(never)
     public func assemble(_ system: QuadraticConstraintSystem, initialPosition: [Double], time: Double,
@@ -161,10 +176,14 @@ public struct WeightedConstraintAssembler: ConstraintAssembling {
         try ConstraintArithmetic.storage(count,&work)
     }
     @inline(never)
-    private func validateSample(_ sample: VelocityConstraintSample, velocity: [Double], policy: ConstraintSolvePolicy, work: inout NumericalWork) throws(ConstraintError) {
+    private func validateSample(_ sample: VelocityConstraintSample, velocity: [Double]?, policy: ConstraintSolvePolicy, work: inout NumericalWork) throws(ConstraintError) {
         let n=sample.layout.scales.count, m=sample.rowIDs.count
-        guard velocity.count == n, sample.rows.count == n*m, sample.drift.count == m, sample.accelerationBias.count == m else { throw .invalidDimensions }
-        for i in 0..<n { try ConstraintArithmetic.charge(1,&work); guard velocity[i].isFinite else { throw .invalidInput } }
+        let entries=try ConstraintArithmetic.product(n,m)
+        guard sample.rows.count == entries, sample.drift.count == m, sample.accelerationBias.count == m else { throw .invalidDimensions }
+        if let velocity {
+            guard velocity.count == n else { throw .invalidDimensions }
+            for i in 0..<n { try ConstraintArithmetic.charge(1,&work); guard velocity[i].isFinite else { throw .invalidInput } }
+        }
         for row in 0..<m {
             try ConstraintArithmetic.check(policy.evaluation); try ConstraintArithmetic.charge(2,&work)
             guard sample.drift[row].isFinite, sample.accelerationBias[row].isFinite else { throw .invalidInput }

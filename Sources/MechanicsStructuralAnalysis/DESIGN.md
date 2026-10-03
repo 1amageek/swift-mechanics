@@ -1,18 +1,18 @@
 # MechanicsStructuralAnalysis
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). IM28 owns modes and structural stability under [SPEC](../../SPEC.md). This is an AF14 dispatch boundary, not a registered target or implementation qualification. Actual child design links are added after their contracts exist.
+Parent: [system/package](../../DESIGN.md). IM28 owns modes and structural stability under [SPEC](../../SPEC.md). Children: [PhysicalModels](PhysicalModels/DESIGN.md), [Pencils](Pencils/DESIGN.md), [HarmonicResponse](HarmonicResponse/DESIGN.md), [Buckling](Buckling/DESIGN.md). Registered selected source has behavioral/profile evidence below; full ST-005..007 remains incomplete.
 
 ## Responsibilities and Boundaries
-/root/material_kernels exclusively owns child production directories and Tests/MechanicsStructuralAnalysisTests. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Dependencies are read-only: Equilibrium, Flexible, Numerics, Materials. Producer changes require root coordination and an explicit reassignment before editing.
+Root owns frozen source qualification after material_kernels transfers to IM44. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Direct dependencies are Core, Model, Materials, Numerics, Compiler, Equilibrium, Flexible and CMechanicsMath. Beams is qualified before upper analysis composition. Producer changes require root coordination and an explicit reassignment before editing.
 
 ## Related Designs
 [Canonical implementation plan](../../IMPLEMENTATION_PLAN.md) owns prerequisite IDs; [root](../../DESIGN.md) owns composition. Only verified public producer contracts may be consumed. Child designs own exact selected operations, assumptions and evidence, without duplicating supplier internals.
 
 ## Architecture
 ```text
-identified producer inputs -> bounded owned computation -> original acceptance evidence
- -> immutable qualified result or typed failure with preserved accepted prefix
+Flexible Beams / Tet4 / Equilibrium -> PhysicalModels
+ -> Pencils / HarmonicResponse / Buckling -> original equation acceptance
 ```
 
 ## Contracts and Invariants
@@ -27,3 +27,5 @@ Public typed errors expose stale binding, unsupported domain, nonfinite inputs, 
 
 ## Verification and Change Impact
 The assigned owner traces producer implementations and fixes each required physical oracle before source. Native tests exercise actual physics and failed paths, not declarations. Root registers stable production targets and qualifies selected public operations on exact profiles after source freeze. Direct/transitive consumers must recheck changed assumptions. Full IM48 remains incomplete.
+
+Initial selected handoff: fifteen Native cases pass after four lower Beam cases, including actual Tet4 rigid modes and compiled equilibrium pencils, cantilever/Euler refinement, Rayleigh poles, complex response, truss gradient/tangent/limit point and original-residual/resource/cancel/supplier failures. All 346 registered Native cases pass. Original Native/WASM/Embedded public execution calls actual Hermite assembly, cantilever modes, pinned buckling, harmonic response, truss critical point and typed nonlinear-beam rejection. Exact Swift6.4.0 release/matching SDKs, EmbeddedUnicode, Node24.19.0 WASI Preview1; no target isolation branches. General nonsymmetric/nonproportional spectra, nonlinear continuum beams and general structural evolution remain unqualified; children own exact physical domains.

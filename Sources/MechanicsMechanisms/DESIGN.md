@@ -4,7 +4,7 @@
 Parent: [system/package](../../DESIGN.md). IM16 owns constrained mechanism execution under [SPEC](../../SPEC.md). This is an AF14 dispatch boundary, not a registered target or implementation qualification. Actual child design links are added after their contracts exist.
 
 ## Responsibilities and Boundaries
-Root exclusively owns child production directories and Tests/MechanicsMechanismsTests. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Dependencies are read-only: Runtime, Integration, Constraints, Transmissions, Actuation, Dynamics. Producer changes require root coordination and an explicit reassignment before editing.
+model_records exclusively owns new child production directories and Tests/MechanicsMechanismsTests after the IM23 source/test freeze. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Dependencies are read-only: Runtime, Integration, Constraints, Transmissions, Actuation, Dynamics. Root owns an additive public Constraints rank operation; source availability is not qualification. Producer changes require root coordination and an explicit reassignment before editing.
 
 ## Related Designs
 [Canonical implementation plan](../../IMPLEMENTATION_PLAN.md) owns prerequisite IDs; [root](../../DESIGN.md) owns composition. Only verified public producer contracts may be consumed. Child designs own exact selected operations, assumptions and evidence, without duplicating supplier internals.

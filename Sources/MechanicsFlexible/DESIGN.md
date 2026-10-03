@@ -1,7 +1,7 @@
 # MechanicsFlexible
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../SPEC.md) owns acceptance and [plan](../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md), [Beams](Beams/DESIGN.md). Beams is an AF14 source dispatch with pending behavioral/profile qualification; existing Tet4 qualification is unchanged.
+Parent: [system/package](../../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../SPEC.md) owns acceptance and [plan](../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md), [Beams](Beams/DESIGN.md). Beams records its AF14 selected behavioral/profile qualification; existing Tet4 qualification is unchanged.
 
 ## Responsibilities and Boundaries
 Consume physical units/geometry, identified model values, numerical equations and verified constitutive laws. Own element interpolation/quadrature/formulation, rest/current geometry, nodal DOF and material/boundary/source association. Materials owns stress/strain law meaning; rigid attachment/evolution, contact, modes/analysis and CAD mesh derivation are separate consumers. A matrix declaration or isolated mesh is not a flexible simulation.
