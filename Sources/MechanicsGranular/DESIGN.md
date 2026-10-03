@@ -1,7 +1,7 @@
 # MechanicsGranular
 
 ## Purpose and Scope
-Parent [system/package](../../DESIGN.md). Own IM43/EX-004 granular reference evolution. This is unregistered source dispatch; actual lower child contracts precede source and child links. Full requirement ownership persists until actual behavioral evidence exists.
+Parent [system/package](../../DESIGN.md). Own IM43/EX-004 granular reference evolution. The frozen AF16 source is registered for root behavioral qualification; actual lower child contracts precede source and are indexed below. Full requirement ownership persists until actual behavioral evidence exists.
 
 ## Responsibilities and Boundaries
 linear_kernels owns new child directories and Tests/MechanicsGranularTests. Frozen MechanicsDerivatives remains read-only. Root owns this index, shared graph/scripts/probes/progress, producer changes and commits. Own physical particle distributions, neighbor/contact evolution and rigid boundaries; acceleration/coupled vehicle/fluid responsibilities belong to other owners.
@@ -27,3 +27,20 @@ Checked particle/neighbor/contact/metadata and numerical budgets precede allocat
 
 ## Verification and Change Impact
 Source-first independent physical/failure tests and one coherent review precede root registration and execution. Changes in contact/discretization/state authority invalidate dependent root qualification. CPU evidence is not acceleration or full-system completion.
+
+## Frozen Source Children
+
+The child source/test snapshot is frozen for root registration and actual behavioral qualification. Source availability is not execution evidence. The [implementation plan](../../IMPLEMENTATION_PLAN.md#frozen-af16-source-handoff-and-actual-build-edges) owns the current dependency/ownership handoff.
+
+| Child design | Relationship | Contract used | Cautions |
+|---|---|---|---|
+| [ParticleState](ParticleState/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+| [NeighborContacts](NeighborContacts/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+| [ParticleEvolution](ParticleEvolution/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+| [Replay](Replay/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+
+## Selected AF17 Qualification
+
+Root registered the fixed source graph after lower review and exercised actual implementations. All 436 Native behavioral tests in 30 registered modules passed in `.build/af17-integrated-native.log`. Selected public compositions compiled/linked and exited 0 on original Native arm64 macOS27, swift-6.4.0-RELEASE_wasm and its matching Embedded SDK with EmbeddedUnicode, Node24.19.0 WASI Preview1; `.build/af17-{native,wasm,embedded}-run.log` owns execution output. Original stack reservation and unmodified produced artifacts were used. This is selected-path evidence, not all Native test paths on WASM, target-wide performance, actual WASI parallelism or full requirement closure.
+
+Native: nineteen actual contact, angular momentum, prescribed work, settling/refinement, seeded sampling/value-history replay and failure cases. Public profiles: required real two-sphere collision, original impulse/work, value replay/rejection and physical weighted sampling. Finite-mass boundary/Runtime transaction/wire/nonsphere/impact gaps remain open.

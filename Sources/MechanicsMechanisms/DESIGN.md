@@ -1,7 +1,7 @@
 # MechanicsMechanisms
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). IM16 owns constrained mechanism execution under [SPEC](../../SPEC.md). This is an AF14 dispatch boundary, not a registered target or implementation qualification. Actual child design links are added after their contracts exist.
+Parent: [system/package](../../DESIGN.md). IM16 owns constrained mechanism execution under [SPEC](../../SPEC.md). The frozen AF16 source is registered for root behavioral qualification. The complete IM16 requirement domain remains open; actual child designs own admitted contracts and selected evidence.
 
 ## Responsibilities and Boundaries
 model_records exclusively owns new child production directories and Tests/MechanicsMechanismsTests after the IM23 source/test freeze. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Dependencies are read-only: Runtime, Integration, Constraints, Transmissions, Actuation, Dynamics. Root owns an additive public Constraints rank operation; source availability is not qualification. Producer changes require root coordination and an explicit reassignment before editing.
@@ -27,3 +27,20 @@ Public typed errors expose stale binding, unsupported domain, nonfinite inputs, 
 
 ## Verification and Change Impact
 The assigned owner traces producer implementations and fixes each required physical oracle before source. Native tests exercise actual physics and failed paths, not declarations. Root registers stable production targets and qualifies selected public operations on exact profiles after source freeze. Direct/transitive consumers must recheck changed assumptions. Full IM48 remains incomplete.
+
+## Frozen Source Children
+
+The child source/test snapshot is frozen for root registration and actual behavioral qualification. Source availability is not execution evidence. The [implementation plan](../../IMPLEMENTATION_PLAN.md#frozen-af16-source-handoff-and-actual-build-edges) owns the current dependency/ownership handoff.
+
+| Child design | Relationship | Contract used | Cautions |
+|---|---|---|---|
+| [ConstrainedDynamics](ConstrainedDynamics/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+| [AffineEvolution](AffineEvolution/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+| [AcceptedTransitions](AcceptedTransitions/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+| [ConnectedSleep](ConnectedSleep/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+
+## Selected AF17 Qualification
+
+Root registered the fixed source graph after lower review and exercised actual implementations. All 436 Native behavioral tests in 30 registered modules passed in `.build/af17-integrated-native.log`. Selected public compositions compiled/linked and exited 0 on original Native arm64 macOS27, swift-6.4.0-RELEASE_wasm and its matching Embedded SDK with EmbeddedUnicode, Node24.19.0 WASI Preview1; `.build/af17-{native,wasm,embedded}-run.log` owns execution output. Original stack reservation and unmodified produced artifacts were used. This is selected-path evidence, not all Native test paths on WASM, target-wide performance, actual WASI parallelism or full requirement closure.
+
+Native: sixteen constrained/redundant/momentum/gear/accepted-lock/leaf-break/connected-decision/failed-work cases. Public profiles: actual required constrained gear dynamics/integration/replay, leaf detachment and Runtime break/checkpoint replay. Root preserved typed Dynamics total-force failure, added required Embedded direct Constraints visibility, and phased the oversized probe caller; production physics/isolation is unchanged. General loop/manifold/subtree/multievent/sleep evolution remains open.

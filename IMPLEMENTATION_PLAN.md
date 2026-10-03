@@ -135,6 +135,40 @@ At dispatch, the control owner puts the actual ready sibling items into one expl
 
 The first task is IM00. IM01 follows its baseline/path handoff. The first multi-worker cohort is **IM02 + IM03 + IM18** after IM01. Actual dispatch requires the checks above and recorded behavioral evidence. Parallelism is bounded by actual resources; no concurrency number or real-time budget is guessed here.
 
+### Frozen AF16 source handoff and actual build edges
+
+The following table fixes the integration input on 2026-10-04. These are **direct Swift target dependencies for the admitted source domains**, checked against production imports and child designs. The complete work-item prerequisites in §3 remain authoritative for the full requirement scope. A missing import is not proof that a full requirement has no semantic dependency.
+
+| Source owner / work | Exclusive production and test paths | Direct production target dependencies | Handoff / next gate |
+|---|---|---|---|
+| model_records / IM16 | `Sources/MechanicsMechanisms/{ConstrainedDynamics,AffineEvolution,AcceptedTransitions,ConnectedSleep}`; `Tests/MechanicsMechanismsTests` | Core, Model, Compiler, Joints, Numerics, Nonlinear, Constraints, Transmissions, Dynamics, Loads, Runtime, Integration | Frozen source; root reviews/registers and runs actual constrained dynamics, lock and leaf-break tests. Actuation remains a full IM16 prerequisite; the admitted constant-drive source does not import it. |
+| linear_kernels / IM43 | `Sources/MechanicsGranular/{ParticleState,NeighborContacts,ParticleEvolution,Replay}`; `Tests/MechanicsGranularTests` | Core, Model, Numerics, Collision, ContactLaws, Runtime | Frozen source; actual sphere/prescribed-plane evolution and in-process history/RNG replay await root qualification. ContactResponse and Hybrid remain complete-work prerequisites; this compliant DEM path does not import them. |
+| material_kernels / IM44 | `Sources/MechanicsFluids/PlanarProjection`; `Tests/MechanicsFluidsProjectionTests` | Core, Model, Numerics | Frozen source; actual periodic MAC projection/evolution awaits root qualification. Existing Fluids target also depends on Joints, Compiler and Runtime for its qualified channel children. Planar Runtime continuation is a later explicit handoff. |
+| root / composition | `Package.swift`, module-root indexes, `Sources/FoundationVerification`, shared scripts, `PROGRESS.md` and commits | Consumes the frozen handoffs above | Sole writer of registration and existing producer changes. No build may mix an evolving registered source snapshot. |
+
+Every abbreviated target name above has the `Mechanics` prefix. Test-only oracle adapters are not production dependencies. All three frozen production scopes are independent: none imports another member, and no complete-work prerequisite path connects IM16, IM43 and IM44.
+
+```mermaid
+flowchart TD
+  Dyn[IM15 dynamics] --> CD[IM16 constrained dynamics]
+  Con[IM12 constraints] --> CD
+  Trans[IM13 transmission diagnostics] --> CD
+  CD --> Aff[IM16 affine evolution and lock]
+  Integr[IM09 integration] --> Aff
+  Runtime[IM08 qualified atomic replacement] --> Break[IM16 accepted leaf break]
+  CD --> Break
+  Collision[IM10 collision geometry] --> DEM[IM43 sphere DEM step]
+  Law[IM20 contact laws] --> DEM
+  DEM --> Replay[IM43 value checkpoint and replay]
+  Random[IM08 random-state contract] --> Replay
+  Num[IM03 actual linear solve] --> MAC[IM44 periodic MAC projection]
+  MAC --> FluidNext[Future planar continuation and coupling]
+```
+
+This is a view of selected lower handoffs, not a replacement for §3. Break publication waits for both physical mapping and atomic Runtime replacement. Granular Runtime transaction binding waits for the frozen particle/history/RNG contract; its current value checkpoint does not supply that binding. Planar continuation/coupling waits for verified pressure, divergence, momentum and energy acceptance. General mechanism charts, finite-mass granular boundaries, and full fluid/FSI remain open.
+
+The next complete-work candidates include IM31 contact/impact derivatives, IM32 optimization/identification and IM38 CAD mechanical input. They are independent of these three current owners and of one another. Before dispatch, the corresponding owner must select only operations supported by the recorded producer handoffs; IM38 additionally needs a clean CAD pin and exercised public geometry queries. Candidate status alone does not authorize dependent source assumptions or qualify a capability.
+
 ## 5. Why major paths remain independent
 
 ```mermaid
@@ -196,3 +230,5 @@ Each provider owns its local contract proof. Each composing item owns new intera
 | IM48 complete target | All preceding work, all requirement owners and declared-profile evidence | INT-01..10 plus requirement closure audit |
 
 The prior planning verification proved only graph acyclicity, ownership coverage and documented parallel isolation conditions. Implementation now adds actual API/production-path evidence in PROGRESS.md and corresponding child designs/tests. No IM item is checked complete or dispatch-ready without actual prerequisite and local completion evidence; no complete-target claim is made before IM48 passes.
+
+AF17 next source dispatch: linear_kernels owns only new MechanicsOptimization child directories and MechanicsOptimizationTests, after read-only actual producer tracing. Numerics/Nonlinear/Derivatives remain frozen. The [module index](Sources/MechanicsOptimization/DESIGN.md) fixes the bounded affine convex first handoff and later nonlinear/physical-estimation responsibilities. It is unregistered during current profile builds, with no source dependency on Mechanisms, Granular or Fluids. Root alone registers a frozen handoff. CAD tracing established a clean remote candidate but no full-moments/error-bound contract; the affected exact CAD mass path remains blocked, not silently approximated.
