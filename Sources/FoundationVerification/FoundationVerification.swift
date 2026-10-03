@@ -8,10 +8,12 @@ struct FoundationVerification {
     static func main() throws(FoundationVerificationError) {
         do {
             try verify()
+            try verifyNumericalExtensions()
+            try verifyKinematics()
         } catch {
             throw .unexpectedFailure
         }
-        print("Foundation runtime verification passed: mass, layouts, Float64/Float32 solves, reductions and material history.")
+        print("Foundation runtime verification passed: mass, layouts, linear/nonlinear/cone solves, reductions, material history and kinematics.")
     }
 
     private static func require(_ condition: Bool) throws(FoundationVerificationError) {

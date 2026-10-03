@@ -16,6 +16,7 @@ let package = Package(
         .executable(name: "mechanics-core-verification", targets: ["CoreVerification"]),
         .executable(name: "mechanics-foundation-verification", targets: ["FoundationVerification"]),
     ],
+    traits: [.trait(name: "EmbeddedUnicode", description: "Link matching Embedded Swift SDK Unicode data tables.")],
     targets: [
         .target(
             name: "CMechanicsMath",
@@ -23,7 +24,8 @@ let package = Package(
             linkerSettings: [.linkedLibrary("m", .when(platforms: [.linux]))]
         ),
         .target(name: "MechanicsCore", dependencies: ["CMechanicsMath"],
-                exclude: ["DESIGN.md", "Diagnostics/DESIGN.md", "Geometry/DESIGN.md", "Spatial/DESIGN.md", "Units/DESIGN.md"]),
+                exclude: ["DESIGN.md", "Diagnostics/DESIGN.md", "Geometry/DESIGN.md", "Spatial/DESIGN.md", "Units/DESIGN.md"],
+                linkerSettings: [.linkedLibrary("swiftUnicodeDataTables", .when(platforms: [.wasi], traits: ["EmbeddedUnicode"]))]),
         .target(name: "MechanicsModel", dependencies: ["MechanicsCore"],
                 exclude: ["DESIGN.md", "Identity/DESIGN.md", "Representations/DESIGN.md", "Inertia/DESIGN.md", "Bodies/DESIGN.md", "Coordinates/DESIGN.md"]),
         .target(name: "MechanicsNumerics", dependencies: ["MechanicsCore"],
@@ -37,7 +39,7 @@ let package = Package(
         .target(name: "MechanicsJoints", dependencies: ["MechanicsCore", "MechanicsModel"],
                 exclude: ["DESIGN.md", "KinematicAlgebra/DESIGN.md", "JointManifolds/DESIGN.md", "ArticulatedTrees/DESIGN.md", "Jacobians/DESIGN.md"]),
         .executableTarget(name: "CoreVerification", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
-        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials"], exclude: ["DESIGN.md"]),
+        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsModelTests", dependencies: ["MechanicsModel", "MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsMaterialsTests", dependencies: ["MechanicsMaterials", "MechanicsCore"], exclude: ["DESIGN.md"]),

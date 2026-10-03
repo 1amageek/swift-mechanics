@@ -50,3 +50,6 @@ Owner: Tests/MechanicsCoreTests and Sources/CoreVerification. Native tests cover
 - Production ownership review: all stored numeric/value fields and static constants are immutable. Matrix3.maximumMagnitude is a read-only computed property. No target-specific storage, shared mutable state, unchecked Sendable, unsafe pointer or async resource exists in these components. Concurrency semantics of a future mutable runtime are not certified by this evidence.
 
 This handoff qualifies the foundational contracts needed by IM02/03/18. Full MD/RB model-frame and physics feature closure, Linux/iOS, browser JS integration, GPU and allocation/performance claims are not established. The full 210-requirement goal remains active.
+
+### Embedded Unicode link profile
+The SwiftPM EmbeddedUnicode trait explicitly links the matching WASI Embedded SDK swiftUnicodeDataTables library. This is a package link setting, with no alternative source, storage, Sendable, synchronization or equality semantics. Enable --traits EmbeddedUnicode with the exact Embedded SDK when a consumer executes String identity/hash operations. The regular Native/WASM profile omits this SDK-specific trait. The caller selects a matching toolchain/SDK/link profile; missing tables fail at link. Root's composition probe records actual execution, not universal Unicode coverage.
