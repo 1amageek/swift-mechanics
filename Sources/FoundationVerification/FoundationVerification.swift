@@ -11,10 +11,12 @@ struct FoundationVerification {
             try verifyNumericalExtensions()
             try verifyKinematics()
             try verifyLoads()
+            try verifyCompiler()
+            try verifyCollision()
         } catch {
             throw .unexpectedFailure
         }
-        print("Foundation runtime verification passed: mass, layouts, linear/nonlinear/cone solves, reductions, material history and kinematics.")
+        print("Foundation runtime verification passed: inertia, solves, materials, kinematics, loads, compiler and collision.")
     }
 
     private static func require(_ condition: Bool) throws(FoundationVerificationError) {

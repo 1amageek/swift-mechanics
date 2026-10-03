@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-This root owns system and repository/package-level design. Implementation is active under the full 210-requirement goal. The current SwiftPM graph registers MechanicsCore, MechanicsModel, MechanicsNumerics, MechanicsMaterials, MechanicsNonlinear, MechanicsComplementarity MechanicsJoints and MechanicsLoads with real local tests and selected public-protocol runtime verification paths. Profile qualification is recorded in each child handoff. No complete mechanism simulator, CAD adapter or feature gate is claimed. The target and acceptance authority is [SPEC.md](SPEC.md); factual dependency/reference observations are owned by [SOURCES.md](SOURCES.md).
+This root owns system and repository/package-level design. Implementation is active under the full 210-requirement goal. The current SwiftPM graph registers MechanicsCore, MechanicsModel, MechanicsNumerics, MechanicsMaterials, MechanicsNonlinear, MechanicsComplementarity, MechanicsJoints, MechanicsLoads, MechanicsCompiler and MechanicsCollision with real local tests and selected public-protocol runtime verification. Profile qualification is recorded in each child handoff. No complete mechanism simulator, CAD adapter or feature gate is claimed. The target and acceptance authority is [SPEC.md](SPEC.md); factual dependency/reference observations are owned by [SOURCES.md](SOURCES.md).
 
 Parent: none. Current children are indexed below. Additional responsibility scopes remain planned until their actual contracts and behavior are verified. Each real target/component owns its DESIGN.md beside its implementation. Implemented source and passing tests do not imply all required profiles or whole feature families are supported.
 
@@ -19,9 +19,9 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsNonlinear](Sources/MechanicsNonlinear/DESIGN.md) | IM04 active PG03 ownership; consumes MechanicsNumerics |
 | [MechanicsComplementarity](Sources/MechanicsComplementarity/DESIGN.md) | IM05 active PG03 ownership; consumes MechanicsNumerics |
 | [MechanicsJoints](Sources/MechanicsJoints/DESIGN.md) | IM06 active PG03 ownership; consumes MechanicsCore, MechanicsModel |
-| [MechanicsCompiler](Sources/MechanicsCompiler/DESIGN.md) | IM07 active PG04 ownership; consumes Core, Model, Numerics, Joints |
+| [MechanicsCompiler](Sources/MechanicsCompiler/DESIGN.md) | IM07 verified initial descriptor/kinematic handoff; consumes Core, Model, Numerics, Joints |
 | [MechanicsLoads](Sources/MechanicsLoads/DESIGN.md) | IM11 verified initial handoff; consumes Core, Model, Joints |
-| [MechanicsCollision](Sources/MechanicsCollision/DESIGN.md) | IM10 active AF04 ownership; consumes Core, Model |
+| [MechanicsCollision](Sources/MechanicsCollision/DESIGN.md) | IM10 verified initial geometry/CCD handoff; consumes Core, Model |
 | [MechanicsDynamics](Sources/MechanicsDynamics/DESIGN.md) | IM15 active AF05 ownership; consumes Core, Model, Numerics, Joints, Loads |
 
 Initial IM00 ownership: root agent alone edits Package.swift, global scripts/toolchain configuration, module-root design indexes and progress. IM01 owns Sources/MechanicsCore components and Tests/MechanicsCoreTests. After its verified handoff, IM02 owns Sources/MechanicsModel component directories and Tests/MechanicsModelTests; IM03 owns Sources/MechanicsNumerics component directories and Tests/MechanicsNumericsTests; IM18 owns Sources/MechanicsMaterials component directories and Tests/MechanicsMaterialsTests. Their real modules are registered by IM00 after sources/designs exist; no placeholder target or simulated output is added. The three scopes consume MechanicsCore only and have disjoint source/test paths. PG02 is dispatched with one owner per module; component source and tests remain in those paths, while this root alone registers targets and composes verified handoffs.

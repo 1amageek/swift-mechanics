@@ -48,7 +48,7 @@ let package = Package(
         .target(name: "MechanicsCollision", dependencies: ["MechanicsCore", "MechanicsModel"],
                 exclude: ["DESIGN.md", "Shapes/DESIGN.md", "Geometry/DESIGN.md", "Discovery/DESIGN.md", "Persistence/DESIGN.md", "Sweep/DESIGN.md"]),
         .executableTarget(name: "CoreVerification", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
-        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads"], exclude: ["DESIGN.md"]),
+        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads", "MechanicsCompiler", "MechanicsCollision"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsModelTests", dependencies: ["MechanicsModel", "MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsMaterialsTests", dependencies: ["MechanicsMaterials", "MechanicsCore"], exclude: ["DESIGN.md"]),
