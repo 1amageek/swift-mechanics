@@ -29,10 +29,11 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsContactLaws](Sources/MechanicsContactLaws/DESIGN.md) | IM20 verified initial compliant-law handoff; consumes Core, Model; collision translation belongs to IM21 |
 | [MechanicsContactResponse](Sources/MechanicsContactResponse/DESIGN.md) | IM21 verified initial coupled normal-response handoff; consumes numerical, witness, law and mass contracts |
 | [MechanicsExchange](Sources/MechanicsExchange/DESIGN.md) | IM35 verified initial native exchange handoff; consumes Compiler model input/validation contracts |
-| [MechanicsTransmissions](Sources/MechanicsTransmissions/DESIGN.md) | IM13 dispatched AF12 ownership; consumes verified initial constraint contracts |
+| [MechanicsEquilibrium](Sources/MechanicsEquilibrium/DESIGN.md) | IM17 dispatched AF13 ownership; consumes verified nonlinear, constraint and rigid operators |
+| [MechanicsTransmissions](Sources/MechanicsTransmissions/DESIGN.md) | IM13 dispatched AF13 ownership; consumes verified initial constraint contracts |
 | [MechanicsConstraints](Sources/MechanicsConstraints/DESIGN.md) | IM12 verified initial stateless constraint/assembly/scalar-port handoff; full domains remain its ownership |
 | [MechanicsActuation](Sources/MechanicsActuation/DESIGN.md) | IM14 verified initial scalar actuation handoff; consumes runtime/load contracts |
-| [MechanicsHybrid](Sources/MechanicsHybrid/DESIGN.md) | IM24 dispatched AF12 ownership; consumes verified runtime/integration/dynamics/contact contracts |
+| [MechanicsHybrid](Sources/MechanicsHybrid/DESIGN.md) | IM24 dispatched AF13 ownership; consumes verified runtime/integration/dynamics/contact contracts |
 
 Initial IM00 ownership: root agent alone edits Package.swift, global scripts/toolchain configuration, module-root design indexes and progress. IM01 owns Sources/MechanicsCore components and Tests/MechanicsCoreTests. After its verified handoff, IM02 owns Sources/MechanicsModel component directories and Tests/MechanicsModelTests; IM03 owns Sources/MechanicsNumerics component directories and Tests/MechanicsNumericsTests; IM18 owns Sources/MechanicsMaterials component directories and Tests/MechanicsMaterialsTests. Their real modules are registered by IM00 after sources/designs exist; no placeholder target or simulated output is added. The three scopes consume MechanicsCore only and have disjoint source/test paths. PG02 is dispatched with one owner per module; component source and tests remain in those paths, while this root alone registers targets and composes verified handoffs.
 
@@ -228,7 +229,7 @@ Initial repository planning verified document integrity, requirement IDs, refere
 
 For dependency planning, evidence additionally covers all requirement owners, prerequisite existence/acyclicity and independence of candidate parallel groups. The plan's handoff/path/runtime checks remain implementation readiness conditions. Neither a DAG check nor hypothetical non-overlapping paths proves real concurrency safety.
 
-The current actual AF12 production frontier is IM13 + IM14 + IM24. All direct prerequisites are checked in PROGRESS.md and no dependency path connects these scopes. IM13 owns only Sources/MechanicsTransmissions child components and Tests/MechanicsTransmissionsTests; IM14 and IM24 retain their existing Actuation and Hybrid child/test ownership. IM12 initial contracts are frozen at commit d03e7d0. Root alone owns package registration, module indexes, public probes, progress and commits; modules register only after actual sources are stable. Candidate groups are antichains, not implementation waves.
+The current actual AF13 frontier is IM13 + IM17 + IM24. All direct prerequisites are checked in PROGRESS.md and no dependency path connects these scopes. IM13 retains Transmissions child/tests; IM17 owns only MechanicsEquilibrium child directories and Tests/MechanicsEquilibriumTests; IM24 retains Hybrid child/tests. IM12 and IM14 initial handoffs are frozen at d03e7d0 and f5f4763. Root alone registers stable modules and owns indexes/probes/progress/commits. Each dispatched owner reads actual supplier paths before designing its admitted component contracts.
 
 The IM12 initial handoff now has actual selected Native/ordinary-WASM/Embedded-WASM public-service execution and composite fifteen-case Native proof. IM14 and IM24 retain their disjoint AF11 ownership while IM13 may start immediately after the IM12 handoff commit. This does not close the full requirement domains.
 
