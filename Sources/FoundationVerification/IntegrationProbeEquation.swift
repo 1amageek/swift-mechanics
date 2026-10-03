@@ -10,11 +10,12 @@ import MechanicsIntegration
 struct IntegrationProbeEquation: SmoothODEEquations {
     let descriptor: ODEDescriptor
     let malformed: Bool
+    let nestedFailure: Bool
 
-    init(model: CompiledMechanicalModel, malformed: Bool = false) throws(RuntimeFailure) {
+    init(model: CompiledMechanicalModel, malformed: Bool = false, nestedFailure: Bool = false) throws(RuntimeFailure) {
         descriptor = try ODEDescriptor(identity: "constant-angular-acceleration", chart: "hinge-q-v", model: model.stamp,
             dimensions: [.angle, PhysicalDimension(time: -1, angle: 1)], maximumIdentityBytes: 256, maximumCoordinates: 2)
-        self.malformed = malformed
+        self.malformed = malformed; self.nestedFailure = nestedFailure
     }
     func validate(model: CompiledMechanicalModel) throws(RuntimeFailure) {
         guard model.stamp == descriptor.model, model.tree.layout.positionCount == 1, model.tree.layout.velocityCount == 1,
@@ -38,6 +39,7 @@ struct IntegrationProbeEquation: SmoothODEEquations {
     func derivative(time: Double, point: [Double], into output: inout [Double], work: inout NumericalWork, control: RuntimeStepControl) throws(RuntimeFailure) {
         try control.beginWorkBlock(units: 1); try charge(&work, 2)
         guard time.isFinite, point.count == 2, output.count == 2 else { throw RuntimeFailure(.invalidState, message: "Probe derivative layout mismatch.") }
+        if nestedFailure { throw RuntimeFailure(.invalidState, message: "Actual derivative charged work before nested supplier evidence became unavailable.", failedSupplierWorkUnavailable: true) }
         output[0] = point[1]
         if !malformed { output[1] = 2 }
     }

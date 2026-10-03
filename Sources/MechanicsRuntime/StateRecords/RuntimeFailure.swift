@@ -2,11 +2,13 @@ public struct RuntimeFailure: Error, Sendable {
     public let code: RuntimeFailureCode
     public let contributor: String?
     public let message: String
+    public let failedSupplierWorkUnavailable: Bool
     public let lastAccepted: RuntimeAcceptedState?
-    public init(_ code: RuntimeFailureCode, contributor: String? = nil, message: String, lastAccepted: RuntimeAcceptedState? = nil) {
+    public init(_ code: RuntimeFailureCode, contributor: String? = nil, message: String, lastAccepted: RuntimeAcceptedState? = nil, failedSupplierWorkUnavailable: Bool = false) {
         self.code = code; self.contributor = contributor; self.message = message; self.lastAccepted = lastAccepted
+        self.failedSupplierWorkUnavailable = failedSupplierWorkUnavailable
     }
     public func retaining(_ accepted: RuntimeAcceptedState) -> RuntimeFailure {
-        RuntimeFailure(code, contributor: contributor, message: message, lastAccepted: accepted)
+        RuntimeFailure(code, contributor: contributor, message: message, lastAccepted: accepted, failedSupplierWorkUnavailable: failedSupplierWorkUnavailable)
     }
 }

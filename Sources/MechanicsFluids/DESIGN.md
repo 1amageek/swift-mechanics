@@ -27,3 +27,13 @@ Typed admission, unsupported domain, stability, solver, resource and cancellatio
 
 ## Verification and Change Impact
 Source-first independent physical/failure tests precede root registration and actual execution. Producer gaps require root coordination before edits. Full EX-005 and whole-target IM48 remain incomplete until applicable behavior evidence exists.
+
+## Source Handoff and Independent Expansion
+The ChannelDiscretization, ViscousEvolution and Continuation source/test snapshot is frozen for root review and qualification. Its actual public APIs remain read-only during registration. material_kernels next owns only a new `PlanarProjection/` child and dedicated `Tests/MechanicsFluidsProjectionTests/`. This is an independent multidimensional incompressible Newtonian fluid expansion under IM44, using read-only Core/Model/Numerics contracts; it does not require changing the frozen channel Runtime contributor. Lower actual grid/pressure/velocity boundary, stability, numerical work and conservation contracts precede source. Root owns this index and later shared target registration. General free surface/compressibility/FSI/particle claims remain open.
+
+| Child | Responsibility | Qualification |
+|---|---|---|
+| [ChannelDiscretization](ChannelDiscretization/DESIGN.md) | Identified channel field and boundary data | Frozen, root execution pending |
+| [ViscousEvolution](ViscousEvolution/DESIGN.md) | Steady and backward-Euler channel physical balance | Frozen, root execution pending |
+| [Continuation](Continuation/DESIGN.md) | Accepted/rejected channel and Runtime contributor | Frozen, root execution pending |
+| PlanarProjection | Independent multidimensional velocity/pressure evolution | Lower design/source pending |

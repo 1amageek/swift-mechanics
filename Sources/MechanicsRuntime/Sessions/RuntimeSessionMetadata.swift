@@ -3,7 +3,8 @@ import MechanicsJoints
 
 @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
 internal struct RuntimeSessionMetadata: Sendable {
-    let model: CompiledMechanicalModel
+    var context: RuntimeSessionContext
+    var model: CompiledMechanicalModel { context.model }
     var accepted: RuntimeAcceptedState
     var workspace: RuntimeTrial?
     var activeTicket: UInt64?
@@ -17,9 +18,9 @@ internal struct RuntimeSessionMetadata: Sendable {
     var rejected: UInt64 = 0
     var failed: UInt64 = 0
     var releaseIssued = false
-    let scalarSlots: Int
-    init(model: CompiledMechanicalModel, accepted: RuntimeAcceptedState, capacity: RuntimeCapacity) throws(RuntimeFailure) {
-        self.model = model; self.accepted = accepted; self.workspace = try RuntimeTrial(accepted: accepted, capacity: capacity)
+    var scalarSlots: Int
+    init(context: RuntimeSessionContext, accepted: RuntimeAcceptedState) throws(RuntimeFailure) {
+        self.context = context; self.accepted = accepted; self.workspace = try RuntimeTrial(accepted: accepted, capacity: context.configuration.capacity)
         scalarSlots = try RuntimeCounts.physical(q: accepted.physical.state.q.count, v: accepted.physical.state.v.count)
     }
 }

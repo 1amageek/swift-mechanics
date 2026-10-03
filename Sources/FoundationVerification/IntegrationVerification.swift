@@ -50,5 +50,15 @@ extension FoundationVerification {
             _ = try service.advance(context.first, model: context.fixture.model, equations: malformed, continuation: context.continuation, to: 0.6)
         } catch { try require(error.cause.code == .invalidState && error.lastAccepted == prefix); malformedRejected = true }
         try require(malformedRejected && context.first.snapshot() == prefix)
+        let nested = try IntegrationProbeEquation(model: context.fixture.model, nestedFailure: true)
+        var nestedRejected = false
+        do throws(IntegrationFailure) {
+            _ = try service.advance(context.first, model: context.fixture.model, equations: nested, continuation: context.continuation, to: 0.6)
+        } catch {
+            try require(error.cause.code == .invalidState && error.cause.failedSupplierWorkUnavailable)
+            try require(error.work.failedSupplierWorkUnavailable && error.work.supplierArithmeticCharged == 3 && error.work.derivativeCalls == 1)
+            try require(error.lastAccepted == prefix); nestedRejected = true
+        }
+        try require(nestedRejected && context.first.snapshot() == prefix)
     }
 }

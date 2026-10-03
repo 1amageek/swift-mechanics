@@ -21,6 +21,20 @@ import MechanicsIntegration
             #expect(failed.work.supplierArithmeticCharged == (fault == .replaceInPrepare ? 0 : 1))
         }
     }
+    @Test func nestedFailurePreservesKnownChargesAndUnknownWorkWithoutRetry() throws {
+        guard #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) else { Issue.record("Runtime OS baseline unavailable."); return }
+        let model = try IntegrationFixtures.model()
+        let equation = try ManufacturedHingeEquation(model: model, prepareSubsystem: true, ledgerFault: .nestedFailure)
+        let (session, continuation) = try IntegrationFixtures.session(model: model, equation: equation, policy: IntegrationFixtures.policy())
+        let prefix = session.snapshot()
+        let failed = try #require(IntegrationFixtures.failure(.invalidState) { () throws(IntegrationFailure) in
+            _ = try ReferenceExplicitIntegrator().advance(session, model: model, equations: equation, continuation: continuation, to: 1)
+        })
+        #expect(failed.work.failedSupplierWorkUnavailable)
+        #expect(failed.work.supplierArithmeticCharged == 3 && failed.work.derivativeCalls == 1)
+        #expect(failed.lastAccepted == prefix && session.snapshot() == prefix)
+        #expect(session.profile().attemptedTransactions == 1 && failed.acceptedSteps == 0 && failed.rejectedTrials == 0)
+    }
     @Test func malformedDerivativeSupplierOuterAndRuntimeBudgetsAreTerminal() throws {
         guard #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) else { Issue.record("Runtime OS baseline unavailable."); return }
         let model = try IntegrationFixtures.model()

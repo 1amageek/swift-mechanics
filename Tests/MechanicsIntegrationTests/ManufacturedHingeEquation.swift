@@ -7,7 +7,7 @@ import MechanicsIntegration
 
 @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
 struct ManufacturedHingeEquation: SmoothODEEquations {
-    enum LedgerFault: Equatable, Sendable { case none, replaceInPrepare, resetInDerivative }
+    enum LedgerFault: Equatable, Sendable { case none, replaceInPrepare, resetInDerivative, nestedFailure }
     let descriptor: ODEDescriptor
     let accelerationCoefficient: Double
     let malformed: Bool
@@ -48,6 +48,7 @@ struct ManufacturedHingeEquation: SmoothODEEquations {
     func derivative(time: Double, point: [Double], into output: inout [Double], work: inout NumericalWork, control: RuntimeStepControl) throws(RuntimeFailure) {
         try control.beginWorkBlock(units: 1); try charge(&work, 2)
         if ledgerFault == .resetInDerivative { work = NumericalWork(budget: work.budget) }
+        if ledgerFault == .nestedFailure { throw RuntimeFailure(.invalidState, message: "Nested supplier failed after charged work without complete nested ledger.", failedSupplierWorkUnavailable: true) }
         onDerivative?()
         guard time.isFinite, point.count == 2, output.count == 2 else { throw RuntimeFailure(.invalidState, message: "Fixture derivative domain invalid.") }
         output[0] = point[1]

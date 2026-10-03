@@ -18,7 +18,7 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
             guard let record = accepted.checkpoint.contributors.first(where: { $0.id == continuation.schema.id }) else { throw RuntimeFailure(.missingContributor, message: "Required integration history is missing.") }
             let history = try continuation.history(record)
             target = history.acceptedTime + history.nextStep
-        } catch { throw IntegrationFailure(cause: error, accepted: accepted, work: IntegrationWorkReport(), steps: 0, rejects: 0) }
+        } catch { throw IntegrationFailure(cause: error, accepted: accepted, work: IntegrationWorkReport(unavailable: error.failedSupplierWorkUnavailable), steps: 0, rejects: 0) }
         return try run(session, model: model, equations: equations, continuation: continuation, target: target, firstOnly: true)
     }
     private func run(_ session: any RuntimeSessionOperating, model: CompiledMechanicalModel, equations: any SmoothODEEquations,
@@ -36,7 +36,7 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
             guard let record = accepted.checkpoint.contributors.first(where: { $0.id == continuation.schema.id }) else { throw RuntimeFailure(.missingContributor, message: "Required integration history is missing.") }
             _ = try continuation.associatedHistory(record, physical: accepted.checkpoint.physical, equations: equations)
             guard equations.descriptor == descriptor else { throw RuntimeFailure(.invalidInput, message: "Equation descriptor changed during model validation.") }
-        } catch { throw IntegrationFailure(cause: error, accepted: accepted, work: report(), steps: steps, rejects: rejects) }
+        } catch { unavailable = unavailable || error.failedSupplierWorkUnavailable; throw IntegrationFailure(cause: error, accepted: accepted, work: report(), steps: steps, rejects: rejects) }
         while accepted.checkpoint.physical.time < target {
             let capture = IntegrationAttemptCapture(), expected = accepted
             var consumed = false
@@ -65,7 +65,7 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
                     if firstOnly { break }
                 }
             } catch {
-                let evidence = capture.read(); unavailable = unavailable || evidence.work.failedSupplierWorkUnavailable
+                let evidence = capture.read(); unavailable = unavailable || evidence.work.failedSupplierWorkUnavailable || error.failedSupplierWorkUnavailable
                 if !consumed { outer += evidence.work.outerArithmeticBoundCharged; supplier += evidence.work.supplierArithmeticCharged; calls += evidence.work.derivativeCalls; iterations += evidence.work.supplierIterationsCharged; supplierSlots = max(supplierSlots,evidence.work.peakSupplierScalars) }
                 slots = max(slots,evidence.work.reservedCoordinateScalars)
                 throw IntegrationFailure(cause: error, accepted: error.lastAccepted ?? session.snapshot(), work: report(), steps: steps, rejects: rejects)
@@ -165,9 +165,9 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
               work.budget.arithmeticOperations == previous.budget.arithmeticOperations, work.budget.iterations == previous.budget.iterations,
               work.operations >= previous.operations, work.iterations >= previous.iterations, work.peakScalarStorage >= previous.peakScalarStorage else {
             work = previous; unavailable = true
-            throw RuntimeFailure(.invalidOwnerAccess, message: "Supplier replaced/reset the authoritative numerical budget ledger.")
+            throw RuntimeFailure(.invalidOwnerAccess, message: "Supplier replaced/reset the authoritative numerical budget ledger.", failedSupplierWorkUnavailable: true)
         }
-        if let failure { throw failure }
+        if let failure { unavailable = unavailable || failure.failedSupplierWorkUnavailable; throw failure }
     }
     private static func evaluate(_ equations: any SmoothODEEquations, descriptor: ODEDescriptor, time: Double, point: [Double],
                                  output: inout [Double], supplier: inout NumericalWork, unavailable: inout Bool, outer: inout Int, maximumOuter: Int,
