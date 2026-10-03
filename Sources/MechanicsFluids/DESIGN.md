@@ -1,7 +1,7 @@
 # MechanicsFluids
 
 ## Purpose and Scope
-Parent [system/package](../../DESIGN.md). Own IM44 fluid evolution and EX-005 under [SPEC](../../SPEC.md). This is source dispatch only; no registered capability or behavior qualification. Child links follow actual lower contracts.
+Parent [system/package](../../DESIGN.md). Own IM44 fluid evolution and EX-005 under [SPEC](../../SPEC.md). The frozen channel formulation is registered and qualified on selected exact profiles; independent multidimensional expansion remains excluded until its lower contract and behavior are qualified.
 
 ## Responsibilities and Boundaries
 material_kernels owns new child directories and Tests/MechanicsFluidsTests. Root owns this index, Package.swift, shared scripts/probes, PROGRESS, producer edits and commits. Frozen Beams/StructuralAnalysis remain read-only. Select identified physical equations, discretization, boundary data and bounded time evolution. Coupling, vehicle control and acceleration remain separate owners.
@@ -33,7 +33,9 @@ The ChannelDiscretization, ViscousEvolution and Continuation source/test snapsho
 
 | Child | Responsibility | Qualification |
 |---|---|---|
-| [ChannelDiscretization](ChannelDiscretization/DESIGN.md) | Identified channel field and boundary data | Frozen, root execution pending |
-| [ViscousEvolution](ViscousEvolution/DESIGN.md) | Steady and backward-Euler channel physical balance | Frozen, root execution pending |
-| [Continuation](Continuation/DESIGN.md) | Accepted/rejected channel and Runtime contributor | Frozen, root execution pending |
-| PlanarProjection | Independent multidimensional velocity/pressure evolution | Lower design/source pending |
+| [ChannelDiscretization](ChannelDiscretization/DESIGN.md) | Identified channel field and boundary data | Native and selected profile qualified |
+| [ViscousEvolution](ViscousEvolution/DESIGN.md) | Steady and backward-Euler channel physical balance | Native and selected profile qualified |
+| [Continuation](Continuation/DESIGN.md) | Accepted/rejected channel and Runtime contributor | Native and selected profile qualified |
+| [PlanarProjection](PlanarProjection/DESIGN.md) | Independent multidimensional velocity/pressure evolution | Lower design/source pending |
+
+Root reviewed the complete channel solve/original residual/time/codec/Runtime paths and preserved numerical unknown-work evidence in the Runtime bridge. Seventeen channel/continuation Native tests pass, including that real exhausted-solver regression. Public hydrostatic/Couette/backward-Euler, accept/reject/checkpoint replay and failed supplier prefix paths compiled, linked and exited 0 on original Native/ordinary-WASM/Embedded WASM with swift-6.4.0-RELEASE/matching SDKs. Embedded required direct Joints imports for physical carrier properties; this visibility correction does not change physics/isolation. PlanarProjection is explicitly excluded from registration; no multidimensional/FSI/free-surface/compressibility qualification is inferred.
