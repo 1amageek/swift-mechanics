@@ -19,6 +19,9 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsNonlinear](Sources/MechanicsNonlinear/DESIGN.md) | IM04 active PG03 ownership; consumes MechanicsNumerics |
 | [MechanicsComplementarity](Sources/MechanicsComplementarity/DESIGN.md) | IM05 active PG03 ownership; consumes MechanicsNumerics |
 | [MechanicsJoints](Sources/MechanicsJoints/DESIGN.md) | IM06 active PG03 ownership; consumes MechanicsCore, MechanicsModel |
+| [MechanicsCompiler](Sources/MechanicsCompiler/DESIGN.md) | IM07 active PG04 ownership; consumes Core, Model, Numerics, Joints |
+| [MechanicsLoads](Sources/MechanicsLoads/DESIGN.md) | IM11 active PG04 ownership; consumes Core, Model, Joints |
+| [MechanicsCollision](Sources/MechanicsCollision/DESIGN.md) | IM10 active AF04 ownership; consumes Core, Model |
 
 Initial IM00 ownership: root agent alone edits Package.swift, global scripts/toolchain configuration, module-root design indexes and progress. IM01 owns Sources/MechanicsCore components and Tests/MechanicsCoreTests. After its verified handoff, IM02 owns Sources/MechanicsModel component directories and Tests/MechanicsModelTests; IM03 owns Sources/MechanicsNumerics component directories and Tests/MechanicsNumericsTests; IM18 owns Sources/MechanicsMaterials component directories and Tests/MechanicsMaterialsTests. Their real modules are registered by IM00 after sources/designs exist; no placeholder target or simulated output is added. The three scopes consume MechanicsCore only and have disjoint source/test paths. PG02 is dispatched with one owner per module; component source and tests remain in those paths, while this root alone registers targets and composes verified handoffs.
 
@@ -213,3 +216,7 @@ Scenario definitions and their numerical evidence policy are owned by SPEC §5. 
 Initial repository planning verified document integrity, requirement IDs, references, ownership consistency and prerequisite independence. The implemented MechanicsCore additionally has native behavioral tests and actual native/WASM/Embedded runtime evidence recorded in its child design. Model records and inertia have qualified local evidence; compiled model, dynamics, CAD adapter and whole-system delivery gates remain unverified.
 
 For dependency planning, evidence additionally covers all requirement owners, prerequisite existence/acyclicity and independence of candidate parallel groups. The plan's handoff/path/runtime checks remain implementation readiness conditions. Neither a DAG check nor hypothetical non-overlapping paths proves real concurrency safety.
+
+PG04 active assignments: IM07 owns Sources/MechanicsCompiler component directories and Tests/MechanicsCompilerTests; IM11 owns Sources/MechanicsLoads component directories and Tests/MechanicsLoadsTests. These are separate native module boundaries. Root retains module indexes, Package.swift, shared runtime probe, progress and commits. Neither imports the other; existing producer source is frozen at f291f24.
+
+The actual AF04 dispatch frontier is IM07 + IM10 + IM11: all producer prerequisites are verified and no dependency path connects these members. IM10 owns Sources/MechanicsCollision and Tests/MechanicsCollisionTests. Their input producers are frozen, component/test writers are disjoint, and root owns registration and composition; candidate PG03/PG04 references remain plan-only groupings.
