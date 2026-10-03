@@ -40,6 +40,7 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsDerivatives](Sources/MechanicsDerivatives/DESIGN.md) | IM30 AF14 exclusive dispatch; consumes Core, Model, Joints, Constraints, Dynamics, Numerics, Loads |
 | [MechanicsStructuralAnalysis](Sources/MechanicsStructuralAnalysis/DESIGN.md) | IM28 AF14 exclusive dispatch; consumes Equilibrium, Flexible, Numerics, Materials |
 | [MechanicsFluids](Sources/MechanicsFluids/DESIGN.md) | IM44 independent source dispatch; consumes Numerics, Runtime, Integration |
+| [MechanicsObservations](Sources/MechanicsObservations/DESIGN.md) | IM25 unregistered independent observation/mounting source dispatch after the selected mechanism handoff |
 | [MechanicsOptimization](Sources/MechanicsOptimization/DESIGN.md) | IM32 unregistered independent child dispatch using qualified numerical/first-derivative contracts |
 | [MechanicsGranular](Sources/MechanicsGranular/DESIGN.md) | IM43 independent source dispatch; consumes Runtime, Collision, ContactLaws, ContactResponse, Hybrid contracts |
 

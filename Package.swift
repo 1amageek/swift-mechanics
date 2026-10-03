@@ -99,7 +99,7 @@ let package = Package(
         .target(name: "MechanicsDerivatives", dependencies: ["CMechanicsMath", "MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsJoints", "MechanicsConstraints", "MechanicsDynamics", "MechanicsLoads"],
                 exclude: ["DESIGN.md", "ScalarCalculus/DESIGN.md", "TreeTangents/DESIGN.md", "ConstraintProducts/DESIGN.md", "MechanicalSensitivities/DESIGN.md"]),
         .target(name: "MechanicsFluids", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsJoints", "MechanicsCompiler", "MechanicsNumerics", "MechanicsRuntime"],
-                exclude: ["DESIGN.md", "ChannelDiscretization/DESIGN.md", "ViscousEvolution/DESIGN.md", "Continuation/DESIGN.md", "PlanarProjection/DESIGN.md"]),
+                exclude: ["DESIGN.md", "ChannelDiscretization/DESIGN.md", "ViscousEvolution/DESIGN.md", "Continuation/DESIGN.md", "PlanarProjection/DESIGN.md", "PlanarContinuation"]),
         .target(name: "MechanicsMechanisms", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsCompiler", "MechanicsJoints", "MechanicsNumerics", "MechanicsNonlinear", "MechanicsConstraints", "MechanicsTransmissions", "MechanicsDynamics", "MechanicsLoads", "MechanicsRuntime", "MechanicsIntegration"],
                 exclude: ["DESIGN.md", "ConstrainedDynamics/DESIGN.md", "AffineEvolution/DESIGN.md", "AcceptedTransitions/DESIGN.md", "ConnectedSleep/DESIGN.md"]),
         .target(name: "MechanicsGranular", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsCollision", "MechanicsContactLaws", "MechanicsRuntime"],
