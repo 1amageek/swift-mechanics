@@ -1,7 +1,7 @@
 # MechanicsCollision
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). Own IM10 geometric collision/proximity witnesses, conservative pair discovery, query/event identity and admitted CCD. [SPEC](../../SPEC.md) CL-001..010 owns full requirements. Component designs precede source and are indexed at handoff.
+Parent: [system/package](../../DESIGN.md). Own IM10 geometric collision/proximity witnesses, conservative pair discovery, query/event identity and admitted CCD. [SPEC](../../SPEC.md) CL-001..010 owns full requirements. Children: [Shapes](Shapes/DESIGN.md), [Geometry](Geometry/DESIGN.md), [Discovery](Discovery/DESIGN.md), [Persistence](Persistence/DESIGN.md), [Sweep](Sweep/DESIGN.md). Component designs precede source and are indexed at handoff.
 
 ## Responsibilities and Boundaries
 Own framed geometry queries and declared shape/motion/representation domains. Contact constitutive law, forces/impulses, dynamics, CAD shape construction and accepted runtime event scheduling remain external. A numerical shape query never implies mechanical response.
@@ -30,3 +30,6 @@ Source revision, frame identity and declared approximation errors remain traceab
 
 ## Verification and Change Impact
 Tests/MechanicsCollisionTests owns analytic pair/query/CCD/transform/degeneracy/filter/capacity proofs. Root owns package registration, composed runtime probes and local commits. Changed witness conventions or IDs invalidate contact response, planning, sensing and CAD-derivation consumers. Full CL feature closure remains distinguishable from an initial admitted producer handoff.
+
+### Verified initial producer handoff (2026-10-03)
+Native Swift 6.4.0 release passed 14 tests in four suites covering admitted analytic geometry, conservative discovery, filter failure/order, current-pose/stale manifold and sampled trigger identity, original translating TOI brackets, cancellation and resources. Tangent-edge classification uses the child-owned numerical boundary-equivalence band; an independently observed 1e-12 s tangency bracket that excluded the true time was rejected by typed unresolvedMinimum after the targeted correction. Root selected sphere/box/plane witnesses, pair discovery, sliding feature-ID continuation, moving-plane translation CCD and unsupported pair rejection compiled/linked and actually ran with exit 0 on Native, ordinary WASM and Embedded WASM. Node.js 24.19.0 WASI Preview 1 and exact matching Swift 6.4.0 SDKs were used; Embedded selected --traits EmbeddedUnicode. A missing explicit Model import in Discovery was corrected uniformly, and its affected three Native tests passed again. General shapes/pairs/rotation/refit/continuous-trigger/source-geometry fidelity domains remain unqualified under IM10/IM48.
