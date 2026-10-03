@@ -17,6 +17,7 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsMaterials](Sources/MechanicsMaterials/DESIGN.md) | IM18 constitutive response; active independent scope consuming MechanicsCore |
 | [FoundationVerification](Sources/FoundationVerification/DESIGN.md) | Root-owned composite public API probe; separate Native/WASM/Embedded real execution |
 | [MechanicsNonlinear](Sources/MechanicsNonlinear/DESIGN.md) | IM04 bounded nonlinear solves; consumes MechanicsNumerics |
+| [MechanicsComplementarity](Sources/MechanicsComplementarity/DESIGN.md) | IM05 validated complementarity and associated cone solves; consumes MechanicsNumerics |
 
 Initial IM00 ownership: root agent alone edits Package.swift, global scripts/toolchain configuration, module-root design indexes and progress. IM01 owns Sources/MechanicsCore components and Tests/MechanicsCoreTests. After its verified handoff, IM02 owns Sources/MechanicsModel component directories and Tests/MechanicsModelTests; IM03 owns Sources/MechanicsNumerics component directories and Tests/MechanicsNumericsTests; IM18 owns Sources/MechanicsMaterials component directories and Tests/MechanicsMaterialsTests. Their real modules are registered by IM00 after sources/designs exist; no placeholder target or simulated output is added. The three scopes consume MechanicsCore only and have disjoint source/test paths. PG02 is dispatched with one owner per module; component source and tests remain in those paths, while this root alone registers targets and composes verified handoffs.
 
