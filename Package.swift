@@ -57,7 +57,7 @@ let package = Package(
         .target(name: "MechanicsContactLaws", dependencies: ["MechanicsCore", "MechanicsModel"],
                 exclude: ["DESIGN.md", "Inputs/DESIGN.md", "MaterialPairs/DESIGN.md", "Response/DESIGN.md", "Impact/DESIGN.md"]),
         .executableTarget(name: "CoreVerification", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
-        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads", "MechanicsCompiler", "MechanicsCollision", "MechanicsDynamics"], exclude: ["DESIGN.md"]),
+        .executableTarget(name: "FoundationVerification", dependencies: ["MechanicsCore", "MechanicsModel", "MechanicsNumerics", "MechanicsMaterials", "MechanicsNonlinear", "MechanicsComplementarity", "MechanicsJoints", "MechanicsLoads", "MechanicsCompiler", "MechanicsCollision", "MechanicsDynamics", "MechanicsFlexible", "MechanicsContactLaws"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsModelTests", dependencies: ["MechanicsModel", "MechanicsCore"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsMaterialsTests", dependencies: ["MechanicsMaterials", "MechanicsCore"], exclude: ["DESIGN.md"]),
