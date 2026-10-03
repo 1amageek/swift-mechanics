@@ -12,9 +12,9 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsCore](Sources/MechanicsCore/DESIGN.md) | IM01 immutable units, geometry and spatial algebra; depends only on CMechanicsMath |
 | [CoreVerification](Sources/CoreVerification/DESIGN.md) | Headless actual-Core protocol/runtime probe; depends on MechanicsCore |
 | [MechanicsCoreTests](Tests/MechanicsCoreTests/DESIGN.md) | Native behavioral tests; depends on MechanicsCore |
-| [MechanicsModel](Sources/MechanicsModel/DESIGN.md) | IM02 model records and inertia; active independent scope consuming MechanicsCore |
-| [MechanicsNumerics](Sources/MechanicsNumerics/DESIGN.md) | IM03 operators/linear solves; active independent scope consuming MechanicsCore |
-| [MechanicsMaterials](Sources/MechanicsMaterials/DESIGN.md) | IM18 constitutive response; active independent scope consuming MechanicsCore |
+| [MechanicsModel](Sources/MechanicsModel/DESIGN.md) | IM02 verified initial model-record/inertia handoff; consumes MechanicsCore |
+| [MechanicsNumerics](Sources/MechanicsNumerics/DESIGN.md) | IM03 verified initial numerical handoff; consumes MechanicsCore |
+| [MechanicsMaterials](Sources/MechanicsMaterials/DESIGN.md) | IM18 verified initial constitutive handoff; consumes MechanicsCore |
 | [FoundationVerification](Sources/FoundationVerification/DESIGN.md) | Root-owned composite public API probe; separate Native/WASM/Embedded real execution |
 | [MechanicsNonlinear](Sources/MechanicsNonlinear/DESIGN.md) | IM04 verified initial handoff; consumes MechanicsNumerics |
 | [MechanicsComplementarity](Sources/MechanicsComplementarity/DESIGN.md) | IM05 verified initial handoff; consumes MechanicsNumerics |
@@ -29,6 +29,8 @@ Parent: none. Current children are indexed below. Additional responsibility scop
 | [MechanicsContactLaws](Sources/MechanicsContactLaws/DESIGN.md) | IM20 verified initial compliant-law handoff; consumes Core, Model; collision translation belongs to IM21 |
 | [MechanicsContactResponse](Sources/MechanicsContactResponse/DESIGN.md) | IM21 active AF09 ownership; consumes verified numerical, witness, law and mass contracts |
 | [MechanicsExchange](Sources/MechanicsExchange/DESIGN.md) | IM35 active AF09 ownership; consumes Compiler model input/validation contracts |
+| [MechanicsConstraints](Sources/MechanicsConstraints/DESIGN.md) | IM12 dispatched AF10 ownership; consumes verified nonlinear/complementarity/kinematic/runtime contracts |
+| [MechanicsActuation](Sources/MechanicsActuation/DESIGN.md) | IM14 dispatched AF10 ownership; consumes verified runtime/load contracts |
 
 Initial IM00 ownership: root agent alone edits Package.swift, global scripts/toolchain configuration, module-root design indexes and progress. IM01 owns Sources/MechanicsCore components and Tests/MechanicsCoreTests. After its verified handoff, IM02 owns Sources/MechanicsModel component directories and Tests/MechanicsModelTests; IM03 owns Sources/MechanicsNumerics component directories and Tests/MechanicsNumericsTests; IM18 owns Sources/MechanicsMaterials component directories and Tests/MechanicsMaterialsTests. Their real modules are registered by IM00 after sources/designs exist; no placeholder target or simulated output is added. The three scopes consume MechanicsCore only and have disjoint source/test paths. PG02 is dispatched with one owner per module; component source and tests remain in those paths, while this root alone registers targets and composes verified handoffs.
 
@@ -224,4 +226,4 @@ Initial repository planning verified document integrity, requirement IDs, refere
 
 For dependency planning, evidence additionally covers all requirement owners, prerequisite existence/acyclicity and independence of candidate parallel groups. The plan's handoff/path/runtime checks remain implementation readiness conditions. Neither a DAG check nor hypothetical non-overlapping paths proves real concurrency safety.
 
-The current actual AF09 frontier is IM09 + IM21 + IM35. Runtime's verified initial local/profile handoff is 6ae2742. Every direct prerequisite is checked in PROGRESS.md and no dependency path connects these frontier members. IM09 owns Sources/MechanicsIntegration child components and Tests/MechanicsIntegrationTests; IM21 and IM35 retain their independent existing paths. Verified suppliers remain frozen. Root alone owns module-root indexes, package/global probes, progress and commits. IM12 is independently ready but awaits a free implementation owner; it is not an additional prerequisite of IM09. Candidate groups are not mandatory waves and initial handoffs do not close eventual full-family domains.
+The current actual AF10 production frontier is IM09 + IM12 + IM14. Their direct prerequisites are checked in PROGRESS.md and no dependency path connects these members. IM09 retains its Integration child/test ownership while fixing the confirmed Embedded execution stack path. IM12 owns only Sources/MechanicsConstraints child components and Tests/MechanicsConstraintsTests; IM14 owns only Sources/MechanicsActuation child components and Tests/MechanicsActuationTests. The latter modules are not registered until real sources and child contracts are stable. Verified suppliers remain frozen; root alone owns module indexes, package/probe wiring, progress and commits. IM21/IM35 have completed local behavior and selected public paths but await coherent recorded handoff/commit after the current profile fix; their initial domains do not close whole families. Candidate groups are not mandatory waves.
