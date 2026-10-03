@@ -10,6 +10,7 @@ struct FoundationVerification {
             try verify()
             try verifyNumericalExtensions()
             try verifyKinematics()
+            try verifyLoads()
         } catch {
             throw .unexpectedFailure
         }

@@ -1,9 +1,16 @@
 import MechanicsCore
 import MechanicsModel
 import MechanicsJoints
+import MechanicsLoads
 
 extension FoundationVerification {
     static func verifyKinematics() throws {
+        let composedIdentity = try EntityID(kind: .frame, key: "caf\u{00e9}")
+        let decomposedIdentity = try EntityID(kind: .frame, key: "cafe\u{0301}")
+        let identityLookup = [composedIdentity: 7]
+        guard composedIdentity == decomposedIdentity, identityLookup[decomposedIdentity] == 7 else {
+            throw FoundationVerificationError.analyticCheckFailed
+        }
         let tolerance = try NumericalTolerance(absolute: 1e-12, relative: 1e-12)
         let policy = try JointEvaluationPolicy(quaternionTolerance: tolerance, chartRankRelative: 1e-9, characteristicLengthMeters: 1)
         let evaluator: any JointMotionEvaluating = JointMotionEvaluator()
@@ -37,6 +44,12 @@ extension FoundationVerification {
               abs(try force.dot(point.velocity) - generalizedForce[0] * state.v[0]) < 1e-12 else {
             throw FoundationVerificationError.analyticCheckFailed
         }
+        var loadWork = LoadWork(budget: try LoadBudget(maximumWork: 20, maximumScalars: 1))
+        let mapper: any LoadMapping = LoadMapper()
+        let mapped = try mapper.point(FramedPointLoad(body: child.id, frame: tree.worldFrame,
+            point: point.position, forces: ForceParts(active: force)), jacobian: jacobian, rate: state.v, work: &loadWork)
+        guard abs(mapped.values[0] + 2) < 1e-12, abs(mapped.power.virtual + 6) < 1e-12,
+              abs(mapped.power.actual + 6) < 1e-12 else { throw FoundationVerificationError.analyticCheckFailed }
         let stale = try KinematicState(revision: 2, time: 0, q: state.q, v: state.v, acceleration: state.acceleration)
         var rejected = false
         do { _ = try treeEvaluator.evaluate(tree, state: stale, policy: policy) }
