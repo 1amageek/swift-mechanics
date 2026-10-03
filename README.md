@@ -2,7 +2,7 @@
 
 Swift 向けの工学機構シミュレーションライブラリを設計するリポジトリです。機構の運動、力・トルク、接触、柔軟体、制御、最適化を対象にします。
 
-**現在は仕様策定段階です。シミュレーター、SwiftPM package、実装済み公開 API はまだありません。** 文書にある機能は実装済みの機能一覧ではなく、検証を伴う開発要件です。
+**現在は実装中です。SwiftPM package と MechanicsCore の基盤 API・動作テストを追加しています。** 210 要件全体、機構シミュレーター、CAD 連携の完了はまだ主張していません。文書の機能一覧は検証を伴う開発要件です。
 
 | 文書 | 正本として所有する内容 |
 |---|---|
@@ -10,7 +10,7 @@ Swift 向けの工学機構シミュレーションライブラリを設計す�
 | [DESIGN.md](DESIGN.md) | 提案する責務分離、依存方向、状態所有、実行フロー |
 | [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | 49 作業項目の実装依存 DAG、210 要件の担当、並列開始条件・統合順序 |
 | [SOURCES.md](SOURCES.md) | 参照した公式資料と比較の根拠、swift-CAD の確認範囲 |
-| [PROGRESS.md](PROGRESS.md) | 今回の仕様策定タスクの進捗 |
+| [PROGRESS.md](PROGRESS.md) | 実装・テスト・全体統合の進捗 |
 
 ```mermaid
 flowchart LR
@@ -21,7 +21,7 @@ flowchart LR
   Result --> App[Application and visualization]
 ```
 
-swift-CAD を CAD 連携の依存先にする方針です。CAD 連携を利用する構成では必須ですが、形状を外部から与えて計算するコアは CAD カーネルに依存しません。形状生成・位相管理は swift-CAD、質量・慣性・関節・荷重・時間発展は swift-mechanics が所有します。現在は依存を設定した `Package.swift` もありません。
+swift-CAD を CAD 連携の依存先にする方針です。CAD 連携を利用する構成では必須ですが、形状を外部から与えて計算するコアは CAD カーネルに依存しません。形状生成・位相管理は swift-CAD、質量・慣性・関節・荷重・時間発展は swift-mechanics が所有します。現在の Package.swift は基盤のみで、CAD 依存は実際の連携契約を検証する IM38 で設定します。
 
 Project Chrono、Simbody、Drake、MuJoCo、Bullet、Rapier の機能を参照して目標を定めています。既存ライブラリの完全互換や、すべての物理現象への対応を意味するものではありません。数学モデル、適用範囲、誤差、バックエンドを区別し、未対応や未収束を成功として扱わないことを基本契約にします。
 
@@ -71,4 +71,4 @@ delivery gates は統合済みの機能を確認する順序です。実装作�
 | 柔軟体要素 ／ 剛体・接触・時間発展 | IM27 で剛柔連成へ合流 |
 | 機構・観測 ／ 微分・最適化 | 通常の制御と軌道計画は独立、MPC は最適化を利用 |
 
-現在は各作業が未実装です。具体的な module・component の所有パス、公開契約、正確な実行環境を先行する所有者が確定し、その振る舞いを検証してから並列 dispatch します。`Package.swift`・共有 API・統合設定の同時編集は行いません。
+IM00・IM01 の基盤は実装と動作検証が済んでいます。IM02・IM03・IM18 は検証済みの MechanicsCore を共通の前提とし、それぞれ独立した source・test パスを所有します。後続作業も、先行する所有者の公開契約と動作証拠を確認してから並列 dispatch します。`Package.swift`・共有 API・統合設定は root が所有します。

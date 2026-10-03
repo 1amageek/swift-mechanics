@@ -1,8 +1,8 @@
 # Implementation dependency plan
 
-Status: dependency planning only, 2026-10-03. All implementation items are **planned, not dispatch-ready**. This task authorizes dependency documentation; it does not start implementation. Before this planning task, the repository contained five documentation files. There is still no Package.swift, production source, compiled model, runtime or verified child contract.
+Status: implementation active, 2026-10-03. The user authorized the complete plan and behavioral tests as the finish condition. PROGRESS.md owns current executable readiness/completion; this document retains the stable work IDs and dependency graph. MechanicsCore implementation and its SwiftPM/test/runtime paths are being established; downstream physics items remain planned until their actual prerequisites pass.
 
-This document owns future work IDs, prerequisite edges, requirement ownership, handoffs and parallel dispatch rules. [DESIGN.md](DESIGN.md) owns architectural composition; [SPEC.md](SPEC.md) owns the unchanged 210 behavioral requirements. [PROGRESS.md](PROGRESS.md) records the current documentation task, not an unapproved implementation backlog. Future IM work forms one implementation-task parent; these IDs are its sibling work items.
+This document owns work IDs, prerequisite edges, requirement ownership, handoffs and parallel dispatch rules. [DESIGN.md](DESIGN.md) owns architectural composition; [SPEC.md](SPEC.md) owns the unchanged 210 behavioral requirements. [PROGRESS.md](PROGRESS.md) records the authorized implementation task. Its child IDs IM.IM00 through IM.IM47 map to this plan's IM00 through IM47; top-level IM48 owns whole-target integration after their parent IM completes.
 
 ## 1. Three dependency meanings
 
@@ -40,7 +40,7 @@ Independence requires separating interface data from concrete engines. IM20 owns
 
 IM03 owns shared numerical operator/status/budget/precision record contracts needed by both IM04 and IM05. IM04 owns nonlinear iteration and acceptance implementation; IM05 does not import that implementation merely to obtain common record definitions. Geometry-following constraints in IM12 consume explicitly supplied query contracts; CAD supplies one possible adapter, not a mandatory dependency of those kernels.
 
-Actual module/component directory names are not frozen here: there is no package or child implementation to validate them against. **IM00 must assign concrete non-overlapping paths and the native SwiftPM graph before any parallel production dispatch.** This is a known readiness condition, not an excuse to create 49 modules or treat hypothetical directories as verified components. Multiple task scopes may live in one real module only when their component contracts and paths remain independently owned.
+Concrete module/path assignments for the first foundation cohort are indexed in DESIGN.md. Later assignments remain a prerequisite of their dispatch. IM00 assigns non-overlapping paths and the native SwiftPM graph before parallel production work; no 49-module structure or hypothetical component is treated as verified. Multiple task scopes may live in one real module only when their component contracts and paths remain independently owned.
 
 ## 3. Canonical prerequisite and ownership table
 
@@ -133,7 +133,7 @@ At dispatch, the control owner puts the actual ready sibling items into one expl
 | Numerical evidence | Fixture scales/tolerances/model equations are fixed before candidate results; no mock success replaces the implementation path. |
 | Commit/integration | Each coherent sprint is reviewed/tested and locally committed; integration consumes its exact contract/source revision. |
 
-The first task is IM00. IM01 follows its baseline/path handoff. The first multi-worker cohort is **IM02 + IM03 + IM18** after IM01. This identifies prerequisite order only; actual dispatch still requires the checks above and no implementation starts in this documentation turn. Parallelism is bounded by actual resources; no concurrency number or real-time budget is guessed here.
+The first task is IM00. IM01 follows its baseline/path handoff. The first multi-worker cohort is **IM02 + IM03 + IM18** after IM01. Actual dispatch requires the checks above and recorded behavioral evidence. Parallelism is bounded by actual resources; no concurrency number or real-time budget is guessed here.
 
 ## 5. Why major paths remain independent
 
@@ -195,4 +195,4 @@ Each provider owns its local contract proof. Each composing item owns new intera
 | IM42–46 domain integration | Calibrated domain contributors, interface/clock and actual acceleration | INT-10 |
 | IM48 complete target | All preceding work, all requirement owners and declared-profile evidence | INT-01..10 plus requirement closure audit |
 
-Completion of this planning task proves only the graph's acyclicity, ownership coverage and documented parallel isolation conditions. It does not prove a real API, physics solver, source adapter, toolchain profile or concurrency behavior. No IM item is checked complete or dispatch-ready until its prerequisites and readiness checks have actual evidence.
+The prior planning verification proved only graph acyclicity, ownership coverage and documented parallel isolation conditions. Implementation now adds actual API/production-path evidence in PROGRESS.md and corresponding child designs/tests. No IM item is checked complete or dispatch-ready without actual prerequisite and local completion evidence; no complete-target claim is made before IM48 passes.

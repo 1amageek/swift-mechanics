@@ -1,6 +1,6 @@
 # swift-mechanics specification
 
-Status: proposed requirements, revision 0.1, 2026-10-03. **Every requirement below is `planned`; none is implemented or behaviorally verified.** This is the canonical functional and acceptance contract. [DESIGN.md](DESIGN.md) owns the proposed architecture; [SOURCES.md](SOURCES.md) owns source observations.
+Status: target requirements, revision 0.1, 2026-10-03. **The complete target is not implemented or verified.** Foundation implementation is active; PROGRESS.md and component designs/tests record actual supported subsets and evidence. A requirement remains planned until its full applicable behavior and integration obligations pass. This is the canonical functional and acceptance contract. [DESIGN.md](DESIGN.md) owns architecture; [SOURCES.md](SOURCES.md) owns source observations.
 
 ## 1. Goal and interpretation
 
@@ -77,7 +77,7 @@ Every numerical family requires EV-A or EV-R plus relevant EV-I and EV-F. Lifecy
 
 ## 3. Detailed requirements
 
-The owner is a logical responsibility pending child design, not an existing SwiftPM module. All rows: `planned`. Source tags refer to [SOURCES.md](SOURCES.md); they indicate feature-area provenance, not that an upstream implements our exact contract.
+The owner identifies a responsibility, not automatically a SwiftPM module. Actual implementations and qualified evidence are indexed by DESIGN.md and PROGRESS.md; these target rows do not themselves claim completion. Source tags refer to [SOURCES.md](SOURCES.md); they indicate feature-area provenance, not that an upstream implements our exact contract.
 
 ### 3.1 MD — Mechanical model and compilation
 

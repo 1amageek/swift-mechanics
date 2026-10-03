@@ -2,9 +2,20 @@
 
 ## Purpose and Scope
 
-This root owns both the proposed system and repository/package-level design. The repository currently contains specifications only. No package graph, production component, solver, CAD adapter or public Swift API exists. The target and acceptance authority is [SPEC.md](SPEC.md); factual dependency/reference observations are owned by [SOURCES.md](SOURCES.md).
+This root owns system and repository/package-level design. Implementation is active under the full 210-requirement goal. The current SwiftPM graph implements foundational MechanicsCore and its real test/runtime verification paths. No complete mechanism simulator, CAD adapter or feature gate is claimed. The target and acceptance authority is [SPEC.md](SPEC.md); factual dependency/reference observations are owned by [SOURCES.md](SOURCES.md).
 
-Parent: none. Implemented children: none. Proposed responsibility scopes are listed below. Actual SwiftPM products/targets and component directories will be created only after their subordinate contracts are verified. Each real target/component will own its `DESIGN.md` beside its implementation and be indexed here. This proposal is not a claim that those child designs or their runtime behavior have already been validated.
+Parent: none. Current children are indexed below. Additional responsibility scopes remain planned until their actual contracts and behavior are verified. Each real target/component owns its DESIGN.md beside its implementation. Implemented source and passing tests do not imply all required profiles or whole feature families are supported.
+
+| Current child | Responsibility and dependency |
+|---|---|
+| [CMechanicsMath](Sources/CMechanicsMath/DESIGN.md) | System libm adapter; no physics backend or heap/shared state |
+| [MechanicsCore](Sources/MechanicsCore/DESIGN.md) | IM01 immutable units, geometry and spatial algebra; depends only on CMechanicsMath |
+| [CoreVerification](Sources/CoreVerification/DESIGN.md) | Headless actual-Core protocol/runtime probe; depends on MechanicsCore |
+| [MechanicsCoreTests](Tests/MechanicsCoreTests/DESIGN.md) | Native behavioral tests; depends on MechanicsCore |
+
+Initial IM00 ownership: root agent alone edits Package.swift, global scripts/toolchain configuration, module-root design indexes and progress. IM01 owns Sources/MechanicsCore components and Tests/MechanicsCoreTests. After its verified handoff, IM02 owns Sources/MechanicsModel component directories and Tests/MechanicsModelTests; IM03 owns Sources/MechanicsNumerics component directories and Tests/MechanicsNumericsTests; IM18 owns Sources/MechanicsMaterials component directories and Tests/MechanicsMaterialsTests. Their real modules are registered by IM00 after sources/designs exist; no placeholder target or simulated output is added. The three scopes consume MechanicsCore only and have disjoint source/test paths.
+
+Current package products SwiftMechanics and MechanicsCore both expose the MechanicsCore module; no duplicate facade state or type aliases are introduced. CoreVerification is an executable entry point rather than a public placeholder implementation. Toolchain baseline is installed Apple Swift 6.4 (swift-6.4-RELEASE) on arm64-apple-macosx27.0.0; installed SDK identifiers are swift-6.4.0-RELEASE_wasm and swift-6.4.0-RELEASE_wasm-embedded. Actual per-profile evidence is recorded with the implementing sprint; unavailable platforms remain unverified.
 
 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) is the canonical owner of future work IDs, prerequisite edges, per-requirement implementation ownership and parallel dispatch checks. Its work scopes are not existing modules. This root retains architectural composition authority; the plan sequences the work needed to establish and verify its child contracts.
 
@@ -39,7 +50,7 @@ The application owns assembly/document edits, visual presentation, user interact
 | [SOURCES.md](SOURCES.md) | Evidence inventory | Official capability observations and local CAD inspection provenance | Supports scope and dependency judgments | Moving upstream pages are not pinned runtime oracles |
 | [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | Implementation coordination | Prerequisite DAG, requirement owners, producer handoffs and parallel readiness | Sequences contract validation and independent implementation scopes | An acyclic planned graph does not establish a verified API or dispatch readiness |
 | [swift-CAD repository](https://github.com/1amageek/swift-CAD) | Proposed dependency of CAD integration | Evaluated geometry/topology, units and future required geometric moment/query capabilities | Geometry authority and shape source | Clean revision, actual public products and full moments remain to be selected/verified |
-| Future child `DESIGN.md` documents | Proposed children, none created | Their verified public assumptions/guarantees | Will compose into this system | Implementation cannot start from unverified names or diagram boxes alone |
+| Current children indexed in Purpose and Scope | child | Their verified public assumptions/guarantees | Compose the implemented foundation | Evidence is limited to each child's documented profiles and behavior |
 
 No nonexistent child-design links are included. When an implementation work item creates a child, its design must cover public/failed operations, owner/lifetime, applicable platform/backend assumptions and behavioral proof before the parent treats it as a black box.
 
@@ -190,6 +201,6 @@ Target-specific conditional compilation is restricted to real API/ABI/runtime di
 
 Scenario definitions and their numerical evidence policy are owned by SPEC §5. Test target/component ownership is added only when actual implementation boundaries exist. A child contract change triggers revalidation of the parent assumptions it affects, not unrelated suites or speculative concerns.
 
-For this repository setup, verification is limited to document integrity, requirement IDs, references, ownership consistency, scope/gate semantics and clean Git history. No numerical model, source adapter, physics algorithm or platform capability has passed runtime verification. Completing this documentation task does not complete any feature delivery gate.
+Initial repository planning verified document integrity, requirement IDs, references, ownership consistency and prerequisite independence. The implemented MechanicsCore additionally has native behavioral tests and actual native/WASM/Embedded runtime evidence recorded in its child design. Model, dynamics, CAD adapter and whole-system delivery gates remain unverified.
 
 For dependency planning, evidence additionally covers all requirement owners, prerequisite existence/acyclicity and independence of candidate parallel groups. The plan's handoff/path/runtime checks remain implementation readiness conditions. Neither a DAG check nor hypothetical non-overlapping paths proves real concurrency safety.
