@@ -37,6 +37,24 @@ struct ResponseFailureTests {
         let otherFrame=ModelReference(id:try ResponseFixtures.id(.frame,"other"),revision:1)
         #expect(throws:ContactResponseError.frameMismatch) { try ResponseFixtures.solve(changed(input,contacts:[binding(input.contacts[0],basis:ContactBasis(frame:otherFrame,contactToQuery:.identity))])) }
     }
+    @Test func materialSiteRepresentationCannotUseRigidMassResponse() throws {
+        let input=try ResponseFixtures.input(), old=input.contacts[0], base=old.accepted.identity
+        let identity=try ContactIdentity(key:base.key,firstBody:base.firstBody,secondBody:base.secondBody,frame:base.frame,
+            firstGeometryRevision:base.firstGeometryRevision,secondGeometryRevision:base.secondGeometryRevision,tangentLayoutRevision:base.tangentLayoutRevision,
+            firstMaterialSite:ContactMaterialSite(key:String(repeating:"x",count:3000),revision:1),
+            secondMaterialSite:ContactMaterialSite(key:"face",revision:1))
+        var historyWork=try ResponseFixtures.lawWork()
+        let accepted=try CompliantContactEvaluator().initialHistory(identity:identity,pair:old.pair,timeSeconds:0,work:&historyWork)
+        let contact=WitnessContact(coordinateID:old.coordinateID,tangentLayoutRevision:old.tangentLayoutRevision,witness:old.witness,
+            firstProxyIndex:old.firstProxyIndex,secondProxyIndex:old.secondProxyIndex,firstColliderToBody:old.firstColliderToBody,
+            secondColliderToBody:old.secondColliderToBody,basis:old.basis,pair:old.pair,accepted:accepted)
+        var outer=try ResponseFixtures.work(), dynamics=try ResponseFixtures.work(), cone=try ResponseFixtures.work(), law=try ResponseFixtures.lawWork()
+        let service:any CoupledContactResponding=ImplicitLinearNormalResponse()
+        #expect(throws:ContactResponseError.unsupportedRepresentation) {
+            try service.solve(changed(input,contacts:[contact]),policy:ResponseFixtures.policy(),responseWork:&outer,dynamicsWork:&dynamics,coneWork:&cone,lawWork:&law)
+        }
+        #expect(dynamics.operations == 0 && cone.operations == 0 && law.operations == 0 && accepted.sequence == 0)
+    }
     @Test func unsupportedSelectedLawFailsBeforeMassResponse() throws {
         let friction=ContactFrictionLaw.elasticCoulomb(try ContactFrictionParameters(staticFirst:0.8,staticSecond:0.8,dynamicFirst:0.4,dynamicSecond:0.4,tangentialStiffness:1000,transitionSpeed:0.1))
         let service:any CoupledContactResponding=ImplicitLinearNormalResponse()

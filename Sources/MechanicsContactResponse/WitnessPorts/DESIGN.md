@@ -38,3 +38,5 @@ Typed capacity/stale/layout/frame/pose/witness/unsupported-law/nonfinite/Core/Jo
 
 ## Verification and Change Impact
 Current/stale geometry/body/frame/placement/basis/history and unsupported friction/damping/cohesion checks, long-key budget, offset-point virtual work. Contract changes invalidate coupled response and root exact-profile adapter probes.
+
+Explicit material-site contact identities are outside this rigid witness/mass representation and fail unsupportedRepresentation before traversing site metadata. Deforming nodal response remains IM23/IM27 meaning; rigid body IDs or mass columns are not fabricated to accommodate self-contact. Existing nil-site witness/response paths and validation behavior retain their prior assumptions. Root qualified the added failure branch with an actual admission test within eleven passing Native response cases; the original nil-site response paths also executed on all three selected profiles.

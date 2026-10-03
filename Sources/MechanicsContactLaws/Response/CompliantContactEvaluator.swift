@@ -4,7 +4,7 @@ public struct CompliantContactEvaluator: ContactLawEvaluating, Sendable {
     public init() {}
     public func initialHistory(identity: ContactIdentity, pair: ContactLawPair, timeSeconds: Double,
                                work: inout ContactWork) throws(ContactLawError) -> ContactHistory {
-        try work.consume(operations:32,scalarStorage:96,records:1)
+        try work.consume(operations:32,scalarStorage:96+identity.materialSiteScalarStorage,records:1)
         try contactAccountIdentity(identity,work:&work); try contactAccountPair(pair,work:&work)
         guard timeSeconds.isFinite, timeSeconds >= 0 else { throw .invalidInput }
         try work.checkCancellation()
@@ -13,7 +13,7 @@ public struct CompliantContactEvaluator: ContactLawEvaluating, Sendable {
     }
     public func evaluate(input: ContactInput, pair: ContactLawPair, accepted: ContactHistory,
                          policy: ContactAcceptancePolicy, work: inout ContactWork) throws(ContactLawError) -> ContactResponse {
-        try work.consume(operations:4096,scalarStorage:256,records:1)
+        try work.consume(operations:4096,scalarStorage:256+input.identity.materialSiteScalarStorage+accepted.identity.materialSiteScalarStorage,records:1)
         try contactAccountIdentity(input.identity,work:&work); try contactAccountIdentity(accepted.identity,work:&work)
         try contactAccountPair(pair,work:&work); try contactAccountPair(accepted.pair,work:&work)
         guard input.identity == accepted.identity, pair == accepted.pair,

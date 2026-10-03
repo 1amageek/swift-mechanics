@@ -23,6 +23,8 @@ public struct RigidContactWitnessAdapter: ContactWitnessAdapting {
         guard a.filter.enabled, b.filter.enabled, !a.filter.isTrigger, !b.filter.isTrigger,
               a.filter.layerBits & b.filter.maskBits != 0, b.filter.layerBits & a.filter.maskBits != 0 else { throw .ineligiblePair }
         let identity=binding.accepted.identity
+        // FIXME(INCOMPLETE_IMPLEMENTATION): Material-site nodal contact is not implemented by this rigid mass adapter. This public preparation path rejects it until actual nodal geometry, mass and power evidence exists; rigid columns must not imply deforming response success.
+        guard identity.firstMaterialSite == nil, identity.secondMaterialSite == nil else { throw .unsupportedRepresentation }
         try ResponseArithmetic.key(identity.key,policy:policy,work:&work)
         guard try ResponseArithmetic.id(identity.firstBody.id,a.geometry.bodyID,policy:policy,work:&work),
               try ResponseArithmetic.id(identity.secondBody.id,b.geometry.bodyID,policy:policy,work:&work),

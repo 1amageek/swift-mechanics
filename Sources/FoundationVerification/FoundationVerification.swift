@@ -16,6 +16,7 @@ struct FoundationVerification {
             try verifyDynamics()
             try verifyFlexible()
             try verifyContactLaws()
+            try verifyMaterialSites()
             try verifyContactResponse()
             try verifyExchange()
             try verifyConstraints()

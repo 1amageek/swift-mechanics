@@ -8,6 +8,8 @@ internal func contactAccountIdentity(_ identity: ContactIdentity, work: inout Co
     try contactAccountKey(identity.firstBody.id.key,work:&work)
     try contactAccountKey(identity.secondBody.id.key,work:&work)
     try contactAccountKey(identity.frame.id.key,work:&work)
+    if let site = identity.firstMaterialSite { try contactAccountKey(site.key,work:&work) }
+    if let site = identity.secondMaterialSite { try contactAccountKey(site.key,work:&work) }
 }
 internal func contactAccountPair(_ pair: ContactLawPair, work: inout ContactWork) throws(ContactLawError) {
     try contactAccountKey(pair.firstMaterial.id.key,work:&work)

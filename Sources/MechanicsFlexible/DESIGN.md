@@ -1,7 +1,7 @@
 # MechanicsFlexible
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../SPEC.md) owns acceptance and [plan](../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md).
+Parent: [system/package](../../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../SPEC.md) owns acceptance and [plan](../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md), [Beams](Beams/DESIGN.md). Beams is an AF14 source dispatch with pending behavioral/profile qualification; existing Tet4 qualification is unchanged.
 
 ## Responsibilities and Boundaries
 Consume physical units/geometry, identified model values, numerical equations and verified constitutive laws. Own element interpolation/quadrature/formulation, rest/current geometry, nodal DOF and material/boundary/source association. Materials owns stress/strain law meaning; rigid attachment/evolution, contact, modes/analysis and CAD mesh derivation are separate consumers. A matrix declaration or isolated mesh is not a flexible simulation.
@@ -11,6 +11,7 @@ Consume physical units/geometry, identified model values, numerical equations an
 |---|---|---|---|---|
 | [Mesh](Mesh/DESIGN.md) | child | Identified reference cell validation and assignments | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
 | [Tetrahedra](Tetrahedra/DESIGN.md) | child | Actual total-Lagrangian tetrahedral assembly and nodal outputs | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
+| [Beams](Beams/DESIGN.md) | child | Identified Hermite element mass/elastic/geometric stiffness | AF14 additional exclusive material_kernels ownership | No qualified analysis until element behavior passes |
 | [Root](../../DESIGN.md) | parent | Ownership and global invariants | Composition authority | Full closure remains IM48 |
 | [Model](../MechanicsModel/DESIGN.md) | depends on | Identity, provenance and geometry/mass distinction | Identified physical source | Display mesh never becomes physical without explicit admission |
 | [Numerics](../MechanicsNumerics/DESIGN.md) | depends on | Matrix layout, work budgets and original-residual acceptance | Numerical values/solve | Generic operators are not element implementations |
