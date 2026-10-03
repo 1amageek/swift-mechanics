@@ -9,6 +9,22 @@ public struct ReferenceRuntimeCheckpointHandler<Contributors: RuntimeContributor
 
     public func admit(_ checkpoint: RuntimeCheckpoint, model: CompiledMechanicalModel,
                       configuration: RuntimeConfiguration, cancellation: RuntimeCancellationSource?) throws(RuntimeFailure) -> RuntimeAcceptedState {
+        let records = try prepareRecords(checkpoint, model: model, configuration: configuration)
+        let canonical = try validateContributors(checkpoint, model: model, configuration: configuration,
+            records: records, cancellation: cancellation)
+        return try publishAccepted(checkpoint, model: model, canonical: canonical, cancellation: cancellation)
+    }
+
+    @inline(never)
+    private func prepareRecords(_ checkpoint: RuntimeCheckpoint, model: CompiledMechanicalModel,
+                                configuration: RuntimeConfiguration) throws(RuntimeFailure) -> RuntimeAdmissionRecords {
+        let registrations = try preflight(checkpoint, model: model, configuration: configuration)
+        return try buildRecords(checkpoint, configuration: configuration, registrations: registrations)
+    }
+
+    @inline(never)
+    private func preflight(_ checkpoint: RuntimeCheckpoint, model: CompiledMechanicalModel,
+                           configuration: RuntimeConfiguration) throws(RuntimeFailure) -> [RuntimeContributorSchema] {
         let cap = configuration.capacity
         // FIXME(INCOMPLETE_IMPLEMENTATION): Stronger determinism requests reach checkpoint/session admission.
         // Exact target-pair numerical/bitwise workload evidence is required before qualifying these tiers.
@@ -28,6 +44,13 @@ public struct ReferenceRuntimeCheckpointHandler<Contributors: RuntimeContributor
               checkpoint.contributors.count <= cap.maximumContributors else { throw RuntimeFailure(.capacityExceeded, message: "Checkpoint scalar/contributor capacity exceeded.") }
         let registrations = contributors.schemas
         guard registrations.count <= cap.maximumContributors else { throw RuntimeFailure(.capacityExceeded, message: "Contributor registry exceeds capacity.") }
+        return registrations
+    }
+
+    @inline(never)
+    private func buildRecords(_ checkpoint: RuntimeCheckpoint, configuration: RuntimeConfiguration,
+                             registrations: [RuntimeContributorSchema]) throws(RuntimeFailure) -> RuntimeAdmissionRecords {
+        let cap = configuration.capacity
         var registry: [String: RuntimeContributorSchema] = [:], metadataBytes = checkpoint.model.identity.utf8.count
         guard metadataBytes <= cap.maximumMetadataBytes else { throw RuntimeFailure(.capacityExceeded, message: "Model identity exceeds runtime metadata capacity.") }
         for schema in registrations {
@@ -46,12 +69,20 @@ public struct ReferenceRuntimeCheckpointHandler<Contributors: RuntimeContributor
         }
         let requiredIDs = Set(configuration.requiredContributors.map { $0.id })
         for record in checkpoint.contributors where !requiredIDs.contains(record.id) { throw RuntimeFailure(.unknownContributor, contributor: record.id, message: "Checkpoint has undeclared contributor state.") }
+        return RuntimeAdmissionRecords(registry: registry, records: records)
+    }
+
+    @inline(never)
+    private func validateContributors(_ checkpoint: RuntimeCheckpoint, model: CompiledMechanicalModel,
+                                      configuration: RuntimeConfiguration, records: RuntimeAdmissionRecords,
+                                      cancellation: RuntimeCancellationSource?) throws(RuntimeFailure) -> [RuntimeContributorState] {
+        let cap = configuration.capacity
         var used = 0, canonical: [RuntimeContributorState] = []
         canonical.reserveCapacity(configuration.requiredContributors.count)
         for schema in configuration.requiredContributors {
-            guard let registration = registry[schema.id], registration.category == schema.category, registration.version == schema.version,
+            guard let registration = records.registry[schema.id], registration.category == schema.category, registration.version == schema.version,
                   schema.maximumBytes <= registration.maximumBytes else { throw RuntimeFailure(.missingContributor, contributor: schema.id, message: "Required contributor validator is missing/incompatible.") }
-            guard let record = records[schema.id] else { throw RuntimeFailure(.missingContributor, contributor: schema.id, message: "Required contributor state is missing.") }
+            guard let record = records.records[schema.id] else { throw RuntimeFailure(.missingContributor, contributor: schema.id, message: "Required contributor state is missing.") }
             guard record.category == schema.category, record.version == schema.version, record.bytes.count <= schema.maximumBytes else { throw RuntimeFailure(.invalidContributor, contributor: schema.id, message: "Contributor schema/version/byte bound is incompatible.") }
             try cancellation?.check()
             guard !Task.isCancelled else { throw RuntimeFailure(.cancelled, message: "Contributor admission cancelled.") }
@@ -61,6 +92,12 @@ public struct ReferenceRuntimeCheckpointHandler<Contributors: RuntimeContributor
             used = try RuntimeCounts.sum(used, evidence.workUnitsUsed)
             canonical.append(record)
         }
+        return canonical
+    }
+
+    @inline(never)
+    private func publishAccepted(_ checkpoint: RuntimeCheckpoint, model: CompiledMechanicalModel,
+                                 canonical: [RuntimeContributorState], cancellation: RuntimeCancellationSource?) throws(RuntimeFailure) -> RuntimeAcceptedState {
         try cancellation?.check()
         guard !Task.isCancelled else { throw RuntimeFailure(.cancelled, message: "Physical admission cancelled.") }
         let physical: CompiledKinematicState

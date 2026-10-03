@@ -45,3 +45,22 @@ No target conditional storage/isolation or conformance exists. Native tests and 
 
 
 Causal Embedded stack finding: in the preserved initial AF09 artifact, the run-loop frame was 22,544 bytes and remained live beneath Runtime trial/admission; root fixture, Runtime trial and admission frames brought these four measured live frames to 101,616 bytes before Compiler/Joints nesting. An unchanged-function-body diagnostic that adjusted only stack/memory reservation completed the full probe. The trial phase extraction addresses that measured live-call chain; root subsequently rebuilt and ran the final Native, ordinary WASM and Embedded selected public probes successfully (exit 0) with the original profile stack reservation. Final Native focused evidence was nine tests in three suites using `.build/cohort-integration --filter Integration`. Rebuilt per-function frame sizes were not measured, and no numerical frame-size reduction is claimed. This is not an allocation/copy performance claim or a blanket stack bound for other toolchains/providers.
+
+### Nested Hybrid trial lifetime correction
+
+The initial public Integration profile proof remains valid for its exercised caller. A later Hybrid reintegration caller exposes a larger composed peak: the root's private boundary trap stops before overwrite at executeTrial -> stages -> evaluate -> Runtime work admission. Original measured static callers total approximately 131,392 bytes, including executeTrial 26,064, run 22,864 and Runtime.performTrial 15,232. Root owns the Runtime checkpoint admission split and all profile configuration. No larger-stack diagnostic qualifies the original profile.
+
+This component separates one trial into non-inline preparation, stage computation, error assessment and endpoint publication. The executeTrial owner retains only the exclusive stage workspace, scalar interval/proposal and the exit-evidence defer while a stage supplier executes. Preparation's rich expected state/history/descriptor temporaries return before stages; future contributor/history/publication temporaries exist only in the publication phase. IntegrationAttemptContext becomes an immutable final Sendable owner with let fields, avoiding rich context value copies into the required Runtime callback. No mutable workspace enters that owner, and the existing attempt evidence Mutex remains the only shared mutable storage.
+
+```text
+Runtime exclusive trial
+ -> executeTrial (exclusive workspace; exit evidence defer)
+    -> prepareTrial -> scalar interval
+    -> stages -> actual required derivative witnesses
+    -> assessStep -> reject, or bounded proposal
+    -> publishEndpoint -> actual derivative/write/readback/contributor
+ <- decision + same evidence
+ -> Runtime acceptance/rejection validation
+```
+
+The preparation read/prepare/read order, stage tableau, arithmetic charges, adaptive error and proposal rules, accepted-sequence overflow priority, endpoint derivative/write/readback order and contributor generation remain unchanged. Failures still run the same workspace evidence defer; rejection/failure leaves Runtime's accepted physical/contributor/RNG prefix unchanged. Immutable context lifetime is one attempted Runtime transaction. All target declarations, public entry points, budgets and continuation bytes are identical; no synchronization or memory-profile fallback is introduced. The nine Integration cases passed in the registered 299-test Native cohort. The final original-profile Native/ordinary-WASM/Embedded-WASM public probe exited 0, including actual nested Hybrid stages and restart. This qualifies the exercised lifetime revision, not arbitrary providers or a general stack bound; no allocator/copy performance measurement is claimed.

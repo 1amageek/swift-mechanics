@@ -1,7 +1,7 @@
 # MechanicsEquilibrium
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). IM17 owns ST-001..004 and ST-008 in [SPEC](../../SPEC.md): equilibrium, quasi-static continuation, reaction ambiguity, smooth operating-point linearization and bounded sweeps. Children are indexed after actual source contracts exist. This dispatch qualifies no operation.
+Parent: [system/package](../../DESIGN.md). IM17 owns ST-001..004 and ST-008 in [SPEC](../../SPEC.md): equilibrium, quasi-static continuation, reaction ambiguity, smooth operating-point linearization and bounded sweeps. Children: [Equations](Equations/DESIGN.md), [Statics](Statics/DESIGN.md), [Linearization](Linearization/DESIGN.md), [Continuation](Continuation/DESIGN.md). Initial source is fixed after coherent review and targeted cancellation/fixture corrections; twenty-four Native behavioral cases and selected Native/ordinary-WASM/Embedded-WASM public execution passed. Full requirement ownership persists; broader nonlinear/mechanical equilibrium and stability domains remain unqualified.
 
 ## Responsibilities and Boundaries
 The implementation owner owns child directories under Sources/MechanicsEquilibrium and Tests/MechanicsEquilibriumTests. Root owns this index, Package.swift, global public probes, PROGRESS and commits. Equation providers own calibrated force/energy/domain meanings; this owner solves and independently accepts their original force/constraint equations. Numerical convergence does not establish stable equilibrium, uniqueness or a reaction decomposition. Dynamics and Constraints supply only their documented admitted physical/coordinate operators. Modal/buckling domains remain IM28.

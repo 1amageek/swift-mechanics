@@ -1,7 +1,7 @@
 # MechanicsHybrid
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). IM24 owns DY-006 and TI-005..006 in [SPEC](../../SPEC.md): impact impulses, event location and accepted contact evolution. This is a dispatch boundary, not a qualified implementation. Root indexes real child contracts after the implementation owner establishes them; full eventual requirement ownership remains.
+Parent: [system/package](../../DESIGN.md). IM24 owns DY-006 and TI-005..006 in [SPEC](../../SPEC.md): impact impulses, event location and accepted contact evolution. Children: [ImpactPorts](ImpactPorts/DESIGN.md), [NormalImpulse](NormalImpulse/DESIGN.md), [EventEvolution](EventEvolution/DESIGN.md), [Continuation](Continuation/DESIGN.md). The initial source is fixed after coherent review and findings-limited corrections; fifteen Native behavioral cases and selected Native/ordinary-WASM/Embedded-WASM public execution passed. Full eventual requirement ownership remains; coupled/frictional impulses, general trajectories and IM16 event reconciliation remain unqualified.
 
 ## Responsibilities and Boundaries
 Worker owns only Sources/MechanicsHybrid child directories and Tests/MechanicsHybridTests. Root owns this module index, Package/global probes/PROGRESS/commits. Hybrid owns discontinuity ordering, original jump/event acceptance and binding to required Runtime continuation. Suppliers retain smooth stages, mass operators, collision witnesses and contact laws. Accepted wake/constraint reconciliation is coordinated with the future IM16 owner through public contracts; no unimplemented participant is inferred.
@@ -36,3 +36,5 @@ Invalid event domain, stale witness/model, inconsistent or unresolved simultaneo
 
 ## Verification and Change Impact
 Tests/MechanicsHybridTests owns independent analytic velocity/impulse/energy jumps, real bounce/event-time evolution, simultaneous direction/order, rollback/restart and invalid/resource/cancel proof for the explicitly admitted domain. Root owns exact selected-profile public execution after source freeze. Deferred domains remain IM24 responsibility. Changed event/impulse/contributor contracts require rechecking direct and transitive consumers; unrelated supplier evidence remains valid.
+
+Actual initial dependencies: Core, Model, Numerics, Joints, Compiler, Loads, Dynamics, Collision, ContactLaws, Runtime and Integration. Hard impact owns distinct impulse witnesses; it does not reinterpret the compliant ContactResponse adapter. The selected constant-acceleration sphere/plane trajectory uses isolated real reintegration, not translation CCD on curved paths. Test owner: [Hybrid tests](../../Tests/MechanicsHybridTests/DESIGN.md).

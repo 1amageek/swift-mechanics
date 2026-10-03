@@ -1,7 +1,7 @@
 # MechanicsContactPatches
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). IM22 owns CT-008 in [SPEC](../../SPEC.md): distributed/hydroelastic pressure representations, contact patches and integrated wrenches. Children are indexed after their actual supplier contracts and admitted domains are understood. This dispatch has no qualified implementation or execution claim.
+Parent: [system/package](../../DESIGN.md). IM22 owns CT-008 in [SPEC](../../SPEC.md): distributed/hydroelastic pressure representations, contact patches and integrated wrenches. Children: [PressureFields](PressureFields/DESIGN.md), [PlanePatches](PlanePatches/DESIGN.md). Initial supplied-pressure Tet4/rigid-plane source is fixed after coherent review; nine Native behavioral cases and selected Native/ordinary-WASM/Embedded-WASM public execution passed. Full CT-008 ownership persists; supplied pressure does not qualify equilibrated hydroelastic contact.
 
 ## Responsibilities and Boundaries
 The implementation owner owns child directories under Sources/MechanicsContactPatches and Tests/MechanicsContactPatchesTests. Root owns this index, Package.swift, shared probes, progress and commits. Patch pressure, representation-pair admission, integration and independent force/moment/refinement evidence belong here. Flexible discretization, collision witnesses, constitutive laws and rigid response remain with their suppliers. Accepted trajectory and rigid/flexible coupling belong to their consuming work items.

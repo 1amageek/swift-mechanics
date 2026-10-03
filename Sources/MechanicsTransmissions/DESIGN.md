@@ -1,7 +1,7 @@
 # MechanicsTransmissions
 
 ## Purpose and Scope
-Parent: [system/package](../../DESIGN.md). IM13 owns TR-001..011 in [SPEC](../../SPEC.md). It owns identified ideal and constitutive transmission coordinate/effort ports, fidelity, phase, ratio and continuation. Children are indexed by root after actual contracts exist. This dispatch does not qualify any API or physical behavior.
+Parent: [system/package](../../DESIGN.md). IM13 owns TR-001..011 in [SPEC](../../SPEC.md). It owns identified ideal and constitutive transmission coordinate/effort ports, fidelity, phase, ratio and continuation. Children: [PortBindings](PortBindings/DESIGN.md), [IdealNetworks](IdealNetworks/DESIGN.md), [CompliantPorts](CompliantPorts/DESIGN.md). The initial source is frozen after coherent review and the failure-ledger finding correction. The initial admitted ports have thirteen Native behavioral cases and selected Native/ordinary-WASM/Embedded-WASM public execution with exit 0. Full requirement ownership remains; broader transmission laws and coupled mechanism execution are unqualified.
 
 ## Responsibilities and Boundaries
 The implementation owner owns child directories under Sources/MechanicsTransmissions and Tests/MechanicsTransmissionsTests. Root owns this index, Package.swift, public composition probes, progress and commits. Each supported transmission publishes its coordinate equation and conjugate efforts through actual supplied constraint/layout contracts. Tooth geometry/contact is IM47; accepted constrained evolution and dynamic bearing reactions are IM16. No ideal ratio implies a resolved tooth or self-locking model.
@@ -11,6 +11,7 @@ The implementation owner owns child directories under Sources/MechanicsTransmiss
 |---|---|---|---|---|
 | [Root](../../DESIGN.md) | parent | Dispatch and composition authority | Disjoint ownership | Whole requirement closure remains IM48 |
 | [Constraints](../MechanicsConstraints/DESIGN.md) | depends on | Identified dimensionless coordinate equations, rank, projection and scalar ports | Verified initial stateless producer | General geometry, mixed charts and dynamic reactions are unavailable |
+| [Nonlinear](../MechanicsNonlinear/DESIGN.md) | depends on | Failed-work evidence of the actual assembly supplier | Preserves unavailable-work semantics | Direct import is required for exact Embedded specialization |
 
 ## Architecture
 ```text

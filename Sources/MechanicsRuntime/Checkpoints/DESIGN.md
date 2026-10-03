@@ -31,8 +31,12 @@ Physical checkpoint v1 stores fixed-anchor tree state; prescribed moving-anchor 
 ## State, Ownership, and Lifecycle
 Immutable records are Sendable value owners. Mutable work lives in an exclusive inout transaction; shared metadata/cancellation state uses identical Mutex storage on every target. Native/WASM/Embedded semantics are qualified only by selected actual target paths.
 
+Admission phases end their temporary lifetimes before invoking required contributor witnesses or compiled-tree admission. One operation-owned immutable registry/record owner connects preflight, metadata preparation and validation; physical publication follows validation. The order of checks, cumulative validation budget, cancellation gates, canonical contributor order, error mapping and all-or-nothing publication remain unchanged. No additional lock, mutable cache, target branch or alternate WASM stack profile is introduced.
+
 ## Failure, Concurrency, and Constraints
 Typed RuntimeFailure identifies domain, missing contributor, incompatible model/continuation, capacity, busy/closed/cancelled or validation failure. Session failures retain last accepted prefix. Limits precede allocation and publication is all-or-nothing. No silent fallback or unimplemented success.
 
 ## Verification and Change Impact
 [Test owner](../../../Tests/MechanicsRuntimeTests/DESIGN.md): Actual uninterrupted vs restarted contributor/random trajectory, corrupt/truncated/missing/schema/revision/build/backend failures and compatible inertia-edit migration. Provider-specific internal state/future moving anchors remain explicit integration obligations.
+
+The IM24 consumer exposed a measured 33,712-byte Embedded debug admission frame on a nested actual integration/validation path. Admission lifetime changes require the sixteen Native Runtime behavioral cases and the existing original-profile Native/WASM/Embedded public probes to execute again; the failing nested Hybrid path is additional composition evidence. The sixteen Runtime cases passed in the registered 299-test Native cohort; the final original-profile Native/ordinary-WASM/Embedded-WASM public probe exited 0, including the nested Hybrid path. This requalifies the exercised lifetime revision only.

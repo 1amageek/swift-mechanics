@@ -19,7 +19,10 @@ struct FoundationVerification {
             try verifyContactResponse()
             try verifyExchange()
             try verifyConstraints()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyIntegration(); try verifyActuation() }
+            try verifyTransmissions()
+            try verifyEquilibrium()
+            try verifyContactPatches()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyIntegration(); try verifyActuation(); try verifyHybrid() }
             else { throw FoundationVerificationError.unexpectedFailure }
         } catch {
             throw .unexpectedFailure

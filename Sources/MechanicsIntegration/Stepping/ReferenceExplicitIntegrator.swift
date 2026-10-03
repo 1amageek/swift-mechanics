@@ -76,13 +76,21 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
     @inline(never)
     private static func executeTrial(_ context: IntegrationAttemptContext, trial: inout RuntimeTrial,
                                      control: RuntimeStepControl, capture: IntegrationAttemptCapture) throws(RuntimeFailure) -> RuntimeTrialDecision {
-        let equations = context.equations, continuation = context.continuation, expected = context.expected
-        let descriptor = continuation.descriptor, policy = continuation.policy
-        let n = descriptor.dimensions.count, supplierBudget = context.supplierBudget, outerRemaining = context.outerRemaining
-        let target = context.target, retry = context.retry
-        var workspace = try IntegrationStageWorkspace(count: n, maximumOuter: outerRemaining, supplier: supplierBudget)
+        var workspace = try IntegrationStageWorkspace(count: context.continuation.descriptor.dimensions.count,
+            maximumOuter: context.outerRemaining, supplier: context.supplierBudget)
         var error: Double?, next: Double?
         defer { capture.store(IntegrationAttemptEvidence(work: workspace.report, error: error, next: next)) }
+        let interval = try prepareTrial(context, trial: &trial, workspace: &workspace, control: control)
+        try stages(context, interval: interval, workspace: &workspace, control: control)
+        guard try assessStep(context, interval: interval, workspace: &workspace, error: &error, next: &next, control: control) else { return .reject }
+        return try publishEndpoint(context, interval: interval, workspace: &workspace, error: error, next: next, trial: &trial, control: control)
+    }
+    @inline(never)
+    private static func prepareTrial(_ context: IntegrationAttemptContext, trial: inout RuntimeTrial,
+                                     workspace: inout IntegrationStageWorkspace, control: RuntimeStepControl) throws(RuntimeFailure) -> IntegrationTrialInterval {
+        let equations = context.equations, continuation = context.continuation, expected = context.expected
+        let descriptor = continuation.descriptor
+        let n = descriptor.dimensions.count, target = context.target, retry = context.retry
         try control.beginWorkBlock(units: 1)
         guard equations.descriptor == descriptor else { throw RuntimeFailure(.invalidInput, message: "Equation descriptor changed before trial.") }
         let record = try trial.contributor(continuation.schema.id), history = try continuation.history(record)
@@ -100,7 +108,13 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
         let time = trial.timeSeconds, requested = retry ?? history.nextStep, gap = target - time
         let h = min(requested, gap), end = h == gap ? target : time + h
         guard h.isFinite, h > 0, end.isFinite, end > time, end <= target else { throw RuntimeFailure(.invalidInput, message: "Step cannot advance representable accepted time.") }
-        try Self.stages(equations, descriptor: descriptor, time: time, h: h, endpoint: end, policy: policy, workspace: &workspace, control: control)
+        return IntegrationTrialInterval(time: time, step: h, end: end, acceptedSteps: history.acceptedSteps)
+    }
+    @inline(never)
+    private static func assessStep(_ context: IntegrationAttemptContext, interval: IntegrationTrialInterval,
+                                   workspace: inout IntegrationStageWorkspace, error: inout Double?, next: inout Double?,
+                                   control: RuntimeStepControl) throws(RuntimeFailure) -> Bool {
+        let policy = context.continuation.policy, n = context.continuation.descriptor.dimensions.count, h = interval.step
         if policy.method == .heunEuler {
             var norm = 0.0
             for i in 0..<n {
@@ -117,11 +131,19 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
             guard proposal.isFinite, proposal > 0 else { throw RuntimeFailure(.invalidState, message: "Adaptive step proposal overflow/underflow.") }
             if norm > 1 {
                 guard proposal < h, proposal >= policy.minimumStep else { throw RuntimeFailure(.capacityExceeded, message: "Adaptive error target exhausted minimum step.") }
-                next = min(policy.maximumStep,proposal); return .reject
+                next = min(policy.maximumStep,proposal); return false
             }
             next = min(policy.maximumStep,max(policy.minimumStep,proposal))
         } else { next = policy.initialStep }
-        guard history.acceptedSteps < UInt64.max else { throw RuntimeFailure(.integerOverflow, message: "Accepted integration sequence overflow.") }
+        return true
+    }
+    @inline(never)
+    private static func publishEndpoint(_ context: IntegrationAttemptContext, interval: IntegrationTrialInterval,
+                                        workspace: inout IntegrationStageWorkspace, error: Double?, next: Double?,
+                                        trial: inout RuntimeTrial, control: RuntimeStepControl) throws(RuntimeFailure) -> RuntimeTrialDecision {
+        let equations = context.equations, continuation = context.continuation
+        let descriptor = continuation.descriptor, end = interval.end
+        guard interval.acceptedSteps < UInt64.max else { throw RuntimeFailure(.integerOverflow, message: "Accepted integration sequence overflow.") }
         // Endpoint derivative is real and provider publication has no inferred q/v meaning.
         try Self.evaluate(equations, descriptor: descriptor, time: end, point: workspace.result, output: &workspace.stage, supplier: &workspace.supplier, unavailable: &workspace.unavailable, outer: &workspace.outer,
                           maximumOuter: workspace.maximumOuter, calls: &workspace.calls, control: control)
@@ -131,7 +153,7 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
         try equations.read(trial, into: &workspace.k1)
         guard trial.timeSeconds == end, workspace.k1 == workspace.result, equations.descriptor == descriptor else { throw RuntimeFailure(.invalidState, message: "Chart publication did not preserve endpoint/time/descriptor.") }
         guard let next else { throw RuntimeFailure(.invalidState, message: "Accepted step has no continuation proposal.") }
-        let updated = IntegrationHistory(time: end, point: workspace.result, nextStep: next, steps: history.acceptedSteps + 1, error: error)
+        let updated = IntegrationHistory(time: end, point: workspace.result, nextStep: next, steps: interval.acceptedSteps + 1, error: error)
         try trial.replaceContributor(continuation.record(updated)); return .accept
     }
     private static func supplierCall(work: inout NumericalWork, unavailable: inout Bool,
@@ -161,8 +183,11 @@ public struct ReferenceExplicitIntegrator: ExplicitIntegrating, Sendable {
         try control.beginWorkBlock(units: 1)
         guard equations.descriptor == descriptor, output.count == point.count, output.allSatisfy({ $0.isFinite }) else { throw RuntimeFailure(.invalidState, message: "Derivative output is incomplete/nonfinite or descriptor changed.") }
     }
-    private static func stages(_ equations: any SmoothODEEquations, descriptor: ODEDescriptor, time: Double, h: Double, endpoint: Double,
-                               policy: ExplicitIntegrationPolicy, workspace w: inout IntegrationStageWorkspace, control: RuntimeStepControl) throws(RuntimeFailure) {
+    @inline(never)
+    private static func stages(_ context: IntegrationAttemptContext, interval: IntegrationTrialInterval,
+                               workspace w: inout IntegrationStageWorkspace, control: RuntimeStepControl) throws(RuntimeFailure) {
+        let equations = context.equations, descriptor = context.continuation.descriptor, policy = context.continuation.policy
+        let time = interval.time, h = interval.step, endpoint = interval.end
         try evaluate(equations, descriptor: descriptor, time: time, point: w.start, output: &w.k1, supplier: &w.supplier, unavailable: &w.unavailable, outer: &w.outer, maximumOuter: w.maximumOuter, calls: &w.calls, control: control)
         if policy.method == .heunEuler {
             for i in w.start.indices { try w.charge(32,control: control); w.stage[i] = w.start[i] + h*w.k1[i] }
