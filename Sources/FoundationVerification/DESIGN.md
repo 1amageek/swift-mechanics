@@ -30,6 +30,8 @@ flowchart LR
 ```
 
 ## Contracts and Invariants
+IM14 composition uses an actual compiled revolute binding, required servo and motor witnesses, conjugate affine port power, and a required ActuatorRuntimeContributors owner. The selected probe checks circuit/energy values and real rejected-trial/checkpoint/restart continuation. Calibrated chamber/muscle behavior remains Native-local evidence; accepted motor-driven mechanics and prescribed reactions are downstream. Non-inlined setup, trial and continuation checks preserve the existing original stack profile.
+
 The IM12 composition calls published constraint, assembly and scalar-port witnesses. Independently checked circle intersections, weighted velocity projection, redundant-row ambiguity and passive power must execute on each exact profile. Contradictory original rows must fail. This selected stateless quadratic/scalar domain does not qualify general geometric loops, dynamic reactions, quaternion projection or accepted mechanism evolution. Setup and solve phases use separate non-inlined functions to bound overlapping fixture stack frames. Execution evidence is recorded after runtime verification.
 
 Every check calls actual production code. Nonzero exit is required for unexpected failure or failed analytic expectation. Expected invalid model/capability requests must throw. The admitted Float64 and Float32 paths execute independently with explicit tolerances/budgets, not a backend substitution.
@@ -97,3 +99,6 @@ Native registered-cohort execution covered 205 tests: 204 passed and one invalid
 
 ### IM12 executed composition (2026-10-04)
 The selected Constraints checks above compiled, linked and actually executed with exit 0 on Native and both exact Swift 6.4.0 release WASM SDK profiles. Embedded retained EmbeddedUnicode, and Node24.19.0 WASI Preview1 ran each WASM artifact. Existing composition checks also executed. Native constraint evidence is fourteen initial successes plus the single corrected floating-point comparison recheck, establishing fifteen cases without claiming a new whole-package run. Full constraint families, browser execution and IM48 remain incomplete.
+
+### IM14 executed composition (2026-10-04)
+All selected Actuation checks above separately compiled, linked and actually exited0 on Native and both exact Swift6.4.0 release WASM SDK artifacts. Embedded retained EmbeddedUnicode; Node24.19.0 WASI Preview1 ran each WASM artifact. The final Embedded foreign-module imports affect visibility only; previous Native/ordinary behavior and eighteen Native local tests remain valid. Real required contributor/servo trial rejection and restart preserve the accepted physical/history/random prefix. This qualifies the selected scalar motor/servo/affine composition, not minimum macOS13, parallel WASI, chamber/muscle runtime profiles or integrated driven mechanisms. Whole-target IM48 remains incomplete.
