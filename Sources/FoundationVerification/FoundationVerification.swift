@@ -16,12 +16,14 @@ struct FoundationVerification {
             try verifyDynamics()
             try verifyFlexible()
             try verifyContactLaws()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime() }
+            try verifyContactResponse()
+            try verifyExchange()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyIntegration() }
             else { throw FoundationVerificationError.unexpectedFailure }
         } catch {
             throw .unexpectedFailure
         }
-        print("Foundation runtime verification passed: inertia, solves, materials, kinematics, loads, compiler, collision, dynamics, tetrahedra, contact laws and runtime transactions.")
+        print("Foundation runtime verification passed: inertia, solves, materials, kinematics, loads, compiler, collision, dynamics, tetrahedra, contact laws, coupled response, runtime transactions, explicit integration and native model exchange.")
     }
 
     static func require(_ condition: Bool) throws(FoundationVerificationError) {

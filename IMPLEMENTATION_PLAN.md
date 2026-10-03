@@ -1,6 +1,6 @@
 # Implementation dependency plan
 
-Status: implementation active, 2026-10-03. The user authorized the complete plan and behavioral tests as the finish condition. PROGRESS.md owns current executable readiness/completion; this document retains the stable work IDs and dependency graph. MechanicsCore implementation and its SwiftPM/test/runtime paths are being established; downstream physics items remain planned until their actual prerequisites pass.
+Status: implementation active, 2026-10-03. The user authorized the complete plan and behavioral tests as the finish condition. PROGRESS.md owns current executable readiness/completion; this document retains the stable work IDs and dependency graph. PROGRESS.md records the verified initial numerical, kinematic, compiler, dynamics, constitutive, collision and runtime handoffs and current ready frontier. Complete requirement-domain closure and whole-target integration remain open; downstream production work starts only after its consumed contracts pass.
 
 This document owns work IDs, prerequisite edges, requirement ownership, handoffs and parallel dispatch rules. [DESIGN.md](DESIGN.md) owns architectural composition; [SPEC.md](SPEC.md) owns the unchanged 210 behavioral requirements. [PROGRESS.md](PROGRESS.md) records the authorized implementation task. Its child IDs IM.IM00 through IM.IM47 map to this plan's IM00 through IM47; top-level IM48 owns whole-target integration after their parent IM completes.
 
@@ -40,7 +40,7 @@ Independence requires separating interface data from concrete engines. IM20 owns
 
 IM03 owns shared numerical operator/status/budget/precision record contracts needed by both IM04 and IM05. IM04 owns nonlinear iteration and acceptance implementation; IM05 does not import that implementation merely to obtain common record definitions. Geometry-following constraints in IM12 consume explicitly supplied query contracts; CAD supplies one possible adapter, not a mandatory dependency of those kernels.
 
-Concrete module/path assignments for foundation, verified IM04/05/06 and dispatched IM07/11 PG04 scopes are indexed in DESIGN.md. Additional assignments remain a prerequisite of their dispatch. IM00 assigns non-overlapping paths and the native SwiftPM graph before parallel production work; no 49-module structure or hypothetical component is treated as verified. Multiple task scopes may live in one real module only when their component contracts and paths remain independently owned.
+Concrete current module/path assignments, verified initial producers and the actual dispatched frontier are indexed in DESIGN.md. Additional assignments remain a prerequisite of their dispatch. IM00 assigns non-overlapping paths and the native SwiftPM graph before parallel production work; no 49-module structure or hypothetical component is treated as verified. Multiple task scopes may live in one real module only when their component contracts and paths remain independently owned.
 
 ## 3. Canonical prerequisite and ownership table
 
