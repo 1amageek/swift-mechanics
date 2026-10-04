@@ -3,8 +3,9 @@ internal final class ToothContactPhysics: Sendable {
     let geometry: any CollisionGeometryQuerying
     let laws: any ContactLawEvaluating
     let dynamics: any RigidDynamicsSolving
+    let rigid: ToothRigidAcceptance
     init(model: ToothContactModel, geometry: any CollisionGeometryQuerying, laws: any ContactLawEvaluating,
-         dynamics: any RigidDynamicsSolving) { self.model=model; self.geometry=geometry; self.laws=laws; self.dynamics=dynamics }
+         dynamics: any RigidDynamicsSolving) { self.model=model; self.geometry=geometry; self.laws=laws; self.dynamics=dynamics; rigid=ToothRigidAcceptance(model:model,dynamics:dynamics) }
     @inline(never)
     func history(time: Double, policy: ToothContactPolicy, work: inout ToothContactWork) throws(ToothContactError) -> [ContactHistory] {
         let reserved=try ToothArithmetic.slots(teeth:model.teeth.count,contacts:model.contacts.count)
@@ -56,28 +57,10 @@ internal final class ToothContactPhysics: Sendable {
     @inline(never)
     private func pairSample(_ index: Int, snapshot: KinematicSnapshot, history: ContactHistory, start: Double, step: Double,
                             policy: ToothContactPolicy, work: inout ToothContactWork) throws(ToothContactError) -> ToothPairSample {
-        let pair=model.contacts[index], a=model.teeth[pair.firstProxy], b=model.teeth[pair.secondProxy]
+        let pair=model.contacts[index]
         guard history.identity == (try identity(pair)), history.pair == pair.law, history.timeSeconds == start else { throw .staleSource }
-        let first: BodyKinematics, second: BodyKinematics
-        do { first=try snapshot.body(a.proxy.geometry.bodyID); second=try snapshot.body(b.proxy.geometry.bodyID) } catch { throw .joint(error) }
-        let poseA=try ToothArithmetic.core { () throws(CoreError) in try first.motion.pose.composed(with:a.colliderToBody) }
-        let poseB=try ToothArithmetic.core { () throws(CoreError) in try second.motion.pose.composed(with:b.colliderToBody) }
-        let proxyA=a.proxy.moved(to:poseA), proxyB=b.proxy.moved(to:poseB)
-        let reserved=try ToothArithmetic.slots(teeth:model.teeth.count,contacts:model.contacts.count)
-        let witness=try ToothArithmetic.collision(reserved:reserved,policy:policy,work:&work) { (local: inout CollisionWork) throws(CollisionError) in
-            try self.geometry.witness(first:proxyA,second:proxyB,policy:policy.collision,work:&local)
-        }
-        let original=try ToothArithmetic.collision(reserved:reserved,policy:policy,work:&work) { (local: inout CollisionWork) throws(CollisionError) in
-            try AnalyticCollisionQueries().witness(first:proxyA,second:proxyB,policy:policy.collision,work:&local)
-        }
-        guard witness.pair == original.pair, witness.poseA == poseA, witness.poseB == poseB,
-              witness.featureA == original.featureA, witness.featureB == original.featureB,
-              witness.approximationError == original.approximationError else { throw .invalidSupplierOutput }
-        guard witness.degeneracy == .regular, original.degeneracy == .regular else { throw .unsupportedDomain }
-        try ToothArithmetic.vector(witness.pointA,original.pointA,policy:policy)
-        try ToothArithmetic.vector(witness.pointB,original.pointB,policy:policy)
-        let normalError=try ToothArithmetic.core { () throws(CoreError) in try witness.normal.subtracting(original.normal).magnitude() }
-        guard normalError <= policy.collision.normalTolerance, abs(witness.separation-original.separation) <= policy.collision.lengthTolerance else { throw .invalidSupplierOutput }
+        let kinematics=try ToothPairKinematics.evaluate(shared:self,pair:pair,snapshot:snapshot,policy:policy,work:&work)
+        let first=kinematics.first, second=kinematics.second, witness=kinematics.witness
         try work.charge(512)
         let ra=try ToothArithmetic.core { () throws(CoreError) in try witness.pointA.subtracting(first.motion.pose.translation) }
         let rb=try ToothArithmetic.core { () throws(CoreError) in try witness.pointB.subtracting(second.motion.pose.translation) }
@@ -96,6 +79,7 @@ internal final class ToothContactPhysics: Sendable {
         catch { throw .contact(error) }
         let basisError=try ToothArithmetic.core { () throws(CoreError) in try basis.normal.subtracting(witness.normal).magnitude() }
         guard basisError <= policy.collision.normalTolerance else { throw .invalidSupplierOutput }
+        let reserved=try ToothArithmetic.slots(teeth:model.teeth.count,contacts:model.contacts.count)
         let response=try lawResponse(input:input,pair:pair,history:history,policy:policy,reserved:reserved,work:&work)
         let forceA=try ToothArithmetic.core { () throws(CoreError) in try response.forceOnB.scaled(by:-1) }
         let ta=try ToothArithmetic.core { () throws(CoreError) in try ra.cross(forceA) }
@@ -144,68 +128,14 @@ internal final class ToothContactPhysics: Sendable {
     private func mechanical(snapshot: KinematicSnapshot, loads: [BodyWrenchContribution], observations: [ToothContactObservation],
                             histories: [ContactHistory], stored: Double, loss: Double, contactPower: Double, reserved: Int,
                             policy: ToothContactPolicy, work: inout ToothContactWork) throws(ToothContactError) -> ToothPhysicalSample {
-        let input: RigidDynamicsInput
-        do { input=try RigidDynamicsInput(snapshot:snapshot,velocity:snapshot.coordinateRate,inertias:model.inertias,gravity:nil,bodyWrenches:loads) }
-        catch { throw .dynamics(error) }
-        let system=try assemble(input,policy:policy,reserved:reserved,work:&work)
-        let solved=try ToothArithmetic.numeric(reserved:reserved,policy:policy,work:&work) { (local: inout NumericalWork) throws(DynamicsError) in
-            try self.dynamics.forward(system,driveForce:model.driveForce,policy:policy.dynamics,work:&local)
-        }
-        guard solved.acceleration.count == 2, solved.driveForce == model.driveForce else { throw .invalidSupplierOutput }
-        var original=[Double](repeating:0,count:2)
-        try ToothArithmetic.numeric(reserved:reserved,policy:policy,work:&work) { (local: inout NumericalWork) throws(DynamicsError) in
-            try RigidEquationKernel().originalInertialForce(system,acceleration:solved.acceleration,includeBias:true,into:&original,work:&local)
-        }
-        try work.charge(128)
-        for i in 0..<2 {
-            let known: Double
-            do { known=try system.forces.total(at:i) } catch { throw .dynamics(error) }
-            try ToothArithmetic.close(original[i],known+model.driveForce[i],scale:policy.dynamics.energyScale,policy:policy)
-        }
-        let energy=try ToothArithmetic.numeric(reserved:reserved,policy:policy,work:&work) { (local: inout NumericalWork) throws(DynamicsError) in
-            try RigidEquationKernel().energy(system,acceleration:solved.acceleration,angularMomentumReference:.zero,requireComplete:true,work:&local)
-        }
-        guard let potential=energy.potentialEnergy else { throw .invalidSupplierOutput }
-        try ToothArithmetic.close(potential,stored,scale:policy.dynamics.energyScale,policy:policy)
-        let power=try ToothArithmetic.value(contactPower+model.driveForce[0]*input.velocity[0]+model.driveForce[1]*input.velocity[1])
-        try ToothArithmetic.close(energy.kineticEnergyRate,power,scale:policy.dynamics.energyScale/policy.dynamics.timeScale,policy:policy)
-        try ToothArithmetic.close(system.forces.actualPower,contactPower,scale:policy.dynamics.energyScale/policy.dynamics.timeScale,policy:policy)
-        guard energy.time == snapshot.time, energy.frame == model.tree.worldFrame else { throw .invalidSupplierOutput }
-        return ToothPhysicalSample(acceleration:solved.acceleration,contactForce:system.forces.contact,observations:observations,histories:histories,
-            energy:energy,storedEnergy:stored,dissipationPower:loss)
+        let result=try rigid.evaluate(snapshot:snapshot,loads:loads,stored:stored,loss:loss,contactPower:contactPower,
+            reserved:reserved,policy:policy,work:&work)
+        return ToothPhysicalSample(acceleration:result.acceleration,contactForce:result.contactForce,observations:observations,histories:histories,
+            energy:result.energy,storedEnergy:stored,dissipationPower:loss)
     }
     @inline(never)
     internal func assemble(_ input: RigidDynamicsInput, policy: ToothContactPolicy, reserved: Int,
                           work: inout ToothContactWork) throws(ToothContactError) -> RigidDynamicsSystem {
-        try ToothArithmetic.check(policy); try work.beginCall()
-        let remaining=work.budget.arithmeticOperations-work.operations, storage=work.budget.scalarStorage-reserved
-        let numericalBudget: NumericalBudget, loadBudget: LoadBudget
-        do { numericalBudget=try NumericalBudget(scalarStorage:storage/2,arithmeticOperations:remaining/2,iterations:work.budget.iterations-work.iterations) }
-        catch { throw .numerical(error) }
-        do { loadBudget=try LoadBudget(maximumWork:remaining-remaining/2,maximumScalars:storage-storage/2,isCancelled:policy.isCancelled) }
-        catch { throw .capacityExceeded }
-        var numerical=NumericalWork(budget:numericalBudget), load=LoadWork(budget:loadBudget)
-        do { try numerical.chargeOperations(1); try numerical.advanceIteration() } catch {
-            try work.charge(numerical.operations,storage:reserved,iterations:numerical.iterations)
-            throw .numerical(error)
-        }
-        do { try load.charge(1) } catch {
-            try work.charge(ToothArithmetic.sum(numerical.operations,load.consumed),storage:reserved,iterations:numerical.iterations)
-            throw .capacityExceeded
-        }
-        let result: Result<RigidDynamicsSystem,DynamicsError>
-        do { result = .success(try RigidEquationKernel().assemble(input,admission:policy.admission,loadWork:&load,work:&numerical)) }
-        catch { result = .failure(error) }
-        guard numerical.budget == numericalBudget, numerical.operations >= 1, numerical.iterations >= 1,
-              load.budget.maximumWork == loadBudget.maximumWork, load.budget.maximumScalars == loadBudget.maximumScalars,
-              load.consumed >= 1 else {
-            // Both local operation seeds and the numerical iteration preceded the callback.
-            try work.charge(2,storage:reserved,iterations:1)
-            throw .invalidSupplierLedger(failedSupplierWorkUnavailable:true)
-        }
-        try work.charge(ToothArithmetic.sum(numerical.operations,load.consumed),
-            storage:ToothArithmetic.sum(reserved,ToothArithmetic.sum(numerical.peakScalarStorage,load.peakScalars)),iterations:numerical.iterations)
-        try ToothArithmetic.check(policy)
-        switch result { case .success(let system): return system; case .failure(let error): throw .dynamics(error) }
+        try rigid.assemble(input,policy:policy,reserved:reserved,work:&work)
     }
 }

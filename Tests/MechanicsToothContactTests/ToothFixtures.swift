@@ -29,11 +29,13 @@ enum ToothFixtures {
         return try SeriesContactPairing().combine(first:material("tooth-material-a"),second:material("tooth-material-b"),
             selection:.linear(maximumPenetration:0.8,maximumNormalSpeed:100),lossPolicy:.compliantDampingOnly,resistanceRadius:0.3,override:nil,work:&work)
     }
-    static func model(mesh: Int = 1, inertia: Double = 1, damping: Double = 0, missingPair: Bool = false) throws -> ToothContactModel {
-        let root=try body("root",position:.zero,moment:1,mode:.static)
+    static func model(mesh: Int = 1, inertia: Double = 1, damping: Double = 0, missingPair: Bool = false, lawOverride: ContactLawPair? = nil,
+                      materialDirection: Vector3? = nil, secondAxis: Vector3 = .unitZ,
+                      worldRotation: UnitQuaternion = .identity) throws -> ToothContactModel {
+        let root=try body("root",position:.zero,moment:1,mode:.static,rotation:worldRotation)
         let a=try body("a",position:.zero,moment:inertia,mode:.dynamic)
         let b=try body("b",position:Vector3(2,0,0),moment:1,mode:.dynamic)
-        let joints=try [hinge("b-joint",child:b.id,offset:Vector3(2,0,0)),hinge("a-joint",child:a.id,offset:.zero)]
+        let joints=try [hinge("b-joint",child:b.id,offset:Vector3(2,0,0),axis:secondAxis),hinge("a-joint",child:a.id,offset:.zero)]
         let tree=try KinematicTree(bodies:[b,root,a],joints:joints,root:root.id,rootBase:.fixed,
             worldFrame:id(.frame,"tooth-world"),revision:1,capacity:KinematicCapacity(maximumBodies:3,maximumVelocities:2,maximumJacobianScalars:36))
         let tolerance=try NumericalTolerance(absolute:1e-10,relative:1e-10)
@@ -63,10 +65,13 @@ enum ToothFixtures {
                 teeth.append(ToothProxyBinding(toothID:UInt64(side*mesh+i+1),proxy:proxy,colliderToBody:placement))
             }
         }
-        let pairLaw=try law(stiffness:10/Double(mesh*mesh),damping:damping)
+        let pairLaw: ContactLawPair
+        if let lawOverride { pairLaw=lawOverride } else { pairLaw=try law(stiffness:10/Double(mesh*mesh),damping:damping) }
+        let tangent: ToothMaterialTangent?
+        if let materialDirection { tangent=try ToothMaterialTangent(directionInCollider:materialDirection) } else { tangent=nil }
         var contacts:[ToothContactPair]=[]
         for i in 0..<mesh { for j in 0..<mesh {
-            if !missingPair || i != mesh-1 || j != mesh-1 { contacts.append(try ToothContactPair(key:"pair-\(i)-\(j)",firstProxy:i,secondProxy:mesh+j,law:pairLaw)) }
+            if !missingPair || i != mesh-1 || j != mesh-1 { contacts.append(try ToothContactPair(key:"pair-\(i)-\(j)",firstProxy:i,secondProxy:mesh+j,law:pairLaw,firstMaterialTangent:tangent)) }
         } }
         var work=try work()
         return try ToothContactModel(source:SourceProvenance(source:"external curved tooth catalog",revision:1),tree:tree,referenceCoordinates:[0,0],
@@ -76,15 +81,15 @@ enum ToothFixtures {
         try MassProperties3D(mass:1,centerOfMass:.zero,inertiaAtCenter:Matrix3(moment,0,0,0,moment,0,0,0,moment),
             policy:InertiaValidationPolicy(symmetry:NumericalTolerance(absolute:1e-10,relative:1e-10),physicalityRelative:0))
     }
-    private static func body(_ key: String, position: Vector3, moment: Double, mode: BodyMotionMode) throws -> KinematicBody {
+    private static func body(_ key: String, position: Vector3, moment: Double, mode: BodyMotionMode, rotation: UnitQuaternion = .identity) throws -> KinematicBody {
         KinematicBody(body:try BodyRecord3D(id:id(.body,"tooth-"+key),frame:id(.frame,"tooth-"+key+"-frame"),mode:mode,
-            bodyToWorld:RigidTransform(rotation:.identity,translation:position),representations:BodyRepresentations(),
+            bodyToWorld:RigidTransform(rotation:rotation,translation:position),representations:BodyRepresentations(),
             inertia:InertialRepresentation3D(properties:properties(moment),provenance:SourceProvenance(source:"independent shaft inertia",revision:1),quality:.exact)))
     }
-    private static func hinge(_ key: String, child: EntityID, offset: Vector3) throws -> JointRecord {
+    private static func hinge(_ key: String, child: EntityID, offset: Vector3, axis: Vector3 = .unitZ) throws -> JointRecord {
         try JointRecord(id:id(.joint,key),parentBody:id(.body,"tooth-root"),childBody:child,
             parentAnchor:JointAnchor(frame:id(.frame,key+"-parent"),placement:.fixed(RigidTransform(rotation:.identity,translation:offset))),
-            childAnchor:JointAnchor(frame:id(.frame,key+"-child"),placement:.fixed(.identity)),manifold:JointManifold(.revolute(axis:.unitZ)))
+            childAnchor:JointAnchor(frame:id(.frame,key+"-child"),placement:.fixed(.identity)),manifold:JointManifold(.revolute(axis:axis)))
     }
     static func indices(_ model: ToothContactModel) throws -> (Int,Int) {
         let a=try id(.joint,"a-joint"), b=try id(.joint,"b-joint")

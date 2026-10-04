@@ -24,7 +24,9 @@ struct ToothFailureTests {
     }
     @Test func explicitFidelityUnsupportedLawAndOperationalLimits() throws {
         let model=try ToothFixtures.model(), initial=try ToothFixtures.initial(model)
-        do { _=try ToothFixtures.model(damping:1); Issue.record("Unqualified damping branch accepted.") }
+        let damped=try ToothFixtures.model(damping:1)
+        var legacyWork=try ToothFixtures.work()
+        do { _=try ReferenceToothContactEvolution(model:damped).initial(time:0,q:[0,0],v:[0,0],evaluationTimeStep:0.001,policy:ToothFixtures.policy(),work:&legacyWork); Issue.record("Legacy damping branch accepted.") }
         catch let error as ToothContactError { if case .unsupportedDomain=error {} else { Issue.record("Unexpected failure: \(error)") } }
         let policies=try [ToothFixtures.policy(spacing:0.01),ToothFixtures.policy(error:0.001),ToothFixtures.policy(cancelled:{true})]
         for policy in policies {

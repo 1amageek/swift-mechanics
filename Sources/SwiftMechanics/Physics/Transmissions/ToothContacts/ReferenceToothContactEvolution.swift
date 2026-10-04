@@ -1,14 +1,22 @@
-public struct ReferenceToothContactEvolution: ToothContactEvolving, Sendable {
+public struct ReferenceToothContactEvolution: ToothContactEvolving, MaterialToothContactEvolving, Sendable {
     public let model: ToothContactModel
-    private let physics: ToothContactPhysics
+    internal let physics: ToothContactPhysics
+    internal let material: ToothMaterialPhysics?
     public init(model: ToothContactModel, geometry: any CollisionGeometryQuerying = AnalyticCollisionQueries(),
                 laws: any ContactLawEvaluating = CompliantContactEvaluator(), dynamics: any RigidDynamicsSolving = DenseRigidDynamics()) {
-        self.model=model; physics=ToothContactPhysics(model:model,geometry:geometry,laws:laws,dynamics:dynamics)
+        self.model=model; material=nil; physics=ToothContactPhysics(model:model,geometry:geometry,laws:laws,dynamics:dynamics)
+    }
+    public init(model: ToothContactModel, geometry: any CollisionGeometryQuerying = AnalyticCollisionQueries(),
+                laws: any ContactLawEvaluating = CompliantContactEvaluator(), current: any ContactCurrentEvaluating,
+                dynamics: any RigidDynamicsSolving = DenseRigidDynamics()) {
+        self.model=model
+        let shared=ToothContactPhysics(model:model,geometry:geometry,laws:laws,dynamics:dynamics)
+        physics=shared; material=ToothMaterialPhysics(shared:shared,current:current)
     }
     @inline(never)
     public func initial(time: Double, q: [Double], v: [Double], evaluationTimeStep: Double, policy: ToothContactPolicy,
                         work: inout ToothContactWork) throws(ToothContactError) -> ToothContactState {
-        try model.validatePolicy(policy,work:&work)
+        try model.validatePolicy(policy,work:&work); try model.validateLegacy(policy:policy,work:&work)
         guard time.isFinite, time >= 0, evaluationTimeStep.isFinite, evaluationTimeStep > 0, q.count == 2, v.count == 2,
               time+evaluationTimeStep > time, (time+evaluationTimeStep).isFinite else { throw .invalidInput }
         try work.charge(64)
@@ -27,7 +35,7 @@ public struct ReferenceToothContactEvolution: ToothContactEvolving, Sendable {
     @inline(never)
     public func step(accepted: ToothContactState, timeStep: Double, policy: ToothContactPolicy,
                      work: inout ToothContactWork) throws(ToothContactError) -> ToothContactState {
-        try model.validatePolicy(policy,work:&work); try accepted.model.validatePolicy(policy,work:&work)
+        try model.validatePolicy(policy,work:&work); try model.validateLegacy(policy:policy,work:&work); try accepted.model.validatePolicy(policy,work:&work)
         guard model.matches(accepted.model), accepted.physical.revision == model.tree.revision,
               accepted.histories.count == model.contacts.count else { throw .staleSource }
         guard policy.maximumSteps >= 1, accepted.acceptedSteps < UInt64.max else { throw .capacityExceeded }
@@ -45,24 +53,7 @@ public struct ReferenceToothContactEvolution: ToothContactEvolving, Sendable {
     @inline(never)
     private func retract(_ source: KinematicState, start: ToothPhysicalSample, timeStep: Double,
                          policy: ToothContactPolicy, work: inout ToothContactWork) throws(ToothContactError) -> KinematicState {
-        try ToothArithmetic.check(policy); try work.charge(1024)
-        let velocity=try [ToothArithmetic.value(source.v[0]+timeStep*start.acceleration[0]),
-                          ToothArithmetic.value(source.v[1]+timeStep*start.acceleration[1])]
-        var positions=source.q
-        let evaluator: any JointMotionEvaluating=JointMotionEvaluator()
-        for (index,joint) in model.tree.joints.enumerated() {
-            let layout=model.tree.layout.joints[index]
-            let integrated: [Double]
-            do { integrated=try evaluator.integrating(joint.manifold,q:source.q[layout.positions.start..<layout.positions.end],
-                v:velocity[layout.velocities.start..<layout.velocities.end],timeStep:timeStep,policy:model.jointPolicy) }
-            catch let e as JointError { throw .joint(e) }
-            catch let e as CoreError { throw .core(e) }
-            catch { throw .unexpectedKinematicsFailure }
-            guard integrated.count == layout.positions.count else { throw .invalidSupplierOutput }
-            positions[layout.positions.start]=integrated[0]
-        }
-        do { return try KinematicState(revision:model.tree.revision,time:source.time+timeStep,q:positions,v:velocity,acceleration:start.acceleration) }
-        catch { throw .joint(error) }
+        try ToothRetraction.apply(model:model,source:source,acceleration:start.acceleration,timeStep:timeStep,policy:policy,work:&work)
     }
     @inline(never)
     private func publish(source: ToothContactState, endpoint: ToothPhysicalSample, provisional: KinematicState, timeStep: Double,
@@ -92,7 +83,7 @@ public struct ReferenceToothContactEvolution: ToothContactEvolving, Sendable {
         var current=accepted, completed=0
         do throws(ToothContactError) {
             guard time.isFinite, time >= current.physical.time, timeStep.isFinite, timeStep > 0 else { throw .invalidInput }
-            try model.validatePolicy(policy,work:&work); try current.model.validatePolicy(policy,work:&work)
+            try model.validatePolicy(policy,work:&work); try model.validateLegacy(policy:policy,work:&work); try current.model.validatePolicy(policy,work:&work)
             guard model.matches(current.model) else { throw .staleSource }
             while current.physical.time < time {
                 guard completed < policy.maximumSteps else { throw .capacityExceeded }

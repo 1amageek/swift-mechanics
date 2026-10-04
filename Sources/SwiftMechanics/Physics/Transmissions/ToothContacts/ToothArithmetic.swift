@@ -106,6 +106,30 @@ internal enum ToothArithmetic {
         try check(policy)
         switch result { case .success(let value): return value; case .failure(let e): throw .contact(e) }
     }
+    static func current<T>(reserved: Int, policy: ToothContactPolicy, work: inout ToothContactWork,
+                           operation: (inout ContactWork) throws(ContactCurrentError) -> T) throws(ToothContactError) -> T {
+        try check(policy); try work.beginCall()
+        let budget: ContactBudget
+        do { budget=try ContactBudget(operations:work.budget.arithmeticOperations-work.operations,scalarStorage:work.budget.scalarStorage-reserved,records:1) }
+        catch { throw .contact(error) }
+        var local=ContactWork(budget:budget)
+        do { try local.consume(operations:1,scalarStorage:0,records:0) } catch {
+            try work.charge(local.operations,storage:sum(reserved,local.peakScalarStorage))
+            throw .contact(error)
+        }
+        let result: Result<T,ContactCurrentError>
+        do { result = .success(try operation(&local)) } catch { result = .failure(error) }
+        guard local.budget.operations == budget.operations, local.budget.scalarStorage == budget.scalarStorage,
+              local.budget.records == budget.records, local.operations >= 1, local.operations <= budget.operations,
+              local.peakScalarStorage <= budget.scalarStorage else {
+            // The contact seed has no iteration cost.
+            try work.charge(1,storage:reserved)
+            throw .invalidSupplierLedger(failedSupplierWorkUnavailable:true)
+        }
+        try work.charge(local.operations,storage:sum(reserved,local.peakScalarStorage))
+        try check(policy)
+        switch result { case .success(let value): return value; case .failure(let e): throw .current(e) }
+    }
     @inline(never)
     static func snapshot(_ model: ToothContactModel, state: KinematicState, policy: ToothContactPolicy,
                          work: inout ToothContactWork) throws(ToothContactError) -> KinematicSnapshot {

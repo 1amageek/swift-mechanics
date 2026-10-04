@@ -103,12 +103,10 @@ public final class ToothContactModel: Sendable {
             // ToothContacts rejects such actual catalogs until original collision geometry and refinement proof exist.
             default: throw .unsupportedDomain
             }
-            // FIXME(INCOMPLETE_IMPLEMENTATION): Friction, damped/nonlinear normal, cohesive and impact tooth evolution is incomplete.
-            // Current selected evolution rejects those laws; original coupled work/history/event evidence is required before success.
-            guard case .linear(_,let damping,_,_)=pair.law.parameters.normal, damping == 0,
-                  pair.law.parameters.friction == .none, pair.law.parameters.cohesion == .none,
-                  pair.law.parameters.resistance.rollingCoefficient == 0, pair.law.parameters.resistance.spinningCoefficient == 0,
-                  pair.law.lossPolicy == .compliantDampingOnly else { throw .unsupportedDomain }
+            // FIXME(INCOMPLETE_IMPLEMENTATION): Hard-impact tooth events are not implemented.
+            // Material evolution admits continuous constitutive losses only; impact/history event proof is required for success.
+            guard pair.law.lossPolicy == .compliantDampingOnly else { throw .unsupportedDomain }
+            if pair.law.parameters.friction != .none, pair.firstMaterialTangent == nil { throw .invalidInput }
             for j in 0..<i { guard pair.key != contacts[j].key,
                 pair.firstProxy != contacts[j].firstProxy || pair.secondProxy != contacts[j].secondProxy else { throw .invalidInput } }
         }
@@ -124,6 +122,17 @@ public final class ToothContactModel: Sendable {
             if case .sampled(let spacing)=tooth.proxy.geometry.resolution {
                 guard spacing <= policy.maximumFeatureSpacingMeters else { throw .capacityExceeded }
             }
+        }
+    }
+    internal func validateLegacy(policy: ToothContactPolicy, work: inout ToothContactWork) throws(ToothContactError) {
+        try ToothArithmetic.check(policy); try work.charge(ToothArithmetic.product(16,contacts.count))
+        for pair in contacts {
+            // FIXME(INCOMPLETE_IMPLEMENTATION): The legacy issued-trial facade cannot evolve history-dependent material laws.
+            // It refuses richer models before suppliers; the additive material operations own their current/trial lifecycle.
+            guard case .linear(_,let damping,_,_)=pair.law.parameters.normal, damping == 0,
+                  pair.law.parameters.friction == .none, pair.law.parameters.cohesion == .none,
+                  pair.law.parameters.resistance.rollingCoefficient == 0, pair.law.parameters.resistance.spinningCoefficient == 0,
+                  pair.law.lossPolicy == .compliantDampingOnly else { throw .unsupportedDomain }
         }
     }
     internal func matches(_ other: ToothContactModel) -> Bool {

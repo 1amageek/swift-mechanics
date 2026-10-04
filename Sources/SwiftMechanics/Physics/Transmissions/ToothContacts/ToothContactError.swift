@@ -5,6 +5,8 @@ public enum ToothContactError: Error, Sendable {
     case energyDefect(value: Double, maximum: Double)
     case collision(CollisionError)
     case contact(ContactLawError)
+    case current(ContactCurrentError)
+    case materialChartSingularity
     case dynamics(DynamicsError)
     case numerical(NumericalError)
     case joint(JointError)
