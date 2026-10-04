@@ -4,46 +4,56 @@ public final class PhysicalRigidDynamicsInput: Sendable {
         case spatial(RigidDynamicsInput)
         case planar(PlanarRigidDynamicsInput)
     }
-    public let source: Source
-    public init(spatial: RigidDynamicsInput) { source = .spatial(spatial) }
-    public init(planar: PlanarRigidDynamicsInput) { source = .planar(planar) }
+    private enum Storage: Sendable {
+        case spatial(SpatialRigidDynamicsSource)
+        case planar(PlanarRigidDynamicsSource)
+    }
+    private let storage: Storage
+    public var source: Source {
+        switch storage {
+        case .spatial(let owner): return .spatial(owner.input)
+        case .planar(let owner): return .planar(owner.input)
+        }
+    }
+    public init(spatial: RigidDynamicsInput) { storage = .spatial(SpatialRigidDynamicsSource(spatial)) }
+    public init(planar: PlanarRigidDynamicsInput) { storage = .planar(PlanarRigidDynamicsSource(planar)) }
     public var dimension: KinematicDimension {
-        switch source { case .spatial: return .spatial; case .planar: return .planar }
+        switch storage { case .spatial: return .spatial; case .planar: return .planar }
     }
     public var snapshot: KinematicSnapshot {
-        switch source { case .spatial(let input): return input.snapshot; case .planar(let input): return input.snapshot }
+        switch storage { case .spatial(let owner): return owner.input.snapshot; case .planar(let owner): return owner.input.snapshot }
     }
     public var velocity: [Double] {
-        switch source { case .spatial(let input): return input.velocity; case .planar(let input): return input.velocity }
+        switch storage { case .spatial(let owner): return owner.input.velocity; case .planar(let owner): return owner.input.velocity }
     }
     public var gravity: AffineGravity? {
-        switch source { case .spatial(let input): return input.gravity; case .planar(let input): return input.gravity }
+        switch storage { case .spatial(let owner): return owner.input.gravity; case .planar(let owner): return owner.input.gravity }
     }
     public var bodyWrenches: [BodyWrenchContribution] {
-        switch source { case .spatial(let input): return input.bodyWrenches; case .planar(let input): return input.bodyWrenches }
+        switch storage { case .spatial(let owner): return owner.input.bodyWrenches; case .planar(let owner): return owner.input.bodyWrenches }
     }
     public var generalizedForces: [GeneralizedForceContribution] {
-        switch source { case .spatial(let input): return input.generalizedForces; case .planar(let input): return input.generalizedForces }
+        switch storage { case .spatial(let owner): return owner.input.generalizedForces; case .planar(let owner): return owner.input.generalizedForces }
     }
     @inline(never)
     internal func properties(at index:Int) throws(DynamicsError) -> RigidBodyPhysicalProperties {
-        switch source {
-        case .spatial(let input):
-            let properties=input.inertias[index].properties
+        switch storage {
+        case .spatial(let owner):
+            let properties=owner.input.inertias[index].properties
             return RigidBodyPhysicalProperties(mass:properties.mass,center:properties.centerOfMass,inertia:.spatial(properties.inertiaAtCenter))
-        case .planar(let input):
-            let properties=input.inertias[index].properties
+        case .planar(let owner):
+            let properties=owner.input.inertias[index].properties
             let center=try DynamicsArithmetic.core { () throws(CoreError) in try Vector3(properties.centerX,properties.centerY,0) }
             return RigidBodyPhysicalProperties(mass:properties.mass,center:center,inertia:.planar(properties.polarInertiaAtCenter))
         }
     }
     internal var inertiaCount: Int {
-        switch source { case .spatial(let input): return input.inertias.count; case .planar(let input): return input.inertias.count }
+        switch storage { case .spatial(let owner): return owner.input.inertias.count; case .planar(let owner): return owner.input.inertias.count }
     }
     internal func body(at index: Int) -> EntityID {
-        switch source { case .spatial(let input): return input.inertias[index].body; case .planar(let input): return input.inertias[index].body }
+        switch storage { case .spatial(let owner): return owner.input.inertias[index].body; case .planar(let owner): return owner.input.inertias[index].body }
     }
     internal func frame(at index: Int) -> EntityID {
-        switch source { case .spatial(let input): return input.inertias[index].frame; case .planar(let input): return input.inertias[index].frame }
+        switch storage { case .spatial(let owner): return owner.input.inertias[index].frame; case .planar(let owner): return owner.input.inertias[index].frame }
     }
 }
