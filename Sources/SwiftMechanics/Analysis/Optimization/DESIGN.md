@@ -1,12 +1,13 @@
 # Optimization component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). Own IM32 / OP-004 and OP-009 under [SPEC](../../../../SPEC.md). This is a registered AF18 frozen convex handoff; later children remain source-free and unqualified. Lower child contracts precede production; child links are added only when their designs exist. The first complete handoff is bounded affine LP / strictly convex QP and its physical feasibility/optimality certificates. Later nonlinear and mechanical estimation responsibilities remain assigned but unqualified.
+Parent: [responsibility owner](../DESIGN.md). Own IM32 / OP-004 and OP-009 under [SPEC](../../../../SPEC.md). The AF18 convex handoff is registered and qualified. The AF27 nonlinear child has independent Native evidence and awaits canonical registration/profile qualification; physical identification remains unimplemented. Lower child contracts precede production; child links are added only when their designs exist. The first complete handoff is bounded affine LP / strictly convex QP and its physical feasibility/optimality certificates. Later nonlinear and mechanical estimation responsibilities remain assigned but unqualified.
 
 | Child | Owned contract |
 |---|---|
 | [ProblemContracts](ProblemContracts/DESIGN.md) | Original normalized problem, caller policy, status and certificate meaning |
 | [ConvexPrograms](ConvexPrograms/DESIGN.md) | Actual bounded enumeration, original optimality checks and phase-I/Farkas proof |
+| [NonlinearKKT](NonlinearKKT/DESIGN.md) | AF27 fixed-active strict-local certificates; canonical qualification pending |
 
 The first handoff directly consumes Core, Model and Numerics. Nonlinear, Derivatives and Dynamics are later responsibility prerequisites, not imports of the initial convex implementation.
 
@@ -57,3 +58,7 @@ linear_kernels next owns only new `NonlinearKKT/` and dedicated unregistered `Te
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF27 nonlinear implementation resumption
+
+linear_kernels exclusively owns NonlinearKKT and Tests/MechanicsNonlinearOptimizationTests under the existing AF19 mathematical contract. The excluded child had no source files at dispatch; its actual qualified supplier paths now support the implemented selected Native handoff. Existing convex producers/tests remain read-only. Root owns this index, registration, public composition and commits. See [AF27 dispatch](../../../../IMPLEMENTATION_PLAN.md#af27-independent-source-and-verification-dispatch).
