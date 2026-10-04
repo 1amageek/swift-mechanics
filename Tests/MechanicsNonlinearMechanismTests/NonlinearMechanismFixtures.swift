@@ -80,15 +80,15 @@ internal enum NonlinearMechanismFixtures {
             policy:policy(scales:v.scales,gramLU:true),projection:projection(q),admission:admission(),maximumIdentityBytes:8192,solver:solver)
     }
     typealias Session=RuntimeSession<ReferenceRuntimeCheckpointHandler<IntegrationContinuationProvider,ReferenceModelRevisionUpdater>>
-    static func session(_ equation:NonlinearMechanismEquation,step:Double = 0.01,adaptive:Bool = false) throws -> (Session,IntegrationContinuationProvider) {
+    static func session(_ equation:any ProjectedMechanismEquations,step:Double = 0.01,adaptive:Bool = false) throws -> (Session,IntegrationContinuationProvider) {
         let scales=try equation.descriptor.dimensions.map { try ODEErrorScale(dimension:$0,absoluteSI:1e-6,relative:0) }
         let ip=try ExplicitIntegrationPolicy(method:adaptive ? .heunEuler : .classicalRK4,initialStep:step,minimumStep:1e-8,maximumStep:step,safety:0.8,minimumFactor:0.1,maximumFactor:2,
-            scales:scales,maximumContinuationBytes:16384,budget:IntegrationBudget(maximumCoordinates:16,maximumAttempts:100000,maximumAcceptedSteps:100000,maximumOuterArithmetic:100_000_000,
+            scales:scales,maximumContinuationBytes:65536,budget:IntegrationBudget(maximumCoordinates:max(16,equation.descriptor.dimensions.count),maximumAttempts:100000,maximumAcceptedSteps:100000,maximumOuterArithmetic:100_000_000,
                 supplier:NumericalBudget(scalarStorage:1_000_000,arithmeticOperations:2_000_000_000,iterations:1_000_000)))
         let continuation=try IntegrationContinuationProvider(descriptor:equation.descriptor,policy:ip)
         let configuration=try RuntimeConfiguration(continuation:RuntimeContinuationIdentity(build:"nonlinear-v1",backend:"reference-cpu",precision:"float64"),requiredContributors:continuation.schemas,
-            capacity:RuntimeCapacity(maximumPhysicalScalars:64,maximumContributors:4,maximumContributorBytes:32768,maximumMetadataBytes:32768,maximumCheckpointBytes:65536,
-                maximumValidationWork:65536,maximumValidationScratchBytes:65536,maximumObservationLeases:2,maximumBatchStates:2,maximumTransactions:100000,maximumStepWorkUnits:1000000,maximumWorkBetweenSafePoints:4),
+            capacity:RuntimeCapacity(maximumPhysicalScalars:64,maximumContributors:4,maximumContributorBytes:131072,maximumMetadataBytes:131072,maximumCheckpointBytes:262144,
+                maximumValidationWork:262144,maximumValidationScratchBytes:262144,maximumObservationLeases:2,maximumBatchStates:2,maximumTransactions:100000,maximumStepWorkUnits:1000000,maximumWorkBetweenSafePoints:4),
             determinism:.sameBuildReplay,workload:"nonlinear-mechanism")
         let handler=ReferenceRuntimeCheckpointHandler(contributors:continuation,revisions:ReferenceModelRevisionUpdater())
         let session=try Session(model:equation.model,configuration:configuration,initialState:equation.model.descriptor.initialState,

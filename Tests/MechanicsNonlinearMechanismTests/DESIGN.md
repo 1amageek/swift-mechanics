@@ -1,22 +1,54 @@
 # Nonlinear mechanism verification
 
-Owner: [NonlinearEvolution](../../Sources/SwiftMechanics/Physics/Mechanisms/NonlinearEvolution/DESIGN.md).
+## Purpose and Scope
+Test owner for [NonlinearEvolution](../../Sources/SwiftMechanics/Physics/Mechanisms/NonlinearEvolution/DESIGN.md), with no children. Retain existing quadratic behavior and prove the new actual body-frame force evolution through the registered public SwiftMechanics module.
 
+## Responsibilities and Boundaries
+This target owns independent physical fixtures/oracles and success, failure, endpoint and replay witnesses. Root owns target registration, original-profile execution and task integration. The tests use real compilation, rigid mass, constraint and Runtime paths; they never fabricate a dynamics system or internal accepted record.
+
+## Related Designs
+| Design | Relationship | Contract Used | Summary | Cautions |
+|---|---|---|---|---|
+| [NonlinearEvolution](../../Sources/SwiftMechanics/Physics/Mechanisms/NonlinearEvolution/DESIGN.md) | used by | quadratic/geometric facades, projected advance, physical result | Primary behavior under test | Require actual execution, not type presence |
+| [GeometricRelations](../../Sources/SwiftMechanics/Physics/Constraints/GeometricRelations/DESIGN.md) | depends on | immutable builtin relations and original samples | Real frame constraints | Full physical axis cross is independently checked |
+| [ManifoldProjection](../../Sources/SwiftMechanics/Physics/Constraints/ManifoldProjection/DESIGN.md) | depends on | local tangent assembly | Position consistency | No closest-point claim |
+| [Foundation verification](../../Verification/FoundationVerification/DESIGN.md) | coordinates with | exact original profile evidence | Public Native/WASM/Embedded qualification | Native dedicated mixed evidence does not qualify other profiles |
+
+## Architecture
+```text
+independent circle / rod sin-cos / quaternion / moving target oracles
+    -> real compiled models -> public equations -> common projected evolution
+    -> actual mass/reaction/energy -> Runtime endpoint/history/replay
+fault suppliers -> original source/ledger acceptance -> unchanged accepted prefix
+```
+
+## Contracts and Invariants
 | Invariant | Independent behavioral oracle |
 |---|---|
-| Original nonlinear position/velocity, redundant rows | Cartesian unit-circle norm and q dot v after twenty seconds |
-| Original acceleration/reaction | Unit mass centrifugal force and gravity pendulum radial equation |
-| Energy | Circle speed and pendulum 0.5 v² + g y |
-| Integrator convergence | Analytic sine/cosine solution, squared-error refinement ratio |
-| Manifold qdot and bias | Spherical quaternion half-angle spin, 4 q / 3 v, unit norm |
-| Atomic accepted state and history | Actual associatedHistory, checkpoint restart exact replay |
-| Rejection/initial consistency | Adaptive reject count and inconsistent q/v unchanged Runtime snapshot |
-| Supplier failed-work evidence | Late ledger reset/cancel on both success and failure, failed prefix and no publication |
+| Quadratic original position/velocity and redundancy | Cartesian circle norm and q dot v after twenty seconds |
+| Quadratic original acceleration and energy | Unit mass centrifugal force, gravity radial equation and mechanical energy |
+| Non-polynomial actual revolute loop | Fourbar independent sin/cos g, first and second derivatives |
+| Reaction and physical energy | Independent geometric J-transpose multipliers, zero autonomous reaction power, rod kinetic energy vs constant torque displacement |
+| Numeric order | Circle analytic fourth-order refinement; actual fourbar state refinement |
+| Mixed q/v and centripetal terms | Root/sixDOF/spherical quaternion half angles, strict norm, moving x-axis full cross/rate/second derivative |
+| Correction energy accounting | Rod energy before/after position retraction separately from velocity impulse kineticEnergyChange |
+| Analytic time law | Independent moving target q/v/a in SI seconds |
+| Strict initial vs RK correction | Invalid external quaternion rejected; bounded stage correction explicitly reported |
+| Accepted state and history | Exact public associatedHistory and checkpoint/restart equality |
+| Rejection and opaque failures | Adaptive reject, late reset success/failure/cancel, unchanged physical/history/RNG prefix and no unknown retry |
+| Complete source binding | Genuine producer systems with changed pose/inertia/load and changed-q acceleration at equal time/v rejected |
+| Canonical metadata binding | Same facade identity with different drive/chart bound cannot reuse contributor |
 
-The fixtures compile real spatial bodies and an admitted two-axis translational joint. No diagonal fabricated mass or mock acceleration is used. All tests have explicit time limits. Root owns frozen public Native/WASM/Embedded qualification; local scratch execution does not establish other profiles.
+The mixed fixture uses equal relative sphere/sixDOF spin with a moving physical x-axis: its axis rate and centripetal second derivative are nonzero while full original physical closure derivatives vanish. Canonical public joint ID/ranges determine all chart offsets. No test assumes caller insertion order equals compiler layout order.
 
-Final local Native snapshot: all 11 tests passed in 14.377 seconds with exact Swift 6.4.0 release, real compiled-tree/rigid mass/Runtime paths, and a 150-second process timeout. The physical witness fixture additionally proves a curved quaternion constraint whose Ndot contribution is nonzero, original J-transpose reaction representatives, moving-row time drift, and cancelled suppliers with known work. The separate reset-success/reset-failure fixtures prove unavailable work is preserved explicitly and no retry/publication occurs. Root owns cross-profile and whole-task integration verification after this source freeze.
+## Runtime Flows
+Registered focused Native execution follows one stable source/test freeze. Public profile probes consume the same public facade requirements. Original endpoint failures are invoked inside actual Runtime trials after drawing RNG so rollback checks include random state. Rejected manual physical witnesses leave accepted state untouched. Replay restores actual serialized checkpoint data.
 
-Source binding regression owner: NonlinearSourceBindingTests and genuine WrongSourceKernel / WrongSourceMechanismSolver wrappers. The wrappers return actual lower producer results rather than constructing internal records. Different pose/inertia/load inputs and same-time/same-velocity quaternion acceleration snapshots are rejected with specific source mismatch failures and unchanged Runtime state. The two regressions passed in 0.012 seconds; circle20s/replay and quaternion positive paths passed after the repair in 13.762 seconds. These are the targeted recheck of the single comprehensive review finding.
+## State, Ownership, and Lifecycle
+Each test owns its model/session/suppliers. Session shutdown is deferred. Physical witness capture uses the existing identical Mutex<NonlinearMechanismState?> and withLock operations on every target. No static shared resource or platform-dependent mutable storage is added.
 
-The Embedded-observed lifetime repair was rechecked against all 13 existing Native tests: all passed in 20.709 seconds under a 150-second process timeout using exact Swift 6.4.0 release. Numeric refinement, original reaction/energy/time drift/source binding, supplier cancellation/reset and Runtime rollback/replay remain covered. Root owns actual Embedded stack/runtime qualification after source freeze.
+## Failure, Concurrency, and Constraints
+Every test has an explicit time limit. Root supplies a process timeout and exact Swift 6.4.0 toolchain for registered execution. Supplier reset/cancel flags are immutable and selected by physical time. Opaque wrappers return genuine lower-produced records; unknown failed work cannot be turned into successful retry.
+
+## Verification and Change Impact
+Existing thirteen Native tests and AF20 original-profile paths were qualified before IM16.10. Their original snapshot evidence remains in [Foundation verification](../../Verification/FoundationVerification/DESIGN.md). New IM16.10 evidence is pending stable registered execution; source presence and the interim topology compile do not qualify new physical behavior. Renew affected quadratic/shared-engine and geometric tests once after convergence, then root qualifies the actual original public profiles. No copied dependency package or temporary manifest is used.

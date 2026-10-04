@@ -1,6 +1,6 @@
 /// Actual compiled-tree holonomic evolution with independent position and velocity charts.
 @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
-public final class NonlinearMechanismEquation: SmoothODEEquations, Sendable {
+public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Sendable {
     public let descriptor: ODEDescriptor
     public let model: CompiledMechanicalModel
     public let constraints: QuadraticConstraintSystem
@@ -8,12 +8,9 @@ public final class NonlinearMechanismEquation: SmoothODEEquations, Sendable {
     public let drive: [Double]
     public let policy: MechanismSolvePolicy
     public let projection: NonlinearMechanismProjectionPolicy
-    private let admission: DynamicsAdmission
-    private let inertias: [RigidBodyInertia]
+    private let physical:NonlinearPhysicalEngine
     private let quaternionBlocks: [(position:Int,velocity:Int)]
-    private let kernel: any RigidEquationComputing
     private let evaluator: any ConstraintEvaluating
-    private let solver: any ConstrainedMechanismSolving
     private let ranker: any ConstraintRankAnalyzing
     private let linear: any LinearSolving<Double>
     public init(identity:String, model:CompiledMechanicalModel, constraints:QuadraticConstraintSystem,
@@ -88,19 +85,18 @@ public final class NonlinearMechanismEquation: SmoothODEEquations, Sendable {
         let augmented:QuadraticConstraintSystem
         do throws(ConstraintError) { augmented=try QuadraticConstraintSystem(layout:constraints.layout,rows:rows,minimumPosition:constraints.minimumPosition,
             maximumPosition:constraints.maximumPosition,minimumTime:constraints.minimumTime,maximumTime:constraints.maximumTime) } catch { throw .constraint(error) }
-        var bound:[RigidBodyInertia]=[];bound.reserveCapacity(model.tree.bodies.count)
-        for body in model.tree.bodies {
-            // FIXME(INCOMPLETE_IMPLEMENTATION): This constructor's inertia binding admits real spatial bodies only. Planar inertia needs a lower physical adapter with mass, original reaction and energy proofs before planar-body evolution may succeed.
-            guard let raw=model.descriptor.bodies.first(where:{$0.id == body.id}),case .spatial(let source)=raw,let inertia=source.inertia else { throw .unsupportedChart }
-            do throws(DynamicsError) { bound.append(try RigidBodyInertia(body:body.id,frame:body.frame,properties:inertia.properties)) } catch { throw .dynamics(error) }
-        }
+        let bound=try NonlinearPhysicalEngine.bind(model)
         var dimensions=constraints.layout.dimensions
         for d in velocityLayout.dimensions { guard d.time > Int8.min else { throw .invalidInput };dimensions.append(PhysicalDimension(length:d.length,mass:d.mass,time:d.time-1,angle:d.angle,electricCurrent:d.electricCurrent,temperature:d.temperature,amount:d.amount,luminousIntensity:d.luminousIntensity)) }
         let chart=try NonlinearMechanismChart.signature(augmented,velocity:velocityLayout,drive:drive,policy:policy,projection:projection,maximum:maximumIdentityBytes)
         do { descriptor=try ODEDescriptor(identity:identity,chart:chart,model:model.stamp,dimensions:dimensions,maximumIdentityBytes:maximumIdentityBytes,
             maximumCoordinates:try NumericalWork.sum(projection.position.evaluation.maximumCoordinates,policy.maximumCoordinates)) } catch { throw .invalidInput }
         self.model=model;self.constraints=augmented;self.velocityLayout=velocityLayout;self.drive=drive;self.policy=policy;self.projection=projection
-        self.admission=admission;inertias=bound;quaternionBlocks=blocks;self.kernel=kernel;self.evaluator=evaluator;self.solver=solver;self.ranker=ranker;self.linear=linear
+        quaternionBlocks=blocks;self.evaluator=evaluator;self.ranker=ranker;self.linear=linear
+        let storage:Int
+        do { storage=try NumericalWork.sum(try NumericalWork.product(256,try NumericalWork.product(model.tree.bodies.count,max(1,n))),try NumericalWork.sum(try NumericalWork.product(16,try NumericalWork.product(p,n)),try NumericalWork.sum(try NumericalWork.product(16,try NumericalWork.product(totalRows,max(p,totalRows))),try NumericalWork.product(32,try NumericalWork.sum(p,n))))) }
+        catch { throw .capacityExceeded }
+        physical=NonlinearPhysicalEngine(model:model,velocityLayout:velocityLayout,drive:drive,policy:policy,admission:admission,inertias:bound,kernel:kernel,solver:solver,storage:storage)
     }
     public func validate(model:CompiledMechanicalModel) throws(RuntimeFailure) {
         guard model.stamp == self.model.stamp,model.descriptor == self.model.descriptor,model.tree.layout == self.model.tree.layout else { throw RuntimeFailure(.incompatibleModel,message:"Nonlinear equation model/chart differs.") }
@@ -225,29 +221,7 @@ public final class NonlinearMechanismEquation: SmoothODEEquations, Sendable {
         guard rp.isFinite,rv.isFinite,(!position || rp <= projection.position.originalResidualTolerance),(!velocity || rv <= policy.originalTolerance) else { throw RuntimeFailure(.invalidState,message:"Original nonlinear position/velocity rows are inconsistent.") }
         return (rp,rv)
     }
-    private func snapshot(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> KinematicSnapshot {
-        try control.beginWorkBlock(units:1)
-        // Two lower tree evaluations are required by makeState/evaluate. Charge their bounded body/column envelope before either callback.
-        do { try work.chargeOperations(try NumericalWork.product(512,try NumericalWork.product(model.tree.bodies.count,try NumericalWork.sum(1,v.count)))) }
-        catch { throw RuntimeFailure(.capacityExceeded,message:"Compiled tree callback work admission exhausted.") }
-        do { return try model.evaluate(model.makeState(KinematicState(revision:model.stamp.revision,time:time,q:q,v:v,acceleration:[Double](repeating:0,count:v.count)))) }
-        catch { throw RuntimeFailure(.invalidState,message:"Actual compiled manifold evaluation failed.") }
-    }
-    private func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> RigidDynamicsSystem {
-        let snapshot=try snapshot(q:q,v:v,time:time,work:&work,control:control)
-        let input:RigidDynamicsInput
-        do throws(DynamicsError) { input=try RigidDynamicsInput(snapshot:snapshot,velocity:v,inertias:inertias,gravity:nil) }
-        catch { throw RuntimeFailure(.invalidState,message:"Rigid dynamics input failed.") }
-        var local=try supplier(&work,control:control),load:LoadWork
-        do { load=LoadWork(budget:try LoadBudget(maximumWork:0,maximumScalars:0)) } catch { throw RuntimeFailure(.invalidInput,message:"Load budget invalid.") }
-        let before=local;var result:RigidDynamicsSystem?,failure:DynamicsError?
-        do throws(DynamicsError) { result=try kernel.assemble(input,admission:admission,loadWork:&load,work:&local) } catch { failure=error }
-        try finish(local,before:before,into:&work)
-        if let failure { throw RuntimeFailure(.invalidState,message:"Rigid assembly failed.",failedSupplierWorkUnavailable:MechanismError.dynamics(failure).failedSupplierWorkUnavailable) }
-        try sourceComparisonAdmission(&work)
-        guard let result,result.massMatrix.count == v.count*v.count,NonlinearPhysicalSource.matches(result.input,input) else { throw RuntimeFailure(.invalidState,message:"Rigid supplier result source differs.") }
-        return result
-    }
+
     private func evaluate(q:[Double],rate:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstraintEvaluation {
         var local=try supplier(&work,control:control);let before=local
         var result:ConstraintEvaluation?,failure:ConstraintError?
@@ -320,60 +294,7 @@ public final class NonlinearMechanismEquation: SmoothODEEquations, Sendable {
         let sample=try tangent(evaluation,q:q,v:v,time:time,work:&work,control:control)
         return NonlinearPhysicalSolveContext(system:assembled,sample:sample,impulse:impulse,positionResidual:residual.position,velocityResidual:residual.velocity)
     }
-    @inline(never)
-    private func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstrainedMotion {
-        let result=try invokePhysicalSupplier(context,work:&work,control:control)
-        try acceptPhysicalSupplier(context,result:result,work:&work)
-        return result
-    }
-    @inline(never)
-    private func invokePhysicalSupplier(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstrainedMotion {
-        // Reserve an irreversible admission quantum before all opaque callbacks; each independent ledger also has a seed.
-        var a=try supplier(&work,control:control),b=try supplier(&work,control:control),c=try supplier(&work,control:control),d=try supplier(&work,control:control)
-        let before=[a,b,c,d];var result:ConstrainedMotion?,failure:MechanismError?
-        do throws(MechanismError) {
-            if context.impulse { result=try invokeVelocity(context,a:&a,b:&b,c:&c,d:&d) }
-            else { result=try invokeAcceleration(context,a:&a,b:&b,c:&c,d:&d) }
-        } catch { failure=error }
-        for (ledger,prior) in zip([a,b,c,d],before) { try finish(ledger,before:prior,into:&work) }
-        if let failure { throw RuntimeFailure(.invalidState,message:"Original constrained physical solve failed.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable) }
-        guard let result else { throw RuntimeFailure(.invalidState,message:"Mechanism supplier source/result differs.") }
-        return result
-    }
-    @inline(never)
-    private func invokeVelocity(_ context:NonlinearPhysicalSolveContext,a:inout NumericalWork,b:inout NumericalWork,c:inout NumericalWork,d:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
-        try solver.reconcileVelocity(context.system,sample:context.sample,policy:policy,work:&a,dynamicsWork:&b,rankWork:&c,linearWork:&d)
-    }
-    @inline(never)
-    private func invokeAcceleration(_ context:NonlinearPhysicalSolveContext,a:inout NumericalWork,b:inout NumericalWork,c:inout NumericalWork,d:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
-        try solver.acceleration(context.system,sample:context.sample,drive:drive,policy:policy,work:&a,dynamicsWork:&b,rankWork:&c,linearWork:&d)
-    }
-    @inline(never)
-    private func acceptPhysicalSupplier(_ context:NonlinearPhysicalSolveContext,result:ConstrainedMotion,work:inout NumericalWork) throws(RuntimeFailure) {
-        let system=context.system,sample=context.sample,impulse=context.impulse
-        try sourceComparisonAdmission(&work)
-        guard NonlinearPhysicalSource.matches(result.sourceSnapshot,system.input.snapshot),result.values.count == system.velocityCount,result.values.allSatisfy({$0.isFinite}),result.generalizedReaction.count == system.velocityCount,
-              result.rowIDs == sample.rowIDs,result.rowMultipliers.count == sample.rowIDs.count,result.rank.reactionNullity == sample.rowIDs.count-result.rank.rank,
-              result.temporalMeaning == (impulse ? .instantaneousVelocityImpulse : .accelerationForce),result.time == system.input.snapshot.time,result.basis == model.tree.layout,result.sourceVelocity == system.input.velocity else { throw RuntimeFailure(.invalidState,message:"Mechanism supplier source/result differs.") }
-        // Independent acceptance from original mass and retained tangent rows, including redundant rows.
-        let n=system.velocityCount,t=velocityLayout.timeScale,s=velocityLayout.scales,e=policy.dynamics.energyScale
-        for row in sample.rowIDs.indices {
-            var residual=impulse ? sample.drift[row] : sample.accelerationBias[row]
-            for i in 0..<n { try charge(4,&work);residual+=sample.rows[row*n+i]*result.values[i]*(impulse ? t : t*t)/s[i] }
-            guard residual.isFinite,abs(residual) <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Original tangent equation rejects supplier motion.") }
-        }
-        for i in 0..<n {
-            var represented=0.0
-            for row in sample.rowIDs.indices { try charge(3,&work);represented+=sample.rows[row*n+i]*result.rowMultipliers[row]/s[i] }
-            guard represented.isFinite,abs(represented-result.generalizedReaction[i])*s[i]/(e*(impulse ? t : 1)) <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Original row transpose rejects reaction representative.") }
-            var force=impulse ? 0 : system.inertialBias[i]
-            for j in 0..<n { try charge(4,&work);force+=system.massMatrix[i*n+j]*(impulse ? result.values[j]-system.input.velocity[j] : result.values[j]) }
-            let applied:Double
-            do throws(DynamicsError) { applied=impulse ? result.generalizedReaction[i] : drive[i]+(try system.forces.total(at:i))+result.generalizedReaction[i] }
-            catch { throw RuntimeFailure(.invalidState,message:"Original applied force unavailable.") }
-            guard force.isFinite,abs(force-applied)*s[i]/(e*(impulse ? t : 1)) <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Original mass/momentum equation rejects supplier reaction.") }
-        }
-    }
+
     private func rank(_ sample:VelocityConstraintSample,policy:ConstraintSolvePolicy,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstraintRankEvidence {
         var local=try supplier(&work,control:control);let before=local;var result:ConstraintRankEvidence?,failure:ConstraintError?
         do throws(ConstraintError) { result=try ranker.rank(sample,policy:policy,work:&local) } catch { failure=error }
@@ -402,12 +323,7 @@ public final class NonlinearMechanismEquation: SmoothODEEquations, Sendable {
         }
         return solution.values
     }
-    private func sourceComparisonAdmission(_ work:inout NumericalWork) throws(RuntimeFailure) {
-        do {
-            let bodyColumns=try NumericalWork.product(model.tree.bodies.count,try NumericalWork.sum(1,model.tree.layout.velocityCount))
-            try work.chargeOperations(try NumericalWork.product(512,bodyColumns))
-        } catch { throw RuntimeFailure(.capacityExceeded,message:"Physical source comparison work budget exhausted.") }
-    }
+
     private func reservedSlots() throws(NumericalError) -> Int {
         let p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount,m=constraints.rows.count,b=model.tree.bodies.count
         return try NumericalWork.sum(try NumericalWork.product(256,try NumericalWork.product(b,max(1,n))),try NumericalWork.sum(try NumericalWork.product(16,try NumericalWork.product(p,n)),try NumericalWork.sum(try NumericalWork.product(16,try NumericalWork.product(m,max(p,m))),try NumericalWork.product(32,try NumericalWork.sum(p,n)))))
@@ -417,19 +333,26 @@ public final class NonlinearMechanismEquation: SmoothODEEquations, Sendable {
         guard !policy.isCancelled(),!projection.position.evaluation.isCancelled() else { throw RuntimeFailure(.cancelled,message:"Nonlinear equation cancelled.") }
         do { try work.requireStorage(reservedSlots()) } catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear orchestration scalar envelope exhausted.") }
     }
-    private func supplier(_ work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> NumericalWork {
-        try control.beginWorkBlock(units:1);try charge(1,&work)
-        do { var local=NumericalWork(budget:try work.remainingBudget(reservedStorage:reservedSlots()));try local.chargeOperations(1);return local }
-        catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear supplier admission exhausted.") }
-    }
-    private func finish(_ local:NumericalWork,before:NumericalWork,into work:inout NumericalWork) throws(RuntimeFailure) {
-        guard local.budget == before.budget,local.operations >= before.operations,local.iterations >= before.iterations,local.peakScalarStorage >= before.peakScalarStorage else { throw RuntimeFailure(.invalidOwnerAccess,message:"Nonlinear supplier replaced/reset its admitted ledger.",failedSupplierWorkUnavailable:true) }
-        do { try work.absorb(local,reservedStorage:reservedSlots()) } catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear aggregate supplier work exhausted.") }
-    }
-    private func charge(_ count:Int,_ work:inout NumericalWork) throws(RuntimeFailure) {
-        do { try work.chargeOperations(count) } catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear arithmetic budget exhausted.") }
-    }
+
     private func iteration(_ work:inout NumericalWork) throws(RuntimeFailure) {
         do { try work.advanceIteration() } catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear projection iteration budget exhausted.") }
     }
+    private func snapshot(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> KinematicSnapshot {
+        try physical.snapshot(q:q,v:v,time:time,work:&work,control:control)
+    }
+    private func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> RigidDynamicsSystem {
+        try physical.system(q:q,v:v,time:time,work:&work,control:control)
+    }
+    @inline(never)
+    private func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstrainedMotion {
+        try physical.solve(context,work:&work,control:control)
+    }
+    private func supplier(_ work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> NumericalWork { try physical.supplier(&work,control:control) }
+    private func finish(_ local:NumericalWork,before:NumericalWork,into work:inout NumericalWork) throws(RuntimeFailure) { try physical.finish(local,before:before,into:&work) }
+    private func charge(_ count:Int,_ work:inout NumericalWork) throws(RuntimeFailure) { try physical.charge(count,&work) }
+    public func writeAccepted(point:[Double],derivative:[Double],time:Double,trial:inout RuntimeTrial,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
+        try control.beginWorkBlock(units:1)
+        try write(point:point,derivative:derivative,time:time,trial:&trial)
+    }
+
 }

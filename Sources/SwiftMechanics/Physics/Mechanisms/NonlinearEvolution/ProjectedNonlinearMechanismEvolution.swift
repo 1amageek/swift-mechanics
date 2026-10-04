@@ -1,8 +1,12 @@
 /// Projected RK4/Heun evolution whose physical endpoint and history are published atomically.
 @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
-public struct ProjectedNonlinearMechanismEvolution: NonlinearMechanismEvolving, Sendable {
+public struct ProjectedNonlinearMechanismEvolution: ProjectedMechanismEvolving, Sendable {
     public init() {}
     public func advance(_ session:any RuntimeSessionOperating,equations:NonlinearMechanismEquation,
+                        continuation:IntegrationContinuationProvider,to time:Double) throws(NonlinearMechanismFailure) -> NonlinearMechanismAdvanceResult {
+        try advance(session,equations:equations as any ProjectedMechanismEquations,continuation:continuation,to:time)
+    }
+    public func advance(_ session:any RuntimeSessionOperating,equations:any ProjectedMechanismEquations,
                         continuation:IntegrationContinuationProvider,to time:Double) throws(NonlinearMechanismFailure) -> NonlinearMechanismAdvanceResult {
         let context=NonlinearEvolutionRunContext(session:session,equations:equations,continuation:continuation,target:time)
         var progress=try Self.initialize(context)
@@ -128,13 +132,13 @@ public struct ProjectedNonlinearMechanismEvolution: NonlinearMechanismEvolving, 
         // Recompute the final derivative at the exact endpoint; projection temporaries ended in the preceding phase.
         workspace.calls+=1;try equations.derivative(time:end,point:workspace.result,into:&workspace.stage,work:&workspace.work,control:control)
         try equations.validateInitial(time:end,point:workspace.result,work:&workspace.work,control:control)
-        try equations.write(point:workspace.result,derivative:workspace.stage,time:end,trial:&trial)
+        try equations.writeAccepted(point:workspace.result,derivative:workspace.stage,time:end,trial:&trial,work:&workspace.work,control:control)
         try equations.read(trial,into:&workspace.k1)
         guard workspace.k1 == workspace.result,trial.timeSeconds == end,interval.acceptedSteps < UInt64.max,let next=workspace.next else { throw RuntimeFailure(.invalidState,message:"Projected endpoint/time/history publication differs.") }
         try trial.replaceContributor(context.continuation.record(acceptedTime:end,point:workspace.result,nextStep:next,acceptedSteps:interval.acceptedSteps+1,normalizedError:workspace.error));return .accept
     }
     @inline(never)
-    private static func projectedEndpoint(_ equations:NonlinearMechanismEquation,time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> [Double] {
+    private static func projectedEndpoint(_ equations:any ProjectedMechanismEquations,time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> [Double] {
         try equations.consistent(time:time,point:point,work:&work,control:control).point
     }
 }
