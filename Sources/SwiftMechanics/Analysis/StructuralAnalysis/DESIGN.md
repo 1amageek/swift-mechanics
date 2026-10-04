@@ -1,7 +1,7 @@
 # StructuralAnalysis component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). IM28 owns modes and structural stability under [SPEC](../../../../SPEC.md). Children: [PhysicalModels](PhysicalModels/DESIGN.md), [Pencils](Pencils/DESIGN.md), [HarmonicResponse](HarmonicResponse/DESIGN.md), [Buckling](Buckling/DESIGN.md), [GeneralDampedSpectrum](GeneralDampedSpectrum/DESIGN.md). Registered selected source has behavioral/profile evidence below; full ST-005..007 remains incomplete.
+Parent: [responsibility owner](../DESIGN.md). IM28 owns modes and structural stability under [SPEC](../../../../SPEC.md). Children: [PhysicalModels](PhysicalModels/DESIGN.md), [Pencils](Pencils/DESIGN.md), [HarmonicResponse](HarmonicResponse/DESIGN.md), [Buckling](Buckling/DESIGN.md), [GeneralDampedSpectrum](GeneralDampedSpectrum/DESIGN.md), [NonlinearStability](NonlinearStability/DESIGN.md). Registered selected source has behavioral/profile evidence below; full ST-005..007 remains incomplete.
 
 ## Responsibilities and Boundaries
 Root owns frozen source qualification after material_kernels transfers to IM44. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Direct dependencies are Core, Model, Materials, Numerics, Compiler, Equilibrium, Flexible and the internal [ScalarFunctions boundary](../../Mathematics/ScalarFunctions/DESIGN.md). Beams is qualified before upper analysis composition. Producer changes require root coordination and an explicit reassignment before editing.
@@ -12,11 +12,12 @@ Root owns frozen source qualification after material_kernels transfers to IM44. 
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
 | [GeneralDampedSpectrum](GeneralDampedSpectrum/DESIGN.md) | child | Original nonproportional quadratic modes | Composes admitted physical pencils with the complex numerical solver | Qualification and domain belong to the child; old Pencils behavior remains unchanged |
+| [NonlinearStability](NonlinearStability/DESIGN.md) | child | Original augmented equilibrium continuation and local constrained stability | Calibrated nonlinear force and actual compiled inertia | Exact source/policy owners; explicit branch ambiguity and bounded work |
 
 ## Architecture
 ```text
 Flexible Beams / Tet4 / Equilibrium -> PhysicalModels
- -> Pencils / HarmonicResponse / Buckling / GeneralDampedSpectrum
+ -> Pencils / HarmonicResponse / Buckling / GeneralDampedSpectrum / NonlinearStability
  -> original equation acceptance
 ```
 
@@ -43,3 +44,7 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 scalar_boundary exclusively owns the new GeneralDampedSpectrum child and dedicated tests, with the new Numerics/ComplexSpectrum prerequisite under the same owner. Existing Pencils/PhysicalModels/HarmonicResponse/Buckling and all suppliers stay read-only. Actual general spectral and original quadratic-pencil contracts precede declarations; no existing unsupported branch is silently redirected. Root alone owns this index, registration/public evidence/progress and commits. See [dispatch](../../../../IMPLEMENTATION_PLAN.md#af28-independent-frontier-dispatch).
 
 Selected AF28 Native/ordinary-WASM/Embedded-WASM public behavior is qualified through the unchanged core profile. Exact integrated execution and remaining domain limits belong to [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af28-integrated-selected-qualification); child contracts remain the API authority.
+
+## AF29 nonlinear-stability dispatch
+
+scalar_boundary exclusively owns NonlinearStability and its dedicated tests. Its documented original multidimensional KKT continuation and physically derived constrained spectrum are authorized for implementation. Existing suppliers remain read-only. Root owns shared registration and exact-profile public qualification after owner source freeze. The selected calibrated-source contract does not certify missing nonlinear continuum or material-history producers.

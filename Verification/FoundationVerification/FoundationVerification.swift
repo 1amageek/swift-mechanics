@@ -54,6 +54,7 @@ struct FoundationVerification {
             stage = "verifyDeformingContact"; try verifyDeformingContact()
             stage = "verifyStructuralAnalysis"; try verifyStructuralAnalysis()
             stage = "verifyGeneralDampedSpectrum"; try verifyGeneralDampedSpectrum()
+            stage = "verifyNonlinearStability"; try verifyNonlinearStability()
             stage = "verifyDerivatives"; try verifyDerivatives()
             stage = "verifyContactDerivatives"; try verifyContactDerivatives()
             stage = "verifyOptimization"; try verifyOptimization()
