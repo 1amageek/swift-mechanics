@@ -30,3 +30,7 @@ Each test owns independent records and counters. Mutable observation counters us
 
 ## Verification and Change Impact
 Run the focused SwiftMechanicsMachineTests target with an external timeout after root registration. Actual hinge tests assert rotation and angular velocity; repeated instance tests compile scoped joints connected to an outer root. Budget tests reject before additional lazy closures, and independent retry verifies failed drafts are discarded. Recheck these cases after builder dispatch, namespace encoding, facade publication or budget changes.
+
+### Target authoring qualification
+
+The [Machines verification matrix](../../Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#target-verification-matrix) owns the obligations for the approved structural authoring surface. These tests are planned, not present or passed. This target will own syntax lowering, typed reference/role admission, coordinate placement and actual compiler equivalence. Physical law, deformation, contact and accepted-transition tests remain with their existing responsibility-specific targets; root owns integrated profile qualification. Existing record-based hinge evidence does not qualify the proposed nested primitives.

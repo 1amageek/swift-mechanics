@@ -10,6 +10,8 @@ Every requirement row is mandatory for the complete target scope. Delivery gates
 
 Requirements describe semantics rather than freezing public Swift type names. Public APIs, protocol requirements, ownership, model equations and child designs must be finalized before their implementation. Each implemented requirement must link its design owner, implementation path, applicable capabilities, and behavioral evidence. A declaration or successful compilation is insufficient.
 
+The approved declarative authoring direction is specified in [Modeling/Machines](Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#target-declarative-authoring-contract). Its structure catalog maps authoring patterns to the existing requirement families; it does not add completed requirements or claim every named mechanism is implemented. The high-level 3D surface preserves the existing 2D/3D physical scope. Concrete surface spellings remain sketches where the owning design identifies unresolved implementation decisions.
+
 ### 1.1 Mechanical levels
 
 | Level | Inputs and resulting claim | Requirements |

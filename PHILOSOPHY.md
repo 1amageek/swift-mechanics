@@ -8,6 +8,8 @@ This document explains the project's values. [SPEC.md](SPEC.md) owns normative p
 
 A machine declaration expresses composition. It identifies bodies, joints and relationships without owning the solver's mutable state. `Machine` and `MachineBuilder` provide the declarative foundation; compilation and execution have separate responsibilities.
 
+Declare physical structure directly inside `body`. Nesting should express a connection, references should express cross-links, and named ports should express distinct mechanical roles. Spatial coincidence does not imply rigid attachment or shared motion. Runtime engagement is a physical state transition rather than reevaluation of a construction-time branch. The [Machines design](Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#target-declarative-authoring-contract) owns the authoring contract and its distinction from the implemented foundation.
+
 Convenience should preserve identity, units, coordinate conventions and failure information. A concise API is useful when its physical meaning remains explicit. Builder syntax cannot make an unsupported law or invalid assembly valid.
 
 ```mermaid

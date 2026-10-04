@@ -8,6 +8,8 @@ Parent: none. Direct production child: SwiftMechanics. Executable verification c
 
 The package exports `import SwiftMechanics`. CAD and foreign/environment-specific adapters belong in separate packages consuming its public contracts. The baseline package does not acquire their dependencies. The package has no owned C implementation target; a Swift platform adapter consumes system libm. Native, ordinary WASM and Embedded WASM must execute the actual migrated public path independently. Linux/iOS and unimplemented domains remain unqualified.
 
+The approved declarative authoring direction is owned by [Machines](Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#target-declarative-authoring-contract), reached through SwiftMechanics and Modeling. That child owns structure syntax, the mechanical relationship catalog and lowering obligations. The system consumes its immutable admitted output; syntax coverage does not qualify physical or numerical capabilities. The new 3D authoring surface does not remove the existing planar requirements or low-level APIs.
+
 Root alone edits the manifest, shared verification entry points, source mapping, design indexes, progress and local commits. Parallel ownership is by component responsibility, not by SwiftPM target. Component details and admission authority are owned by their child designs. The migration preserves accepted-state identity, cancellation, rollback, exactly-once release, typed failure and identical synchronization/Sendable contracts across profiles.
 
 ## Responsibilities and Boundaries
@@ -53,6 +55,7 @@ flowchart TD
   Format[Native and foreign model input] --> Exchange[Exchange validation]
   CADAdapter --> Draft[Mechanical model input]
   Exchange --> Draft
+  Authoring[Machine structure declarations] --> Draft
   Draft --> Compiler[Model compiler and capability validation]
   Compiler --> Model[Immutable compiled model]
   Model --> Session[State and workspace owner]

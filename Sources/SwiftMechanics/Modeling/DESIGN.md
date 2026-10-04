@@ -6,6 +6,8 @@ Mechanical declaration, model identity, kinematic charts, structural validation 
 ## Responsibilities and Boundaries
 Mechanical declaration, model identity, kinematic charts, structural validation and immutable compilation. Child contracts own each operation and failure domain. Consumers depend on published protocols and admitted immutable records. Internal visibility is not permission to bypass validation.
 
+[Machines](Machines/DESIGN.md#target-declarative-authoring-contract) owns the approved structural authoring design. Its target lowering resolves declaration scopes, attachment placement and cross-links into mechanical input; Compiler still owns graph, physical and capability admission. The current body/joint facade remains the implemented subset. Additional relationship records and their supplier contracts must be admitted before broader authoring declarations become callable production APIs.
+
 ## Related Designs
 | Design | Relationship | Contract used | Cautions |
 |---|---|---|---|
@@ -18,8 +20,11 @@ Mechanical declaration, model identity, kinematic charts, structural validation 
 ## Architecture
 ```mermaid
 flowchart LR
-  Inputs[Admitted inputs] --> Owner[Modeling]
-  Owner --> Outputs[Checked outputs or typed failure]
+  Declarations[Machine structure and relationship declarations] --> Machines[Machines lowering]
+  Machines --> Inputs[Mechanical draft]
+  Records[Explicit mechanical records] --> Inputs
+  Inputs --> Compiler[Compiler admission]
+  Compiler --> Outputs[Immutable model or typed failure]
 ```
 
 ## Contracts and Invariants

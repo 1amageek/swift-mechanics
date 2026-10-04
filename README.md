@@ -18,25 +18,33 @@ Use [PROGRESS.md](PROGRESS.md) and the corresponding component designs to check 
 
 ## Declarative machines
 
-`Machine` provides a SwiftUI-like composition model through `var body: some Machine` and `MachineBuilder`. The current foundation composes validated body and joint records:
+`Machine` provides a SwiftUI-like composition model through `var body: some Machine` and `MachineBuilder`. The intended authoring model declares bodies and their connections directly inside `body`:
+
+**Target API sketch:** the high-level primitives below are not implemented yet. The authoring surface describes 3D machines without dimensional suffixes. This example illustrates structure; geometry, inertia and initialization inputs are omitted, so it is not a runnable simulation.
 
 ```swift
 import SwiftMechanics
 
 struct HingeAssembly: Machine {
-    let base: BodyRecord3D
-    let arm: BodyRecord3D
-    let hinge: MechanicalJoint
-
     var body: some Machine {
-        MachineBody(base)
-        MachineBody(arm)
-        MachineJoint(hinge)
+        RigidBody("base") {
+            RevoluteJoint("hinge", axis: .z) {
+                RigidBody("arm")
+            }
+            .offset(z: 0.1)
+        }
+        .fixed()
     }
 }
 ```
 
-The records supplied to this assembly carry the physical data and joint definition. Composition supports conditionals, `switch`, optional content, reusable scoped instances, type erasure through `AnyMachine`, and bounded lazy repetition through `ForEachMachine`.
+Declarations should produce immutable mechanical definitions; identity, units, physical parameters and connections are admitted during lowering and compilation. Mutable simulation state belongs to execution owners rather than stored body or joint objects in the declaration.
+
+Nesting expresses articulated structure. Cross-references close loops or connect independent components; named ports express multi-terminal transmissions. Placement, persistent constraints, force laws and runtime engagement have distinct meanings. The declaration tree is not the physical connection graph.
+
+The [declarative authoring design](Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#target-declarative-authoring-contract) owns the structure catalog, coordinate conventions, example syntax, lowering obligations and implementation prerequisites. Its sketches are target design, not a capability claim. Existing planar kernels and low-level records remain part of the specification.
+
+The implemented foundation currently uses `MachineBody` and `MachineJoint` to compose validated records. Its builder supports conditionals, `switch`, optional content, reusable scoped instances, type erasure through `AnyMachine`, and bounded lazy repetition through `ForEachMachine`.
 
 `MachineDefinition` lowers declarations into a descriptor and delegates physical admission to the mechanical compiler. A successfully constructed declaration is not yet a valid compiled model. Simulation steps operate on compiled models and state; they do not reevaluate the declaration.
 
