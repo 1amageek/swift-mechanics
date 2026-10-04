@@ -40,3 +40,7 @@ DynamicsError distinguishes domain/capacity/identity/shape/velocity mismatch/ene
 
 ## Verification and Change Impact
 Forward/inverse/mixed analytic comparisons, asymmetric Euler, independent original physical residual, scaled coordinates, capability/solver pivot/work/storage/iteration/cancellation boundaries. Changes to COM/frame/v convention, force authority, original residual, resources or scaling invalidate downstream constraints/contact/integration/observations and root platform probes. No dynamics trajectory or recursive scaling proof is claimed.
+
+### AF24 additive physical solve contract
+
+Consume the complete source-tagged physical system defined by [RigidEquations](../RigidEquations/DESIGN.md#af24-additive-planar-physical-source-contract). An additive `PhysicalRigidDynamicsSolving` port provides non-generic physical-system solve requirements while preserving original spatial `RigidDynamicsSolving` calls and result meaning. Numerical solve and original-body residual algorithms must be shared; a planar source cannot be converted into fabricated spatial inertia or accepted solely from assembled M. Actual source, velocity, acceleration/force temporal meaning, scales, known work and unavailable supplier failure remain associated through every phase. The test owner and root qualification boundary are linked by RigidEquations; implementation-specific lower design and actual behavioral evidence must precede upper handoff.

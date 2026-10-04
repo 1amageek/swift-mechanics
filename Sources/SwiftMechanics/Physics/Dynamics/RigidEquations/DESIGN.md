@@ -40,3 +40,19 @@ DynamicsError distinguishes domain/capacity/identity/shape/velocity mismatch/ene
 
 ## Verification and Change Impact
 Free rigid-body asymmetric Euler and rotated body axes, COM pendulum, two-link independent M/C/gravity, prescribed motion and nonzero supplied acceleration, physical energy/power/momentum, frame/missing-inertia/velocity mismatch and capacity failures. Changes to COM/frame/v convention, force authority, original residual, resources or scaling invalidate downstream constraints/contact/integration/observations and root platform probes. No dynamics trajectory or recursive scaling proof is claimed.
+
+### AF24 additive planar physical source contract
+
+The source trace established that Model and Compiler retain validated `MassProperties2D` and Joints evaluates original planar body motion, columns and acceleration bias. Current Dynamics admission and `RigidBodyInertia.properties: MassProperties3D` reject that physical domain. Removing the guard alone cannot qualify planar mechanics.
+
+The additive contract retains the existing spatial inertia/input/system APIs. A new `PlanarRigidBodyInertia` retains identified original `MassProperties2D`; a planar input retains the full original snapshot, velocity, inertia inventory and explicit loads. `PhysicalRigidDynamicsInput` tags actual spatial versus planar source, and `PhysicalRigidDynamicsSystem` retains the complete admitted source plus equation, load, ledger and resource evidence. `PhysicalRigidEquationComputing` exposes non-generic protocol requirements for assembly, original inertia, body wrench and energy. The concrete kernel shares its physical algorithms with the existing spatial witnesses. A planar source never produces a legacy spatial system, empty substitute inertia inventory or fabricated 3D tensor. Exact record layout and phase implementation belong to this component's lower implementation design before source edits.
+
+```text
+original spatial input -> spatial source bridge --+
+                                                  +-> shared physical equations -> original-body acceptance
+original 2D inertia + actual planar input --------+
+```
+
+Planar admission requires one connected, dimension-consistent XY tree, positive mass and polar inertia, original body/frame/order/layout identity and plane-preserving motion and loads. Out-of-plane force/torque after original frame/reference transformation is an explicit typed failure; an unavailable plane support reaction is never reported as zero. COM transport uses original Rz*[cx,cy,0]. Inertia action on the admitted rotational tangent is Iz*omegaZ, without fictional transverse moments. Mass, bias, original Newton/Euler product, momentum and kinetic/prescribed work use those same original values. Uniform gravity remains the only admitted gravity distribution. Existing source/velocity checks, preallocation capacity, separate load/numerical work, supplier seed/reset/refusal/cancellation and unknown-work contracts remain applicable to both domains.
+
+This owner and [DenseDynamics](../DenseDynamics/DESIGN.md#af24-additive-physical-solve-contract) are the first lower handoff, before planar constrained evolution. [MechanicsDynamicsTests](../../../../../Tests/MechanicsDynamicsTests/DESIGN.md) must independently check offset-COM free body/pendulum/two-link M/C/gravity, forward/inverse/mixed solves, original physical residual rejection, kinetic energy/momentum/power, dimension/frame/source/plane-load refusal and bounded/cancelled work. Root owns actual registration and original Native/WASM/Embedded composition at unchanged stack/profile settings. This is an implementation contract; planar behavioral qualification is pending.

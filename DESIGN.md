@@ -246,3 +246,7 @@ Root registered the general frame/point/axis relation and local manifold correct
 ## AF23 Qualified Composition Frontier
 
 [Mechanisms](Sources/SwiftMechanics/Physics/Mechanisms/DESIGN.md#af23-imposed-motion-and-stationary-physical-loading-contracts) owns the selected imposed-base and stationary physical-loading composition contracts. Lower Core unit restoration and Runtime complete-anchor continuation were behaviorally qualified before upper production. [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af23-integrated-qualification) owns the final original Native/WASM/Embedded execution evidence and affected-lifetime requalification. PROGRESS retains remaining IM16 domains and the full 210-requirement/IM48 objective.
+
+## AF24 Lower Physical Frontier
+
+[Mechanisms](Sources/SwiftMechanics/Physics/Mechanisms/DESIGN.md#af24-remaining-planar-and-closed-loop-physical-boundaries) indexes the remaining planar/closed-loop boundaries. [Dynamics](Sources/SwiftMechanics/Physics/Dynamics/DESIGN.md#af24-lower-physical-handoff) and [Constraints](Sources/SwiftMechanics/Physics/Constraints/DESIGN.md#af24-original-physical-geometry-handoff) own independent lower contracts before upper consumers. The implementation plan owns sole-writer dispatch and dependency order; PROGRESS owns readiness. All new AF24 behavior remains unqualified until actual execution evidence exists.

@@ -46,3 +46,7 @@ Ownership audit: immutable Sendable inputs/results; internal ForceAccumulator an
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+### AF24 lower physical handoff
+
+[RigidEquations](RigidEquations/DESIGN.md#af24-additive-planar-physical-source-contract) owns additive planar/source-tagged equation authority; [DenseDynamics](DenseDynamics/DESIGN.md#af24-additive-physical-solve-contract) owns consumed physical solve witnesses. Existing spatial public values and calls remain available. Actual lower behavioral qualification precedes planar constrained consumers; source dispatch grants no qualification.

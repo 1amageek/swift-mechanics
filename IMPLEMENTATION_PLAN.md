@@ -262,3 +262,18 @@ IM16.10 + IM16.11 -> IM16.12 original-profile composition
 ReactionPaths joins that same ready sibling group with isolated source/tests and frozen Dynamics/Loads/Joints dependencies. Original body inertial wrench and identified applied-load balance are its authority; generalized force alone cannot qualify a unique bearing wrench. Root owns all shared manifest/probe registration and final profile execution after freeze.
 
 The AF20 original ordinary/Embedded awake-sleep execution identifies excessive rich temporaries in the consumed AffineEvolution motion path. Root reassigns only that required motion phase/lifetime repair, lower design and affected old mechanism tests to the sleep owner. Source and profile qualification stay serial after freeze; public laws, work ledgers, synchronization and original stack reservation remain fixed.
+
+### AF24 lower physical contract and dispatch frontier
+
+After AF23 corrective/integrated commit 4fa27a5, IM16.19 closes read-only planar inertia and closed-loop physical reaction traces. The concrete lower contracts belong to [RigidEquations](Sources/SwiftMechanics/Physics/Dynamics/RigidEquations/DESIGN.md#af24-additive-planar-physical-source-contract) and [GeometricRelations](Sources/SwiftMechanics/Physics/Constraints/GeometricRelations/DESIGN.md#af24-planar-geometry-and-physical-row-authority). Original spatial APIs remain available; original 2D inertia is never synthesized as an artificial 3D tensor. Individual loop-path allocation with nonzero original reaction nullity is a typed ambiguity failure.
+
+| Work | Sole mutable owner / paths | Prerequisite | Handoff |
+|---|---|---|---|
+| IM16.20 | nonlinear_mechanisms: Dynamics/RigidEquations and DenseDynamics; MechanicsDynamicsTests | qualified AF23 and planar source contract | additive source-tagged original physical equations/solves |
+| IM16.21 | reaction_paths: Constraints/GeometricRelations; MechanicsGeometricConstraintTests | qualified AF23 and original geometry contract | planar original geometry and physical-row covectors |
+| IM16.22 | root: registration, shared probes, parent indexes, focused Native and original profiles | both lower frozen handoffs | actual lower behavior before upper dispatch |
+| IM16.23 | nonlinear_mechanisms: required ConstrainedDynamics/NonlinearEvolution consumers and matching tests | IM16.22 | planar physical mechanism evolution and cold continuation |
+| IM16.24 | reaction_paths: new ClosedLoopReactionPaths and matching tests | IM16.22 | source-bound continuous body reactions; typed ambiguity |
+| IM16.25 | root: full cohort integration, profile witnesses and commits | both upper qualified handoffs | selected evidence with explicit remaining domains |
+
+IM16.20 and IM16.21 are disjoint ready siblings in AF24Lower; neither consumes another evolving owner. IM16.23 and IM16.24 may become disjoint AF24Upper siblings only after actual lower qualification and their own component contracts. Root alone changes shared manifest/probe/source registration and commits; workers do not build evolving source or modify existing unrelated producers. No new production module or C target is implied. PROGRESS owns actual readiness; the full 210-requirement DAG is preserved.
