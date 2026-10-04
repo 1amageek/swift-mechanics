@@ -20,6 +20,8 @@ struct FoundationVerification {
             try verifyConstraints()
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyGeometricConstraints() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyGeometricEvolution() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyMovingBaseEvolution() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyLoadedSleepMechanisms() }
             try verifyTransmissions()
             try verifyEquilibrium()
             try verifyContactPatches()
@@ -29,7 +31,7 @@ struct FoundationVerification {
             try verifyOptimization()
             try verifyGranular()
             try verifyPlanarFluids()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyRuntimeReplacement(); try verifyMechanisms(); try verifyNonlinearMechanisms(); try verifySleepMechanisms(); try verifyReactionPaths(); try verifyTopologyContinuation(); try verifyFluids(); try verifyPlanarRuntime(); try verifyIntegration(); try verifyActuation(); try verifyHybrid() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyMovingAnchorRuntime(); try verifyRuntimeReplacement(); try verifyMechanisms(); try verifyNonlinearMechanisms(); try verifySleepMechanisms(); try verifyReactionPaths(); try verifyTopologyContinuation(); try verifyFluids(); try verifyPlanarRuntime(); try verifyIntegration(); try verifyActuation(); try verifyHybrid() }
             else { throw FoundationVerificationError.unexpectedFailure }
         } catch {
             throw .unexpectedFailure
