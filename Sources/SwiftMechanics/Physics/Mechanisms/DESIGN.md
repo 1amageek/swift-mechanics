@@ -81,6 +81,8 @@ The selected AF22 lower and upper composition has passed qualification. [Foundat
 
 ## AF23 Imposed Motion and Stationary Physical Loading Contracts
 
+[StationaryLoads](StationaryLoads/DESIGN.md) is the new child for immutable physical load catalog/receipts. The lower trajectory contract belongs to [Joints PrescribedMotions](../../Modeling/Joints/PrescribedMotions/DESIGN.md), consumed by geometry/evolution. These component contracts are proposed and unqualified pending production and behavioral handoff.
+
 The next scope consumes the actual compiler/Joints moving-anchor path: fixed static root, a zero-DOF fixed joint with a prescribed parent anchor, a prescribed-kinematic base body, then dynamic descendant joints. Independent dynamic q/v remain distinct from complete imposed pose/velocity/acceleration samples. Full floating-root prescribed-coordinate partition remains an additional IM16 domain; the moving-base path does not certify it. Runtime currently rejects or discards samples, and general geometry/retraction/evolution currently rejects or discards them. The geometry facade's half-v-M-v energy currently covers only independent motion and must be replaced by the lower full body-motion energy when imposed drift is enabled.
 
 ```text

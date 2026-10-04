@@ -10,6 +10,7 @@ The owner binds inertias in public compiled-tree body order by resolving descrip
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
 | [AffineEvolution](../AffineEvolution/DESIGN.md) | depends on | genuine constrained acceleration and chart | active evolution | scalar stationary affine domain only |
+| [StationaryLoads](../StationaryLoads/DESIGN.md) | planned dependency | catalog/selection, explicit execution receipt | AF23 gravity/passive authority | Design-only until lower Runtime proof |
 | [ConstrainedDynamics](../ConstrainedDynamics/DESIGN.md) | depends on | mass equation, source-bound impulse | equilibrium and physical wake | temporal meaning and source must agree |
 | [ConnectedSleep](../ConnectedSleep/DESIGN.md) | depends on | mass/constraint connected groups, energy, normalized speed | group identity | this component separately proves positive mass |
 | [Runtime Checkpoints](../../../Execution/Runtime/Checkpoints/DESIGN.md) | depends on | RuntimeCheckpointHandling full checkpoint admission | restored physical/time/sequence binding | record-only validation rejects sleep records |
@@ -65,3 +66,47 @@ Tests deliberately reorder descriptor bodies relative to public compiled-tree tr
 
 ### AF20 selected public profile evidence
 Root executed the final unmodified Native, ordinary-WASM and Embedded-WASM compositions with all path completion witnesses and exit zero. [Exact profile evidence](../../../../../Verification/FoundationVerification/DESIGN.md#af20-selected-original-profile-qualification) owns toolchain, stack, runtime and test-snapshot qualification. This extends only the selected public paths documented there; the remaining domain and concurrency limitations above persist.
+
+### Planned AF23 accepted loaded sleep contract
+These additive names/contracts are proposals; current executable scope remains the qualified zero-external-load path. A loaded constructor admits StationaryLoadCatalog and initial selection. Existing zero-load construction and legacy step/command/impact remain compatible. A catalog-backed owner uses an explicit work-reporting port; calling a legacy receipt-less operation for that owner is a typed domain error, never a zero-load fallback.
+
+```swift
+public protocol LoadedMechanismSleepContinuing: MechanismSleepContinuing {
+    func stepWithLoads(_ session: any RuntimeSessionOperating, loadBudget: LoadBudget,
+                       maximumLoadInvocations: Int)
+        throws(LoadedMechanismSleepFailure) -> LoadedMechanismAdvanceResult
+    func selectLoad(_ session: any RuntimeSessionOperating, expected: RuntimeAcceptedState,
+                    selection: StationaryLoadSelection, loadBudget: LoadBudget,
+                    maximumLoadInvocations: Int, work: inout NumericalWork)
+        throws(LoadedMechanismSleepFailure) -> LoadedMechanismWakeResult
+    func commandWithLoads(_ session: any RuntimeSessionOperating, expected: RuntimeAcceptedState,
+                         drive: [Double], generation: UInt64, loadBudget: LoadBudget,
+                         maximumLoadInvocations: Int, work: inout NumericalWork)
+        throws(LoadedMechanismSleepFailure) -> LoadedMechanismWakeResult
+    func impactWithLoads(_ session: any RuntimeSessionOperating, expected: RuntimeAcceptedState,
+                        impulse: MechanismSleepImpulse, loadBudget: LoadBudget,
+                        maximumLoadInvocations: Int, work: inout NumericalWork)
+        throws(LoadedMechanismSleepFailure) -> LoadedMechanismWakeResult
+}
+```
+LoadedMechanismAdvanceResult holds the actual IntegrationAdvanceResult plus an equationExecution-scope StationaryLoadWorkReport; LoadedMechanismWakeResult holds actual RuntimeTrialOutcome plus the separate equationExecution-scope load report. Neither claims total operation/cold-admission work. LoadedMechanismSleepFailure has `preflight(RuntimeFailure, accepted: RuntimeAcceptedState, loads: StationaryLoadWorkReport)`, `integration(IntegrationFailure, loads: StationaryLoadWorkReport)` and `wake(RuntimeFailure, accepted: RuntimeAcceptedState, loads: StationaryLoadWorkReport)` cases. These wrap actual producer results/failures, never construct lower internal reports. Preflight invalid bounds produce a known empty receipt; invocation-budget failure produces the actual known receipt. Rejected trials consume/report actual attempted work while semantic state/RNG is unchanged. A fresh execution owner is created for each public operation and closed/reported on all terminal paths; the adapter's captured reference bridges the NumericalWork-only SmoothODE boundary.
+
+Loaded history uses a separately versioned schema/signature. It binds exact catalog signature, selected program ID/revision/generation, existing q/v/time/global sequence, drive/command generation, flags/dwell and last wake identity. Kind 3 identifies a load selection event with source/target program versions and generation; existing command/impact event semantics remain. Bounds, ID lengths, generation/sequence overflow and canonical bytes are checked before allocation/traversal. Old zero-load wire remains unchanged; loaded/zero or foreign catalog records are not silently migrated.
+
+```text
+full accepted record -> exact catalog/selection lookup -> per-step immutable loaded adapter
+ -> shared actual affine loadedMotion -> SPD/connectivity + exact v=0/a=0 + threshold/dwell
+ -> active actual stages OR unchanged source with prepared stationary proof
+ -> endpoint + history -> full required validation -> Runtime accept / rollback
+expected accepted source -> next load generation + catalog target
+ -> shared actual loadedMotion at unchanged actual q/v/time
+ -> atomic selected version + physical acceleration + whole connected wake + event
+    + reset rest onset + exact Integration initial history -> accept / rollback
+```
+The full handler rejects altered catalog/version/selection, missing records and mismatched physical/time/global sequence. Sleeping restore performs a cold shared loaded-motion proof with the restored program; catalog provenance makes unchanged q, exact v=0 and unchanged program time-independent. Nonzero gravity/passive force may be balanced by each other or retained constraint reactions: nonzero forces are not rejection by themselves. Uniform gravity/passive equations still execute and original physical acceptance remains required. Exact zero acceleration is retained as the omission criterion; merely small residual/velocity does not freeze motion.
+
+Memo keys additionally include exact catalog/program version and selected generation (plus q/drive); each step captures immutable selection and source-bound prepared proof. Catalog lookup and all dependency edges remain valid for zero coefficients/forces. No current-load mutable property exists on the sleep owner. Whole-mechanism wake remains an acceptable conservative compatibility guarantee; component-minimal omission/wake is separately unqualified. A load change cannot reuse the former proof even if its instantaneous net force happens to match.
+
+A planned explicit full-checkpoint handler port `admitWithLoadReport(checkpoint:model:configuration:cancellation:)` returns LoadedSleepAdmissionResult(actual accepted state, checkpointAdmission-scope validation load receipt), or LoadedSleepAdmissionFailure(actual RuntimeFailure, validation receipt). It creates an operation-local contributor/receipt owner before delegating to actual ReferenceRuntimeCheckpointHandler; all required validation and publication remains in that lower path. Its standard RuntimeCheckpointHandling requirement preserves the lower generic contract. Validation's separate K=1 and unit/scratch composition are owned by [StationaryLoads](../StationaryLoads/DESIGN.md); stage load reports do not claim those Runtime-owned validation costs. Lower Runtime contextual/physical admission qualification must complete before implementing either port.
+
+Gravity/passive equilibrium, new-load acceleration/motion, receipts and replay are owned by the [test design](../../../../../Tests/MechanicsSleepMechanismTests/DESIGN.md). This proposal does not connect Hybrid contact, topology migration, arbitrary time-dependent force callbacks or floating/planar formulations and cannot close full RB-007. Implementation/build/registration is gated on root's lower Runtime green and design handoff acceptance.

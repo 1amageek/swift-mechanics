@@ -12,7 +12,8 @@ Explicit index-reduced affine holonomic constraints over dynamic scalar revolute
 | [Parent](../DESIGN.md) | parent | IM16 ownership | Module composition | Root registers and qualifies actual paths |
 | [Compiler](../../../Modeling/Compiler/DESIGN.md) | depends on | Compiled model state/evaluation | Actual tree and revision | No private reconstruction |
 | [Joints](../../../Modeling/Joints/DESIGN.md) | depends on | Scalar manifold/layout/state | Explicit qdot chart authority | No inferred q/v meaning |
-| [Loads](../../Loads/DESIGN.md) | depends on | Zero external-load ledger | No mapped external loads | Actual drive is passed separately |
+| [Loads](../../Loads/DESIGN.md) | depends on | Zero external-load ledger | Existing facade uses no mapped external loads | Actual drive is passed separately |
+| [StationaryLoads](../StationaryLoads/DESIGN.md) | planned dependency | Catalog, selection, explicit LoadWork execution | AF23 opt-in loaded motion | Design-only until lower Runtime proof |
 | [Numerics](../../../Mathematics/Numerics/DESIGN.md) | depends on | Caller work/capacity ledger | Separate supplier accounting | No unknown retry |
 | [Dynamics](../../Dynamics/DESIGN.md) | depends on | Rigid equations and solve | Real compiled physical mass | No diagonal proxy |
 | [Constraints](../../Constraints/DESIGN.md) | depends on | Required rank and evaluation | Original identified rows | Rank does not imply force or feasibility |
@@ -51,3 +52,19 @@ Native fixed/adaptive gear replay and inconsistent-initial-state tests passed. O
 
 ### AF20 selected public profile evidence
 Root executed the final unmodified Native, ordinary-WASM and Embedded-WASM compositions with all path completion witnesses and exit zero. [Exact profile evidence](../../../../../Verification/FoundationVerification/DESIGN.md#af20-selected-original-profile-qualification) owns toolchain, stack, runtime and test-snapshot qualification. This extends only the selected public paths documented there; the remaining domain and concurrency limitations above persist.
+
+### Planned AF23 shared loaded path
+This section proposes additive APIs; no loaded implementation or evidence exists yet. Existing constructor/zero-load facade, chart bytes and operation behavior remain compatible. A new opt-in constructor captures immutable catalog/selection and an operation-local StationaryLoadExecuting port. Its chart binds the complete canonical catalog signature; selected version/generation is the accepted continuation owner's dynamic authority. It implements the same SmoothODE witnesses and a required public loaded-motion operation:
+
+```swift
+public protocol StationaryAffineMotionComputing: Sendable {
+    func loadedMotion(physical: KinematicState, selection: StationaryLoadSelection,
+                      execution: any StationaryLoadExecuting, work: inout NumericalWork)
+        throws(RuntimeFailure) -> StationaryAffineMotion
+}
+```
+StationaryAffineMotion is an immutable bounded reference output holding actual RigidDynamicsSystem, original VelocityConstraintSample and accepted ConstrainedMotion. It exposes the source-bound system/rows required for sleep SPD/connectivity; no other owner reconstructs private dynamics. The equation's captured model/constraints/drive/catalog are validated against physical/selection. The non-Runtime operation works for full-checkpoint proof as well as stage/wake calls; it uses its supplied cancellation/admission/ledgers, not a fabricated RuntimeStepControl. Stage witnesses still admit actual Runtime control blocks before entering it.
+
+One phased implementation owns physical source admission -> original stationary row evaluation -> actual scalar load sample -> RigidDynamicsInput with selected gravity/applied contribution -> real rigid assembly -> constrained acceleration -> original source/momentum association. Active derivative, zero-equilibrium proof and new-load wake all call this same operation. Snapshot and inertias use actual public compiled-tree order. Each call uses one execution lease; its local LoadWork spans scalar evaluation and rigid gravity evaluation and is finalized on every success/failure. NumericalWork remains a separately guarded caller ledger; no LoadWork units are substituted for numerical arithmetic. Shared producer errors keep original unavailable-work/cancellation evidence. Concrete actual Loaded motion is required after wake; no delegate-only result or cached derivative can qualify it.
+
+The source, sampled loads/input, system/rows and result association are noninline phases; only immutable bounded context outputs cross phases. Rich completed/future values do not remain live over lower solver calls. The load-work protocol, finite K/bounds, receipt and synchronization guarantees are owned by [StationaryLoads](../StationaryLoads/DESIGN.md), not repeated here. Loaded constraints remain stationary scalar affine; nonlinear/floating/planar/time-varying loads remain unsupported. Changes affect SleepContinuation's AF23 proof/wake and original-profile integration; no frozen lower dynamics or constraint producer change is proposed.

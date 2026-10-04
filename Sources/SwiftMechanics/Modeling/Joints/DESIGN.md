@@ -1,7 +1,7 @@
 # Joints component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). Responsibility IM06: joint coordinate manifolds, tree transforms, framed jacobian and motion terms, requirements JT-001..004 and KI-001..003 in [SPEC](../../../../SPEC.md). Components: [KinematicAlgebra](KinematicAlgebra/DESIGN.md), [JointManifolds](JointManifolds/DESIGN.md), [ArticulatedTrees](ArticulatedTrees/DESIGN.md), [Jacobians](Jacobians/DESIGN.md). Full feature/platform closure remains the task-level integration responsibility.
+Parent: [responsibility owner](../DESIGN.md). Responsibility IM06: joint coordinate manifolds, tree transforms, framed jacobian and motion terms, requirements JT-001..004 and KI-001..003 in [SPEC](../../../../SPEC.md). Components: [KinematicAlgebra](KinematicAlgebra/DESIGN.md), [JointManifolds](JointManifolds/DESIGN.md), [ArticulatedTrees](ArticulatedTrees/DESIGN.md), [Jacobians](Jacobians/DESIGN.md), [PrescribedMotions](PrescribedMotions/DESIGN.md). Full feature/platform closure remains the task-level integration responsibility.
 
 ## Responsibilities and Boundaries
 Joint coordinate manifolds, tree transforms, framed Jacobian and motion terms. Components own admitted domains, original-equation acceptance and explicit failure. Compiler, loads, rigid dynamics and constraints consume public contracts and own their mechanical graph, runtime state, physical formulation and composition.
@@ -41,3 +41,7 @@ Ownership review found immutable Sendable public descriptors/results and synchro
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+### AF23 motion-program authority
+
+[PrescribedMotions](PrescribedMotions/DESIGN.md) owns bounded immutable relative trajectory generation and original mathematical sample verification. It consumes Core/ArticulatedTrees mathematical values and the explicit Numerics work contract, without a Compiler/Runtime dependency. Compiled model/body authority, complete required frames and physical/history association belong to consumers. This is a planned unqualified component until its own and upper behavioral evidence passes.
