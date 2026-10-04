@@ -64,3 +64,20 @@ The first registered affected Native run passed 39 cases in eleven suites on mac
 
 ### AF25 selected proof ownership
 AF25 PrescribedRootEvolutionTests / PrescribedRootFailureTests / PrescribedRootAggregateTests own complete root-only and dynamic-descendant planar/spatial selected behavior. Independent scalar Newton-Euler and internal-motor oracles verify original efforts, COM/spin K/Kdot and integrated work, actual q/v/a/axis closure, refinement, exact canonical endpoint/history, cold replay and failed mutation prefix. Faults execute actual producers for wrong source/acceleration and seeded ledger reset/cancel/unknown work; caller capacity/conflict and changed same-ID law/inertia are exact typed refusals. Aggregate evidence uses one identical Mutex owner across targets; no callback runs under its lock. Root executes the registered graph and original profiles after source freeze.
+
+### AF26 quadratic cold authority proof
+
+Design-only selected evidence; implementation and execution are pending. The sole production contract is [NonlinearEvolution](../../Sources/SwiftMechanics/Physics/Mechanisms/NonlinearEvolution/DESIGN.md#af26-source-bound-quadratic-cold-authority). Root owns upper sleep/wake migration, registration, bounded commands, original profiles and commits; existing legacy/geometric/root evidence remains unchanged.
+
+Use actual fixed-root spatial mass-2 Y-prismatic A/B/C, original A-B/B-C rows and drive [4,-4,0], resting q/v/a. Derive canonical offsets from compiler joint IDs/ranges. A public subtree release replaces A with sixDOF; explicit target rows/drive retire A-B/A effort and retain B-C/B=-4. Independent scalar Newton equations give A a=0, B=C=-1, without using returned diagnostics as oracle.
+
+| Invariant | Actual behavioral proof |
+|---|---|
+| Physical source identity | Same stamp/chart/drive/resting state with changed mass changes the strict descriptor and rejects old history; legacy signature remains compatible. |
+| Original force, every sequence | Accept consistent source/target at zero and later; reject row-consistent force-wrong stored a and free forward B=-2/C=0. Exercise actual sixDOF q7/v6, quaternion/Ndot and original retained rows. |
+| Immutable target evidence | Wrong target descriptor/layout/stamp refuses; valid reconciliation preserves all q/v/time/revision bits and consumes only actual producer evidence. Root may compile-probe inaccessible token creation from an unrelated component. |
+| History and required law source | Actual public Integration records bind time/full point/source signature/global steps, including source+1 target. Missing/altered/stale/future records and required registry omission/duplicate/unknown/law mutation refuse. |
+| Bounded irreversible work | Real delegated evaluator/solver success and failure preserve seeds/known prefixes; reset/unknown work is terminal, capacity prevents unadmitted entry, late cancellation prevents issuance. Four cold ledgers share one admitted ceiling. |
+| Whole-prefix rollback/replay | Genuine Runtime trial draws RNG before contextual failure; compare full checkpoint bytes/history/RNG. Fresh equivalent source-bound owner restores encoded saved state, advances actual projected evolution and replays exactly. |
+
+No fake control, copied producer, manufactured accepted state, raw IntegrationHistory or projection that repairs saved input is used. Lower tests prove physical evidence/context; exact upper catalog/publication is its own owner. Failed admission/reconciliation cannot change the accepted prefix while caller work remains an irreversible failed prefix. Tests use individual availability guards inside undecorated Test/Suite functions, explicit time limits and root command timeout. New supplier captures, if needed, are operation-local identical Mutex owners across Native/WASM/Embedded with callbacks outside locks. One scoped source/test review plus causal repairs precedes frozen focused qualification; design presence is not proof completion.

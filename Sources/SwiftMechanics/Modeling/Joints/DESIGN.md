@@ -45,3 +45,6 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ### AF23 motion-program authority
 
 [PrescribedMotions](PrescribedMotions/DESIGN.md) owns bounded immutable relative trajectory generation and original mathematical sample verification. It consumes Core/ArticulatedTrees mathematical values and the explicit Numerics work contract, without a Compiler/Runtime dependency. Compiled model/body authority, complete required frames and physical/history association belong to consumers. The selected component and upper execution have passed [AF23 qualification](../../../../Verification/FoundationVerification/DESIGN.md#af23-integrated-qualification); qualification is limited to the actual motion programs and composed profiles recorded there.
+
+
+The additive [AF26 trajectory contract](PrescribedMotions/DESIGN.md#af26-additive-lower-trajectory-contract) owns harmonic/C2 piecewise mathematical source, sealed sampling and earliest-knot authority. Existing quadratic records/getters/signatures remain the old contract. Compiler/physical/history binding stays with later consumers; no backedge is introduced. New source execution is pending.

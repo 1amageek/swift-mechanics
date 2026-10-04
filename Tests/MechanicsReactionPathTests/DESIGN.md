@@ -1,5 +1,68 @@
 # Reaction path behavioral evidence
 
+## AF26 prescribed planar root proof contract
+
+### Purpose and Scope
+
+This test target belongs to the [package](../../DESIGN.md) and has no children. This is design-only test planning for the selected additive prescribed planar root contract. No new declaration, test execution, or successful prescribed-support claim is recorded here. Existing spatial/planar tests and their qualified evidence remain unchanged.
+
+### Responsibilities and Boundaries
+
+This target owns root support/cut correspondence; Joints owns law generation, ConstrainedDynamics owns original full-mass effort acceptance, and root owns public profile/build/commit evidence. Fixture values and supplier wrappers are test-owned and are never production physical authorities.
+
+### Related Designs
+
+| Design | Relationship | Contract used | Caution |
+|---|---|---|---|
+| [ReactionPaths](../../Sources/SwiftMechanics/Physics/Mechanisms/ReactionPaths/DESIGN.md#af26-additive-prescribed-planar-root-contract) | verifies | New public prescribed-root recovery, signs/source/ledgers | Selected complete reduced planar tree only |
+| [ConstrainedDynamics](../../Sources/SwiftMechanics/Physics/Mechanisms/ConstrainedDynamics/DESIGN.md) | depends on | Original constrained root solve and sealed PhysicalConstrainedMotion | Test suppliers may produce genuine wrong evidence; recovery must reject it independently |
+| [Package](../../DESIGN.md) | parent | Frozen qualification ownership | Root owns original profiles and commits |
+
+### Architecture
+
+```text
+actual compiled prescribed planar root + law-bound state + original MassProperties2D/loads
+ -> genuine original full-mass constrained solve
+ -> new public protocol recovery
+ -> independent scalar force/moment/effort and refusal checks
+```
+
+Planned new files are `PlanarPrescribedRootReactionFixtures.swift`, `PlanarPrescribedRootReactionPhysicalTests.swift`, `PlanarPrescribedRootReactionFailureTests.swift`, `PlanarPrescribedRootReactionLedgerTests.swift`, and separate primary-type supplier helpers `PlanarPrescribedRootForeignEquations.swift` and `PlanarPrescribedRootGravitySupplier.swift`. Fixture model/source/assembly/solve/recover phases use actual public protocols and distinct noninline lifetime boundaries. Tests are named by the new contract and use one-minute declaration deadlines; root sets an external timeout for the focused filters `PlanarPrescribedRootReactionPhysicalTests`, `PlanarPrescribedRootReactionFailureTests`, `PlanarPrescribedRootReactionLedgerTests`. Declaration/expanded-case counts are reported only after actual source freeze, not guessed from this plan.
+
+### Contracts and Invariants
+
+| Independent physical oracle | Actual owner and expected result | Counterexample detected |
+|---|---|---|
+| Offset COM root: m=2, COM=(.4,-.3), Iz=5; initial Rz(.4); vx=.4+.3t, vy=-.2+.2t, omega=.2+.3t, alpha=.3 | Let theta=.4+.2t+.15t² and r=Rz(theta)COM. COM acceleration is (.3-alpha*r.y-omega²*r.x, .2+alpha*r.x-omega²*r.y). Support F=2*aCOM, Mz=5*alpha+r.x*Fy-r.y*Fx. P effort is [Fx,Fy,Mz] at root origin; no child cut exists | Relabeled effort without actual body force; omitted centripetal/COM moment; foreign inertia with matching metadata |
+| Translating root with X-prismatic child: masses root1/child2, both COM at origins; child origin x=2, known root ay=1, other root rates/accelerations zero; D acceleration=0; no gravity/loads | Actual child-anchor cut parent-on-child=(Fx0,Fy2,Mz0); root-origin support=(0,3,4); P effort=[0,3,4], D residual0. Child and root independent inertia owners are explicit | Only child-body support; missing offset moment; hiding free-X residual with root support |
+| Same translating tree with gravity gY=-10 | Child cut Fy22; root support Fy33 and Mz44. Root body's independent weight appears only in support | Double-counted/missing root gravity; foreign gravity invisible to free X |
+| Actual translated/rotated output frame and physically identified offset load/couple | Independently shift full wrench to reported point, then rotate Fx/Fy/Mz; both signs use one actual world point. Root wrench power equals P effort dot actual base velocity | Missing moment shift, sign/reference disagreement, rotation-only conversion |
+| Raw force at actual off-plane reference with cancelling transverse couple | Full world shift makes admitted body-origin load planar before reduction; scalar in-plane root/cut balance remains correct | Premature raw reduction or invented strict reference-z refusal |
+
+The offset-COM scalar oracle is independent of production columns, mass matrices, body-wrench diagnostics and supplied report values. The existing `MechanicsNonlinearMechanismTests/PrescribedRootOracle.swift` establishes the algebraic fixture pattern, but this owner supplies its own scalar assertions without importing another test target. Genuine motion comes from `PrescribedRootMechanismSolving` using actual original source and nonunit normalization; row multipliers must scale while physical effort/wrenches remain unchanged. Root power correspondence is a check, not a substitute for force or moment acceptance.
+
+### Failure, Concurrency, and Constraints
+
+| Failure/authority fixture | Required behavior |
+|---|---|
+| Original law/state/source time, layout, revision, frames, root columns or coordinateRate changed | Refuse stale source before publication, with actual canonical original comparison |
+| Foreign sealed motion system against original constraint, changed mass/inertia/body loads/gravity source | Refuse original association or invalid supplier evidence; same IDs and shape cannot establish source authority |
+| Genuine different original root normalization/row IDs/constraint supplied against accepted motion | Refuse original row/layout/reaction mismatch; use actual producer outputs rather than fabricating sealed ConstrainedMotion |
+| Root-only actual solver uses an injected original-force query delegated to an actual foreign physical system, while returning genuine sealed motion bound to the original system | Canonical original P force/effort acceptance refuses the resulting wrong root multipliers; no sealed value is fabricated and synthetic root mu cannot be adopted as body load |
+| Actual descendant solver accepts nonzero dynamic-coordinate drive, while recovery declares originalDrive=zeros against the same source | Original D generalized residual failure; root support cannot absorb that undeclared drive |
+| Impulse result, fixed/spatial/free root, missing compiled prescribed authority, any original geometry row including structural-zero row, named prescribed anchor | Exact unsupported temporal/support failure; preserve original rows instead of deleting them |
+| Nonzero explicit drive or original generalized-only contribution; incomplete topology | unallocatableGeneralizedLoad or unrepresentedConnections |
+| Injected original query delegates to actual foreign mass under same body/frame/reference; returns success/failure after reset | Builtin original recomputation or supplierLedgerReplaced; irreversible caller prefix retained |
+| Gravity performs actual point work then resets zero/precharged ledger on success/failure | supplierLedgerReplaced; original cancellation closure and known admission prefix preserved |
+| Original cancellation occurs while opaque gravity increments are merged | loadLedgerMerge(cancelled), unavailable marker and last charged known prefix; no partial success |
+| Capacity/storage/operation overflow or exhaustion, cancellation at operation/phase/publication boundary, original supplier failure with valid ledger | Typed cause with retained known work; report never published |
+
+Successful gravity paths independently assert three units per original body. Numerical callback tests assert positive pre-admission and monotonic known work on both success/failure; exact opaque unknown work is not invented. Helpers keep all work/source values local. Any cancellation flag uses the same `Synchronization.Mutex` declaration/read/mutation on every target, with actual platform availability guarded in the Native tests. No target-specific raw state or unchecked Sendable is introduced.
+
+### Verification and Change Impact
+
+The owned source review checks this fixed success/refusal/work/lifetime contract once; concrete compiler/runtime findings receive only a targeted repair/recheck. Root executes focused Native after freeze and independently exercises the public protocol path in unchanged original Native/WASM/Embedded artifacts and the 128 KiB guards. Full prescribed-root loops, spatial support, bearing splits and other IM16 domains remain open rather than expanding this suite.
+
 ## AF25 reduced planar evidence owner
 `PlanarReactionRecoveryTests` uses actual BodyRecord2D/MassProperties2D and PhysicalRigidEquationComputing. Independent pendulum, distinct root/child gravity and slider offset/frame rotation check Fx/Fy/Mz and retained points. Raw off-plane reference/couple cancellation, wrong acceleration/generalized allocation, malformed supplier evidence, zero/precharged gravity reset success/failure, cancellation preservation, numerical reset/resource/cancellation and floating support absence exercise the contract. Existing planar Joints admission requires anchor poses with z==0; no fabricated off-plane snapshot is used as evidence. Existing spatial tests remain unchanged. Owner: [ReactionPaths](../../Sources/SwiftMechanics/Physics/Mechanisms/ReactionPaths/DESIGN.md#af25-additive-reduced-planar-recovery). Root owns actual execution after freeze.
 

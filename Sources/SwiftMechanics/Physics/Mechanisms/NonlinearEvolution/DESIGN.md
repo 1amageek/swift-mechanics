@@ -18,6 +18,8 @@ Immutable equation binds compiled model, original quadratic geometric/time rows,
 | [ConstrainedDynamics](../ConstrainedDynamics/DESIGN.md) | depends on | acceleration and reconcileVelocity | Original mass/reaction acceptance | Projection impulse is distinct from continuous reaction |
 | [Integration](../../../Execution/Integration/DESIGN.md) | coordinates with | descriptor, contributor, history | RK4/Heun policy and continuation | Accepted history stores actual projected endpoint |
 | [Runtime](../../../Execution/Runtime/DESIGN.md) | coordinates with | performTrial/reject/checkpoint/restart | Atomic publication and rollback | Failed opaque work stops without retry |
+| [SubtreeTransitions](../SubtreeTransitions/DESIGN.md) | depends on | sealed SubtreeRelease and exact compiled target | Incoming mapped state for quadratic constrained reconciliation | Existing free forward-acceleration evidence is a separate authority |
+| [TopologyContinuation](../TopologyContinuation/DESIGN.md) | used by | planned sealed quadratic reconciliation outcome and contextual handler | Upper catalog/history preparation and atomic replacement | Upper preparation must explicitly use the global accepted sequence |
 
 ## Architecture
 ```text
@@ -181,3 +183,39 @@ The single scoped source review traces the public immutable base-law binding thr
 | Aggregate regression evidence | identical Mutex<Evidence?> in test supplier | evidence/read and write via withLock; actual solver outside lock | test-owned release |
 
 Root-only geometry has genuinely zero original rows, the full nonempty root layout, empty D and active rank zero; root identity motion rows belong solely to the original solve. Relative coaxial rotor tests use a nonidentity Rz root and two regular physical axis rows with one structural zero/redundancy. Noncommuting Rx initial orientation and offset COM are independently exercised in the root-only spatial Newton-Euler case. The original row-relative rank policy and its near-zero-row limitation are retained; no derivative rounding or rank heuristics were added. Periodic/piecewise laws and nonroot prescribed-coordinate partitions remain open.
+
+### AF26 source-bound quadratic cold authority
+
+Design-only contract; implementation and behavioral qualification are pending. The selected domain is a connected fixed-root spatial tree with fixed anchors, dynamic scalar joints and a released dynamic sixDOF connector, immutable generalized drive, and zero external loads. Legacy quadratic constructors/chart bytes, geometric/prescribed-root paths, projected evolution and free topology tokens/publication remain unchanged. This stage adds no planar, gravity/load, passive-law or general migration domain.
+
+The original quadratic evaluator/tangent conversion already reaches NonlinearPhysicalEngine's actual physical system, nil-control constrained solve, original full source/row/M/J-transpose acceptance and bounded cold four-ledger partition. The missing authority is cold access without a fabricated RuntimeStepControl, complete saved acceleration/history association, and an immutable constrained release outcome. Saved state is validated without projection or repair. The resting same-revision changed-mass counterexample also proves the legacy polynomial chart is insufficient source identity. No admissible public canonical signature covers the target sixDOF manifold; this component owns a new dedicated bounded signature.
+
+| Planned additive API | Contract |
+|---|---|
+| NonlinearMechanismEquation.init(identity:sourceBoundModel:constraints:velocityLayout:drive:policy:projection:admission:maximumIdentityBytes:kernel:evaluator:solver:ranker:linear:) | Existing argument types/defaults and typed MechanismError; private construction mode selects a distinct source-bound chart. Existing model: initializer/signature stays exact. No public flag, setter or raw signature factory. |
+| NonlinearMechanismCheckpointHandler: RuntimeCheckpointHandling, Sendable | init(equations: NonlinearMechanismEquation, continuation: IntegrationContinuationProvider, base: any RuntimeCheckpointHandling, validationBudget: NumericalBudget) throws(RuntimeFailure). Requires genuine source-bound equation, exact descriptor and adequate scalar budget; implements original admit/migrate requirements. |
+| NonlinearSubtreeAccelerationPreparing: Sendable | Non-generic requirement prepare(release: SubtreeRelease, equations: NonlinearMechanismEquation, work: inout NumericalWork) throws(RuntimeFailure) -> NonlinearReconciledSubtreeRelease. ReferenceNonlinearSubtreeAccelerationPreparer uses the same original cold context. |
+| NonlinearReconciledSubtreeRelease: Sendable | Immutable read-only release, admitted physical state, source-bound equation descriptor and original accepted ConstrainedMotion. Its opaque token has an explicit fileprivate initializer in the actual issuing preparer file; no raw/public constructor or returned token. |
+
+The lossless canonical signature binds actual tree/layout/root base/authority; body ID/frame/reference pose/mass/COM/inertia; joint ID/parent-child/manifold/ordered axes/fixed anchors/authority/ranges; compiler chart policy, drive, physical admission/acceptance policy and existing quadratic chart. Canonical admitted ordering and exact scalar bits are retained. Dynamic checkpoint state and sequence are associated separately. Caller maximumIdentityBytes bounds encoding and resulting descriptor before materialization; overflow/count/allocation checks precede storage. Cancellation closure identity is not serialized. Every contextual entry validates the complete actual compiled model descriptor/layout as well as stamp. Cold handler and preparer refuse a legacy equation.
+
+```text
+source-bound compiled model + original rows/drive/policies
+ -> model.makeState + strict chart/domain/source checks
+ -> original quadratic evaluate + all position/velocity residuals
+ -> actual coordinateRate and N/Ndot tangent
+ -> actual physical.system + original source witness
+ -> existing nil-control solve + original row/M/J-transpose acceptance
+      saved q/v/a -> original stored acceleration check -> history -> required base handler
+      release q/v -> constrained a only -> model.makeState -> sealed release
+```
+
+One noninline immutable cold context serves both paths. Only common private reservation/evaluation/tangent/system/solve helpers acquire optional control; public projected methods retain genuine RuntimeStepControl. Saved acceleration must satisfy original tangent rows and accepted full force at every sequence, including zero. Quaternion unit/rate/Ndot checks remain actual quadratic semantics. Unsupported anchors/authority are rejected before snapshots can drop them. Reconciliation checks the equation against the exact release target and retains every q/v/time/revision bit, changing only acceleration. Actual target makeState precedes issuance; the motion retains original source snapshot, acceleration-force temporal semantics, complete rows/reaction/system.
+
+The handler checks the public Integration provider's exact source-bound signature, actual physical time/full q/v point and history.acceptedSteps == checkpoint.acceptedSteps before the explicit base handler validates every required catalog/law record and issues Runtime acceptance. RNG/records are not synthesized. Generic migration remains incompatibleMigration and its callable unsupported branch receives the required incomplete-implementation marker. Fresh-owner bootstrap/restore follows the same strict checks; no mutable initialized flag or process registry is added.
+
+Upper TopologyContinuation owns an additive path for the new sealed outcome, explicit catalog dispositions, history append and a strict quadratic handler around its topology/required registry. Existing initializeIntegration creates sequence zero while replacement uses source+1; the new path must use the public provider record API with reconciled point/time and source.acceptedSteps+1. The existing concrete free result is neither rewritten nor reinterpreted. Runtime exact expected-source/lease and atomic replacement remain lower publication authority.
+
+Handler validationBudget owns local work; reconciliation uses caller aggregate work. Both reserve existing scalar envelopes, charge opaque admission irreversibly, preserve positive seeded budgets/monotone known prefixes on both callback outcomes, and reuse the existing single cold four-ledger allowance. Known prefixes/retained seeds are absorbed before reset/unknown classification. Cancellation polls actual supplied cancellation source, Task and existing policy at phase boundaries and before issuance/base admission. No unknown-work retry or fabricated control occurs. New contexts/signatures/outcomes are immutable Sendable; vectors/work remain caller-exclusive; all targets retain existing Mutex/isolation, callback-outside-lock and phase-lifetime contracts.
+
+The independent selected oracle is mass-2 Y-prismatic A/B/C, A-B/B-C rows, drive [4,-4,0], at rest. Cut A into a real sixDOF connector, explicitly retire A-B/A effort, retain B-C and drive B=-4: free A a=0, B=C=-1. Legacy free forward B=-2/C=0 must fail strict force admission. [Dedicated test owner](../../../../../Tests/MechanicsNonlinearMechanismTests/DESIGN.md#af26-quadratic-cold-authority-proof) owns source/force/history/work/refusal/rollback/replay proof; root owns registered Native/three-profile and upper wake qualification. Design/token shape alone claims no behavioral success.

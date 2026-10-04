@@ -124,3 +124,6 @@ AF24 upper composition preserves two independent consumer contracts. The planar 
 
 
 AF25 selected prescribed-root force/power/evolution/history and planar closed-loop physical recovery now compose those qualified lower contracts. ConstrainedDynamics, NonlinearEvolution and ClosedLoopReactionPaths remain the contract owners. [Final integrated qualification](../../../../Verification/FoundationVerification/DESIGN.md#af25-upper-integrated-qualification) covers their changed interaction and inherited sleep path; this does not close the remaining IM16 domains.
+
+
+The [AF26 handoff](../../../../IMPLEMENTATION_PLAN.md#af26-selected-prerequisite-handoff-and-exclusive-dispatch) fixes three independent lower writers before upper changes. ReactionPaths owns reduced planar prescribed-root complete-tree recovery; NonlinearEvolution owns strict source-bound quadratic cold admission/reconciliation. SleepContinuation owns source retirement through Runtime contributor abstractions; TopologyContinuation consumes that authority and the new lower physical outcome. Root composes catalogs/target evolution. Detailed contracts are child-owned; actual lower behavior and upper execution remain pending.

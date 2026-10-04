@@ -324,3 +324,27 @@ AF25 upper qualification discovered an actual missing RuntimeTrial acceleration 
 
 
 AF25 upper completed original-profile qualification after concrete rich-value lifetime findings. Sole owners phased Manifold/position acceptance and root-only rank acceptance without changing original operation order, rows, force/power acceptance or ledgers. Root corrected public canonical inertia order/admission and endpoint lifetimes. The final [integrated qualification](Verification/FoundationVerification/DESIGN.md#af25-upper-integrated-qualification) owns exact Native/original-profile/stack evidence. Remaining domains continue through the canonical requirement graph.
+
+
+### AF26 selected prerequisite handoff and exclusive dispatch
+
+Qualified AF25 source `76983de` and integrated proof `0e72830` are frozen prerequisites. The read-only path handoff found three actual missing contracts, not interchangeable declarations: new trajectory mathematics/boundary authority, original prescribed-root support recovery, and quadratic source-bound cold physical/history acceptance. Existing free subtree reconciliation cannot authorize retained-row target acceleration. The canonical child designs below own each contract; this parent owns sequencing and sole mutable paths only.
+
+| Item | Sole writer / scope | Frozen assumptions | Actual completion evidence |
+|---|---|---|---|
+| IM16.31.1 | nonlinear_mechanisms: Joints/PrescribedMotions and MechanicsJointsTests | all old record/getter/sample/signature semantics; no upper or Compiler dependency | independent harmonic/quintic/qdot/boundary oracles and opaque source/work refusal |
+| IM16.31.2 | reaction_paths: ReactionPaths and MechanicsReactionPathTests | old RootBinding/program/full-root constraints, original dynamics/gravity and allocation unchanged | planar original per-body support/cut/effort balance, source/rank/multiplier and supplier refusals |
+| IM16.31.3 | admission_authority: NonlinearEvolution quadratic cold source/context/handler/reconciliation and MechanicsNonlinearMechanismTests | geometric/root path and legacy quadratic constructor/signature/free token unchanged | genuine retained B-C acceleration, same-revision physical-source refusal, strict saved force/history and whole-prefix failure |
+| IM16.31.4 | root: only new public lower callers and entrypoint/parent registration | fixed child signatures; production builds wait for all owners to freeze | independent original service calls on Native/WASM/Embedded; no copied test helper authority |
+| IM16.31.5 / .32 | root: focused/cumulative Native, original public profiles, exact stack evidence and commits | frozen source/tests; unchanged profiles and irreversible work | actual behavior and coherent source/integrated local commits |
+| later upper handoff | root + explicit child writers after .32 | qualified new lower contracts | trajectory binding/knot-aware evolution and selected sleep retirement/topology publication designs before production |
+
+```text
+new trajectory mathematics/next-knot ----> qualified lower ----> later same-engine trajectory binding
+original planar support recovery ------> qualified lower
+source-bound quadratic cold reconcile -> qualified lower ----> sleep retirement + topology publication
+```
+
+NonlinearEvolution owns the bounded lossless physical-source identity needed by its new strict constructor; no existing public serializer admits this sixDOF domain. It reuses the actual original force/constraint engine and issues a distinct immutable reconciliation outcome. SleepContinuation owns original sleep retirement and takes additional contributors through the Runtime contract. TopologyContinuation consumes that authority plus the lower physical outcome and owns event/history/catalog publication. Root composes providers and genuine target evolution; no mutual concrete Sleep/Topology dependency is introduced. Exact selected upper scope excludes loaded-catalog migration, which needs a separate actual load authority.
+
+All new lower algorithms reside in their existing components of the single SwiftMechanics module. Child designs are [trajectory](Sources/SwiftMechanics/Modeling/Joints/PrescribedMotions/DESIGN.md#af26-additive-lower-trajectory-contract), [support](Sources/SwiftMechanics/Physics/Mechanisms/ReactionPaths/DESIGN.md), [quadratic cold authority](Sources/SwiftMechanics/Physics/Mechanisms/NonlinearEvolution/DESIGN.md#af26-source-bound-quadratic-cold-authority), [sleep retirement](Sources/SwiftMechanics/Physics/Mechanisms/SleepContinuation/DESIGN.md) and [topology publication](Sources/SwiftMechanics/Physics/Mechanisms/TopologyContinuation/DESIGN.md). No declaration/source freeze completes a behavioral item. Old observation and other excluded/unowned files are preserved. Root alone builds, registers, stages and commits.

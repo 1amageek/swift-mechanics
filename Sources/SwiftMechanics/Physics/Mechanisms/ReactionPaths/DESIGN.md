@@ -1,5 +1,83 @@
 # ReactionPaths
 
+## AF26 additive prescribed planar root contract
+
+This is a design-only contract; the new declarations and callable branches do not yet exist. The selected domain is a complete reduced planar tree whose root is genuinely prescribed through the original compiled model and `PrescribedRootBinding.program`. Existing spatial/planar tree and closed-loop operations remain unchanged. This port adds net prescribed-root support and tree cuts; it does not claim a bearing split, actuator/bearing decomposition, spatial support, or prescribed-root loop allocation.
+
+### Confirmed prerequisite and responsibility boundary
+
+`PrescribedRootBinding` validates compiled `.prescribedMotion` root authority and original law-bound q/v/a. `PrescribedRootConstraint` retains the full original physical system, root identity rows, layout and root sample. `MassWeightedMechanismSolver` fixes known-root acceleration before acceptance, computes root effort from original full inertial force, and accepts every original P/D force equation. `PhysicalConstrainedMotion` seals that system/motion association. These frozen producers establish coordinate effort; they do not supply a physical support allocation. Existing tree recovery requires zero residual in every generalized coordinate and no net wrench for a floating root, so it cannot be reused by pretending the prescribed root is fixed or by changing the original snapshot.
+
+| Design | Relationship | Contract used | Caution |
+|---|---|---|---|
+| [GeometricRelations](../../Constraints/GeometricRelations/DESIGN.md) | depends on | Original compiled source, prescribedRoot binding, evaluator/original acceptance | Root program and original state remain authoritative; metadata alone is insufficient |
+| [PrescribedMotions](../../../Modeling/Joints/PrescribedMotions/DESIGN.md) | depends on | OriginalPrescribedBaseMotionAcceptance, sealed base sample | Consume the current frozen program contract; new trajectory laws are a separate owner |
+| [ConstrainedDynamics](../ConstrainedDynamics/DESIGN.md) | depends on | PrescribedRootConstraint, PhysicalConstrainedMotion, original rank/rows/force | Synthetic root rows represent effort, not physical endpoint covectors |
+| [RigidEquations](../../Dynamics/RigidEquations/DESIGN.md) | depends on | PhysicalRigidEquationComputing.originalInertialForce/inertialWrench | Original MassProperties2D and bias; no copied Newton/Euler implementation |
+| [Tests](../../../../../Tests/MechanicsReactionPathTests/DESIGN.md#af26-prescribed-planar-root-proof-contract) | used by | New public prescribed-root port | Independent scalar physical and refusal oracles; root owns execution |
+
+```text
+compiled root authority + original program/state + constraint + sealed motion
+ -> builtin source/law/rows/rank acceptance
+ -> builtin full original force + supplied/canonical per-body inertia and known loads
+ -> original P effort and D residual acceptance
+ -> original world-origin subtree/cut/body balance
+ -> root-origin wrench projected through actual root columns equals P effort
+ -> frame/reference conversion -> immutable continuous reduced report
+```
+
+### Public port and construction authority
+
+The following signatures are fixed for the additive implementation. Input construction only retains immutable declarations; it cannot manufacture acceptance. The recovery operation alone constructs the report. Each primary type has its own file.
+
+```swift
+public struct PlanarPrescribedRootReactionInput: Sendable {
+    public init(motion: PhysicalConstrainedMotion, geometry: GeometricConstraintSystem,
+                state: KinematicState, constraint: PrescribedRootConstraint,
+                originalDrive: [Double], topology: TreeReactionTopology)
+}
+public struct PlanarPrescribedRootReactionPolicy: Sendable {
+    public init(geometry: ConstraintEvaluationPolicy, mechanism: MechanismSolvePolicy,
+                tree: TreeReactionPolicy) throws(PlanarPrescribedRootReactionError)
+}
+public protocol PlanarPrescribedRootReactionRecovering: Sendable {
+    func recover(_ input: PlanarPrescribedRootReactionInput, outputFrame: EntityID,
+                 policy: PlanarPrescribedRootReactionPolicy,
+                 loadWork: inout LoadWork, work: inout NumericalWork)
+        throws(PlanarPrescribedRootReactionError) -> PlanarPrescribedRootReactionReport
+}
+public struct PlanarPrescribedRootReactionRecovery: PlanarPrescribedRootReactionRecovering {
+    public init(equations: any PhysicalRigidEquationComputing = RigidEquationKernel(),
+                gravity: any GravityEvaluating = GravityEvaluator())
+}
+```
+
+Input exposes its six initializer fields and `dynamics: PhysicalRigidDynamicsSystem` derived from `constraint.system`. Policy exposes `geometry`, `mechanism`, and `tree`; it composes existing bounds, scales, tolerances and cancellation rather than inventing a numerical accuracy constant. Recovery validates coordinate scales/time/energy/revision and compatible dimensions under these policies. Report exposes `source: PlanarPrescribedRootReactionInput`, `joints: [PlanarJointReactionWrench]`, nonoptional `support: PlanarRootSupportWrench`, `rootActuationEffort: [Double]` in original known-coordinate order, `originalRank: ConstraintRankEvidence`, `maximumScaledOriginalGeneralizedResidual: Double`, `maximumScaledRootEffortResidual: Double`, `numericalWork: NumericalWork` and `loadWork: LoadWork`. Its nested `Fidelity` enum has `.reducedPlanarPrescribedRootBalance`, exposed by `fidelity`; no old report fidelity changes.
+
+New files are `PlanarPrescribedRootReactionInput.swift`, `PlanarPrescribedRootReactionPolicy.swift`, `PlanarPrescribedRootReactionRecovering.swift`, `PlanarPrescribedRootReactionRecovery.swift`, `PlanarPrescribedRootReactionReport.swift`, `PlanarPrescribedRootReactionError.swift`, `PlanarPrescribedRootReactionContext.swift` and `PlanarPrescribedRootReactionArithmetic.swift`. The last two are internal phase/work owners, not alternative physical algorithms. Existing wrench/sign/temporal types are reused. The new error owns additive failures without editing shared `ReactionPathError`.
+
+### Admission, original acceptance and physical meaning
+
+Require `.planarFloating` root, original compiled `.prescribedMotion` authority, a nonnil actual prescribedRoot binding, all-planar source, and `.completeTree`. Relations, geometry row IDs and constraint.geometry rows/drift/bias must all be empty: even retained structural-zero loop rows belong to an unsupported loop domain here, and are never dropped to enter this port. Require no named prescribed anchors or prescribedMotion program, only fixed joint anchors, and original dynamic descendant joint authority. Complete-tree declaration remains a caller assumption about unseen physical paths. Require finite zero `originalDrive` of full n size and zero values in every original generalized-force contribution. Identified body force/couple inputs remain admissible. Reject impulse meaning. Output frame rotation preserves XY/Z; retain actual world/frame reference points, including their actual z.
+
+Recompute the original geometry sample and snapshot from the original compiled model/state through public builtin operations. Validate the supplied motion source and dynamics snapshot against this complete original sample: tree/layout/revision, bodies/joints/frames, every geometric column, coordinateRate, time bit pattern, velocity and motion frame. Require `motion.system === constraint.system`, original physical input dimension/inertia identities/frames and complete retained loads/gravity. The immutable constraint's original system/input is the physical inertia/load authority; compiled model/state is the kinematic/law authority. A supplier result may not replace either. Bind constraint.base to the original binding.program using builtin original base acceptance, not merely a matching sample metadata string. Reconstruct the canonical PrescribedRootConstraint from the original system, original empty geometry sample, canonical base and binding.rowIDs; compare every original root row, ID, normalization, drift and acceleration bias to the supplied constraint and motion layout. Check accepted root q/v/a against the original law; accepted acceleration root prefix is the original base.a, while D uses the supplied accepted motion values. Recompute builtin original rank with `WeightedConstraintAssembler.rank(_:policy:work:)` and `policy.mechanism.constraints`; compare every rank/independent/dependent row/nullity field: k=3 root identity rows have rank k, zero nullity; every row is retained. Check every normalized root velocity and acceleration residual under the original mechanism tolerance before force acceptance.
+
+For every coordinate, reconstruct `sum(A/S * mu)` from all three original root rows and compare to the supplied generalizedReaction. P root effort equals original row multiplier divided by its coordinate scale; D reconstructed reaction is zero. Recompute original full inertial force with bias and physically identified known load projections. Require `inertial[i] - known[i] - reaction[i] = 0` on P and D under the existing original scaled acceptance policy. Also independently project original per-body inertial-minus-load wrenches through every original body column: D must vanish, P must equal canonical root effort. Neither assembled mass arrays nor a supplier diagnostic substitute for these original equations.
+
+Subtract actual gravity at each original world COM and complete rotated/shifted raw known loads from each original inertial wrench. Shift each residual to a common world origin before subtree aggregation. Parent-on-child is the child subtree residual at the actual child-anchor point; child-on-parent is its negative at the same point. Recover support-on-root as the whole-tree residual at the actual root-body origin; root-on-support is its negative. Independently reconstruct each body's incoming/outgoing cut/support balance before publication. Project this root-origin physical support through the root body's actual original root columns; it must equal the same P coordinate effort. This separates root effort, root support and each cut while checking their physical correspondence. Root's own inertia/gravity/loads belong to support, not child cuts.
+
+The output contains Fx/Fy/Mz only, in N/N m, at snapshot seconds/revision, with `.instantaneousContinuousForce`. `rootActuationEffort` is the chart's generalized effort (translation N, angular N m), not an inferred motor or bearing split. Conditional physical uniqueness covers net root support and each complete-tree cut only. Both signs share one point; change of reference uses `M_to = M_from + (from-to) cross F`, then rotation. Raw off-plane load references and cancelling transverse couples are shifted before planar reduction, preserving existing physical input admission. No additional cut/reference z==0 refusal or fake 3D inertia is introduced.
+
+### Failure, work and phase lifetime
+
+`PlanarPrescribedRootReactionError` cases are `invalidInput`, `invalidShape`, `staleSource`, `capacityExceeded`, `cancelled`, `unsupportedSupportDomain`, `unsupportedTemporalMeaning`, `unrepresentedConnections`, `unallocatableGeneralizedLoad`, `invalidRankEvidence`, `originalRootRow(row: UInt64)`, `originalGeneralizedReaction(index: Int)`, `originalRootEffort(index: Int)`, `invalidSupplierEvidence`, `supplierLedgerReplaced`, `loadLedgerMerge(LoadError)`, and nested `geometry(GeometricConstraintError)`, `motion(PrescribedMotionError)`, `mechanism(MechanismError)`, `constraint(ConstraintError)`, `tree(ReactionPathError)`, `core(CoreError)`, `dynamics(DynamicsError)`, `loads(LoadError)`, `numerical(NumericalError)`. Geometry rows/named anchors/non-prescribed or spatial roots use unsupportedSupportDomain; topology omission uses unrepresentedConnections; nonzero generalized drive/load uses unallocatableGeneralizedLoad. Original residual/body failures retain their existing nested cause. New callable unsupported branches require incomplete-implementation markers.
+
+Use original `PhysicalRigidEquationComputing` public queries for inertia/full force and existing gravity/framed-wrench services. Injected inertial/full-force responses must pass positive caller pre-admission, monotonic budget/counter acceptance on success and failure, requested metadata/shape checks, and builtin original numerical recomputation under the same ledger. Compare then adopt canonical values; same body/frame/point does not certify original inertia. Gravity retains original body/mass/COM/field recomputation and exactly three successful LoadWork units per body (irreversible admission, actual supplier point, original builtin point). Preserve known opaque work prefix and original cancellation closure after failure/reset. A cancelled merge retains loadLedgerMerge and unavailable work semantics. Failed-supplier work availability delegates nested causes and marks reset/merge failures unavailable. No partial report or hidden retry.
+
+All source/results/suppliers remain immutable Sendable across Native/WASM/Embedded. Workspace and both ledgers are operation-local. Policy bounds original bodies/joints/loads/rows/coordinates and checked simultaneous storage; arithmetic overflow and exhausted budgets fail before publication. Distinct noninline source acceptance, canonical force/body evaluation, subtree aggregation and report phases retain only necessary immutable owners; original 128 KiB phase boundaries remain part of root public qualification. No snapshot rewriting, shared mutable state, unsafe isolation, target-specific storage/conformance or internal WorldRigidBody/DynamicsArithmetic dependency.
+
+Implementation readiness requires root's explicit ready group after this design handoff. This document adds no source/test/runtime evidence. Root owns focused Native and original Native/WASM/Embedded public qualification; existing AF25 evidence stays valid until its actual premises change.
+
 ## AF25 additive reduced planar recovery
 
 Existing spatial APIs/fidelity remain unchanged. The non-generic `PlanarTreeReactionRecovering.recover(_:acceleration:topology:outputFrame:policy:loadWork:work:)` consumes an actually admitted planar `PhysicalRigidDynamicsSystem`, `TreeReactionPolicy` and typed `ReactionPathError`. `PlanarTreeReactionRecovery(equations:gravity:)` injects `PhysicalRigidEquationComputing` and `GravityEvaluating`. Complete original MassProperties2D/snapshot/velocity/loads/gravity remain retained; no spatial tensor or generalized-to-body allocation is fabricated.
@@ -24,7 +102,7 @@ If the caller's original cancellation closure prevents merging a known opaque su
 Depends on [RigidEquations](../../Dynamics/RigidEquations/DESIGN.md) actual original physical query/input, [ArticulatedTrees](../../../Modeling/Joints/ArticulatedTrees/DESIGN.md) public topology/columns/anchors and [PassiveLaws](../../Loads/PassiveLaws/DESIGN.md) gravity point evaluation. The forthcoming planar loop recovery depends on this result and GeometricRelations allocation evidence. [MechanicsReactionPathTests](../../../../../Tests/MechanicsReactionPathTests/DESIGN.md) owns independent pendulum, subtree/root gravity, offset/framed loads, admitted off-plane raw/anchor references, residual/allocation refusal, supplier reset/cancellation and resources. Root owns actual qualification; full JT/TR completion remains open.
 
 ## Purpose and Scope
-Parent: [Mechanisms](../DESIGN.md). Own continuous, physically identified spatial tree joint and fixed-root support wrench recovery for selected JT-007 and TR-013 bearing-load paths. No children. Complete JT/TR requirements remain owned by the root plan. Impulses, unrepresented loops, multiple-bearing allocation and mesh attribution are unavailable.
+Parent: [Mechanisms](../DESIGN.md). Own continuous, physically identified tree joint and root support wrench recovery for selected JT-007 and TR-013 paths: existing spatial and reduced planar contracts plus the design-only AF26 prescribed planar root port above. No children. Complete JT/TR requirements remain owned by the root plan. Impulses, unrepresented loops, multiple-bearing allocation and mesh attribution are unavailable.
 
 ## Responsibilities and Boundaries
 Recover net loads transmitted across each tree edge from original per-body Newton/Euler products minus identified external body loads. Require the caller to declare complete physical tree topology. Dynamics owns inertia/acceleration products; Loads owns gravity forces; Joints owns frame geometry. No generalized force allocation, equation solve, transmission constitutive model or accepted-state mutation.
