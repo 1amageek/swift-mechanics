@@ -115,7 +115,7 @@ public struct PlanarTreeReactionRecovery: PlanarTreeReactionRecovering {
     }
 
     @inline(never)
-    private func originalBody(_ context:PlanarReactionContext,body:EntityID,acceleration:[Double],point:Vector3,
+    internal func originalBody(_ context:PlanarReactionContext,body:EntityID,acceleration:[Double],point:Vector3,
                               policy:TreeReactionPolicy,work:inout NumericalWork) throws(ReactionPathError)->PlanarReactionWrench {
         let before=work,evidence:BodyWrenchEvidence
         do { evidence=try equations.inertialWrench(context.system,body:body,acceleration:acceleration,referencePointWorld:point,work:&work) }
@@ -130,7 +130,7 @@ public struct PlanarTreeReactionRecovery: PlanarTreeReactionRecovering {
         return canonical
     }
     @inline(never)
-    private func originalGravity(_ field:AffineGravity,body:EntityID,point:Vector3,mass:Double,loadWork:inout LoadWork) throws(ReactionPathError)->PlanarReactionWrench {
+    internal func originalGravity(_ field:AffineGravity,body:EntityID,point:Vector3,mass:Double,loadWork:inout LoadWork) throws(ReactionPathError)->PlanarReactionWrench {
         do { try loadWork.charge(1) } catch { throw .loads(error) }
         let before=loadWork;var supplier=loadWork
         let response:GravityResponse,sample:GravitySample
@@ -145,7 +145,7 @@ public struct PlanarTreeReactionRecovery: PlanarTreeReactionRecovering {
         do { wrench=try original.load.wrench(about:.zero) } catch { throw .loads(error) }
         return try PlanarReactionArithmetic.reduced(wrench)
     }
-    private func originalLoad(_ load:BodyWrenchContribution,state:BodyKinematics) throws(ReactionPathError)->PlanarReactionWrench {
+    internal func originalLoad(_ load:BodyWrenchContribution,state:BodyKinematics) throws(ReactionPathError)->PlanarReactionWrench {
         let force:Vector3,torque:Vector3,point:Vector3
         if load.frame == state.worldFrame { force=load.wrench.force;torque=load.wrench.torque;point=load.referencePoint }
         else if load.frame == state.bodyFrame {

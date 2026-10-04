@@ -29,6 +29,9 @@ struct FoundationVerification {
                 stage = "verifyPlanarClosedLoopReactions"; try verifyPlanarClosedLoopReactions()
                 stage = "verifyPrescribedRootMotion"; try verifyPrescribedRootMotion()
                 stage = "verifyPrescribedRotorEvolution"; try verifyPrescribedRotorEvolution()
+                stage = "verifyTrajectoryLower"; try verifyTrajectoryLower()
+                stage = "verifyPrescribedRootSupports"; try verifyPrescribedRootSupports()
+                stage = "verifyQuadraticColdAuthority"; try verifyQuadraticColdAuthority()
             }
             stage = "verifyFlexible"; try verifyFlexible()
             stage = "verifyContactLaws"; try verifyContactLaws()

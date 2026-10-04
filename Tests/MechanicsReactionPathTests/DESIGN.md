@@ -4,7 +4,7 @@
 
 ### Purpose and Scope
 
-This test target belongs to the [package](../../DESIGN.md) and has no children. This is design-only test planning for the selected additive prescribed planar root contract. No new declaration, test execution, or successful prescribed-support claim is recorded here. Existing spatial/planar tests and their qualified evidence remain unchanged.
+This test target belongs to the [package](../../DESIGN.md) and has no children. This target contains source for the selected additive prescribed planar root contract. Actual isolated Native execution is recorded below; canonical integration and public profile proof remain root-owned. Existing spatial/planar tests and their qualified evidence remain unchanged.
 
 ### Responsibilities and Boundaries
 
@@ -27,7 +27,7 @@ actual compiled prescribed planar root + law-bound state + original MassProperti
  -> independent scalar force/moment/effort and refusal checks
 ```
 
-Planned new files are `PlanarPrescribedRootReactionFixtures.swift`, `PlanarPrescribedRootReactionPhysicalTests.swift`, `PlanarPrescribedRootReactionFailureTests.swift`, `PlanarPrescribedRootReactionLedgerTests.swift`, and separate primary-type supplier helpers `PlanarPrescribedRootForeignEquations.swift` and `PlanarPrescribedRootGravitySupplier.swift`. Fixture model/source/assembly/solve/recover phases use actual public protocols and distinct noninline lifetime boundaries. Tests are named by the new contract and use one-minute declaration deadlines; root sets an external timeout for the focused filters `PlanarPrescribedRootReactionPhysicalTests`, `PlanarPrescribedRootReactionFailureTests`, `PlanarPrescribedRootReactionLedgerTests`. Declaration/expanded-case counts are reported only after actual source freeze, not guessed from this plan.
+New files are `PlanarPrescribedRootReactionFixtures.swift`, `PlanarPrescribedRootReactionPhysicalTests.swift`, `PlanarPrescribedRootReactionFailureTests.swift`, `PlanarPrescribedRootReactionLedgerTests.swift`, and separate primary-type supplier helpers `PlanarPrescribedRootForeignEquations.swift` and `PlanarPrescribedRootGravitySupplier.swift`. Fixture model/source/assembly/solve/recover phases use actual public protocols and distinct noninline lifetime boundaries. Tests are named by the new contract and use one-minute declaration deadlines; root sets an external timeout for the focused filters `PlanarPrescribedRootReactionPhysicalTests`, `PlanarPrescribedRootReactionFailureTests`, `PlanarPrescribedRootReactionLedgerTests`. The frozen source has 15 declarations in three suites; two two-by-two argument declarations give 21 expanded cases. Owner isolated execution is complete below; canonical integration and profiles remain root-owned.
 
 ### Contracts and Invariants
 
@@ -61,7 +61,11 @@ Successful gravity paths independently assert three units per original body. Num
 
 ### Verification and Change Impact
 
-The owned source review checks this fixed success/refusal/work/lifetime contract once; concrete compiler/runtime findings receive only a targeted repair/recheck. Root executes focused Native after freeze and independently exercises the public protocol path in unchanged original Native/WASM/Embedded artifacts and the 128 KiB guards. Full prescribed-root loops, spatial support, bearing splits and other IM16 domains remain open rather than expanding this suite.
+One owned source review checked actual producer fixtures, independent scalar assertions, typed helper calls, callback reset/failure/cancellation and common state ownership. Concrete compiler/runtime findings receive only a targeted repair/recheck. The owner executed the actual isolated Native target; root independently validates the canonical graph and public protocol path in unchanged original Native/WASM/Embedded artifacts and the 128 KiB guards. Full prescribed-root loops, spatial support, bearing splits and other IM16 domains remain open rather than expanding this suite.
+
+### AF26 isolated Native qualification
+
+[ReactionPaths execution evidence](../../Sources/SwiftMechanics/Physics/Mechanisms/ReactionPaths/DESIGN.md#af26-isolated-owner-native-execution) owns the exact command, frozen baseline, compiler/host, logs and copy-only test-registration reduction. The owner actually ran all 15 declarations in three suites with 21 expanded cases, exit zero (42.97-second build, 0.023-second test run). No owned compiler or behavior finding required a source repair. All independent physical and refusal/supplier-work assertions passed. The reduced graph retained this exact testTarget and unchanged production/executable/dependency/flag paths; the workspace manifest was not changed. Source byte identity and digests are recorded in `.build/af26-support-freeze.json`. This is isolated Native evidence, not canonical full-graph integration, public WASM/Embedded execution or a 128 KiB lifetime qualification; those remain root-owned.
 
 ## AF25 reduced planar evidence owner
 `PlanarReactionRecoveryTests` uses actual BodyRecord2D/MassProperties2D and PhysicalRigidEquationComputing. Independent pendulum, distinct root/child gravity and slider offset/frame rotation check Fx/Fy/Mz and retained points. Raw off-plane reference/couple cancellation, wrong acceleration/generalized allocation, malformed supplier evidence, zero/precharged gravity reset success/failure, cancellation preservation, numerical reset/resource/cancellation and floating support absence exercise the contract. Existing planar Joints admission requires anchor poses with z==0; no fabricated off-plane snapshot is used as evidence. Existing spatial tests remain unchanged. Owner: [ReactionPaths](../../Sources/SwiftMechanics/Physics/Mechanisms/ReactionPaths/DESIGN.md#af25-additive-reduced-planar-recovery). Root owns actual execution after freeze.

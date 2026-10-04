@@ -13,8 +13,12 @@ public struct PrescribedBaseMotionSample: Sendable {
 
     internal init(program: PrescribedBaseMotionProgram, time: Double, q: [Double], v: [Double], a: [Double],
                   coordinateRate: [Double], motion: FrameMotion) {
-        metadata = program.metadata; layout = program.layout; frame = program.law.frame
-        worldFrame = program.law.parentFrame; self.time = time
-        self.q = q; self.v = v; self.a = a; self.coordinateRate = coordinateRate; self.motion = motion
+        self.init(metadata:program.metadata,layout:program.layout,frame:program.law.frame,worldFrame:program.law.parentFrame,
+            time:time,q:q,v:v,a:a,coordinateRate:coordinateRate,motion:motion)
+    }
+    internal init(metadata:String,layout:BaseLayout,frame:EntityID,worldFrame:EntityID,time:Double,
+                  q:[Double],v:[Double],a:[Double],coordinateRate:[Double],motion:FrameMotion) {
+        self.metadata=metadata;self.layout=layout;self.frame=frame;self.worldFrame=worldFrame;self.time=time
+        self.q=q;self.v=v;self.a=a;self.coordinateRate=coordinateRate;self.motion=motion
     }
 }

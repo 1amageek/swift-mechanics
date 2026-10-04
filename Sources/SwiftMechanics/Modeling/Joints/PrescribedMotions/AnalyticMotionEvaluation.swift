@@ -5,7 +5,7 @@ internal enum AnalyticMotionEvaluation {
         guard time.isFinite else { throw .invalidInput }
         guard time >= law.minimumTime, time <= law.maximumTime else { throw .outsideDomain }
         let dt = time - law.referenceTime
-        let angle = law.angularRate * dt + 0.5 * law.angularAcceleration * dt * dt
+        let angle = try self.angle(law, delta: dt)
         let rate = law.angularRate + law.angularAcceleration * dt
         guard dt.isFinite, angle.isFinite, rate.isFinite else { throw .invalidInput }
         do throws(CoreError) {
@@ -19,5 +19,8 @@ internal enum AnalyticMotionEvaluation {
                 acceleration: SpatialMotion(angular: try law.rotationAxis.scaled(by: law.angularAcceleration),
                     linear: law.translationAcceleration))
         } catch { throw .mathematical(error) }
+    }
+    static func angle(_ law:AnalyticPrescribedMotion,delta:Double) throws(PrescribedMotionError) -> Double {
+        try PrescribedTrajectoryArithmetic.finite(law.angularRate*delta+0.5*law.angularAcceleration*delta*delta)
     }
 }

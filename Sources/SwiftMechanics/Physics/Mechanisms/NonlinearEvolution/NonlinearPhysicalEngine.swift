@@ -38,12 +38,12 @@ internal final class NonlinearPhysicalEngine: Sendable {
         do { return try model.evaluate(model.makeState(KinematicState(revision:model.stamp.revision,time:time,q:q,v:v,acceleration:[Double](repeating:0,count:v.count)))) }
         catch { throw RuntimeFailure(.invalidState,message:"Actual compiled manifold evaluation failed.") }
     }
-    func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
+    func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?,retainColdAdmissionSeed:Bool = false) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
         let snapshot=try snapshot(q:q,v:v,time:time,work:&work,control:control)
-        return try system(snapshot:snapshot,v:v,work:&work,control:control)
+        return try system(snapshot:snapshot,v:v,work:&work,control:control,retainColdAdmissionSeed:retainColdAdmissionSeed)
     }
     @inline(never)
-    func system(snapshot:KinematicSnapshot,v:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
+    func system(snapshot:KinematicSnapshot,v:[Double],work:inout NumericalWork,control:RuntimeStepControl?,retainColdAdmissionSeed:Bool = false) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
         let input:PhysicalRigidDynamicsInput
         do throws(DynamicsError) { input=try inertias.input(snapshot:snapshot,velocity:v) }
         catch { throw RuntimeFailure(.invalidState,message:"Rigid dynamics input failed.") }
@@ -51,7 +51,7 @@ internal final class NonlinearPhysicalEngine: Sendable {
         do { load=LoadWork(budget:try LoadBudget(maximumWork:0,maximumScalars:0)) } catch { throw RuntimeFailure(.invalidInput,message:"Load budget invalid.") }
         let before=local;var result:PhysicalRigidDynamicsSystem?,failure:DynamicsError?
         do throws(DynamicsError) { result=try suppliers.assemble(input,admission:admission,load:&load,work:&local) } catch { failure=error }
-        try finish(local,before:before,into:&work)
+        try finish(local,before:before,into:&work,retainAdmissionSeedOnReset:retainColdAdmissionSeed)
         guard load.budget.maximumWork == 0,load.budget.maximumScalars == 0,load.consumed == 0,load.peakScalars == 0 else {
             throw RuntimeFailure(.invalidOwnerAccess,message:"Rigid supplier changed zero-load admission.",failedSupplierWorkUnavailable:true)
         }
@@ -61,13 +61,13 @@ internal final class NonlinearPhysicalEngine: Sendable {
         return result
     }
     @inline(never)
-    func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> ConstrainedMotion {
-        let result=try invokePhysicalSupplier(context,work:&work,control:control)
+    func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?,retainAllColdPrefixes:Bool = false) throws(RuntimeFailure) -> ConstrainedMotion {
+        let result=try invokePhysicalSupplier(context,work:&work,control:control,retainAllColdPrefixes:retainAllColdPrefixes)
         try acceptPhysicalSupplier(context,result:result,work:&work)
         return result
     }
     @inline(never)
-    func invokePhysicalSupplier(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> ConstrainedMotion {
+    func invokePhysicalSupplier(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?,retainAllColdPrefixes:Bool = false) throws(RuntimeFailure) -> ConstrainedMotion {
         // Reserve an irreversible admission quantum before all opaque callbacks; each independent ledger also has a seed.
         var a:NumericalWork,b:NumericalWork,c:NumericalWork,d:NumericalWork
         if control == nil || context.prescribedRoot != nil {
@@ -82,7 +82,7 @@ internal final class NonlinearPhysicalEngine: Sendable {
             if context.impulse { result=try invokeVelocity(context,a:&a,b:&b,c:&c,d:&d) }
             else { result=try invokeAcceleration(context,a:&a,b:&b,c:&c,d:&d) }
         } catch { failure=error }
-        if context.prescribedRoot != nil { try finishRootLedgers([a,b,c,d],before:before,into:&work) }
+        if context.prescribedRoot != nil || (control == nil && retainAllColdPrefixes) { try finishRootLedgers([a,b,c,d],before:before,into:&work) }
         else { for (ledger,prior) in zip([a,b,c,d],before) { try finish(ledger,before:prior,into:&work) } }
         if let failure { throw RuntimeFailure(.invalidState,message:"Original constrained physical solve failed.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable) }
         guard let result else { throw RuntimeFailure(.invalidState,message:"Mechanism supplier source/result differs.") }
@@ -243,8 +243,14 @@ internal final class NonlinearPhysicalEngine: Sendable {
         }
         if replaced { throw RuntimeFailure(.invalidOwnerAccess,message:"Root supplier replaced/reset admitted ledger.",failedSupplierWorkUnavailable:true) }
     }
-    func finish(_ local:NumericalWork,before:NumericalWork,into work:inout NumericalWork) throws(RuntimeFailure) {
-        guard local.budget == before.budget,local.operations >= before.operations,local.iterations >= before.iterations,local.peakScalarStorage >= before.peakScalarStorage else { throw RuntimeFailure(.invalidOwnerAccess,message:"Nonlinear supplier replaced/reset its admitted ledger.",failedSupplierWorkUnavailable:true) }
+    func finish(_ local:NumericalWork,before:NumericalWork,into work:inout NumericalWork,retainAdmissionSeedOnReset:Bool = false) throws(RuntimeFailure) {
+        guard local.budget == before.budget,local.operations >= before.operations,local.iterations >= before.iterations,local.peakScalarStorage >= before.peakScalarStorage else {
+            if retainAdmissionSeedOnReset {
+                do throws(NumericalError) { try work.absorb(before,reservedStorage:reservedSlots()) }
+                catch { throw RuntimeFailure(.capacityExceeded,message:"Cold retained supplier admission exhausted aggregate work.",failedSupplierWorkUnavailable:true) }
+            }
+            throw RuntimeFailure(.invalidOwnerAccess,message:"Nonlinear supplier replaced/reset its admitted ledger.",failedSupplierWorkUnavailable:true)
+        }
         do { try work.absorb(local,reservedStorage:reservedSlots()) } catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear aggregate supplier work exhausted.") }
     }
     func charge(_ count:Int,_ work:inout NumericalWork) throws(RuntimeFailure) {

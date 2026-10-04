@@ -70,27 +70,8 @@ public enum OriginalPrescribedBaseMotionAcceptance {
         guard supplied.metadata.utf8.count <= policy.maximumMetadataBytes,
               supplied.frame.key.utf8.count <= policy.maximumIdentifierBytes,
               supplied.worldFrame.key.utf8.count <= policy.maximumIdentifierBytes else { throw .capacityExceeded }
-        guard supplied.metadata == original.metadata, supplied.layout == original.layout,
-              supplied.frame == original.frame, supplied.worldFrame == original.worldFrame,
-              supplied.time.bitPattern == original.time.bitPattern,
-              numbers(supplied.q, original.q), numbers(supplied.v, original.v), numbers(supplied.a, original.a),
-              numbers(supplied.coordinateRate, original.coordinateRate), motion(supplied.motion, original.motion) else { throw .staleSource }
+        guard PrescribedBaseSampleComparison.matches(supplied, original) else { throw .staleSource }
         try PrescribedBaseMotionArithmetic.check(policy)
         return original
-    }
-    private static func numbers(_ left: [Double], _ right: [Double]) -> Bool {
-        guard left.count == right.count else { return false }
-        for i in right.indices { if left[i].bitPattern != right[i].bitPattern { return false } }
-        return true
-    }
-    private static func vector(_ left: Vector3, _ right: Vector3) -> Bool {
-        left.x.bitPattern == right.x.bitPattern && left.y.bitPattern == right.y.bitPattern && left.z.bitPattern == right.z.bitPattern
-    }
-    private static func motion(_ left: FrameMotion, _ right: FrameMotion) -> Bool {
-        let a = left.pose.rotation, b = right.pose.rotation
-        return vector(left.pose.translation, right.pose.translation) && a.w.bitPattern == b.w.bitPattern &&
-            a.x.bitPattern == b.x.bitPattern && a.y.bitPattern == b.y.bitPattern && a.z.bitPattern == b.z.bitPattern &&
-            vector(left.velocity.angular, right.velocity.angular) && vector(left.velocity.linear, right.velocity.linear) &&
-            vector(left.acceleration.angular, right.acceleration.angular) && vector(left.acceleration.linear, right.acceleration.linear)
     }
 }

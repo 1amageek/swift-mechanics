@@ -2,7 +2,7 @@
 
 ## AF26 additive prescribed planar root contract
 
-This is a design-only contract; the new declarations and callable branches do not yet exist. The selected domain is a complete reduced planar tree whose root is genuinely prescribed through the original compiled model and `PrescribedRootBinding.program`. Existing spatial/planar tree and closed-loop operations remain unchanged. This port adds net prescribed-root support and tree cuts; it does not claim a bearing split, actuator/bearing decomposition, spatial support, or prescribed-root loop allocation.
+This additive contract is implemented in the files below; its runtime qualification is owned by root and is not inferred from source presence. The selected domain is a complete reduced planar tree whose root is genuinely prescribed through the original compiled model and `PrescribedRootBinding.program`. Existing spatial/planar tree and closed-loop operations remain unchanged. This port adds net prescribed-root support and tree cuts; it does not claim a bearing split, actuator/bearing decomposition, spatial support, or prescribed-root loop allocation.
 
 ### Confirmed prerequisite and responsibility boundary
 
@@ -54,7 +54,7 @@ public struct PlanarPrescribedRootReactionRecovery: PlanarPrescribedRootReaction
 
 Input exposes its six initializer fields and `dynamics: PhysicalRigidDynamicsSystem` derived from `constraint.system`. Policy exposes `geometry`, `mechanism`, and `tree`; it composes existing bounds, scales, tolerances and cancellation rather than inventing a numerical accuracy constant. Recovery validates coordinate scales/time/energy/revision and compatible dimensions under these policies. Report exposes `source: PlanarPrescribedRootReactionInput`, `joints: [PlanarJointReactionWrench]`, nonoptional `support: PlanarRootSupportWrench`, `rootActuationEffort: [Double]` in original known-coordinate order, `originalRank: ConstraintRankEvidence`, `maximumScaledOriginalGeneralizedResidual: Double`, `maximumScaledRootEffortResidual: Double`, `numericalWork: NumericalWork` and `loadWork: LoadWork`. Its nested `Fidelity` enum has `.reducedPlanarPrescribedRootBalance`, exposed by `fidelity`; no old report fidelity changes.
 
-New files are `PlanarPrescribedRootReactionInput.swift`, `PlanarPrescribedRootReactionPolicy.swift`, `PlanarPrescribedRootReactionRecovering.swift`, `PlanarPrescribedRootReactionRecovery.swift`, `PlanarPrescribedRootReactionReport.swift`, `PlanarPrescribedRootReactionError.swift`, `PlanarPrescribedRootReactionContext.swift` and `PlanarPrescribedRootReactionArithmetic.swift`. The last two are internal phase/work owners, not alternative physical algorithms. Existing wrench/sign/temporal types are reused. The new error owns additive failures without editing shared `ReactionPathError`.
+New files are `PlanarPrescribedRootReactionInput.swift`, `PlanarPrescribedRootReactionPolicy.swift`, `PlanarPrescribedRootReactionRecovering.swift`, `PlanarPrescribedRootReactionRecovery.swift`, `PlanarPrescribedRootReactionReport.swift`, `PlanarPrescribedRootReactionError.swift`, `PlanarPrescribedRootReactionContext.swift` and `PlanarPrescribedRootReactionArithmetic.swift`. The last two are internal phase/work owners, not alternative physical algorithms. Existing wrench/sign/temporal types are reused. The new error owns additive failures without editing shared `ReactionPathError`. Existing `PlanarTreeReactionRecovery.originalBody`, `originalGravity` and `originalLoad` have component-internal visibility for reuse; their implementations and existing public behavior are unchanged. `TreeReactionTopology.completeTree` documents the root support admitted by the selected port, preserving the old fixed/free domains and the explicit caller assumption.
 
 ### Admission, original acceptance and physical meaning
 
@@ -76,7 +76,21 @@ Use original `PhysicalRigidEquationComputing` public queries for inertia/full fo
 
 All source/results/suppliers remain immutable Sendable across Native/WASM/Embedded. Workspace and both ledgers are operation-local. Policy bounds original bodies/joints/loads/rows/coordinates and checked simultaneous storage; arithmetic overflow and exhausted budgets fail before publication. Distinct noninline source acceptance, canonical force/body evaluation, subtree aggregation and report phases retain only necessary immutable owners; original 128 KiB phase boundaries remain part of root public qualification. No snapshot rewriting, shared mutable state, unsafe isolation, target-specific storage/conformance or internal WorldRigidBody/DynamicsArithmetic dependency.
 
-Implementation readiness requires root's explicit ready group after this design handoff. This document adds no source/test/runtime evidence. Root owns focused Native and original Native/WASM/Embedded public qualification; existing AF25 evidence stays valid until its actual premises change.
+Root authorized IM16.31.2 after committing the lower contracts. One owned source review traced actual canonical source/law/rows/rank acceptance, supplied and builtin original queries, identified raw load shifts, P/D balance, subtree support/root-column acceptance, failure ledgers and publication. Shared-state review found only immutable stored owners and operation-local workspaces across all targets; reused cancellation test flags retain their common Mutex. No concrete contract finding remains. `git diff --check` passed. The isolated owner Native execution below extends the source review; root still owns canonical full-graph Native and original Native/WASM/Embedded composition and original 128 KiB guards. Existing AF25 evidence stays valid until its actual premises change.
+
+### AF26 isolated owner Native execution
+
+The owner executed the frozen source and actual independent/refusal paths in `.build/af26-independent-support`, prepared from committed baseline `1fbf8f9`. Only ReactionPaths and MechanicsReactionPathTests were overlaid. The exact command was:
+
+```text
+python3 Scripts/run_with_timeout.py 240 /Users/1amageek/Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift test --build-path .build/native -j 4 --filter PlanarPrescribedRootReaction
+```
+
+The three initial cold all-test graph attempts exceeded the 240-second bound while progressing through production and unrelated test compilation, with no compiler errors; logs are `.build/af26-independent-support-native.log`, `-2.log`, and `-3.log`. After those processes exited, root authorized an isolated-copy-only registration reduction: retain the exact existing MechanicsReactionPathTests declaration and remove the other 38 one-line testTarget declarations. Production/executable targets, source, flags and dependencies were unchanged; the workspace manifest was untouched. This reduced registration graph, not the canonical package test graph, owns this evidence.
+
+`.build/af26-independent-support-native-focused.log` completed with exit zero, build 42.97 seconds and test runtime 0.023 seconds: all 15 declarations in three suites, including 21 expanded cases, passed. Compiler executable reports `Apple Swift version 6.4 (swift-6.4-RELEASE)`, target arm64-apple-macosx27.0.0; host macOS 27.0.1 (26A434). Swift Testing 2084 reports test deployment target arm64e-apple-macos14.0. Baseline missing-exclude warnings remain; no owned compiler or behavior repair was needed. Canonical source/body/full-force, nonunit normalization, real point/frame/offset moments, wrong original force multipliers, D residual, source/law/time/row refusal and supplier reset/failure/cancel/resource paths actually executed. The source digest/inventory is `.build/af26-support-freeze.json`; copied production/test Swift source matches the workspace frozen source byte-for-byte.
+
+This establishes only the selected isolated Native owner path. Root still owns canonical full-graph Native integration, new public caller composition, ordinary WASM/Embedded runtime and original 128 KiB guards. Existing qualified AF25 evidence is retained under unchanged premises. No commit or broader IM16 completion is claimed.
 
 ## AF25 additive reduced planar recovery
 

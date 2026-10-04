@@ -9,16 +9,37 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
     public let policy: MechanismSolvePolicy
     public let projection: NonlinearMechanismProjectionPolicy
     private let physical:NonlinearPhysicalEngine
+    internal let hasPhysicalSourceBinding:Bool
     private let quaternionBlocks: [(position:Int,velocity:Int)]
     private let evaluator: any ConstraintEvaluating
     private let ranker: any ConstraintRankAnalyzing
     private let linear: any LinearSolving<Double>
-    public init(identity:String, model:CompiledMechanicalModel, constraints:QuadraticConstraintSystem,
+    public convenience init(identity:String, model:CompiledMechanicalModel, constraints:QuadraticConstraintSystem,
                 velocityLayout:ConstraintCoordinateLayout, drive:[Double], policy:MechanismSolvePolicy,
                 projection:NonlinearMechanismProjectionPolicy, admission:DynamicsAdmission, maximumIdentityBytes:Int,
                 kernel:any RigidEquationComputing = RigidEquationKernel(), evaluator:any ConstraintEvaluating = QuadraticConstraintEvaluator(),
                 solver:any ConstrainedMechanismSolving = MassWeightedMechanismSolver(),
                 ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(), linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>()) throws(MechanismError) {
+        try self.init(identity:identity,model:model,constraints:constraints,velocityLayout:velocityLayout,drive:drive,
+            policy:policy,projection:projection,admission:admission,maximumIdentityBytes:maximumIdentityBytes,
+            kernel:kernel,evaluator:evaluator,solver:solver,ranker:ranker,linear:linear,sourceBound:false)
+    }
+    public convenience init(identity:String, sourceBoundModel:CompiledMechanicalModel, constraints:QuadraticConstraintSystem,
+                velocityLayout:ConstraintCoordinateLayout, drive:[Double], policy:MechanismSolvePolicy,
+                projection:NonlinearMechanismProjectionPolicy, admission:DynamicsAdmission, maximumIdentityBytes:Int,
+                kernel:any RigidEquationComputing = RigidEquationKernel(), evaluator:any ConstraintEvaluating = QuadraticConstraintEvaluator(),
+                solver:any ConstrainedMechanismSolving = MassWeightedMechanismSolver(),
+                ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(), linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>()) throws(MechanismError) {
+        try self.init(identity:identity,model:sourceBoundModel,constraints:constraints,velocityLayout:velocityLayout,drive:drive,
+            policy:policy,projection:projection,admission:admission,maximumIdentityBytes:maximumIdentityBytes,
+            kernel:kernel,evaluator:evaluator,solver:solver,ranker:ranker,linear:linear,sourceBound:true)
+    }
+    private init(identity:String, model:CompiledMechanicalModel, constraints:QuadraticConstraintSystem,
+                velocityLayout:ConstraintCoordinateLayout, drive:[Double], policy:MechanismSolvePolicy,
+                projection:NonlinearMechanismProjectionPolicy, admission:DynamicsAdmission, maximumIdentityBytes:Int,
+                kernel:any RigidEquationComputing, evaluator:any ConstraintEvaluating,
+                solver:any ConstrainedMechanismSolving,
+                ranker:any ConstraintRankAnalyzing, linear:any LinearSolving<Double>, sourceBound:Bool) throws(MechanismError) {
         let p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount
         guard p > 0,n > 0,p <= projection.position.evaluation.maximumCoordinates,n <= policy.maximumCoordinates,
               constraints.rows.count <= policy.maximumRows,constraints.layout.scales.count == p,velocityLayout.scales.count == n,
@@ -85,10 +106,14 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
         let augmented:QuadraticConstraintSystem
         do throws(ConstraintError) { augmented=try QuadraticConstraintSystem(layout:constraints.layout,rows:rows,minimumPosition:constraints.minimumPosition,
             maximumPosition:constraints.maximumPosition,minimumTime:constraints.minimumTime,maximumTime:constraints.maximumTime) } catch { throw .constraint(error) }
+        if sourceBound { guard model.tree.rootBase == .fixed,model.descriptor.rootAuthority == .fixed else { throw .unsupportedChart } }
         let bound=try NonlinearPhysicalEngine.bind(model)
         var dimensions=constraints.layout.dimensions
         for d in velocityLayout.dimensions { guard d.time > Int8.min else { throw .invalidInput };dimensions.append(PhysicalDimension(length:d.length,mass:d.mass,time:d.time-1,angle:d.angle,electricCurrent:d.electricCurrent,temperature:d.temperature,amount:d.amount,luminousIntensity:d.luminousIntensity)) }
-        let chart=try NonlinearMechanismChart.signature(augmented,velocity:velocityLayout,drive:drive,policy:policy,projection:projection,maximum:maximumIdentityBytes)
+        let legacyChart=try NonlinearMechanismChart.signature(augmented,velocity:velocityLayout,drive:drive,policy:policy,projection:projection,maximum:maximumIdentityBytes)
+        let chart=sourceBound ? try NonlinearPhysicalSignature.signature(model:model,policy:policy,projection:projection,
+            admission:admission,drive:drive,quadraticChart:legacyChart,maximum:maximumIdentityBytes) : legacyChart
+        hasPhysicalSourceBinding=sourceBound
         do { descriptor=try ODEDescriptor(identity:identity,chart:chart,model:model.stamp,dimensions:dimensions,maximumIdentityBytes:maximumIdentityBytes,
             maximumCoordinates:try NumericalWork.sum(projection.position.evaluation.maximumCoordinates,policy.maximumCoordinates)) } catch { throw .invalidInput }
         self.model=model;self.constraints=augmented;self.velocityLayout=velocityLayout;self.drive=drive;self.policy=policy;self.projection=projection
@@ -222,11 +247,12 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
         return (rp,rv)
     }
 
-    private func evaluate(q:[Double],rate:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstraintEvaluation {
+    private func evaluate(q:[Double],rate:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> ConstraintEvaluation {
+        if control == nil { try checkColdCancellation() }
         var local=try supplier(&work,control:control);let before=local
         var result:ConstraintEvaluation?,failure:ConstraintError?
         do throws(ConstraintError) { result=try evaluator.evaluate(constraints,position:q,velocity:rate,time:time,policy:projection.position.evaluation,work:&local) } catch { failure=error }
-        try finish(local,before:before,into:&work)
+        try finish(local,before:before,into:&work,retainingSeed:control == nil)
         if let failure {
             if case .cancelled=failure { throw RuntimeFailure(.cancelled,message:"Original quadratic supplier cancelled.") }
             throw RuntimeFailure(.invalidState,message:"Original quadratic evaluation failed.",failedSupplierWorkUnavailable:MechanismError.constraint(failure).failedSupplierWorkUnavailable) }
@@ -257,9 +283,10 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
             guard value.isFinite,dt.isFinite,bias.isFinite,abs(value-e.values[row]) <= policy.originalTolerance,
                   abs(dt-e.timeDerivative[row]) <= policy.originalTolerance,abs(bias-e.accelerationBias[row]) <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Constraint supplier changed original polynomial/time bias.") }
         }
+        if control == nil { try checkColdCancellation() }
         return e
     }
-    private func tangent(_ e:ConstraintEvaluation,q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> VelocityConstraintSample {
+    private func tangent(_ e:ConstraintEvaluation,q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> VelocityConstraintSample {
         let p=q.count,n=v.count,m=constraints.rows.count,t=velocityLayout.timeScale
         var map=[Double](repeating:0,count:p*n),basis=[Double](repeating:0,count:n),ndot=[Double](repeating:0,count:p)
         for j in 0..<n {
@@ -285,13 +312,17 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
             drift:Array(e.timeDerivative[..<physicalRows]),accelerationBias:bias,isIntegrable:true)
     }
     @inline(never)
-    private func physicalContext(q:[Double],v:[Double],time:Double,impulse:Bool,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> NonlinearPhysicalSolveContext {
+    private func physicalContext(q:[Double],v:[Double],time:Double,impulse:Bool,work:inout NumericalWork,control:RuntimeStepControl?,cancellation:RuntimeCancellationSource? = nil) throws(RuntimeFailure) -> NonlinearPhysicalSolveContext {
+        if let cancellation { try cancellation.check() }
         let assembled=try system(q:q,v:v,time:time,work:&work,control:control)
+        if let cancellation { try cancellation.check() }
         let evaluation=try evaluate(q:q,rate:assembled.input.snapshot.coordinateRate,time:time,work:&work,control:control)
+        if let cancellation { try cancellation.check() }
         let residual:(position:Double,velocity:Double)
         if impulse { residual=(0,0) }
         else { residual=try original(evaluation,position:true,velocity:true,work:&work) }
         let sample=try tangent(evaluation,q:q,v:v,time:time,work:&work,control:control)
+        if let cancellation { try cancellation.check() }
         return NonlinearPhysicalSolveContext(system:assembled,sample:sample,impulse:impulse,positionResidual:residual.position,velocityResidual:residual.velocity)
     }
 
@@ -328,8 +359,8 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
         let p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount,m=constraints.rows.count,b=model.tree.bodies.count
         return try NumericalWork.sum(try NumericalWork.product(256,try NumericalWork.product(b,max(1,n))),try NumericalWork.sum(try NumericalWork.product(16,try NumericalWork.product(p,n)),try NumericalWork.sum(try NumericalWork.product(16,try NumericalWork.product(m,max(p,m))),try NumericalWork.product(32,try NumericalWork.sum(p,n)))))
     }
-    private func reserve(_ work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
-        try control.beginWorkBlock(units:1)
+    private func reserve(_ work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) {
+        if let control { try control.beginWorkBlock(units:1) } else { try checkColdCancellation() }
         guard !policy.isCancelled(),!projection.position.evaluation.isCancelled() else { throw RuntimeFailure(.cancelled,message:"Nonlinear equation cancelled.") }
         do { try work.requireStorage(reservedSlots()) } catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear orchestration scalar envelope exhausted.") }
     }
@@ -337,22 +368,94 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
     private func iteration(_ work:inout NumericalWork) throws(RuntimeFailure) {
         do { try work.advanceIteration() } catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear projection iteration budget exhausted.") }
     }
-    private func snapshot(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> KinematicSnapshot {
-        try physical.snapshot(q:q,v:v,time:time,work:&work,control:control)
+    private func snapshot(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> KinematicSnapshot {
+        if control == nil { try checkColdCancellation() }
+        let result=try physical.snapshot(q:q,v:v,time:time,work:&work,control:control)
+        if control == nil { try checkColdCancellation() }
+        return result
     }
-    private func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
-        try physical.system(q:q,v:v,time:time,work:&work,control:control)
+    private func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
+        if control == nil { try checkColdCancellation() }
+        let result=try physical.system(q:q,v:v,time:time,work:&work,control:control,retainColdAdmissionSeed:control == nil)
+        if control == nil { try checkColdCancellation() }
+        return result
     }
     @inline(never)
-    private func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstrainedMotion {
+    private func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> ConstrainedMotion {
         try physical.solve(context,work:&work,control:control)
     }
-    private func supplier(_ work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> NumericalWork { try physical.supplier(&work,control:control) }
-    private func finish(_ local:NumericalWork,before:NumericalWork,into work:inout NumericalWork) throws(RuntimeFailure) { try physical.finish(local,before:before,into:&work) }
+    private func supplier(_ work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> NumericalWork { try physical.supplier(&work,control:control) }
+    private func finish(_ local:NumericalWork,before:NumericalWork,into work:inout NumericalWork,retainingSeed:Bool = false) throws(RuntimeFailure) { try physical.finish(local,before:before,into:&work,retainAdmissionSeedOnReset:retainingSeed) }
     private func charge(_ count:Int,_ work:inout NumericalWork) throws(RuntimeFailure) { try physical.charge(count,&work) }
     public func writeAccepted(point:[Double],derivative:[Double],time:Double,trial:inout RuntimeTrial,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
         try control.beginWorkBlock(units:1)
         try write(point:point,derivative:derivative,time:time,trial:&trial)
     }
 
+    internal var contextualScalarStorage:Int { physical.storage }
+    internal func checkColdCancellation() throws(RuntimeFailure) {
+        guard !Task.isCancelled,!policy.isCancelled(),!projection.position.evaluation.isCancelled(),!physical.admission.isCancelled() else {
+            throw RuntimeFailure(.cancelled,message:"Quadratic cold physical operation cancelled.")
+        }
+    }
+    @inline(never)
+    private func coldPhysicalContext(_ state:KinematicState,work:inout NumericalWork,cancellation:RuntimeCancellationSource? = nil) throws(RuntimeFailure) -> NonlinearPhysicalSolveContext {
+        guard hasPhysicalSourceBinding,state.prescribedAnchors.isEmpty else {
+            throw RuntimeFailure(.incompatibleModel,message:"Cold quadratic authority requires an original source-bound fixed-anchor equation.")
+        }
+        if let cancellation { try cancellation.check() }
+        try admitColdPhysical(state,work:&work)
+        return try physicalContext(q:state.q,v:state.v,time:state.time,impulse:false,work:&work,control:nil,cancellation:cancellation)
+    }
+    internal func admitColdPhysical(_ state:KinematicState,work:inout NumericalWork) throws(RuntimeFailure) {
+        try reserve(&work,control:nil)
+        try physical.charge(try coldStateAdmissionCount(),&work)
+        do throws(CompilationFailure) { _=try model.makeState(state) }
+        catch { throw RuntimeFailure(.invalidState,message:"Cold original compiled state is invalid.") }
+    }
+    private func coldStateAdmissionCount() throws(RuntimeFailure) -> Int {
+        do throws(NumericalError) { return try NumericalWork.product(512,try NumericalWork.product(model.tree.bodies.count,try NumericalWork.sum(1,model.tree.layout.velocityCount))) }
+        catch { throw RuntimeFailure(.capacityExceeded,message:"Cold state admission overflow.") }
+    }
+    @inline(never)
+    internal func coldReconciledMotion(_ state:KinematicState,work:inout NumericalWork) throws(RuntimeFailure) -> ConstrainedMotion {
+        let context=try coldPhysicalContext(state,work:&work)
+        return try coldSolve(context,work:&work)
+    }
+    @inline(never)
+    private func coldSolve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,cancellation:RuntimeCancellationSource? = nil) throws(RuntimeFailure) -> ConstrainedMotion {
+        if let cancellation { try cancellation.check() };try checkColdCancellation()
+        let result=try physical.solve(context,work:&work,control:nil,retainAllColdPrefixes:true)
+        if let cancellation { try cancellation.check() };try checkColdCancellation()
+        return result
+    }
+    @inline(never)
+    internal func validateStoredPhysical(_ state:KinematicState,work:inout NumericalWork,cancellation:RuntimeCancellationSource? = nil) throws(RuntimeFailure) {
+        let context=try coldPhysicalContext(state,work:&work,cancellation:cancellation),sample=context.sample
+        let n=state.v.count,t=velocityLayout.timeScale
+        for row in sample.rowIDs.indices {
+            var value=sample.accelerationBias[row]
+            for i in 0..<n { try charge(5,&work);value+=sample.rows[row*n+i]*state.acceleration[i]*t*t/velocityLayout.scales[i] }
+            guard value.isFinite,abs(value) <= policy.originalTolerance else {
+                throw RuntimeFailure(.invalidState,message:"Stored original quadratic tangent acceleration differs.")
+            }
+        }
+        let solution=try coldSolve(context,work:&work,cancellation:cancellation)
+        // Recheck the stored values against original full force; the accepted solution supplies only its verified reaction.
+        for i in 0..<n {
+            var force=context.system.inertialBias[i]
+            for j in 0..<n { try charge(4,&work);force+=context.system.massMatrix[i*n+j]*state.acceleration[j] }
+            let applied:Double
+            do throws(DynamicsError) { applied=drive[i]+(try context.system.forces.total(at:i))+solution.generalizedReaction[i] }
+            catch { throw RuntimeFailure(.invalidState,message:"Stored original applied force unavailable.") }
+            guard force.isFinite,abs(force-applied)*velocityLayout.scales[i]/policy.dynamics.energyScale <= policy.originalTolerance else {
+                throw RuntimeFailure(.invalidState,message:"Stored original quadratic force differs.")
+            }
+            try charge(4,&work)
+            guard abs(state.acceleration[i]-solution.values[i])*t*t/velocityLayout.scales[i] <= policy.originalTolerance else {
+                throw RuntimeFailure(.invalidState,message:"Stored original quadratic acceleration differs.")
+            }
+        }
+        try checkColdCancellation()
+    }
 }
