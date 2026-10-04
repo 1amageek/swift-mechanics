@@ -5,8 +5,15 @@ public struct TopologyCheckpointHandler: RuntimeCheckpointHandling, Sendable {
     private let bootstrap:TopologyHistoryContributor?
     private let bootstrapPhysical:CompiledKinematicState?
     private let bootstrapContributors:TopologyRuntimeContributors?
+    private let sourceBase:(any RuntimeCheckpointHandling)?
+    internal var usesOriginalCatalogAdmission:Bool { sourceBase == nil }
     public init(history:TopologyHistoryContributor,contributors:TopologyRuntimeContributors) {
-        self.history=history;self.contributors=contributors;bootstrap=nil;bootstrapPhysical=nil;bootstrapContributors=nil
+        self.history=history;self.contributors=contributors;bootstrap=nil;bootstrapPhysical=nil;bootstrapContributors=nil;sourceBase=nil
+    }
+    /// Enriches complete source admission while preserving original topology association.
+    public init(history:TopologyHistoryContributor,contributors:TopologyRuntimeContributors,base:any RuntimeCheckpointHandling) {
+        self.history=history;self.contributors=contributors;sourceBase=base
+        bootstrap=nil;bootstrapPhysical=nil;bootstrapContributors=nil
     }
     /// Creates a restore-only owner for an explicit cold physical state and an exact saved final history.
     public init(history:TopologyHistoryContributor,contributors:TopologyRuntimeContributors,
@@ -22,7 +29,7 @@ public struct TopologyCheckpointHandler: RuntimeCheckpointHandling, Sendable {
         catch { throw .compilation(error) }
         guard admitted == physical else { throw .invalidInput }
         self.history=history;self.contributors=contributors;self.bootstrap=bootstrap
-        bootstrapPhysical=physical;self.bootstrapContributors=bootstrapContributors
+        bootstrapPhysical=physical;self.bootstrapContributors=bootstrapContributors;sourceBase=nil
     }
     public func admit(_ checkpoint:RuntimeCheckpoint,model:CompiledMechanicalModel,configuration:RuntimeConfiguration,
                       cancellation:RuntimeCancellationSource?) throws(RuntimeFailure) -> RuntimeAcceptedState {
@@ -41,6 +48,7 @@ public struct TopologyCheckpointHandler: RuntimeCheckpointHandling, Sendable {
             } catch { throw RuntimeFailure(.invalidContributor,message:"Saved topology history failed bounded catalog/target reconstruction.") }
             try history.associated(checkpoint);registry=contributors
         }
+        if let sourceBase { return try sourceBase.admit(checkpoint,model:model,configuration:configuration,cancellation:cancellation) }
         let handler=ReferenceRuntimeCheckpointHandler(contributors:registry,revisions:ReferenceModelRevisionUpdater())
         return try handler.admit(checkpoint,model:model,configuration:configuration,cancellation:cancellation)
     }

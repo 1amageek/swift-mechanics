@@ -39,4 +39,31 @@ This target owns publication, complete contributor catalog and replay boundaries
 
 Existing history-only TopologyReadbackEquation remains solely the legacy integration-initialization fixture. It cannot satisfy this path's active dynamics or cold physical force proof. Actual target composition uses NonlinearMechanismEquation(sourceBoundModel:), NonlinearReconciledSubtreeRelease and NonlinearMechanismCheckpointHandler(equations:continuation:base:validationBudget:), qualified at56a57ba. Refusal asserts actual typed lower/runtime codes, exact checkpoint/RNG/model prefix and caller ledger after known/reset/opaque/cancel failure; handler local validation work is bounded separately and is not an invented aggregate receipt.
 
-Planned files are SleepTopologyPublicationFixtures.swift, SleepTopologyPublicationTests.swift and SleepTopologyReplayTests.swift with specific supplier fixtures only for defined failure/work counterexamples. They exercise the selected public protocol and immutable prepared owner; no lower private token/force algorithm is copied. Existing free-path tests remain unchanged evidence unless additive constructor/overload edits affect their behavior. Tests retain original capacities/stack profiles; root owns consolidated qualification. Source/tests are DESIGN ONLY until production; this handoff asserts contract consistency, not upper execution success.
+Owned files are SleepTopologyFixtures.swift, SleepTopologyPublicationTests.swift and SleepTopologyFailureTests.swift with specific supplier fixtures only for defined failure/work counterexamples. They exercise the selected public protocol and immutable prepared owner; no lower private token/force algorithm is copied. Existing free-path tests remain unchanged evidence unless additive constructor/overload edits affect their behavior. Tests retain original capacities/stack profiles; root owns consolidated qualification. The heading retains the original contract-handoff anchor. Implementation now executes under the independent Native evidence below; original profile qualification remains root-owned.
+
+### AF26 dedicated production cases
+
+| Test owner | Behavioral invariant |
+|---|---|
+| SleepTopologyPublicationTests.realReleaseWakesPublishesGlobalHistoryAndMovesUnderRetainedDrive | Real sixDOF release, original mass/reaction acceleration, single S+1 event and integration history; exact drive work/kinetic energy and rejected RNG rollback |
+| SleepTopologyPublicationTests.freshOriginalSourceColdProofReissuesAndRestoresExactTargetReplay | Fresh source owner cold admission before warmup, new original retirement/reconciliation and fresh target bootstrap reproduce actual final bytes |
+| SleepTopologyPublicationTests cold/preparation refusal cases | Missing/malformed wake, wrong acceleration or global sequence, duplicate/missing dispositions, stale publication and changed same-ID physical/policy catalog refuse atomically |
+| SleepTopologyFailureTests | Genuine delegated constrained solver success/failure ledger reset, unknown work, known failure and cancellation retain the original source prefix/RNG; no retry or lower-local work reported as caller work |
+| SleepTopologyFailureTests.coldHandlerCannotUseGenuineDifferentLawTokenToBypassRetirement | Public contextual constructor rejects a genuinely issued but different-law target token |
+
+Fixture and fault suppliers use only original public mechanics APIs. Real lower cold work is controlled by its explicit validation budget; caller NumericalWork covers only actual upper preparation/encoding and its original prefix. Native cases establish these paths, while root owns Native/WASM/Embedded public composition and the original stack profile. All mutable fault counters use common Mutex declarations and access across targets.
+
+### AF26 independent Native evidence
+
+Owned source/test directories were overlaid alone onto `.build/af26-upper-independent-sleep`, whose AF26_BASELINE marker is qualified lower commit `56a57ba`. Its private manifest retains exactly the existing MechanicsSleepMechanismTests and MechanicsTopologyReleaseTests declarations, with all production/executable/dependency/flags untouched. Swift `swift-6.4.0-RELEASE` compiled against the existing baseline Native macOS27 SDK / deployment14 configuration. This evidence does not substitute for root's original deployment/profile public artifacts.
+
+| Evidence | Result |
+|---|---|
+| setup.log | First build stopped on test-only missing try at two tolerance expressions; no behavioral or production finding |
+| setup-green.log | Timeout1200s, `swift build --build-tests -j 4`, exit0, 5.19 seconds after fixture correction |
+| test.log | Separate timeout240s, `swift test --skip-build`, exit0 |
+| Existing definitions | Sleep21 + Topology9 retained:30 |
+| Added definitions/cases | Sleep5 + Topology8:13 definitions /29 actual standalone or parameter cases |
+| Complete owned run | Sleep26/9 suites + Topology17/5 suites:43 definitions /14 suites |
+
+The one comprehensive owned review found that a public cold contextual constructor could combine original retirement with a genuinely issued different-drive nonlinear token. Original mapped-law validation now runs independently in that constructor's bounded noninline phase; `coldHandlerCannotUseGenuineDifferentLawTokenToBypassRetirement` is the limited behavioral recheck and passes. Complete source schema/source scalar-bit binding, finite lossless source-law fields, reserved contextual association work and opaque/known supplier work were checked in that same review. Source/tests are frozen after this evidence. Lower producers, root artifacts/graph and original stack settings were not edited. Final tree digests and overlay equality are recorded in the copy's OWNED_DIGESTS; root owns staging/commit and integrated target qualification.
