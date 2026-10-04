@@ -238,3 +238,7 @@ Root registered and qualified nonlinear evolution, checkpoint-bound sleep/comman
 ## AF22 General Geometry Foundation
 
 Root registered the general frame/point/axis relation and local manifold correction children under [Constraints](Sources/SwiftMechanics/Physics/Constraints/DESIGN.md). [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af22-selected-general-geometry-qualification) owns actual registered Native and selected original-profile evidence. This closes the lower geometry handoff before upper closed-loop dynamics; general IM16 and full IM48 remain open.
+
+## AF22 Closed-Loop and Topology Integration
+
+[Mechanisms](Sources/SwiftMechanics/Physics/Mechanisms/DESIGN.md#af22-mechanism-frontier) owns the composition boundaries for general geometric evolution and checkpointed subtree release. [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af22-integrated-mechanism-qualification) owns actual registered Native and original Native/WASM/Embedded evidence and its profile limits. The qualified owners were committed independently as ef48e13 (subtree/history/law continuation) and b90af29 (shared physical engine and geometric evolution), after the lower geometry handoff d357b65. No new production module or C target was introduced. PROGRESS retains the remaining IM16 domains and all unclosed 210-requirement/IM48 obligations.
