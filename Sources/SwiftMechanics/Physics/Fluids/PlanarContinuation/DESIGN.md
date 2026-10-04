@@ -1,7 +1,7 @@
 # PlanarContinuation
 
 ## Purpose and Scope
-Initial admitted implementation domain; behavioral/profile qualification pending. Parent [Fluids](../DESIGN.md); no children. Own bounded exact periodic MAC field continuation, required Runtime contributor admission and actual trial/accept/reject/checkpoint/restart. Full EX-005 remains open outside this static-carrier domain.
+Selected static-carrier continuation qualified by the AF21 evidence linked below. Parent [Fluids](../DESIGN.md); no children. Own bounded exact periodic MAC field continuation, required Runtime contributor admission and actual trial/accept/reject/checkpoint/restart. Full EX-005 remains open outside this static-carrier domain.
 
 ## Responsibilities and Boundaries
 Publish immutable context-bound binary state and compose public Runtime/Planar operations. One compiled spatial static root, fixed base/authority and inertial world frame, no joints or q/v, one required fluid contributor, one fluid step per accepted transaction. Grid geometry/material/frame/source, model identity/revision and codec tolerance remain immutable. The public MAC service owns original pressure/momentum/work acceptance; this child does not duplicate its discretization or infer moving-grid/FSI physics. Runtime owns exclusive transactions, RNG, accepted-prefix publication and global checkpoints. The fluid operation never draws RNG; caller trial draws are rolled back/replayed by Runtime.
@@ -17,7 +17,7 @@ Publish immutable context-bound binary state and compose public Runtime/Planar o
 | [Model](../../../Modeling/Model/DESIGN.md) | depends on | Body mode/source | Bound immutable source |
 | [Joints](../../../Modeling/Joints/DESIGN.md) | depends on | KinematicState/root authority | Zero-coordinate carrier |
 | [Numerics](../../../Mathematics/Numerics/DESIGN.md) | depends on | NumericalWork | Distinct supplier ledger |
-| [Tests](../../../../../Tests/MechanicsFluidsRuntimeTests/DESIGN.md) | verified by | Physical/replay/failure proof | Execution pending |
+| [Tests](../../../../../Tests/MechanicsFluidsRuntimeTests/DESIGN.md) | verified by | Physical/replay/failure proof | Native owner and selected public profiles qualified |
 
 ## Architecture
 ```text
@@ -46,3 +46,7 @@ PlanarContinuationError owns invalid input, capacity, malformed payload, stale b
 
 ## Verification and Change Impact
 Independent MAC vortex pressure/nonzero evolution and shear discrete amplification; exact full-state encode/decode; actual compiled static-root Runtime accept/reject/checkpoint/restart and same-build replay with caller RNG draws. Forged structurally valid bytes with stale context, NaN, gauge/divergence/time/sequence mismatches, truncation/extension and codec/Runtime/numerical budgets must fail while preserving the whole accepted owner. Real Cholesky iteration exhaustion propagates unknown failed work; actual successful solver followed by Mutex cancellation must refuse publication. A real-flow wrapper resets its numerical ledger only after the actual correct step, then returns or throws: zero/precharged incoming cases must restore the known ledger, propagate unavailable work, preserve the whole prefix/RNG and invoke exactly once. Changes to wire/binding/association invalidate continuation tests and root selected profiles; solver mathematics remains the projection owner's evidence.
+
+## Selected Qualification
+
+[FoundationVerification AF21](../../../../../Verification/FoundationVerification/DESIGN.md#af21-selected-original-profile-qualification) owns exact Native/ordinary-WASM/Embedded evidence and its limits. The Native owner exercises original MAC physics, restored field association, failure/RNG rollback and real-supplier ledger reset; the public composition executes required Runtime admission and fresh-owner replay on all three selected profiles. General context migration remains an explicit incomplete typed failure.

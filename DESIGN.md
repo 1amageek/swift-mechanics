@@ -230,3 +230,7 @@ Swift 6.4.0 RELEASE consolidated Native execution passed 477 tests across 32 tar
 
 ## AF20 selected mechanism integration
 Root registered and qualified nonlinear evolution, checkpoint-bound sleep/command/impulse wake and identified tree reactions in the single SwiftMechanics module. [Mechanisms](Sources/SwiftMechanics/Physics/Mechanisms/DESIGN.md) owns component boundaries; [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af20-selected-original-profile-qualification) owns exact final Native/WASM/Embedded execution evidence. PROGRESS retains incomplete general IM16 and the full 210-requirement/IM48 target.
+
+## AF21 Planar Continuation Integration
+
+[Fluids](Sources/SwiftMechanics/Physics/Fluids/DESIGN.md#af21-registration-scope) owns the newly registered child index. [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af21-planar-runtime-qualification-contract) owns the public composition contract; [selected original-profile qualification](Verification/FoundationVerification/DESIGN.md#af21-selected-original-profile-qualification) records the passed evidence and its limits. This addition preserves the single production module, immutable compiled model and required Runtime publication authority. Full IM44/IM48 and 210-requirement qualification remain open.

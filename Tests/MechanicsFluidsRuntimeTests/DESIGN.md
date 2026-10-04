@@ -1,7 +1,7 @@
 # MechanicsFluidsRuntimeTests
 
 ## Purpose and Scope
-Behavioral owner for [PlanarContinuation](../../Sources/SwiftMechanics/Physics/Fluids/PlanarContinuation/DESIGN.md); parent [package](../../DESIGN.md), no children. Actual execution/profile qualification pending.
+Behavioral owner for [PlanarContinuation](../../Sources/SwiftMechanics/Physics/Fluids/PlanarContinuation/DESIGN.md); parent [package](../../DESIGN.md), no children. Sixteen Native behavioral tests pass; selected public-profile evidence is linked below.
 
 ## Responsibilities and Boundaries
 Exercise exact public codec/required contributor/checkpoint handler/trial contracts with an actual compiled spatial static-root carrier and real MAC/Cholesky services. Own untrusted-field rejection, whole accepted-prefix/RNG rollback and replay. Frozen projection tests own full discretization refinement; no duplicated solver or mock result.
@@ -33,9 +33,13 @@ All field/model fixtures immutable and locally owned. Shared cancellation uses S
 No source/build/graph mutation of producers. Root runs timeout-wrapped tests after source freeze. Typed malformed/stale/physical/capacity/cancel/numerical unknown-work failures are checked independently. Supplier wrappers delegate real operations; no fake numerical output or retry.
 
 ## Verification and Change Impact
-Codec corruption/bounds, carrier/required migration, exact accepted/rejected state/RNG, restart to same owner and fresh owner, forged time/sequence and failed-supplier/cancellation cases close the selected continuation contract. Changes to wire/identity/association invalidate those cases; actual target qualification remains root-owned.
+Codec corruption/bounds, carrier/required migration, exact accepted/rejected state/RNG, restart to same owner and fresh owner, forged time/sequence and failed-supplier/cancellation cases close the selected continuation contract. Changes to wire/identity/association invalidate those cases; actual target qualification remains root-owned under the evidence link below.
 
 | Profiles | Shared storage | Isolation | Read | Mutation | Release |
 |---|---|---|---|---|---|
 | Native / ordinary WASM / Embedded | Mutex<Bool> | same withLock | policy hook | cancel after real solve | retained immutable owner through call |
 | Native / ordinary WASM / Embedded | Mutex<Int> | same withLock | invocation count | increment on delegated step | retained immutable owner through call |
+
+## Qualification Evidence
+
+[FoundationVerification AF21](../../Verification/FoundationVerification/DESIGN.md#af21-selected-original-profile-qualification) owns the exact-profile/whole-graph evidence. The affected Native owner passed sixteen tests/five suites, including four real-MAC ledger-reset cases and zero-budget invocation refusal. The test Mutex counters/cancellation owners execute on Native; no actual WASI multithread race qualification follows from the synchronous public probes.

@@ -36,7 +36,8 @@ The ChannelDiscretization, ViscousEvolution and Continuation source/test snapsho
 | [ChannelDiscretization](ChannelDiscretization/DESIGN.md) | Identified channel field and boundary data | Native and selected profile qualified |
 | [ViscousEvolution](ViscousEvolution/DESIGN.md) | Steady and backward-Euler channel physical balance | Native and selected profile qualified |
 | [Continuation](Continuation/DESIGN.md) | Accepted/rejected channel and Runtime contributor | Native and selected profile qualified |
-| [PlanarProjection](PlanarProjection/DESIGN.md) | Independent multidimensional velocity/pressure evolution | Frozen source; root behavioral qualification pending |
+| [PlanarProjection](PlanarProjection/DESIGN.md) | Independent multidimensional velocity/pressure evolution | Selected AF17 profiles qualified |
+| [PlanarContinuation](PlanarContinuation/DESIGN.md) | Exact field checkpoint and required Runtime association | Selected AF21 profiles qualified |
 
 Root reviewed the complete channel solve/original residual/time/codec/Runtime paths and preserved numerical unknown-work evidence in the Runtime bridge. Seventeen channel/continuation Native tests pass, including that real exhausted-solver regression. Public hydrostatic/Couette/backward-Euler, accept/reject/checkpoint replay and failed supplier prefix paths compiled, linked and exited 0 on original Native/ordinary-WASM/Embedded WASM with swift-6.4.0-RELEASE/matching SDKs. Embedded required direct Joints imports for physical carrier properties; this visibility correction does not change physics/isolation. At the AF16 channel handoff, PlanarProjection was excluded from registration. Root now registers its frozen AF17 source for qualification; no multidimensional/FSI/free-surface/compressibility qualification is inferred from registration.
 
@@ -54,3 +55,9 @@ material_kernels owns only new `PlanarContinuation/` and `Tests/MechanicsFluidsR
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF21 Registration Scope
+
+Root registers the frozen PlanarContinuation child and MechanicsFluidsRuntimeTests after one original-path review. The confirmed missing supplier-ledger guard is repaired against the child contract before qualification. [Foundation verification](../../../../Verification/FoundationVerification/DESIGN.md#af21-planar-runtime-qualification-contract) owns selected-profile evidence. Existing channel and projection contracts are unchanged; full EX-005 remains open.
+
+[AF21 selected qualification](../../../../Verification/FoundationVerification/DESIGN.md#af21-selected-original-profile-qualification) closes this static-carrier continuation handoff. Full EX-005 and IM44 remain open.
