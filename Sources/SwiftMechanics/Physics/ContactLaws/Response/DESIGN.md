@@ -1,6 +1,6 @@
 # Passive compliant contact response
 ## Purpose and Scope
-Parent [module](../DESIGN.md). Owns continuous normal/cohesive/couple laws and backward-Euler tangential spring return with immutable trial history. Children: none.
+Parent [module](../DESIGN.md). Owns continuous normal/cohesive/couple laws and backward-Euler tangential spring return with immutable trial history. It also owns the pure constitutive kernels consumed by current accepted-state Sampling. Children: none. AF29 shared-kernel extraction passed the affected existing Native behavioral regression in the independent owner proof; canonical/original profile requalification remains parent-owned and pending.
 ## Responsibilities and Boundaries
 Does not integrate bodies, solve complementarity, select contact geometry or produce impacts. Publishes constitutive force/couple and scalar energy/loss measures. No source-geometry or whole CT-family closure is claimed.
 ## Related Designs
@@ -9,12 +9,14 @@ Does not integrate bodies, solve complementarity, select contact geometry or pro
 | [Inputs](../Inputs/DESIGN.md) | depends on | SI framed input/work | Kinematics | Caller advects tangent axes |
 | [MaterialPairs](../MaterialPairs/DESIGN.md) | depends on | resolved law identity | Coefficients | History exact-pair validity |
 | [Impact](../Impact/DESIGN.md) | coordinates with | loss separation | Impact consumer | No dynamics integration |
+| [Sampling](../Sampling/DESIGN.md) | used by | Pure normal/cohesion/resistance and scalar/framed kernels; issued history | Instantaneous accepted-state consumer | Sampling owns admission/rate/derivatives; no trial advancement |
 ## Architecture
 ```text
 input + accepted history -> validate exact identity/pair
 normal compression + finite-range cohesion -> compressive load
 advected spring trial -> static ellipse stick / regularized dynamic ellipse radial return
 rolling/spinning resistance -> force/couple + energy/power + value-owned trial history
+shared pure kernels -> Sampling (without invoking trial evaluation)
 ```
 ## Contracts and Invariants
 Let delta=max(-s,0), vn=n·v, rate(delta)=-vn. For s<0: linear elastic Fe=k delta, U=k delta²/2; Hertz/HC Fe=K delta sqrt(delta), U=(2/5)Fe delta. Linear Fn=max(Fe-c vn,0); Hertz Fn=Fe; HC Fn=Fe max(1-alpha vn,0). For s>=0 Fn=0. Clipping is the published non-tensile damping law, not fallback. Normal loss power=(Fe-Fn)vn>=0; at open contact loss=0. Normal force derivatives are with respect to delta and vn within the selected active branch; boundary/clipping derivatives use the inactive-side convention and are not smooth tangents.
@@ -25,6 +27,8 @@ Output forceOnB=n(Fn+Fc)+t1 Ft1+t2 Ft2; coupleOnB is resistance only. Mechanical
 History binds full ContactIdentity and full resolved pair; geometry/material/frame/layout/model edits fail stale. Virgin history is zero spring/sequence0 at an explicit caller start time. Input start time must equal accepted history time; returned time advances by dt and must be strictly representably later. dt=0 fails, including step-zero requests. Restoring a previously returned immutable value reproduces its time, identity, pair, spring and cumulative loss; replay from the same accepted value is deterministic. A normal-load decrease returns to the reduced ellipse, reporting released spring energy as tangent dissipation. Contact absence clears spring with its full stored energy reported as dissipation. Response returns accepted sequence plus new sequence+1, local-axis spring and cumulative tangent D; accepted input never mutates. Caller alone accepts/rejects returned trial. Basis coordinates advect as described by Inputs. No arrays/shared caches or target branches.
 ## Failure, Concurrency, and Constraints
 Finite caller envelopes bound penetration and normal speed; overflow, invalid identity/frame/history, sequence overflow and budgets/cancellation fail transactionally. No iterative algorithm or guessed iteration cap. Nonfinite/loss-sign errors fail. Independent direct -Ft·(dt vt)-delta(Ut) is checked against reported nonnegative D using caller dimensional energy tolerance; global vector mechanical power is checked against its local-axis decomposition with caller dimensional power tolerance. Normal clipping loss is a continuous rate associated only with compressive compliance; reversible cohesive potential has no dissipative loss contribution, preventing double counting. All services are protocol requirements, immutable Sendable providers and values.
+
+The AF29 extraction moves existing normal/cohesion, squared norm/stable magnitude, dot, traction ellipse, framed axis map and rolling/spinning arithmetic into an internal pure kernel owner. Original evaluation invokes these in the same order with the same arguments and floating-point expressions. The 4096 operation/256 scalar-slot admission, metadata traversal, original energy/power checks, sequence/time rules and history publication remain unchanged. A kernel may expose an already computed elastic normal force for the current consumer, without adding original-path arithmetic. Additional current derivatives remain Sampling-only, so their arithmetic refusals cannot change original evaluator behavior. No public protocol, history field or original result is replaced.
 ## Verification and Change Impact
 [ResponseTests](../../../../../Tests/MechanicsContactLawsTests/ResponseTests.swift) independently checks normal curves/derivatives, clipped unloading, friction onset/dynamic ellipse/discrete energy/recovery, anisotropy rotations, rolling/spinning power, finite-range opening work, failed-trial isolation, stale/material/domain/budget/cancel. Future coupled/evolution consumers must independently prove balance and time refinement; those physical paths remain unverified.
 

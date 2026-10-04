@@ -37,6 +37,7 @@ struct FoundationVerification {
             }
             stage = "verifyFlexible"; try verifyFlexible()
             stage = "verifyContactLaws"; try verifyContactLaws()
+            stage = "verifyContactCurrentSamples"; try verifyContactCurrentSamples()
             stage = "verifyMaterialSites"; try verifyMaterialSites()
             stage = "verifyContactResponse"; try verifyContactResponse()
             stage = "verifyExchange"; try verifyExchange()
