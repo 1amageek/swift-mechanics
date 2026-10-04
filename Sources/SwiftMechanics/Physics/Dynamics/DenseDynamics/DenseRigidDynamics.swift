@@ -1,19 +1,74 @@
-public struct DenseRigidDynamics: RigidDynamicsSolving {
-    private let equations: any RigidEquationComputing
+public struct DenseRigidDynamics: RigidDynamicsSolving, PhysicalRigidDynamicsSolving {
+    private let equations: DenseEquationSupplier
     private let linearSolver: any LinearSolving<Double>
     public init(equations: any RigidEquationComputing = RigidEquationKernel(),
                 linearSolver: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
-        self.equations = equations; self.linearSolver = linearSolver
+        self.equations = .spatial(equations); self.linearSolver = linearSolver
     }
-    public func forward(_ system: RigidDynamicsSystem, driveForce: [Double], policy: DynamicsSolvePolicy,
+    public init(physicalEquations: any PhysicalRigidEquationComputing,
+                linearSolver: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
+        equations = .physical(physicalEquations); self.linearSolver = linearSolver
+    }
+    @inline(never)
+    public func forward(_ system:RigidDynamicsSystem,driveForce:[Double],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
+        try forwardValue(context(system),driveForce:driveForce,policy:policy,work:&work)
+    }
+    @inline(never)
+    public func inverse(_ system:RigidDynamicsSystem,acceleration:[Double],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
+        try inverseValue(context(system),acceleration:acceleration,policy:policy,work:&work)
+    }
+    @inline(never)
+    public func inverseMassProduct(_ system:RigidDynamicsSystem,rightHandSide:[Double],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
+        try inverseMassValue(context(system),rightHandSide:rightHandSide,policy:policy,work:&work)
+    }
+    @inline(never)
+    public func mixed(_ system:RigidDynamicsSystem,partition:[MixedCoordinate],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
+        try mixedValue(context(system),partition:partition,policy:policy,work:&work)
+    }
+    @inline(never)
+    public func forward(_ system:PhysicalRigidDynamicsSystem,driveForce:[Double],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> PhysicalDynamicsSolution {
+        let value=try forwardValue(context(system),driveForce:driveForce,policy:policy,work:&work)
+        return publish(system,value:value)
+    }
+    @inline(never)
+    public func inverse(_ system:PhysicalRigidDynamicsSystem,acceleration:[Double],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> PhysicalDynamicsSolution {
+        let value=try inverseValue(context(system),acceleration:acceleration,policy:policy,work:&work)
+        return publish(system,value:value)
+    }
+    @inline(never)
+    public func inverseMassProduct(_ system:PhysicalRigidDynamicsSystem,rightHandSide:[Double],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> PhysicalDynamicsSolution {
+        let value=try inverseMassValue(context(system),rightHandSide:rightHandSide,policy:policy,work:&work)
+        return publish(system,value:value)
+    }
+    @inline(never)
+    public func mixed(_ system:PhysicalRigidDynamicsSystem,partition:[MixedCoordinate],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> PhysicalDynamicsSolution {
+        let value=try mixedValue(context(system),partition:partition,policy:policy,work:&work)
+        return publish(system,value:value)
+    }
+    @inline(never)
+    private func context(_ system:RigidDynamicsSystem) -> DensePhysicalSolveContext {
+        DensePhysicalSolveContext(system:PhysicalRigidDynamicsSystem(spatial:system),equations:equations,guardedSuppliers:equations.requiresPhysicalGuard)
+    }
+    @inline(never)
+    private func context(_ system:PhysicalRigidDynamicsSystem) -> DensePhysicalSolveContext {
+        DensePhysicalSolveContext(system:system,equations:equations,guardedSuppliers:true)
+    }
+    @inline(never)
+    private func publish(_ system:PhysicalRigidDynamicsSystem,value:DynamicsSolution) -> PhysicalDynamicsSolution {
+        PhysicalDynamicsSolution(system:system,value:value)
+    }
+    @inline(never)
+    private func forwardValue(_ system: DensePhysicalSolveContext, driveForce: [Double], policy: DynamicsSolvePolicy,
                         work: inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
         try solveFull(system,rhs:driveForce,includeBias:true,policy:policy,work:&work)
     }
-    public func inverseMassProduct(_ system: RigidDynamicsSystem, rightHandSide: [Double], policy: DynamicsSolvePolicy,
+    @inline(never)
+    private func inverseMassValue(_ system: DensePhysicalSolveContext, rightHandSide: [Double], policy: DynamicsSolvePolicy,
                                    work: inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
         try solveFull(system,rhs:rightHandSide,includeBias:false,policy:policy,work:&work)
     }
-    public func inverse(_ system: RigidDynamicsSystem, acceleration: [Double], policy: DynamicsSolvePolicy,
+    @inline(never)
+    private func inverseValue(_ system: DensePhysicalSolveContext, acceleration: [Double], policy: DynamicsSolvePolicy,
                         work: inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
         try validate(system,values:acceleration,policy:policy)
         let n = system.velocityCount
@@ -29,7 +84,8 @@ public struct DenseRigidDynamics: RigidDynamicsSolving {
         let residual = try verify(system,acceleration:acceleration,drive:drive,includeBias:true,policy:policy,original:&original,work:&work)
         return DynamicsSolution(acceleration:acceleration,driveForce:drive,originalPhysicalResidual:residual,linearDiagnostics:nil,work:work)
     }
-    public func mixed(_ system: RigidDynamicsSystem, partition: [MixedCoordinate], policy: DynamicsSolvePolicy,
+    @inline(never)
+    private func mixedValue(_ system: DensePhysicalSolveContext, partition: [MixedCoordinate], policy: DynamicsSolvePolicy,
                       work: inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
         try validatePolicy(system,policy:policy)
         let n = system.velocityCount
@@ -69,11 +125,11 @@ public struct DenseRigidDynamics: RigidDynamicsSolving {
                     matrix[i*m+j] = entry; matrix[j*m+i] = entry
                 }
             }
-            let solved = try nestedSolve(matrix,count:m,rhs:rhs,reserved:reserved,policy:policy,work:&work)
+            let solved = try nestedSolve(matrix,count:m,rhs:rhs,reserved:reserved,policy:policy,guarded:system.guardedSuppliers,work:&work)
             diagnostics = solved.diagnostics
             for i in 0..<m { acceleration[unknown[i]] = try physicalAcceleration(solved.values[i],index:unknown[i],policy:policy,work:&work) }
         }
-        try equations.originalInertialForce(system,acceleration:acceleration,includeBias:true,into:&original,work:&work)
+        try system.original(acceleration:acceleration,includeBias:true,into:&original,work:&work)
         for i in 0..<n {
             if case .prescribedAcceleration = partition[i] {
                 try DynamicsArithmetic.operations(5,&work); drive[i] = try DynamicsArithmetic.finite(original[i]-system.forces.total(at:i))
@@ -83,7 +139,8 @@ public struct DenseRigidDynamics: RigidDynamicsSolving {
         try checkpoint(system)
         return DynamicsSolution(acceleration:acceleration,driveForce:drive,originalPhysicalResidual:residual,linearDiagnostics:diagnostics,work:work)
     }
-    private func solveFull(_ system: RigidDynamicsSystem, rhs drive: [Double], includeBias: Bool,
+    @inline(never)
+    private func solveFull(_ system: DensePhysicalSolveContext, rhs drive: [Double], includeBias: Bool,
                            policy: DynamicsSolvePolicy, work: inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {
         try validate(system,values:drive,policy:policy)
         let n = system.velocityCount, matrixCount = try DynamicsArithmetic.product(n,n)
@@ -100,33 +157,41 @@ public struct DenseRigidDynamics: RigidDynamicsSolving {
                 matrix[i*n+j] = entry; matrix[j*n+i] = entry
             }
         }
-        let solved = try nestedSolve(matrix,count:n,rhs:rhs,reserved:reserved,policy:policy,work:&work)
+        let solved = try nestedSolve(matrix,count:n,rhs:rhs,reserved:reserved,policy:policy,guarded:system.guardedSuppliers,work:&work)
         // A required ownership copy separates normalized solver values from physical acceleration output.
         var acceleration = solved.values, original = [Double](repeating:0,count:n)
         for i in 0..<n { acceleration[i] = try physicalAcceleration(solved.values[i],index:i,policy:policy,work:&work) }
         let residual = try verify(system,acceleration:acceleration,drive:drive,includeBias:includeBias,policy:policy,original:&original,work:&work)
         return DynamicsSolution(acceleration:acceleration,driveForce:drive,originalPhysicalResidual:residual,linearDiagnostics:solved.diagnostics,work:work)
     }
+    @inline(never)
     private func nestedSolve(_ values: [Double], count: Int, rhs: [Double], reserved: Int,
-                             policy: DynamicsSolvePolicy, work: inout NumericalWork) throws(DynamicsError) -> LinearSolution<Double> {
+                             policy: DynamicsSolvePolicy, guarded: Bool, work: inout NumericalWork) throws(DynamicsError) -> LinearSolution<Double> {
+        if guarded { try DynamicsArithmetic.operations(1,&work) }
         let matrix: DenseMatrix<Double>, budget: NumericalBudget
         do { matrix = try DenseMatrix(rows:count,columns:count,values:values); budget = try work.remainingBudget(reservedStorage:reserved) }
         catch { throw .numerical(error,failedSupplierWorkUnavailable:false) }
         let result: LinearSolution<Double>
         do { result = try linearSolver.solve(matrix,rightHandSide:rhs,capability:policy.capability,tolerance:policy.linearTolerance,budget:budget) }
         catch { throw .numerical(error,failedSupplierWorkUnavailable:true) }
+        if guarded {
+            let supplied=result.diagnostics.work
+            guard supplied.budget == budget,supplied.operations <= budget.arithmeticOperations,
+                  supplied.iterations <= budget.iterations,supplied.peakScalarStorage <= budget.scalarStorage else { throw .supplierLedgerReplaced }
+        }
         do { try work.absorb(result.diagnostics.work,reservedStorage:reserved) }
         catch { throw .numerical(error,failedSupplierWorkUnavailable:false) }
         guard result.values.count == count, result.values.allSatisfy({ $0.isFinite }) else { throw .invalidShape }
         return result
     }
-    private func verify(_ system: RigidDynamicsSystem, acceleration: [Double], drive: [Double], includeBias: Bool,
+    @inline(never)
+    private func verify(_ system: DensePhysicalSolveContext, acceleration: [Double], drive: [Double], includeBias: Bool,
                         policy: DynamicsSolvePolicy, original: inout [Double], work: inout NumericalWork) throws(DynamicsError) -> PhysicalResidual {
-        try equations.originalInertialForce(system,acceleration:acceleration,includeBias:includeBias,into:&original,work:&work)
+        try system.original(acceleration:acceleration,includeBias:includeBias,into:&original,work:&work)
         let result = try measure(system,drive:drive,original:original,includeBias:includeBias,policy:policy,work:&work)
         try checkpoint(system); return result
     }
-    private func measure(_ system: RigidDynamicsSystem, drive: [Double], original: [Double], includeBias: Bool,
+    private func measure(_ system: DensePhysicalSolveContext, drive: [Double], original: [Double], includeBias: Bool,
                          policy: DynamicsSolvePolicy, work: inout NumericalWork) throws(DynamicsError) -> PhysicalResidual {
         var residual = 0.0, reference = 0.0
         for i in 0..<system.velocityCount {
@@ -156,17 +221,18 @@ public struct DenseRigidDynamics: RigidDynamicsSolving {
         try DynamicsArithmetic.operations(3,&work)
         return try DynamicsArithmetic.finite(value*policy.coordinateScales[index]/(policy.timeScale*policy.timeScale))
     }
-    private func validate(_ system: RigidDynamicsSystem, values: [Double], policy: DynamicsSolvePolicy) throws(DynamicsError) {
+    private func validate(_ system: DensePhysicalSolveContext, values: [Double], policy: DynamicsSolvePolicy) throws(DynamicsError) {
         try validatePolicy(system,policy:policy)
         guard values.count == system.velocityCount, values.allSatisfy({ $0.isFinite }) else { throw .invalidShape }
     }
-    private func validatePolicy(_ system: RigidDynamicsSystem, policy: DynamicsSolvePolicy) throws(DynamicsError) {
+    private func validatePolicy(_ system: DensePhysicalSolveContext, policy: DynamicsSolvePolicy) throws(DynamicsError) {
         try checkpoint(system)
+        try system.equations.admit(system.system)
         guard policy.coordinateScales.count == system.velocityCount else { throw .invalidShape }
         do { try policy.capability.validate(for:Double.self,algorithms:[.cholesky]) }
         catch { throw .numerical(error,failedSupplierWorkUnavailable:false) }
     }
-    private func checkpoint(_ system: RigidDynamicsSystem) throws(DynamicsError) {
+    private func checkpoint(_ system: DensePhysicalSolveContext) throws(DynamicsError) {
         guard !system.admission.isCancelled(), !Task.isCancelled else { throw .cancelled }
     }
 }

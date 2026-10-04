@@ -2,6 +2,9 @@ public enum DynamicsError: Error, Equatable, Sendable {
     case invalidInput
     case invalidShape
     case capacityExceeded
+    case dimensionMismatch
+    case nonplanarInput
+    case supplierLedgerReplaced
     case unsupportedDomain
     case inertiaIdentityMismatch
     case frameMismatch
@@ -15,4 +18,11 @@ public enum DynamicsError: Error, Equatable, Sendable {
     case core(CoreError)
     case joints(JointError)
     case loads(LoadError)
+    public var failedSupplierWorkUnavailable: Bool {
+        switch self {
+        case .supplierLedgerReplaced: return true
+        case .numerical(_,let unavailable): return unavailable
+        default: return false
+        }
+    }
 }

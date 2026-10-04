@@ -1,6 +1,33 @@
-public struct RigidEquationKernel: RigidEquationComputing {
+public struct RigidEquationKernel: RigidEquationComputing, PhysicalRigidEquationComputing {
     public init() {}
-    public func assemble(_ input: RigidDynamicsInput, admission: DynamicsAdmission, loadWork: inout LoadWork, work: inout NumericalWork) throws(DynamicsError) -> RigidDynamicsSystem {
+    @inline(never)
+    public func assemble(_ input: RigidDynamicsInput, admission: DynamicsAdmission, loadWork: inout LoadWork,
+                         work: inout NumericalWork) throws(DynamicsError) -> RigidDynamicsSystem {
+        do throws(DynamicsError) {
+            let physical = try assemble(PhysicalRigidDynamicsInput(spatial:input),admission:admission,loadWork:&loadWork,work:&work)
+            return try physical.spatialSystem()
+        } catch {
+            if error == .dimensionMismatch { throw .unsupportedDomain }
+            throw error
+        }
+    }
+    @inline(never)
+    public func originalInertialForce(_ system: RigidDynamicsSystem, acceleration: [Double], includeBias: Bool,
+                                      into output: inout [Double], work: inout NumericalWork) throws(DynamicsError) {
+        try originalInertialForce(PhysicalRigidDynamicsSystem(spatial:system),acceleration:acceleration,includeBias:includeBias,into:&output,work:&work)
+    }
+    @inline(never)
+    public func inertialWrench(_ system: RigidDynamicsSystem, body: EntityID, acceleration: [Double],
+                               referencePointWorld: Vector3, work: inout NumericalWork) throws(DynamicsError) -> BodyWrenchEvidence {
+        try inertialWrench(PhysicalRigidDynamicsSystem(spatial:system),body:body,acceleration:acceleration,referencePointWorld:referencePointWorld,work:&work)
+    }
+    @inline(never)
+    public func energy(_ system: RigidDynamicsSystem, acceleration: [Double], angularMomentumReference: Vector3,
+                       requireComplete: Bool, work: inout NumericalWork) throws(DynamicsError) -> MechanicalEnergy {
+        try energy(PhysicalRigidDynamicsSystem(spatial:system),acceleration:acceleration,angularMomentumReference:angularMomentumReference,requireComplete:requireComplete,work:&work)
+    }
+    @inline(never)
+    public func assemble(_ input: PhysicalRigidDynamicsInput, admission: DynamicsAdmission, loadWork: inout LoadWork, work: inout NumericalWork) throws(DynamicsError) -> PhysicalRigidDynamicsSystem {
         try validate(input,admission:admission,work:&work)
         let n = input.velocity.count
         let matrixCount = try DynamicsArithmetic.product(n,n)
@@ -9,17 +36,17 @@ public struct RigidEquationKernel: RigidEquationComputing {
         var mass = [Double](repeating:0,count:matrixCount), bias = [Double](repeating:0,count:n)
         var columns = [SpatialMotion](repeating:FrameMotion.zeroMotion,count:n)
         var forces = ForceAccumulator(count:n), gravityPotential = 0.0, gravityTimeDerivative = 0.0
-        for bodyIndex in input.inertias.indices {
+        for bodyIndex in 0..<input.inertiaCount {
             try checkpoint(admission)
             let body = try WorldRigidBody.evaluate(input,index:bodyIndex,work:&work)
             let original = try geometricColumns(input,index:bodyIndex)
             for (i,column) in original.enumerated() { columns[i] = try body.comColumn(column,work:&work) }
-            let momentum = try DynamicsArithmetic.apply(body.inertia,body.omega,&work)
-            let torqueBias = try DynamicsArithmetic.add(DynamicsArithmetic.apply(body.inertia,body.angularBias,&work),DynamicsArithmetic.cross(body.omega,momentum,&work),&work)
+            let momentum = try body.inertia.applied(to:body.omega,work:&work)
+            let torqueBias = try DynamicsArithmetic.add(body.inertia.applied(to:body.angularBias,work:&work),DynamicsArithmetic.cross(body.omega,momentum,&work),&work)
             let forceBias = try DynamicsArithmetic.scale(body.accelerationBias,body.mass,&work)
             for j in 0..<n {
                 try checkpoint(admission)
-                let inertiaColumn = try DynamicsArithmetic.apply(body.inertia,columns[j].angular,&work)
+                let inertiaColumn = try body.inertia.applied(to:columns[j].angular,work:&work)
                 for i in 0...j {
                     let angular = try DynamicsArithmetic.dot(columns[i].angular,inertiaColumn,&work)
                     let linear = try DynamicsArithmetic.dot(columns[i].linear,columns[j].linear,&work)
@@ -32,7 +59,7 @@ public struct RigidEquationKernel: RigidEquationComputing {
             if let field = input.gravity {
                 // Loads logical evaluation cost remains in its caller-owned ledger; this point contract allocates no numerical arrays.
                 let response: GravityResponse
-                do { response = try GravityEvaluator().point(field,body:input.inertias[bodyIndex].body,
+                do { response = try GravityEvaluator().point(field,body:input.body(at:bodyIndex),
                     sample:GravitySample(point:body.position,mass:body.mass),work:&loadWork) } catch { throw .loads(error) }
                 guard let energy = response.load.potentialEnergy else { throw .energyUnavailable }
                 try DynamicsArithmetic.operations(2,&work)
@@ -78,16 +105,17 @@ public struct RigidEquationKernel: RigidEquationComputing {
             try appendAvailability(contribution.dissipatedPower,into:&dissipation,work:&work)
         }
         try checkpoint(admission)
-        return RigidDynamicsSystem(input:input,massMatrix:mass,inertialBias:bias,forces:forces.result(),gravityPotential:gravityPotential,gravityExplicitPotentialTimeDerivative:gravityTimeDerivative,
+        return PhysicalRigidDynamicsSystem(input:input,massMatrix:mass,inertialBias:bias,forces:forces.result(),gravityPotential:gravityPotential,gravityExplicitPotentialTimeDerivative:gravityTimeDerivative,
             knownLoadPotential:potential,knownDissipatedPower:dissipation,assemblyWork:work,assemblyLoadWork:loadWork,scalarStorage:systemStorage,admission:admission)
     }
-    public func originalInertialForce(_ system: RigidDynamicsSystem, acceleration: [Double], includeBias: Bool,
+    @inline(never)
+    public func originalInertialForce(_ system: PhysicalRigidDynamicsSystem, acceleration: [Double], includeBias: Bool,
                                       into output: inout [Double], work: inout NumericalWork) throws(DynamicsError) {
         try validateAcceleration(acceleration,count:system.velocityCount)
         guard output.count == system.velocityCount else { throw .invalidShape }
         try DynamicsArithmetic.storage(DynamicsArithmetic.sum(system.scalarStorage,output.count),&work)
         for i in output.indices { output[i] = 0 }
-        for index in system.input.inertias.indices {
+        for index in 0..<system.input.inertiaCount {
             try checkpoint(system.admission)
             let body = try WorldRigidBody.evaluate(system.input,index:index,work:&work)
             let columns = try geometricColumns(system.input,index:index)
@@ -100,7 +128,8 @@ public struct RigidEquationKernel: RigidEquationComputing {
         }
         try checkpoint(system.admission)
     }
-    public func inertialWrench(_ system: RigidDynamicsSystem, body id: EntityID, acceleration: [Double],
+    @inline(never)
+    public func inertialWrench(_ system: PhysicalRigidDynamicsSystem, body id: EntityID, acceleration: [Double],
                                referencePointWorld: Vector3, work: inout NumericalWork) throws(DynamicsError) -> BodyWrenchEvidence {
         try validateAcceleration(acceleration,count:system.velocityCount); try checkpoint(system.admission)
         try DynamicsArithmetic.storage(system.scalarStorage,&work)
@@ -109,17 +138,18 @@ public struct RigidEquationKernel: RigidEquationComputing {
         let torque = try DynamicsArithmetic.add(wrench.torque,DynamicsArithmetic.cross(DynamicsArithmetic.subtract(body.position,referencePointWorld,&work),wrench.force,&work),&work)
         return BodyWrenchEvidence(body:id,frame:system.input.snapshot.tree.worldFrame,referencePoint:referencePointWorld,wrench:SpatialWrench(torque:torque,force:wrench.force))
     }
-    public func energy(_ system: RigidDynamicsSystem, acceleration: [Double], angularMomentumReference: Vector3,
+    @inline(never)
+    public func energy(_ system: PhysicalRigidDynamicsSystem, acceleration: [Double], angularMomentumReference: Vector3,
                        requireComplete: Bool, work: inout NumericalWork) throws(DynamicsError) -> MechanicalEnergy {
         try validateAcceleration(acceleration,count:system.velocityCount)
         try DynamicsArithmetic.storage(system.scalarStorage,&work)
         if requireComplete && (system.knownLoadPotential == nil || system.knownDissipatedPower == nil) { throw .energyUnavailable }
         var kinetic = 0.0, linearMomentum = Vector3.zero, angularMomentum = Vector3.zero
         var kineticRate = 0.0, prescribedPower = 0.0
-        for index in system.input.inertias.indices {
+        for index in 0..<system.input.inertiaCount {
             try checkpoint(system.admission)
             let body = try WorldRigidBody.evaluate(system.input,index:index,work:&work)
-            let linear = try DynamicsArithmetic.scale(body.velocity,body.mass,&work), spin = try DynamicsArithmetic.apply(body.inertia,body.omega,&work)
+            let linear = try DynamicsArithmetic.scale(body.velocity,body.mass,&work), spin = try body.inertia.applied(to:body.omega,work:&work)
             linearMomentum = try DynamicsArithmetic.add(linearMomentum,linear,&work)
             angularMomentum = try DynamicsArithmetic.add(angularMomentum,DynamicsArithmetic.add(spin,DynamicsArithmetic.cross(DynamicsArithmetic.subtract(body.position,angularMomentumReference,&work),linear,&work),&work),&work)
             try DynamicsArithmetic.operations(3,&work)
@@ -139,23 +169,24 @@ public struct RigidEquationKernel: RigidEquationComputing {
             dissipatedPower:system.knownDissipatedPower,linearMomentum:linearMomentum,angularMomentum:angularMomentum,
             kineticEnergyRate:kineticRate,requiredVirtualPower:virtual,requiredPrescribedPower:prescribedPower)
     }
-    private func validate(_ input: RigidDynamicsInput, admission: DynamicsAdmission, work: inout NumericalWork) throws(DynamicsError) {
+    private func validate(_ input: PhysicalRigidDynamicsInput, admission: DynamicsAdmission, work: inout NumericalWork) throws(DynamicsError) {
         try checkpoint(admission)
         let n = input.snapshot.tree.layout.velocityCount, count = input.snapshot.bodies.count, limits = admission.capacity
         guard count <= limits.maximumBodies, n <= limits.maximumVelocities, input.bodyWrenches.count <= limits.maximumBodyWrenches,
               input.generalizedForces.count <= limits.maximumGeneralizedContributions else { throw .capacityExceeded }
-        // FIXME(INCOMPLETE_IMPLEMENTATION): Planar and zero-velocity query domains are not implemented. Assembly rejects them until corresponding mechanics/query evidence exists; the initial spatial dense profile must not qualify those domains.
-        guard n > 0, input.snapshot.tree.bodies.allSatisfy({ $0.dimension == .spatial }) else { throw .unsupportedDomain }
-        guard input.velocity.count == n, input.inertias.count == count else { throw .invalidShape }
+        // FIXME(INCOMPLETE_IMPLEMENTATION): Zero-velocity physical queries remain unsupported by assembly. V0 queries need their own mass/energy/load and resource evidence before successful publication.
+        guard n > 0 else { throw .unsupportedDomain }
+        guard input.snapshot.tree.bodies.allSatisfy({ $0.dimension == input.dimension }) else { throw .dimensionMismatch }
+        guard input.velocity.count == n, input.inertiaCount == count else { throw .invalidShape }
         if let gravity = input.gravity {
             guard gravity.frame == input.snapshot.tree.worldFrame else { throw .frameMismatch }
             // FIXME(INCOMPLETE_IMPLEMENTATION): Nonuniform gravity distribution is not implemented. COM-only force would omit second-moment torque/potential; this assembly path fails until distributed field mechanics has independent evidence.
             guard gravity.gradient == .zero else { throw .unsupportedDomain }
         }
-        for index in input.inertias.indices {
+        for index in 0..<input.inertiaCount {
             try checkpoint(admission)
-            let state = input.snapshot.bodies[index], inertia = input.inertias[index]
-            guard inertia.body == state.body, inertia.frame == state.bodyFrame else { throw .inertiaIdentityMismatch }
+            let state = input.snapshot.bodies[index]
+            guard input.body(at:index) == state.body, input.frame(at:index) == state.bodyFrame else { throw .inertiaIdentityMismatch }
             var angular = state.prescribedDriftVelocity.angular, linear = state.prescribedDriftVelocity.linear
             for (i,column) in try geometricColumns(input,index:index).enumerated() {
                 angular = try DynamicsArithmetic.add(angular,DynamicsArithmetic.scale(column.angular,input.velocity[i],&work),&work)
@@ -165,6 +196,27 @@ public struct RigidEquationKernel: RigidEquationComputing {
                   try agrees(linear,state.motion.velocity.linear,tolerance:admission.linearVelocityTolerance) else { throw .velocityMismatch }
         }
         for contribution in input.generalizedForces { try DynamicsArithmetic.operations(1,&work); guard contribution.values.count == n else { throw .invalidShape } }
+        if input.dimension == .planar { try validatePlanar(input,admission:admission,work:&work) }
+    }
+    private func validatePlanar(_ input:PhysicalRigidDynamicsInput,admission:DynamicsAdmission,work:inout NumericalWork) throws(DynamicsError) {
+        if let field=input.gravity,field.accelerationAtOrigin.z != 0 || field.uniformTimeDerivative.z != 0 { throw .nonplanarInput }
+        for state in input.snapshot.bodies {
+            try checkpoint(admission);try DynamicsArithmetic.operations(24,&work)
+            guard state.motion.pose.translation.z == 0,state.motion.pose.rotation.x == 0,state.motion.pose.rotation.y == 0,
+                  planar(state.motion.velocity),planar(state.motion.acceleration),planar(state.accelerationBias),planar(state.prescribedDriftVelocity) else { throw .nonplanarInput }
+            for column in try geometricColumns(input,index:bodyIndex(input,state.body)) {
+                try DynamicsArithmetic.operations(3,&work);guard planar(column) else { throw .nonplanarInput }
+            }
+        }
+        for load in input.bodyWrenches {
+            try checkpoint(admission)
+            let index=try bodyIndex(input,load.body)
+            let shifted=try worldWrench(load,state:input.snapshot.bodies[index],work:&work)
+            guard shifted.force.z == 0,shifted.torque.x == 0,shifted.torque.y == 0 else { throw .nonplanarInput }
+        }
+    }
+    private func planar(_ motion:SpatialMotion) -> Bool {
+        motion.angular.x == 0 && motion.angular.y == 0 && motion.linear.z == 0
     }
     private func agrees(_ a: Vector3, _ b: Vector3, tolerance: NumericalTolerance) throws(DynamicsError) -> Bool {
         try DynamicsArithmetic.core { () throws(CoreError) in
@@ -174,10 +226,10 @@ public struct RigidEquationKernel: RigidEquationComputing {
             return x && y && z
         }
     }
-    private func geometricColumns(_ input: RigidDynamicsInput, index: Int) throws(DynamicsError) -> ArraySlice<SpatialMotion> {
-        do { return try input.snapshot.geometricColumns(body:input.inertias[index].body) } catch { throw .joints(error) }
+    private func geometricColumns(_ input: PhysicalRigidDynamicsInput, index: Int) throws(DynamicsError) -> ArraySlice<SpatialMotion> {
+        do { return try input.snapshot.geometricColumns(body:input.body(at:index)) } catch { throw .joints(error) }
     }
-    private func bodyIndex(_ input: RigidDynamicsInput, _ id: EntityID) throws(DynamicsError) -> Int {
+    private func bodyIndex(_ input: PhysicalRigidDynamicsInput, _ id: EntityID) throws(DynamicsError) -> Int {
         do { return try input.snapshot.tree.bodyIndex(id) } catch { throw .joints(error) }
     }
     private func worldWrench(_ load: BodyWrenchContribution, state: BodyKinematics, work: inout NumericalWork) throws(DynamicsError) -> SpatialWrench {
