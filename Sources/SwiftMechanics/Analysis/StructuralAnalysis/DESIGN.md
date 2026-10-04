@@ -1,7 +1,7 @@
 # StructuralAnalysis component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). IM28 owns modes and structural stability under [SPEC](../../../../SPEC.md). Children: [PhysicalModels](PhysicalModels/DESIGN.md), [Pencils](Pencils/DESIGN.md), [HarmonicResponse](HarmonicResponse/DESIGN.md), [Buckling](Buckling/DESIGN.md). Registered selected source has behavioral/profile evidence below; full ST-005..007 remains incomplete.
+Parent: [responsibility owner](../DESIGN.md). IM28 owns modes and structural stability under [SPEC](../../../../SPEC.md). Children: [PhysicalModels](PhysicalModels/DESIGN.md), [Pencils](Pencils/DESIGN.md), [HarmonicResponse](HarmonicResponse/DESIGN.md), [Buckling](Buckling/DESIGN.md), [GeneralDampedSpectrum](GeneralDampedSpectrum/DESIGN.md). Registered selected source has behavioral/profile evidence below; full ST-005..007 remains incomplete.
 
 ## Responsibilities and Boundaries
 Root owns frozen source qualification after material_kernels transfers to IM44. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Direct dependencies are Core, Model, Materials, Numerics, Compiler, Equilibrium, Flexible and the internal [ScalarFunctions boundary](../../Mathematics/ScalarFunctions/DESIGN.md). Beams is qualified before upper analysis composition. Producer changes require root coordination and an explicit reassignment before editing.
@@ -9,10 +9,15 @@ Root owns frozen source qualification after material_kernels transfers to IM44. 
 ## Related Designs
 [Canonical implementation plan](../../../../IMPLEMENTATION_PLAN.md) owns prerequisite IDs; [root](../../../../DESIGN.md) owns composition. Only verified public producer contracts may be consumed. Child designs own exact selected operations, assumptions and evidence, without duplicating supplier internals.
 
+| Design | Relationship | Contract Used | Summary | Cautions |
+|---|---|---|---|---|
+| [GeneralDampedSpectrum](GeneralDampedSpectrum/DESIGN.md) | child | Original nonproportional quadratic modes | Composes admitted physical pencils with the complex numerical solver | Qualification and domain belong to the child; old Pencils behavior remains unchanged |
+
 ## Architecture
 ```text
 Flexible Beams / Tet4 / Equilibrium -> PhysicalModels
- -> Pencils / HarmonicResponse / Buckling -> original equation acceptance
+ -> Pencils / HarmonicResponse / Buckling / GeneralDampedSpectrum
+ -> original equation acceptance
 ```
 
 ## Contracts and Invariants
@@ -32,3 +37,7 @@ Initial selected handoff: fifteen Native cases pass after four lower Beam cases,
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF28 nonproportional-spectrum dispatch
+
+scalar_boundary exclusively owns the new GeneralDampedSpectrum child and dedicated tests, with the new Numerics/ComplexSpectrum prerequisite under the same owner. Existing Pencils/PhysicalModels/HarmonicResponse/Buckling and all suppliers stay read-only. Actual general spectral and original quadratic-pencil contracts precede declarations; no existing unsupported branch is silently redirected. Root alone owns this index, registration/public evidence/progress and commits. See [dispatch](../../../../IMPLEMENTATION_PLAN.md#af28-independent-frontier-dispatch).

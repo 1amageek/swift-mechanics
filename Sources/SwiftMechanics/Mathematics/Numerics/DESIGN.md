@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-Parent: [responsibility owner](../DESIGN.md). Ownership: IM03, requirements SO-001/002/006/010 in [SPEC](../../../../SPEC.md). This module owns linear operators, checked matrix storage, factorization, reduced operations and solve evidence. Children: [LinearAlgebra](LinearAlgebra/DESIGN.md), [Scaling](Scaling/DESIGN.md), [Reduction](Reduction/DESIGN.md). Each component establishes its contract before source; behavior/profile evidence is recorded at handoff. No downstream physics or whole-platform capability is inferred from this module.
+Parent: [responsibility owner](../DESIGN.md). Ownership: IM03, requirements SO-001/002/006/010 in [SPEC](../../../../SPEC.md). This module owns linear operators, checked matrix storage, factorization, reduced operations and solve evidence. Children: [LinearAlgebra](LinearAlgebra/DESIGN.md), [Scaling](Scaling/DESIGN.md), [Reduction](Reduction/DESIGN.md), [ComplexSpectrum](ComplexSpectrum/DESIGN.md). Each component establishes its contract before source; behavior/profile evidence is recorded at handoff. No downstream physics or whole-platform capability is inferred from this module.
 
 ## Responsibilities and Boundaries
 
@@ -17,6 +17,7 @@ Linear operators, checked matrix storage, factorization, reduced operations and 
 | [LinearAlgebra](LinearAlgebra/DESIGN.md) | child | Operators, factorization and solve evidence | Owns its implementation and behavioral evidence | Its detailed contract is authoritative |
 | [Scaling](Scaling/DESIGN.md) | child | Explicit scaling and perturbation policy | Owns its implementation and behavioral evidence | Its detailed contract is authoritative |
 | [Reduction](Reduction/DESIGN.md) | child | Schur and generic tree reduction | Owns its implementation and behavioral evidence | Its detailed contract is authoritative |
+| [ComplexSpectrum](ComplexSpectrum/DESIGN.md) | child | General complex right eigenpairs | Supplies the nonproportional mechanical consumer | Its original residual, failure and capacity contract is authoritative |
 
 ## Architecture
 
@@ -54,3 +55,7 @@ Ownership review: immutable Sendable values and operation-local workspace. Numer
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF28 complex-spectrum prerequisite
+
+scalar_boundary exclusively owns the new ComplexSpectrum child and dedicated tests for the nonproportional structural-spectrum consumer. Existing Numerics and scalar/math suppliers are read-only. Bounded actual algorithms, original residual acceptance and typed failure are prerequisites for the upper consumer; no foreign numerical engine or widened original stack supplies support. Root owns this index/registration/public evidence/progress and commits. See [dispatch](../../../../IMPLEMENTATION_PLAN.md#af28-independent-frontier-dispatch).
