@@ -1,5 +1,28 @@
 # ReactionPaths
 
+## AF25 additive reduced planar recovery
+
+Existing spatial APIs/fidelity remain unchanged. The non-generic `PlanarTreeReactionRecovering.recover(_:acceleration:topology:outputFrame:policy:loadWork:work:)` consumes an actually admitted planar `PhysicalRigidDynamicsSystem`, `TreeReactionPolicy` and typed `ReactionPathError`. `PlanarTreeReactionRecovery(equations:gravity:)` injects `PhysicalRigidEquationComputing` and `GravityEvaluating`. Complete original MassProperties2D/snapshot/velocity/loads/gravity remain retained; no spatial tensor or generalized-to-body allocation is fabricated.
+
+```text
+actual admitted planar source + continuous acceleration + complete-tree assumption
+ -> original body inertia -> original framed loads and gravity subtraction
+ -> original reduced virtual-work acceptance -> world-origin subtree balance
+ -> Fx/Fy/Mz cut pairs/root support -> immutable reduced report
+```
+
+`PlanarReactionWrench` exposes only `forceX`, `forceY`, `momentZ` (N/N m). `PlanarJointReactionWrench` and `PlanarRootSupportWrench` retain direction/identity, frame, actual world/frame reference point, time/revision and continuous temporal meaning. `PlanarTreeReactionReport` retains original system, reduced fidelity, caller topology assumption, generalized residual and both ledgers. Unrepresented transverse axes carry no physical-zero/bearing authority. References retain actual z; no cut-reference z==0 guard is invented. Output rotation must preserve XY/Z axes; a parallel translated origin does not mix these reduced quantities.
+
+Original body-origin inertia and transformed known loads must be planar. Raw load points/couples remain complete until rotation/shift, preserving existing off-plane raw reference/transverse couple cancellation admission. Reduction occurs afterward. Original Fx/Fy/Mz pairing with original body columns accepts generalized equilibrium independently of assembled arrays. World-origin subtree sums are shifted to actual child-anchor points then rotated. Both cut signs share one point. Fixed-root support includes root's own gravity/loads; child cuts do not. Planar floating roots have no support and must satisfy reduced global balance. Nonzero generalized-only loads and unrepresented connections fail explicitly.
+
+One separate noninline source extraction retains the original planar input in an immutable reference owner before body queries. Numerical supplier callbacks receive positive precharged prefixes, validate unchanged budget/monotonic counters on success/failure and restore known work after reset. Gravity callback admission is charged irreversibly into caller LoadWork before supplier dispatch; monotonic merge preserves caller cancellation on success/failure. Checked storage/arithmetic, body/load/edge/publication cancellation and failed-supplier work availability preserve the spatial contract's semantics. Source/results are immutable Sendable; all mutable workspace/ledgers are operation-local on Native/WASM/Embedded with original 128 KiB phase boundaries.
+
+`BodyWrenchEvidence` identifies body/frame/reference but does not retain original inertia/source. A supplier can delegate to an actual foreign-mass system with identical metadata and alter transverse force invisible to a free X coordinate. The new planar port therefore recomputes original body inertia through builtin RigidEquationKernel under the same numerical ledger after supplier ledger acceptance, compares force/moment tolerance, and adopts the builtin value. No old spatial path changes. Gravity response similarly lacks field authority: a foreign Y field is invisible to the free X residual. Builtin original field/body/COM/mass point evaluation is compared with the supplied immutable response and adopted. Successful recovery uses three LoadWork units per gravity body (admission, supplier point, builtin original point); both evaluations and failed prefixes remain accounted. These source obligations cannot be replaced by metadata/array-length checks.
+
+If the caller's original cancellation closure prevents merging a known opaque supplier increment, `ReactionPathError.loadLedgerMerge` retains the LoadError cause and marks failedSupplierWorkUnavailable. The caller retains its last charged prefix and original closure; unavailable supplier work is not reported as charged. Existing planar Joints admission makes anchor z==0, so actual off-plane raw loads, not fabricated off-plane snapshots, own the reachable reference-shift test.
+
+Depends on [RigidEquations](../../Dynamics/RigidEquations/DESIGN.md) actual original physical query/input, [ArticulatedTrees](../../../Modeling/Joints/ArticulatedTrees/DESIGN.md) public topology/columns/anchors and [PassiveLaws](../../Loads/PassiveLaws/DESIGN.md) gravity point evaluation. The forthcoming planar loop recovery depends on this result and GeometricRelations allocation evidence. [MechanicsReactionPathTests](../../../../../Tests/MechanicsReactionPathTests/DESIGN.md) owns independent pendulum, subtree/root gravity, offset/framed loads, admitted off-plane raw/anchor references, residual/allocation refusal, supplier reset/cancellation and resources. Root owns actual qualification; full JT/TR completion remains open.
+
 ## Purpose and Scope
 Parent: [Mechanisms](../DESIGN.md). Own continuous, physically identified spatial tree joint and fixed-root support wrench recovery for selected JT-007 and TR-013 bearing-load paths. No children. Complete JT/TR requirements remain owned by the root plan. Impulses, unrepresented loops, multiple-bearing allocation and mesh attribution are unavailable.
 

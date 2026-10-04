@@ -1,11 +1,37 @@
 
-public struct WeightedConstraintAssembler: ConstraintAssembling, ConstraintRankAnalyzing {
+public struct WeightedConstraintAssembler: ConstraintAssembling, ConstraintRankAnalyzing, ActiveCoordinateRankAnalyzing {
     private let evaluator: any ConstraintEvaluating
     private let nonlinear: any NonlinearSolving<Double>
     private let linear: any LinearSolving<Double>
     public init(nonlinear: any NonlinearSolving<Double> = ReferenceNonlinearSolver<Double>(),
                 linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
         self.evaluator=QuadraticConstraintEvaluator(); self.nonlinear=nonlinear; self.linear=linear
+    }
+    @inline(never)
+    public func rank(_ sample: VelocityConstraintSample, activeCoordinates: [Int], policy: ConstraintSolvePolicy,
+                     work: inout NumericalWork) throws(ConstraintError) -> ActiveCoordinateRankEvidence {
+        let n=sample.layout.scales.count,m=sample.rowIDs.count,k=activeCoordinates.count
+        guard k <= n else { throw .invalidDimensions }
+        // Full retained input and restricted workspace are bounded before either is traversed.
+        guard n <= policy.evaluation.maximumCoordinates,m <= policy.evaluation.maximumRows else { throw .capacityExceeded }
+        let entries=try ConstraintArithmetic.product(m,k)
+        let storage=try ConstraintArithmetic.sum(ConstraintArithmetic.product(2,entries),
+            ConstraintArithmetic.sum(ConstraintArithmetic.product(3,n),ConstraintArithmetic.sum(ConstraintArithmetic.product(4,m),k)))
+        try ConstraintArithmetic.storage(storage,&work)
+        try admit(layout:sample.layout,rows:m,policy:policy,work:&work,allowEmptyRows:true)
+        for i in activeCoordinates.indices {
+            try ConstraintArithmetic.check(policy.evaluation);try ConstraintArithmetic.charge(1,&work)
+            guard activeCoordinates[i] >= 0,activeCoordinates[i] < n else { throw .invalidDimensions }
+            for j in 0..<i {
+                try ConstraintArithmetic.charge(1,&work)
+                guard activeCoordinates[j] != activeCoordinates[i] else { throw .invalidInput }
+            }
+        }
+        try validateSample(sample,velocity:nil,policy:policy,work:&work)
+        let rank=try ConstraintRowRank.compute(rows:sample.rows,ids:sample.rowIDs,metric:policy.diagonalMetric,
+            policy:policy,work:&work,activeCoordinates:activeCoordinates)
+        try ConstraintArithmetic.check(policy.evaluation)
+        return ActiveCoordinateRankEvidence(sample:sample,activeCoordinates:activeCoordinates,policy:policy,rank:rank)
     }
     @inline(never)
     public func rank(_ sample: VelocityConstraintSample, policy: ConstraintSolvePolicy,
@@ -155,12 +181,13 @@ public struct WeightedConstraintAssembler: ConstraintAssembling, ConstraintRankA
         return ConstraintVelocitySolution(velocity:velocity,originalResidual:residual,correctionNorm:norm,introducedKineticEnergy:energy,rank:rank,responseWork:work,linearWork:linearWork)
     }
     @inline(never)
-    private func admit(layout: ConstraintCoordinateLayout, rows: Int, policy: ConstraintSolvePolicy, work: inout NumericalWork) throws(ConstraintError) {
+    private func admit(layout: ConstraintCoordinateLayout, rows: Int, policy: ConstraintSolvePolicy, work: inout NumericalWork,
+                       allowEmptyRows: Bool = false) throws(ConstraintError) {
         try ConstraintArithmetic.check(policy.evaluation)
         let n=layout.scales.count
         guard n <= policy.evaluation.maximumCoordinates, rows <= policy.evaluation.maximumRows else { throw .capacityExceeded }
         guard layout.revision == policy.evaluation.expectedLayoutRevision else { throw .staleLayout }
-        guard policy.diagonalMetric.count == n, rows > 0 else { throw .invalidDimensions }
+        guard policy.diagonalMetric.count == n, rows > 0 || allowEmptyRows else { throw .invalidDimensions }
         for i in 0..<n {
             try ConstraintArithmetic.check(policy.evaluation); try ConstraintArithmetic.charge(4,&work)
             guard policy.diagonalMetric[i].isFinite, policy.diagonalMetric[i] > 0, layout.scales[i].isFinite, layout.scales[i] > 0 else { throw .invalidInput }

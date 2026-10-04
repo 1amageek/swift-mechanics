@@ -1,5 +1,25 @@
 # GeometricRelations
 
+## AF25 physical-allocation certificate
+
+The additive planar port owns a sufficient source-bound certificate for endpoint-wrench uniqueness, conditional on a compatible known generalized reaction and the original numerical rank policy. It does not solve dynamics or certify multiplier uniqueness, feasibility, unseen connections or bearing distribution. Existing geometry and physical-row ports remain compatible.
+
+```text
+canonical planar system/state + supplied sealed rows
+ -> builtin original row acceptance -> builtin all-original-row rank
+ -> dependent endpoint/original covectors exactly zero
+ -> independent row IDs exactly all nonzero physical row IDs
+ -> sealed physical-allocation witness; original rank/nullity retained
+```
+
+`GeometricPhysicalAllocationProviding.physicalAllocation(_:state:supplied:policy:work:)` is a non-generic requirement implemented by `GeometricPhysicalAllocationEvaluator`. `GeometricPhysicalAllocationPolicy(rows:rank:)` combines the physical-row policy and an allowRedundancy original rank policy. The immutable Sendable producer-only `GeometricPhysicalAllocationWitness` retains full recomputed rows, `originalRank`, `activeRowIDs`, `zeroRowIDs` and separate `physicalWrenchesUnique=true`; `multipliersUnique` remains original rank.reactionsUnique. `GeometricPhysicalAllocationAcceptance.validated(_:system:state:policy:work:)` recomputes builtin authority before returning accepted original evidence to upper opaque-supplier consumers.
+
+Every original row and its order remain represented. Each dependent row must have exactly zero linear/angular covectors at both endpoints and exactly zero entries in its original normalized projected row. No tolerance or rank threshold converts a physical nonzero row to zero. Independent row IDs must exactly equal all nonzero physical row IDs in original order. Active dependent rows, including duplicates or a toggle whose projected row is zero but endpoint covector is nonzero, fail with `GeometricPhysicalAllocationError.ambiguousPhysicalRow`. Structural-zero multipliers remain nonunique; their zero physical covectors cannot change a wrench. Existing reduced planar fixed-root coincidence/stationary distance admission applies; spatial input is unsupported by this additive certificate.
+
+Checked storage reserves canonical system/rows, rank work and certificate arrays simultaneously. Traversal/exact-zero checks are charged before execution; both original row/rank cancellation closures and Task cancellation are checked at operation/row/publication boundaries. Work is caller-exclusive and cumulative. No opaque callback, shared mutable state, unsafe storage or target-dependent conformance is introduced. Noninline production/acceptance phases retain original 128 KiB lifetimes. Failure publishes no witness and preserves known work.
+
+Depends on original physical rows above and [AssemblyProjection](../AssemblyProjection/DESIGN.md) builtin rank. The forthcoming planar loop recovery consumes this certificate. [MechanicsGeometricConstraintTests](../../../../../Tests/MechanicsGeometricConstraintTests/DESIGN.md) owns ordinary fourbar rank2/nullity1 success, zero-row multiplier freedom, distance normalization, duplicate/toggle ambiguity, stale source/row/certificate, cancellation and resources. Root qualifies this lower contract before upper composition; source/design presence is not execution evidence.
+
 ## Purpose and Scope
 Parent: [Constraints](../DESIGN.md). No children. Own immutable identified holonomic point coincidence, distance and axis-alignment equations evaluated on actual compiled spatial or admitted planar tree body/frame geometry. This is the lower IM16.9 contribution to CN001/004/006/007; time evolution remains an upper consumer responsibility.
 

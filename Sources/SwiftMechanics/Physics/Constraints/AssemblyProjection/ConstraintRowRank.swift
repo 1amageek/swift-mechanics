@@ -1,18 +1,20 @@
 
 internal enum ConstraintRowRank {
     @inline(never)
-    static func compute(rows: [Double], ids: [UInt64], metric: [Double], policy: ConstraintSolvePolicy, work: inout NumericalWork) throws(ConstraintError) -> ConstraintRankEvidence {
-        let n=metric.count, m=ids.count
+    static func compute(rows: [Double], ids: [UInt64], metric: [Double], policy: ConstraintSolvePolicy, work: inout NumericalWork,
+                        activeCoordinates: [Int]? = nil) throws(ConstraintError) -> ConstraintRankEvidence {
+        let width=metric.count, n=activeCoordinates?.count ?? width, m=ids.count
         let mn=try ConstraintArithmetic.product(m,n)
-        guard rows.count == mn else { throw .invalidDimensions }
+        guard rows.count == (try ConstraintArithmetic.product(m,width)) else { throw .invalidDimensions }
         var basis=[Double](repeating:0,count:mn), scratch=[Double](repeating:0,count:n)
         var selected: [Int]=[], dependent: [UInt64]=[]; selected.reserveCapacity(m); dependent.reserveCapacity(m)
         for row in 0..<m {
             try ConstraintArithmetic.check(policy.evaluation)
             var original=0.0
             for i in 0..<n {
+                let column=activeCoordinates?[i] ?? i
                 try ConstraintArithmetic.charge(5,&work)
-                scratch[i]=try ConstraintArithmetic.finite(rows[row*n+i]/metric[i].squareRoot()); original+=scratch[i]*scratch[i]
+                scratch[i]=try ConstraintArithmetic.finite(rows[row*width+column]/metric[column].squareRoot()); original+=scratch[i]*scratch[i]
             }
             original=try ConstraintArithmetic.finite(original.squareRoot())
             for _ in 0..<2 {
