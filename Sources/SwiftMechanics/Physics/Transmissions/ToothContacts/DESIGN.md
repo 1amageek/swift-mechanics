@@ -1,0 +1,71 @@
+# ToothContacts
+
+## Purpose and Scope
+Parent [Transmissions](../DESIGN.md); children none. IM47 selected TR-012 owns driven tooth-resolved compliant evolution from externally supplied, explicitly bounded tooth proxies. No CAD shape is invented. Selected model: fixed spatial root and two direct scalar revolute shafts, constant generalized drive/load, finite sphere/box tooth proxies and undamped linear normal-only contacts. Full IM47 and arbitrary gear geometry/contact/runtime bytecheckpoint coupling remain open.
+
+## Responsibilities and Boundaries
+External authority supplies complete tooth proxy geometry, actual body-local placements, source/revision, representation quality, resolution and mesh-law coefficients. This component validates those records against original tree/frame/layout, bounds approximation, enumerates complete cross-shaft pairs and owns value accepted history. Collision owns witnesses; ContactLaws owns constitutive forces; Dynamics owns full inertia/force solve. No ideal ratio, inferred exact CAD shape, friction, bearing-force capacity, CCD or hard-impact model is substituted. Frozen exact-only CoupledContactResponse rejects approximation; this separate explicitly compliant force evolution uses actual original forces rather than weakening that adapter.
+
+## Related Designs
+| Design | Relationship | Contract Used | Summary | Cautions |
+|---|---|---|---|---|
+| [Parent](../DESIGN.md) | parent | IM47 fidelity boundary | Tooth geometry owner | No ideal-coupling inference |
+| [Collision](../../Collision/Geometry/DESIGN.md) | depends on | CollisionGeometryQuerying | Original witness | Box-box/degeneracy refused |
+| [ContactLaws](../../ContactLaws/Response/DESIGN.md) | depends on | ContactLawEvaluating/history | Normal compliance | Selected no-history-dependent law |
+| [Joints](../../../Modeling/Joints/ArticulatedTrees/DESIGN.md) | depends on | tree evaluation/retraction | Actual body poses/rates | Fixed scalar revolute domain |
+| [Dynamics](../../Dynamics/RigidEquations/DESIGN.md) | depends on | RigidEquationKernel | Original force/energy | Full source retained |
+| [DenseDynamics](../../Dynamics/DenseDynamics/DESIGN.md) | depends on | RigidDynamicsSolving | Actual full mass solve | No backend fallback |
+| [Tests](../../../../../Tests/MechanicsToothContactTests/DESIGN.md) | used by | independent proof | Owned selected Native | Profiles root-owned |
+
+## Architecture
+```text
+external tooth source / tree / full inertias / complete pair catalog
+ -> bounded canonical model admission at reference coordinates
+ -> actual snapshot / moved proxy -> injected witness + builtin original witness check
+ -> injected law + builtin original law/source/history check
+ -> actual pair force/wrench/power -> original rigid system -> injected dense solve
+ -> builtin original inertia/energy acceptance
+ -> symplectic Euler v then actual public joint retraction q
+ -> real endpoint geometry/forces/original acceleration + issued trial histories
+ -> one immutable accepted value, or typed failure retaining original prefix
+```
+
+## Contracts and Invariants
+Public ToothContactEvolving requires initial(time:q:v:evaluationTimeStep:policy:work:), step(accepted:timeStep:policy:work:), and advance(accepted:to:timeStep:policy:work:). ReferenceToothContactEvolution retains immutable ToothContactModel and injected collision/law/dynamics ports; original geometric/constitutive/physical acceptance is builtin and cannot be overridden. Model admission is its typed constructor with caller policy/work. Public records retain complete source, state, original issued ContactHistory inventory, physical observations, energy, accumulated drive work/dissipation and sequence. Result constructors are sealed to the component.
+
+ToothProxyBinding retains actual CollisionProxy prototype, toothID and colliderToBody. At model.referenceCoordinates actual world pose must agree with prototype.pose; subsequent poses derive only from original body motion and local placement. Model SourceProvenance source/revision, full tree public bodies/joints/layout/root/frame, reference coordinates, inertias, proxy/filter/geometry/source quality, pair order/full law, drive and joint policy bind continuation. Same IDs cannot rebind changed source. Count/byte/work/storage checks precede metadata, equality, arrays or suppliers. Catalog includes every cross-shaft pair exactly once. Excluded filters, unknown bodies/frames, duplicate collider/contact/tooth identities and unsupported geometry/laws refuse explicitly. Approximation and sampled feature spacing are retained as caller-declared data, bounded before use; they are not original CAD validation evidence.
+
+Each force uses original witness n, pA,pB and separation; relative point velocity is full original body twist at those world points. Pair force is equal/opposite with original world-point wrenches mapped by RigidEquationKernel. Report original normal force, tangential slip velocity, separation, contact torque in actual generalized layout, world loads and power. With zero cohesion/friction/resistance, U=k max(-s,0)^2/2 and force Fn=k max(-s,0). No unselected material branch is silently replaced. Proxy error does not change returned nominal force; fidelity is reported separately.
+
+One step uses original start acceleration a0: v1=v0+h*a0, then q1 from JointMotionEvaluator.integrating with actual admitted manifold and v1. It recomputes actual endpoint witness/law, original acceleration and energy before publication. This is explicit first-order symplectic Euler for compliant mechanics, not a CCD/exact ratio integrator. Endpoint forces use the interval's accepted ContactHistory at t0 and real predicted endpoint kinematics; actual trial history advances exactly once to t1. Start diagnostics are discarded trials; no fake history constructor or sequence overwrite. Initial history is issued by the real supplier; initialized acceleration is computed from q/v rather than accepting an arbitrary stored acceleration.
+
+Constant generalized drive work is exact drive·(q1-q0) for admitted scalar revolute coordinates. Contact U is counted once per pair, never twice across body loads. Full body K and Kdot come from original Dynamics energy. Kdot must equal drive power plus actual contact power at each sample. Cumulative energy defect K+U-(K0+U0)-driveWork+dissipation is reported and bounded by caller maximumEnergyDefect. Finite-step truncation is explicit and independently refined; nominal geometry and external shape approximation are separate errors.
+
+## Runtime Flows
+Initial source admission -> actual history issuance -> physical force/solve -> immutable initial value. Step source/context association -> actual start solve -> retraction -> actual endpoint solve/history/source acceptance -> energy defect -> publication. Advance publishes each successful step as an accepted immutable prefix; a later failure carries that exact prefix and executed work, never rolls it back. Source mismatch/cancel/reset/refusal cannot publish a failed step. Fresh service with a fully identical model accepts saved values and reproduces exact evolution; changed source is refused. No general Runtime codec contributor or RNG claim is made because this selected deterministic value owner consumes neither.
+
+## State, Ownership, and Lifecycle
+Immutable Sendable model/state/sample reference owners hold only let fields, bounded COW arrays and original source. Mutable ledgers/workspaces are call-local exclusive values; no shared cache or platform branch. Noninline phases separate witness/law, rigid solve, endpoint/retraction and future publication. Original131072byte profile remains fixed; Native proof does not establish stack margin on other profiles. State input remains readable through any failed callback and all fresh-owner operations.
+
+## Failure, Concurrency, and Constraints
+Typed ToothContactError/Failure preserve collision, contact, dynamics, joint/core/numerical failures and known accepted prefix. Caller owns maximum teeth/contacts/identifier bytes/steps, maximum source deviation/feature spacing, SI geometry/force/power tolerances, maximum energy defect, dynamic solve/admission, and cancellation. ToothContactWork uses NumericalBudget scalar/operation/iteration units plus a caller maximum supplier calls; all lower units are attributed to this cumulative scalar-work envelope with actual typed prefix. Opaque callbacks get a seeded single remaining-budget snapshot; known prefixes merge on success AND failure even after cancel. Reset/budget replacement reports unavailable supplier work and stops once. Multi-ledger kernel assembly reserves its caller boundary, partitions one remaining allowance before simultaneous local ledgers, seeds each inside its allocated share and retains LoadWork prefix. Fixed original Joints work is precharged conservatively before its non-ledger callback. No unknown failed-work retry or silent capability fallback.
+
+## Verification and Change Impact
+[Owned tests](../../../../../Tests/MechanicsToothContactTests/DESIGN.md) independently derive force, torque, slip/separation, full inertia acceleration and energy/work from physical two-shaft tooth geometry and actual drive/load. Mesh proof uses externally defined nonuniform tooth-flank patch refinement with explicit compliance quadrature and independently evaluated limiting torque; time proof refines actual driven states and energy defect. Failure/source/proxy error/unsupported pair, capacity/reset/cancel, accepted-prefix/rollback and fresh replay are behavioral obligations. Owner isolated Native uses baseline209ef09 with1200second setup and separate240second execution; root owns canonical and original-profile integration. No broader requirement success is inferred.
+
+Owned review fixed two concrete pre-verification findings: complete dissipation authority is required before trapezoidal work accumulation (no optional zero substitution), and metadata comparison work is charged by bounded repeated-byte incidence rather than an unrelated full-metadata square. Source/budget/acceptance operation order is unchanged. Production has no shared mutable stored state or conditional synchronization; the exclusive value ledger owns local work. Test fault state uses the same Mutex owner/read/mutation contract on all targets.
+
+
+### AF28 selected owner Native evidence
+Exact Swift6.4.0 release, baseline209ef09 plus only the owned source/test overlays. Private manifest registers original Collision, ContactLaws, Dynamics and Transmissions test targets and this new target; production/executable dependencies and flags are unchanged. Setup uses `swift build --build-tests --build-path .build/native -j 4` with1200second process-group deadline; final behavior uses `swift test --skip-build --build-path .build/native -j 4` with240second deadline. Both completed exit0. Test-only source spelling and a multiline operator parser finding were corrected before the final run; no physical equation/tolerance change was made.
+
+Initial physical proof: new11 declarations/14 parameter cases in2 suites plus original69 declarations in17 suites, all passing. N=2,4,8 complete sampled cross-pair catalogs converge in original transmitted torque against an independent256x256 scalar flank integral; h=.002,.001,.0005 driven q/v and energy defects refine against independent scalar RK4. Other cases execute original witness points/normal/force/torque/slip, separated loaded motion, full K/Kdot/drive work, exact fresh accepted-value replay, source/inertia mismatch, missing catalog, fidelity limits, unsupported damping, capacity, energy refusal, returned wrong physical suppliers, reset and late caller/Task cancellation with known-prefix preservation. This proves the selected external sampled proxy model, not exact CAD teeth, hard-impact/CCD, frictional evolution, a universal gear ratio or Runtime bytecheckpoint coupling.
+
+Logs: `.build/af28-independent-tooth/.build/af28-tooth-native-setup-3.log` and `.build/af28-independent-tooth/.build/af28-tooth-native-tests.log`. Original-profile public/runtime/131072byte stack qualification remains root-owned and is not inferred from Native.
+
+
+### Known seed preservation
+Supplier-boundary overhead and local ledger seeds are distinct executed costs. Before an opaque callback, numeric/collision locals have executed one operation and one iteration; contact locals have executed one operation. Valid supplier ledgers absorb their complete prefix once. A reset or changed/invalid ledger absorbs only the independently known seed, reports unavailable remaining supplier work and never retries. Seed initialization failures occur before supplier entry and therefore absorb the actual trusted local prefix, including an operation completed before iteration/cancellation refusal. Kernel assembly applies the same rule jointly: actual numeric/load initialization prefixes on initialization failure; exactly two known operations and one known iteration on an invalid post-callback ledger; complete validated prefix on ordinary success/failure. All prefixes remain inside the original single remaining allowance; no seed is charged twice and no refused iteration is invented. The call-local assembly phase is component-internal so the owner test can execute its original admission/seed path directly; no public producer authority changes.
+
+
+Known-seed finding-only proof: the actual pre-fix Native RED executes numeric/collision/contact resets and numeric/collision/kernel-assembly partial initialization (5 declarations/6 cases), reporting6 expectation failures. The corrected focused GREEN executes all owned17 declarations/22 cases in3 suites, including the prior independent physical/refinement/replay evidence and valid numeric full-prefix success/throw exactly exhausting an operations5/iterations2 envelope. Setup exit0 with1200second bound; separate behavior exit0 with240second bound. Logs: `.build/af28-independent-tooth/.build/af28-seed-red-tests-2.log`, `af28-seed-green-setup-2.log` and `af28-seed-green-tests.log` in the same log directory. Root and owner finding-only rechecks confirm original split budgets, equations, typed failure classification and no new mutable shared state; no further whole review was performed. Previous unchanged legacy-target evidence remains separately valid.
