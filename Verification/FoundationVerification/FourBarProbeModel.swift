@@ -20,9 +20,11 @@ struct FourBarProbeModel: Sendable {
     let crankIndex: Int
     let couplerIndex: Int
     let rockerIndex: Int
+    let polarScale: Double
 
     @inline(never)
-    init() throws {
+    init(planar: Bool = false, polarScale: Double = 1) throws {
+        self.polarScale = polarScale
         let tolerance = try NumericalTolerance(absolute: 1e-12, relative: 1e-12)
         let inertiaPolicy = try InertiaValidationPolicy(symmetry: tolerance, physicalityRelative: 1e-12)
         let source = try SourceProvenance(source: "four-bar-public-oracle", revision: 1)
@@ -42,6 +44,13 @@ struct FourBarProbeModel: Sendable {
         func body(_ id: EntityID, length: Double, pose: RigidTransform, mode: BodyMotionMode) throws -> MechanicalBody {
             let calculator: any MassPropertyCalculating = AnalyticMassCalculator()
             let box = try calculator.properties(of: .box(width: length, depth: 0.1, height: 0.1), density: 100, policy: inertiaPolicy)
+            if planar {
+                let properties = try MassProperties2D(mass: box.mass, centerX: length/2, centerY: 0,
+                    polarInertiaAtCenter: box.inertiaAtCenter.m22*polarScale)
+                return .planar(try BodyRecord2D(id: id, frame: EntityID(kind: .frame, key: id.key+"-frame"), mode: mode,
+                    bodyToWorld: PlanarPose(x: pose.translation.x, y: pose.translation.y, angle: 2*atan2(pose.rotation.z, pose.rotation.w)),
+                    representations: BodyRepresentations(), inertia: InertialRepresentation2D(properties: properties, provenance: source, quality: .exact)))
+            }
             let inertia = try InertialRepresentation3D(properties: MassProperties3D(mass: box.mass,
                 centerOfMass: Vector3(length/2, 0, 0), inertiaAtCenter: box.inertiaAtCenter, policy: inertiaPolicy),
                 provenance: source, quality: .exact)
@@ -117,9 +126,21 @@ struct FourBarProbeModel: Sendable {
     func originalKineticEnergy(q: [Double], v: [Double]) -> Double {
         let a = q[crankIndex], b = a + q[couplerIndex]
         let u = v[crankIndex], w = u + v[couplerIndex], z = v[rockerIndex]
-        let crankInertia = 1.01 / 12, longRodInertia = 8.02 / 12
+        let crankInertia = polarScale * 1.01 / 12, longRodInertia = polarScale * 8.02 / 12
         let couplerSpeedSquared = u * u + w * w + 2 * cos(a - b) * u * w
         return 0.5 * ((0.25 + crankInertia) * u * u + 2 * couplerSpeedSquared
             + longRodInertia * w * w + (2 + longRodInertia) * z * z)
+    }
+
+    /// Independent Euler-Lagrange generalized force from analytic rod kinetic energy.
+    func originalInertiaForce(q: [Double], v: [Double], acceleration: [Double]) -> [Double] {
+        let d = q[couplerIndex], u = v[crankIndex], w = v[couplerIndex]
+        let first = polarScale*1.01/12, second = polarScale*8.02/12
+        let aa = 4.25+first+second+4*cos(d), ad = 2+second+2*cos(d), dd = 2+second
+        var result = [Double](repeating: 0, count: 3)
+        result[crankIndex] = aa*acceleration[crankIndex]+ad*acceleration[couplerIndex]-4*sin(d)*u*w-2*sin(d)*w*w
+        result[couplerIndex] = ad*acceleration[crankIndex]+dd*acceleration[couplerIndex]+2*sin(d)*u*u
+        result[rockerIndex] = dd*acceleration[rockerIndex]
+        return result
     }
 }

@@ -5,7 +5,7 @@ enum GeometricEvolutionProbeContext {
     typealias Session = RuntimeSession<ReferenceRuntimeCheckpointHandler<IntegrationContinuationProvider, ReferenceModelRevisionUpdater>>
 
     @inline(never)
-    static func equation(_ fixture: FourBarProbeModel) throws -> GeometricMechanismEquation {
+    static func equation(_ fixture: FourBarProbeModel, physical: Bool = false) throws -> GeometricMechanismEquation {
         let system = try GeometricProbeContext.system(fixture), projection = try GeometricProbeContext.policy()
         let tolerance = try LinearTolerance<Double>(absoluteResidual: 1e-10, relativeResidual: 1e-10, pivotThreshold: 1e-13)
         let position = projection.constraints
@@ -21,15 +21,23 @@ enum GeometricEvolutionProbeContext {
             constraints: constraints, maximumCoordinates: 3, maximumRows: 3, originalTolerance: 1e-8)
         var drive = [Double](repeating: 0, count: system.layout.scales.count)
         drive[fixture.crankIndex] = 1
+        if physical {
+            return try GeometricMechanismEquation(identity: "four-bar-torque-public", geometry: system, drive: drive,
+                policy: solve, projection: projection, maximumStageChartCorrection: 0.05,
+                publicationBudget: NumericalBudget(scalarStorage: 2_000_000, arithmeticOperations: 100_000_000, iterations: 100_000),
+                admission: MechanismProbeContext.admission(), maximumIdentityBytes: 65536,
+                physicalKernel: RigidEquationKernel(), physicalSolver: MassWeightedMechanismSolver(
+                    physicalDynamics: DenseRigidDynamics(physicalEquations: RigidEquationKernel()), physicalEquations: RigidEquationKernel()))
+        }
         return try GeometricMechanismEquation(identity: "four-bar-torque-public", geometry: system, drive: drive,
             policy: solve, projection: projection, maximumStageChartCorrection: 0.05,
             publicationBudget: NumericalBudget(scalarStorage: 2_000_000, arithmeticOperations: 100_000_000, iterations: 100_000),
             admission: MechanismProbeContext.admission(), maximumIdentityBytes: 65536)
     }
 
-    static func policy(_ equation: GeometricMechanismEquation) throws -> ExplicitIntegrationPolicy {
+    static func policy(_ equation: GeometricMechanismEquation, step: Double = 0.01) throws -> ExplicitIntegrationPolicy {
         let scales = try equation.descriptor.dimensions.map { try ODEErrorScale(dimension: $0, absoluteSI: 1e-7, relative: 0) }
-        return try ExplicitIntegrationPolicy(method: .classicalRK4, initialStep: 0.01, minimumStep: 1e-8, maximumStep: 0.01,
+        return try ExplicitIntegrationPolicy(method: .classicalRK4, initialStep: step, minimumStep: 1e-8, maximumStep: step,
             safety: 0.8, minimumFactor: 0.1, maximumFactor: 2, scales: scales, maximumContinuationBytes: 32768,
             budget: IntegrationBudget(maximumCoordinates: 6, maximumAttempts: 100, maximumAcceptedSteps: 100,
                 maximumOuterArithmetic: 1_000_000,

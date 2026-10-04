@@ -13,6 +13,7 @@ struct FoundationVerification {
             try verifyCollision()
             try verifyDynamics()
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyPlanarPhysicalLower() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyClosedLoopReactions() }
             try verifyFlexible()
             try verifyContactLaws()
             try verifyMaterialSites()
@@ -21,6 +22,7 @@ struct FoundationVerification {
             try verifyConstraints()
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyGeometricConstraints() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyGeometricEvolution() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyPlanarEvolution() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyMovingBaseEvolution() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyLoadedSleepMechanisms() }
             try verifyTransmissions()
