@@ -2,7 +2,8 @@ internal enum GeometricMetadata {
     static func encode(model:CompiledMechanicalModel,layout:ConstraintCoordinateLayout,relations:[GeometricRelation],minimum:[Double],maximum:[Double],
                        minimumTime:Double,maximumTime:Double,limit:Int,work:inout NumericalWork,prescribedMotion:PrescribedMotionProgram? = nil) throws(GeometricConstraintError) -> String {
         // First pass bounds encoded bytes. No identifier or string buffer is allocated before the bound passes.
-        var count=24
+        let prefix=model.tree.bodies.first?.dimension == .planar ? "body-frame-planar-holonomic-v4" : (prescribedMotion == nil ? "body-frame-holonomic-v2" : "body-frame-holonomic-v3")
+        var count=max(24,prefix.utf8.count)
         func walk(_ emit:(UInt64)->Void,_ identifier:(String)->Void) {
             func vector(_ v:Vector3) { emit(v.x.bitPattern);emit(v.y.bitPattern);emit(v.z.bitPattern) }
             func pose(_ p:RigidTransform) { vector(p.translation);emit(p.rotation.w.bitPattern);emit(p.rotation.x.bitPattern);emit(p.rotation.y.bitPattern);emit(p.rotation.z.bitPattern) }
@@ -45,7 +46,7 @@ internal enum GeometricMetadata {
         guard !overflow,count <= limit else { throw .capacityExceeded }
         try GeometricArithmetic.numeric { () throws(NumericalError) -> Void in try work.requireStorage(try NumericalWork.sum(work.peakScalarStorage,count/8+1)) }
         try GeometricArithmetic.charge(count,&work)
-        var result=prescribedMotion == nil ? "body-frame-holonomic-v2" : "body-frame-holonomic-v3";result.reserveCapacity(count)
+        var result=prefix;result.reserveCapacity(count)
         walk({ value in result.append(":");let raw=String(value,radix:16);result.append(String(repeating:"0",count:16-raw.count));result.append(raw) },{ value in
             result.append(":");result.append(String(value.utf8.count,radix:16));result.append(":")
             for byte in value.utf8 { let raw=String(byte,radix:16);if raw.count == 1 { result.append("0") };result.append(raw) }

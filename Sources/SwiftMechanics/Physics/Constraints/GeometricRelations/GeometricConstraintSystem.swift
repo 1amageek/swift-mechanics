@@ -1,4 +1,4 @@
-/// Immutable equation authority bound to an actual spatial compiled tree.
+/// Immutable equation authority bound to an actual compiled tree with admitted dimension geometry.
 public struct GeometricConstraintSystem: Sendable {
     public let model: CompiledMechanicalModel
     public let layout: ConstraintCoordinateLayout
@@ -33,8 +33,7 @@ public struct GeometricConstraintSystem: Sendable {
                 try NumericalWork.sum(try NumericalWork.product(b,m),try NumericalWork.sum(b+p+n,m)))))
         }
         try GeometricArithmetic.charge(admissionWork,&work)
-        // FIXME(INCOMPLETE_IMPLEMENTATION): Planar/disconnected and fully prescribed floating-root partitions require independent physical and coordinate authority evidence. This path admits spatial connected trees and fixed-root prescribed parent-anchor bases only.
-        guard tree.bodies.allSatisfy({$0.dimension == .spatial}) else { throw .unsupportedDomain }
+        try GeometricDimensionAdmission.validate(model,relations:relations,program:prescribedMotion)
         try GeometricPrescribedBinding.validate(model,program:prescribedMotion,work:&work)
         for i in 0..<p { guard minimumPosition[i].isFinite,maximumPosition[i].isFinite,minimumPosition[i] <= maximumPosition[i] else { throw .invalidInput } }
         for i in 0..<n {

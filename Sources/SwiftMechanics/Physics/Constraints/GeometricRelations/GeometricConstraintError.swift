@@ -1,5 +1,6 @@
 public enum GeometricConstraintError: Error, Sendable {
     case invalidInput, invalidShape, staleSource, outsideDomain, unsupportedDomain, invalidChart
+    case unsupportedPhysicalRows
     case invalidGeometry, nonFiniteResult, capacityExceeded, cancelled, rankChanged, zeroRank
     case branchViolation(row: UInt64)
     case originalRejected(row: UInt64)

@@ -9,18 +9,28 @@ internal enum GeometricFixtures {
     static func pose(_ x:Double=0,_ y:Double=0,_ angle:Double=0) throws -> RigidTransform {
         RigidTransform(rotation:try UnitQuaternion(axis:.unitZ,angle:angle),translation:try Vector3(x,y,0))
     }
-    static func compile(names:[String],poses:[RigidTransform],joints:[JointRecord],q:[Double],v:[Double],floating:Bool=false,jointCoordinates:[String:([Double],[Double])]?=nil,prescribed:[PrescribedAnchorState]=[],modes:[BodyMotionMode]?=nil) throws -> CompiledMechanicalModel {
+    static func compile(names:[String],poses:[RigidTransform],joints:[JointRecord],q:[Double],v:[Double],floating:Bool=false,jointCoordinates:[String:([Double],[Double])]?=nil,prescribed:[PrescribedAnchorState]=[],modes:[BodyMotionMode]?=nil,planar:Bool=false) throws -> CompiledMechanicalModel {
         let tolerance=try NumericalTolerance(absolute:1e-9,relative:1e-9),ip=try InertiaValidationPolicy(symmetry:tolerance,physicalityRelative:0)
-        let properties=try MassProperties3D(mass:1,centerOfMass:.zero,inertiaAtCenter:Matrix3(1,0,0,0,1,0,0,0,1),policy:ip)
         var bodies:[MechanicalBody]=[]
         for i in names.indices {
-            bodies.append(.spatial(try BodyRecord3D(id:id(.body,names[i]),frame:id(.frame,names[i]),mode:modes?[i] ?? (i == 0 && !floating ? .static : .dynamic),
-                bodyToWorld:poses[i],representations:BodyRepresentations(),inertia:InertialRepresentation3D(properties:properties,
-                provenance:SourceProvenance(source:"geometry-test",revision:1),quality:.exact))))
+            let mode=modes?[i] ?? (i == 0 && !floating ? .static : .dynamic)
+            if planar {
+                let properties=try MassProperties2D(mass:1,centerX:0,centerY:0,polarInertiaAtCenter:1)
+                bodies.append(.planar(try BodyRecord2D(id:id(.body,names[i]),frame:id(.frame,names[i]),mode:mode,
+                    bodyToWorld:PlanarPose(x:poses[i].translation.x,y:poses[i].translation.y,angle:poses[i].rotation.rotationVector().z),
+                    representations:BodyRepresentations(),inertia:InertialRepresentation2D(properties:properties,
+                    provenance:SourceProvenance(source:"planar-geometry-test",revision:1),quality:.exact))))
+            } else {
+                let properties=try MassProperties3D(mass:1,centerOfMass:.zero,inertiaAtCenter:Matrix3(1,0,0,0,1,0,0,0,1),policy:ip)
+                bodies.append(.spatial(try BodyRecord3D(id:id(.body,names[i]),frame:id(.frame,names[i]),mode:mode,
+                    bodyToWorld:poses[i],representations:BodyRepresentations(),inertia:InertialRepresentation3D(properties:properties,
+                    provenance:SourceProvenance(source:"geometry-test",revision:1),quality:.exact))))
+            }
         }
+        let base:BaseLayout = floating ? (planar ? .planarFloating : .spatialFloating) : .fixed
         let orderedJoints=joints.sorted { $0.id.key < $1.id.key }
         let tree=try KinematicTree(bodies:bodies.map { try $0.kinematicBody() },joints:orderedJoints,root:id(.body,names[0]),
-            rootBase:floating ? .spatialFloating : .fixed,worldFrame:id(.frame,"world"),revision:1,
+            rootBase:base,worldFrame:id(.frame,"world"),revision:1,
             capacity:KinematicCapacity(maximumBodies:12,maximumVelocities:24,maximumJacobianScalars:5000))
         var position=q,velocity=v
         if let coordinates=jointCoordinates {
@@ -35,7 +45,7 @@ internal enum GeometricFixtures {
         }
         let state=try KinematicState(revision:1,time:0,q:position,v:velocity,acceleration:[Double](repeating:0,count:velocity.count),prescribedAnchors:prescribed)
         let descriptor=try MechanicalDescriptor(identity:"geometric-fixture",revision:1,bodies:bodies,joints:orderedJoints.map { MechanicalJoint(record:$0,authority:$0.manifold.velocityCount == 0 ? .fixed : .dynamicState) },
-            root:id(.body,names[0]),rootBase:floating ? .spatialFloating : .fixed,rootAuthority:floating ? .dynamicState : .fixed,
+            root:id(.body,names[0]),rootBase:base,rootAuthority:floating ? .dynamicState : .fixed,
             worldFrame:id(.frame,"world"),initialState:state,representationRequirements:[],features:[],extensions:[])
         let policy=try CompilationPolicy(kinematicCapacity:KinematicCapacity(maximumBodies:12,maximumVelocities:24,maximumJacobianScalars:5000),
             jointPolicy:JointEvaluationPolicy(quaternionTolerance:tolerance,chartRankRelative:1e-10,characteristicLengthMeters:1),inertiaPolicy:ip,
@@ -50,17 +60,18 @@ internal enum GeometricFixtures {
             parentAnchor:JointAnchor(frame:id(.frame,key+"-parent"),placement:.fixed(parentPose)),
             childAnchor:JointAnchor(frame:id(.frame,key+"-child"),placement:.fixed(childPose)),manifold:JointManifold(specification))
     }
-    static func fourbar(angle:Double=0.6,nonidentityFrame:Bool=true) throws -> CompiledMechanicalModel {
+    static func fourbar(angle:Double=0.6,nonidentityFrame:Bool=true,planar:Bool=false) throws -> CompiledMechanicalModel {
         let child=try nonidentityFrame ? pose(0.3,0.2,0.2) : RigidTransform.identity,a=try pose(0,0,angle),c=try pose(2,0,angle)
         let b=try pose(cos(angle),sin(angle),0).composed(with:child.inverted())
         let joints=[try joint("a",parent:"ground",child:"crank",specification:.revolute(axis:.unitZ)),
                     try joint("c",parent:"ground",child:"rocker",specification:.revolute(axis:.unitZ),parentPose:pose(2,0)),
                     try joint("b",parent:"crank",child:"coupler",specification:.revolute(axis:.unitZ),parentPose:pose(1,0),childPose:child)]
-        return try compile(names:["ground","crank","rocker","coupler"],poses:[.identity,a,c,b],joints:joints,q:[],v:[],jointCoordinates:["a":([angle],[0.7]),"c":([angle],[0.7]),"b":([-angle],[-0.7])])
+        return try compile(names:["ground","crank","rocker","coupler"],poses:[.identity,a,c,b],joints:joints,q:[],v:[],jointCoordinates:["a":([angle],[0.7]),"c":([angle],[0.7]),"b":([-angle],[-0.7])],planar:planar)
     }
     static func layout(_ model:CompiledMechanicalModel,scales:[Double]? = nil) throws -> ConstraintCoordinateLayout {
         var dimensions:[PhysicalDimension]=[]
         if model.tree.rootBase == .spatialFloating { dimensions += [.length,.length,.length,.angle,.angle,.angle] }
+        if model.tree.rootBase == .planarFloating { dimensions += [.length,.length,.angle] }
         for joint in model.tree.joints {
             switch joint.manifold.kind {
             case .spherical: dimensions += [.angle,.angle,.angle]
