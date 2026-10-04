@@ -16,6 +16,8 @@ actual compiler tree -> independent sessions -> inout trial + actual counter sch
 ```
 
 ## Contracts and Invariants
+AF23 moving-anchor evidence uses actual compiler/Joints evaluation and required Runtime admission with a translating/rotating prescribed parent frame. Tests prove full derivatives and time association, q/v/a and all anchor scalar bit patterns, signed zeros/quaternion sign and exact v2 bytes, frozen v1 bytes, reject/cancel/RNG rollback, workspace reset, fresh-owner restore followed by identical advancement, replacement source comparison and scalar/metadata caps. Malformed/nonunit/stale/duplicate/unknown/missing samples produce no accepted state. These tests prove Runtime retention/admission; consumer law generation and geometric evolution remain separate owners. Added @Test functions have explicit availability guards; suites remain unannotated.
+
 Admission authority regression runs the required contributor validator and actual model.makeState rejection paths directly through ReferenceRuntimeCheckpointHandler. Neither failure publishes RuntimeAcceptedState; subsequent valid admission preserves exact checkpoint, physical state, RNG and accepted sequence. Existing trial rejection, ticket replacement, restart and model replacement tests remain the session behavior oracle. Shared-module token constructor access is separately checked by a negative compile probe.
 
 Each test owns its model/state/provider; cross-task gates/counters use Mutex or actors. Tests compare real data/trajectory rather than record existence. Codec malformed data and contributor omission never produce accepted state. Source inputs remain unchanged.
@@ -41,3 +43,5 @@ Atomic replacement proof uses real compiled hinge-to-floating chart changes and 
 Additive qualification: timeout-wrapped `.build/cohort-integration` AF16 focused Native run passed all twenty-one Runtime cases, including five replacement cases, and five IntegrationFailure cases. Three original public profile probes exited 0 for replacement and nested unknown-work propagation. Logs `.build/af16-runtime-native.log` and `.build/af16-{native,wasm,embedded}-run.log` are local execution evidence. No allocator/latency claim.
 
 AR01.8 constructor access proof is recorded by [Compiler tests](../MechanicsCompilerTests/DESIGN.md). The added no-publication behavioral case and unchanged session cases require the root frozen-snapshot Native suite; three-profile runtime evidence remains separately owned by root.
+
+AF23 frozen Native qualification: the exact Swift 6.4.0 release frontend ran `swift test -j 4 --filter MechanicsRuntimeTests` under a 240-second deadline. All 31 tests in seven suites passed with exit 0 (`.build/af23-runtime-native.log`), including nine new complete-anchor cases. This evidence covers Runtime retention and actual model admission on Native; new moving-anchor public WASM/Embedded behavior and prescribed-law dynamics remain separately unqualified until integrated execution.

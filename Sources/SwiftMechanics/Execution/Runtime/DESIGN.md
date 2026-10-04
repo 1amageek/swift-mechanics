@@ -9,7 +9,7 @@ Numerical integration, dynamics, controllers and observations consume this trans
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Compiler dependency Joints](../../Modeling/Joints/DESIGN.md) | depends on | Raw q/v state and fixed-anchor convention | Actual Compiler state values | Dynamic moving anchors remain separately qualified |
+| [Compiler dependency Joints](../../Modeling/Joints/DESIGN.md) | depends on | Raw q/v state and complete prescribed-anchor convention | Actual Compiler state values | Dynamic moving anchors remain separately qualified |
 | [StateRecords](StateRecords/DESIGN.md) | child | Accepted physical/contributor/random state and capacities | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
 | [Transactions](Transactions/DESIGN.md) | child | Exclusive trial and cooperative safe points | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
 | [Checkpoints](Checkpoints/DESIGN.md) | child | Bounded checkpoint admission and continuation | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
@@ -47,3 +47,7 @@ Mutex/strict UTF8-dependent public paths declare macOS15/iOS18/tvOS18/watchOS11 
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+### AF23 complete-anchor lower handoff
+
+[StateRecords](StateRecords/DESIGN.md), [Transactions](Transactions/DESIGN.md), [Checkpoints](Checkpoints/DESIGN.md) and [Sessions](Sessions/DESIGN.md) own the additive bounded complete-anchor continuation and exact physical-bit publication contracts. Core Geometry supplies public validated exact unit-component restoration. Existing zero-anchor v1 byte compatibility is retained; moving-anchor v2, accepted trial/reset/restart and replacement paths require actual component qualification before upper imposed-motion use. Format support does not assert that samples follow a time law; the corresponding mechanical consumer owns contextual trajectory association. The frozen AF23 Native Runtime test owner passed 31 tests in seven suites with the exact Swift 6.4.0 release frontend and a 240-second deadline (exit 0, `.build/af23-runtime-native.log`). Nine new cases execute complete-anchor success, actual compiled-model refusals, exact raw-bit publication, v1/v2 restart, capacity and rollback. This qualifies the lower Native handoff; new moving-anchor public WASM/Embedded proof remains integrated upper work.

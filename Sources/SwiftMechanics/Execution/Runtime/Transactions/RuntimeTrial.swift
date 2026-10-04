@@ -5,6 +5,7 @@ public struct RuntimeTrial: Sendable {
     private var v: [Double]
     private var acceleration: [Double]
     private var time: Double
+    private var prescribedAnchors:[PrescribedAnchorState]
     private var contributors: [RuntimeContributorState]
     private var random: RuntimeRandomState
     private let capacity: RuntimeCapacity
@@ -12,17 +13,23 @@ public struct RuntimeTrial: Sendable {
     internal init(admission: _RuntimeTrialAdmission) throws(RuntimeFailure) {
         let accepted = admission.accepted, capacity = admission.capacity
         let state = accepted.physical.state
-        let count = try RuntimeCounts.physical(q: state.q.count, v: state.v.count)
+        let count = try RuntimeCounts.physical(state:state)
         guard count <= capacity.maximumPhysicalScalars else { throw RuntimeFailure(.capacityExceeded, message: "Physical trial scalar slots exceed capacity.") }
+        _=try RuntimeCounts.anchorMetadata(state:state,maximum:capacity.maximumMetadataBytes)
         q = state.q; v = state.v; acceleration = state.acceleration; time = state.time
+        prescribedAnchors=state.prescribedAnchors
         contributors = accepted.checkpoint.contributors; random = accepted.checkpoint.random; self.capacity = capacity; binding = nil
     }
     internal mutating func reset(admission: _RuntimeOperationAdmission) throws(RuntimeFailure) {
         let accepted = admission.accepted
         let state = accepted.physical.state
-        guard q.count == state.q.count, v.count == state.v.count, acceleration.count == state.acceleration.count else { throw RuntimeFailure(.invalidOwnerAccess, message: "Reserved workspace layout changed.") }
+        let count=try RuntimeCounts.physical(state:state)
+        guard count <= capacity.maximumPhysicalScalars,q.count == state.q.count, v.count == state.v.count,
+              acceleration.count == state.acceleration.count,prescribedAnchors.count == state.prescribedAnchors.count else { throw RuntimeFailure(.invalidOwnerAccess, message: "Reserved workspace layout changed.") }
+        _=try RuntimeCounts.anchorMetadata(state:state,maximum:capacity.maximumMetadataBytes)
         for i in q.indices { q[i] = state.q[i] }
         for i in v.indices { v[i] = state.v[i]; acceleration[i] = state.acceleration[i] }
+        for i in prescribedAnchors.indices { prescribedAnchors[i]=state.prescribedAnchors[i] }
         time = state.time; contributors = accepted.checkpoint.contributors; random = accepted.checkpoint.random; binding = admission.source
     }
     public var timeSeconds: Double { time }
@@ -44,6 +51,19 @@ public struct RuntimeTrial: Sendable {
     public mutating func setTime(_ value: Double) throws(RuntimeFailure) {
         guard value.isFinite else { throw RuntimeFailure(.invalidState, message: "Trial time must be finite.") }; time = value
     }
+    public func prescribedAnchor(_ frame:EntityID) throws(RuntimeFailure) -> PrescribedAnchorState {
+        guard frame.kind == .frame,frame.key.utf8.count <= capacity.maximumMetadataBytes,
+              let sample=prescribedAnchors.first(where: { $0.frame == frame }) else {
+            throw RuntimeFailure(.invalidInput,message:"Prescribed frame is outside the trial layout.")
+        }
+        return sample
+    }
+    /// Replaces an existing frame; final compiled admission checks the complete sample times and frame set.
+    public mutating func setPrescribedAnchor(_ sample:PrescribedAnchorState) throws(RuntimeFailure) {
+        guard sample.frame.key.utf8.count <= capacity.maximumMetadataBytes else { throw RuntimeFailure(.capacityExceeded,message:"Prescribed frame metadata exceeds capacity.") }
+        guard let index=prescribedAnchors.firstIndex(where: { $0.frame == sample.frame }) else { throw RuntimeFailure(.invalidInput,message:"Trial cannot add an unknown prescribed frame.") }
+        prescribedAnchors[index]=sample
+    }
     public func contributor(_ id: String) throws(RuntimeFailure) -> RuntimeContributorState {
         guard let record = contributors.first(where: { $0.id == id }) else { throw RuntimeFailure(.missingContributor, contributor: id, message: "Trial contributor is missing.") }; return record
     }
@@ -61,7 +81,7 @@ public struct RuntimeTrial: Sendable {
         guard time >= accepted.physical.state.time else { throw RuntimeFailure(.invalidState, message: "Accepted trial time cannot move backwards.") }
         guard accepted.checkpoint.acceptedSteps < UInt64.max else { throw RuntimeFailure(.capacityExceeded, message: "Accepted sequence overflow.") }
         let physical: KinematicState
-        do { physical = try KinematicState(revision: accepted.physical.stamp.revision, time: time, q: q, v: v, acceleration: acceleration) }
+        do { physical = try KinematicState(revision: accepted.physical.stamp.revision, time: time, q: q, v: v, acceleration: acceleration,prescribedAnchors:prescribedAnchors) }
         catch { throw RuntimeFailure(.invalidState, message: "Trial physical state construction failed.") }
         return try RuntimeCheckpoint(model: accepted.physical.stamp, continuation: accepted.checkpoint.continuation,
             physical: physical, contributors: contributors, random: random, acceptedSteps: accepted.checkpoint.acceptedSteps + 1)

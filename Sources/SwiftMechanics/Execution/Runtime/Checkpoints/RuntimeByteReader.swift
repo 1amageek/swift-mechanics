@@ -32,13 +32,22 @@ internal struct RuntimeByteReader {
     }
     mutating func doubles() throws(RuntimeFailure) -> [Double] {
         let count = try count(maximum: capacity.maximumPhysicalScalars)
-        scalarCount = try RuntimeCounts.sum(scalarCount, count)
-        guard scalarCount <= capacity.maximumPhysicalScalars, count <= remaining / 8 else { throw RuntimeFailure(.capacityExceeded, message: "Decoded scalar count exceeds capacity or available bytes.") }
+        try reserveScalars(count)
+        guard count <= remaining / 8 else { throw RuntimeFailure(.capacityExceeded, message: "Decoded scalar count exceeds capacity or available bytes.") }
         var values: [Double] = []; values.reserveCapacity(count)
         for _ in 0..<count {
-            let value = Double(bitPattern: try integer())
-            guard value.isFinite else { throw RuntimeFailure(.corruptCheckpoint, message: "Decoded scalar is nonfinite.") }; values.append(value)
+            values.append(try scalar())
         }; return values
+    }
+    mutating func reserveScalars(_ count: Int) throws(RuntimeFailure) {
+        scalarCount = try RuntimeCounts.sum(scalarCount, count)
+        guard scalarCount <= capacity.maximumPhysicalScalars else { throw RuntimeFailure(.capacityExceeded, message: "Decoded scalar count exceeds capacity.") }
+    }
+    /// Reads one field after its enclosing bounded shape has reserved scalar capacity.
+    mutating func scalar() throws(RuntimeFailure) -> Double {
+        let value = Double(bitPattern: try integer())
+        guard value.isFinite else { throw RuntimeFailure(.corruptCheckpoint, message: "Decoded scalar is nonfinite.") }
+        return value
     }
     mutating func payload() throws(RuntimeFailure) -> [UInt8] {
         let count = try count(maximum: capacity.maximumContributorBytes)

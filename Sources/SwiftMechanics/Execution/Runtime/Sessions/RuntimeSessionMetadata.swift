@@ -19,6 +19,6 @@ internal struct RuntimeSessionMetadata: Sendable {
     var scalarSlots: Int
     init(context: RuntimeSessionContext, accepted: RuntimeAcceptedState, workspace: RuntimeTrial) throws(RuntimeFailure) {
         self.context = context; self.accepted = accepted; self.workspace = workspace
-        scalarSlots = try RuntimeCounts.physical(q: accepted.physical.state.q.count, v: accepted.physical.state.v.count)
+        scalarSlots = try RuntimeCounts.physical(state:accepted.physical.state)
     }
 }

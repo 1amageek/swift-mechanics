@@ -33,6 +33,10 @@ finish checks active ticket, original model stamp and cancel/closing state under
 Resource hook is @Sendable and may reenter queries/shutdown; it cannot deadlock or release twice. Retained observations own immutable values, not an escaping pointer. Workspace checkout removes owner storage before outside work and restores it on every exit. Metadata critical sections only copy ownership headers and update bounded counters; copying large array elements, callbacks and validation remain outside. Replaced/closed backing storage is retained in returned operation-local retirement values and released after leaving the lock; old accepted state stays retained by the active lease. Session deinit releases retained accepted backing after the metadata lock has exited.
 
 ## State, Ownership, and Lifecycle
+Complete anchor samples follow the same accepted-prefix/workspace lifetime as q/v/a. Session reservation/profile and bounded replacement comparison use [StateRecords physical and metadata accounting](../StateRecords/DESIGN.md#contracts-and-invariants). Required checkpoint handling remains outside locks and actual model.makeState owns frame-set/time validation. Restart restores all physical fields before the next reset; no target-conditioned anchor owner or alternate lock path exists.
+
+Final required-handler verification and expected-source replacement comparison retain complete checkpoint equality and additionally compare exact physical scalar bit patterns, including time/q/v/a and all ordered anchor fields. Shape/scalar/metadata bounds precede that traversal. Numerically equivalent signed zeros or quaternion signs cannot substitute another saved prefix or alter requested publication data. This comparison is Runtime publication authority, not a general numerical equality policy.
+
 Immutable records are Sendable value owners. Mutable work lives in an exclusive inout transaction; shared metadata/cancellation state uses identical Mutex storage on every target. Native/WASM/Embedded semantics are qualified only by selected actual target paths.
 
 ## Failure, Concurrency, and Constraints

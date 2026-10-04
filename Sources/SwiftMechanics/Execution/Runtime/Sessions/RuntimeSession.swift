@@ -34,9 +34,18 @@ public final class RuntimeSession<Checkpoints: RuntimeCheckpointHandling>: Runti
     private static func verify(_ accepted: RuntimeAcceptedState, requested: RuntimeCheckpoint,
                                model: CompiledMechanicalModel, configuration: RuntimeConfiguration) throws(RuntimeFailure) {
         let value = accepted.checkpoint
+        guard try RuntimeCounts.physical(state:requested.physical) <= configuration.capacity.maximumPhysicalScalars,
+              try RuntimeCounts.physical(state:accepted.physical.state) <= configuration.capacity.maximumPhysicalScalars,
+              try RuntimeCounts.physical(state:value.physical) <= configuration.capacity.maximumPhysicalScalars else {
+            throw RuntimeFailure(.capacityExceeded,message:"Final physical comparison exceeds owner capacity.")
+        }
+        _=try RuntimeCounts.anchorMetadata(state:requested.physical,maximum:configuration.capacity.maximumMetadataBytes)
+        _=try RuntimeCounts.anchorMetadata(state:accepted.physical.state,maximum:configuration.capacity.maximumMetadataBytes)
+        _=try RuntimeCounts.anchorMetadata(state:value.physical,maximum:configuration.capacity.maximumMetadataBytes)
         guard accepted.physical.stamp == model.stamp, value.model == model.stamp,
               value.continuation == configuration.continuation, accepted.physical.state == value.physical,
-              value.physical == requested.physical, value.random == requested.random, value.acceptedSteps == requested.acceptedSteps,
+              value.physical == requested.physical,RuntimePhysicalIdentity.equal(accepted.physical.state,value.physical),
+              RuntimePhysicalIdentity.equal(value.physical,requested.physical),value.random == requested.random, value.acceptedSteps == requested.acceptedSteps,
               value.contributors == requested.contributors.sorted(by: { $0.id < $1.id }),
               value.contributors.count == configuration.requiredContributors.count else {
             throw RuntimeFailure(.invalidOwnerAccess, message: "Admission returned altered model/state/continuation/contributor data.")
@@ -148,7 +157,7 @@ public final class RuntimeSession<Checkpoints: RuntimeCheckpointHandling>: Runti
             try Self.verify(validated,requested:requested,model:context.model,configuration:context.configuration)
             try lease.source.check()
             let workspace = try RuntimeTrial(admission: _RuntimeTrialAdmission(accepted: validated, capacity: capacity))
-            let count=try RuntimeCounts.physical(q:validated.physical.state.q.count,v:validated.physical.state.v.count)
+            let count=try RuntimeCounts.physical(state:validated.physical.state)
             publication=RuntimeReplacementPublication(context:context,workspace:workspace,scalarSlots:count)
             candidate=validated
             try lease.source.check()
@@ -158,7 +167,8 @@ public final class RuntimeSession<Checkpoints: RuntimeCheckpointHandling>: Runti
     @inline(never)
     private func replacementCheckpoint(_ request: RuntimeModelReplacement, lease: RuntimeOperationLease) throws(RuntimeFailure) -> RuntimeCheckpoint {
         try boundComparison(request.expectedSource)
-        guard request.expectedSource == lease.accepted.checkpoint else {
+        guard request.expectedSource == lease.accepted.checkpoint,
+              RuntimePhysicalIdentity.equal(request.expectedSource.physical,lease.accepted.checkpoint.physical) else {
             throw RuntimeFailure(.incompatibleModel,message:"Replacement source is no longer the complete accepted checkpoint.")
         }
         guard request.model.stamp.identity == lease.model.stamp.identity,
@@ -186,14 +196,15 @@ public final class RuntimeSession<Checkpoints: RuntimeCheckpointHandling>: Runti
         return result
     }
     private func boundComparison(_ checkpoint: RuntimeCheckpoint) throws(RuntimeFailure) {
-        let count=try RuntimeCounts.physical(q:checkpoint.physical.q.count,v:checkpoint.physical.v.count)
+        let count=try RuntimeCounts.physical(state:checkpoint.physical)
         guard count <= capacity.maximumPhysicalScalars, checkpoint.physical.acceleration.count == checkpoint.physical.v.count,
-              checkpoint.physical.prescribedAnchors.isEmpty,checkpoint.contributors.count <= capacity.maximumContributors else {
+              checkpoint.contributors.count <= capacity.maximumContributors else {
             throw RuntimeFailure(.capacityExceeded,message:"Replacement checkpoint comparison exceeds admitted shape/capacity.")
         }
         let continuationBytes=try RuntimeCounts.sum(checkpoint.continuation.build.utf8.count,
             RuntimeCounts.sum(checkpoint.continuation.backend.utf8.count,checkpoint.continuation.precision.utf8.count))
-        var metadata=checkpoint.model.identity.utf8.count,payload=0
+        var metadata=try RuntimeCounts.sum(checkpoint.model.identity.utf8.count,
+            RuntimeCounts.anchorMetadata(state:checkpoint.physical,maximum:capacity.maximumMetadataBytes)),payload=0
         guard metadata <= capacity.maximumMetadataBytes,continuationBytes <= capacity.maximumMetadataBytes else {
             throw RuntimeFailure(.capacityExceeded,message:"Replacement checkpoint metadata exceeds owner capacity.")
         }

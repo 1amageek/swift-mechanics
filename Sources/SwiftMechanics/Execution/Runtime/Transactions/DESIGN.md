@@ -4,7 +4,7 @@
 Own uniquely operation-owned mutable trial/workspace and bounded safe-point control. Parent: [MechanicsRuntime](../DESIGN.md). No children.
 
 ## Responsibilities and Boundaries
-Trial changes affect local fixed-shape arrays and explicit contributor/random values only. Consumer callbacks own integration/solver laws and invoke safe points before bounded work blocks; runtime owns acceptance validation and never supplies a default step law.
+Trial changes affect local fixed-shape arrays, complete prescribed-anchor samples and explicit contributor/random values only. Consumer callbacks own integration/solver/prescribed-motion laws and invoke safe points before bounded work blocks; runtime owns acceptance validation and never supplies a default step law.
 
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
@@ -24,9 +24,11 @@ RuntimeTrial construction consumes a session-issued immutable creation token. Re
 
 q/v/acceleration buffer lengths are fixed at owner creation and setters reject wrong indices/nonfinite values. Time must not move backwards on acceptance; reject discards every contributor/random/physical change. Contributor replacement is keyed by schema ID and byte limits; records remain values.
 
+Trial owns a private anchor array copied from the admitted prefix, with fixed count and frame set. `prescribedAnchor(_ frame:)` returns one safe owned value and `setPrescribedAnchor(_ sample:)` replaces an existing named sample; neither adds/removes a frame nor exposes raw storage. Setter bounds frame metadata before lookup. Source initialization, every reset after accept/reject/failure/restart, and candidate checkpoint preserve all sample fields and accepted ordering. Consumers may update time and samples in either order while constructing a local candidate; actual compiled-tree admission requires every final sample time to equal candidate physical time and the exact expected frame set. No stale sample is refreshed implicitly. Workspace replacement changes shape only after complete new-model admission.
+
 RuntimeStepControl owns a Sendable cancellation source with the same Mutex<ControlState> on all targets. beginWorkBlock polls cancellation/Task state before admitting a caller-declared bounded quantum and total work; runtime also polls before/after callbacks and between admission phases. Consumers must implement a published work-unit bound for each block; a wall-clock latency claim is not inferred. Copies of a control share its authoritative work counter; replacing a trial/control from another ticket fails final identity binding. Control retained after a transaction is cancelled, so it cannot authorize later work. No raw target-specific storage or unsafe pointer view is exposed.
 
-Reserved scalar slots are exact q+2v. COW copies can occur when a previous accepted snapshot retains arrays, necessarily preserving immutable observation lifetime. Physical scalar copy upper bound is q+2v per next buffer mutation; this is structural accounting, not measured allocator traffic. Compiler's actual tree validation allocates its own policy-bounded workspace. RT-007's measured steady-state allocation/copy qualification remains open; no zero-allocation claim is made.
+Reserved scalar slots and structural physical-copy envelope use the [StateRecords physical accounting contract](../StateRecords/DESIGN.md#contracts-and-invariants). COW copies can occur when a previous accepted snapshot retains arrays, necessarily preserving immutable observation lifetime. This is structural accounting, not measured allocator traffic. Compiler's actual tree validation allocates its own policy-bounded workspace. RT-007's measured steady-state allocation/copy qualification remains open; no zero-allocation claim is made.
 
 ## State, Ownership, and Lifecycle
 Immutable records are Sendable value owners. Mutable work lives in an exclusive inout transaction; shared metadata/cancellation state uses identical Mutex storage on every target. Native/WASM/Embedded semantics are qualified only by selected actual target paths.

@@ -29,15 +29,7 @@ public struct ReferenceRuntimeCheckpointHandler<Contributors: RuntimeContributor
         guard configuration.determinism == .sameBuildReplay else { throw RuntimeFailure(.unsupportedDeterminism, message: "Only same-build replay is admitted in this transaction domain.") }
         guard checkpoint.model == model.stamp else { throw RuntimeFailure(.incompatibleModel, message: "Checkpoint model identity/revision is incompatible.") }
         guard checkpoint.continuation == configuration.continuation else { throw RuntimeFailure(.incompatibleContinuation, message: "Checkpoint build/backend/precision continuation is incompatible.") }
-        // FIXME(INCOMPLETE_IMPLEMENTATION): Moving-anchor derivative checkpoints reach this admission branch.
-        // Exact raw rotation/derivative continuation encoding must be implemented and proved before admission.
-        guard checkpoint.physical.prescribedAnchors.isEmpty,
-              model.tree.joints.allSatisfy({ joint in
-                  if case .prescribed = joint.parentAnchor.placement { return false }
-                  if case .prescribed = joint.childAnchor.placement { return false }
-                  return true
-              }) else { throw RuntimeFailure(.unsupportedDomain, message: "Moving-anchor continuation is outside checkpoint v1.") }
-        let scalarCount = try RuntimeCounts.physical(q: checkpoint.physical.q.count, v: checkpoint.physical.v.count)
+        let scalarCount = try RuntimeCounts.physical(state:checkpoint.physical)
         guard scalarCount <= cap.maximumPhysicalScalars, checkpoint.physical.acceleration.count == checkpoint.physical.v.count,
               checkpoint.contributors.count <= cap.maximumContributors else { throw RuntimeFailure(.capacityExceeded, message: "Checkpoint scalar/contributor capacity exceeded.") }
         let registrations = contributors.schemas
@@ -49,7 +41,9 @@ public struct ReferenceRuntimeCheckpointHandler<Contributors: RuntimeContributor
     private func buildRecords(_ checkpoint: RuntimeCheckpoint, configuration: RuntimeConfiguration,
                              registrations: [RuntimeContributorSchema]) throws(RuntimeFailure) -> RuntimeAdmissionRecords {
         let cap = configuration.capacity
-        var registry: [String: RuntimeContributorSchema] = [:], metadataBytes = checkpoint.model.identity.utf8.count
+        var registry: [String: RuntimeContributorSchema] = [:]
+        var metadataBytes = try RuntimeCounts.sum(checkpoint.model.identity.utf8.count,
+            RuntimeCounts.anchorMetadata(state:checkpoint.physical,maximum:cap.maximumMetadataBytes))
         guard metadataBytes <= cap.maximumMetadataBytes else { throw RuntimeFailure(.capacityExceeded, message: "Model identity exceeds runtime metadata capacity.") }
         for schema in registrations {
             metadataBytes = try RuntimeCounts.sum(metadataBytes, schema.id.utf8.count)
