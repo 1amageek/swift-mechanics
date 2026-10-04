@@ -234,3 +234,7 @@ Root registered and qualified nonlinear evolution, checkpoint-bound sleep/comman
 ## AF21 Planar Continuation Integration
 
 [Fluids](Sources/SwiftMechanics/Physics/Fluids/DESIGN.md#af21-registration-scope) owns the newly registered child index. [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af21-planar-runtime-qualification-contract) owns the public composition contract; [selected original-profile qualification](Verification/FoundationVerification/DESIGN.md#af21-selected-original-profile-qualification) records the passed evidence and its limits. This addition preserves the single production module, immutable compiled model and required Runtime publication authority. Full IM44/IM48 and 210-requirement qualification remain open.
+
+## AF22 General Geometry Foundation
+
+Root registered the general frame/point/axis relation and local manifold correction children under [Constraints](Sources/SwiftMechanics/Physics/Constraints/DESIGN.md). [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af22-selected-general-geometry-qualification) owns actual registered Native and selected original-profile evidence. This closes the lower geometry handoff before upper closed-loop dynamics; general IM16 and full IM48 remain open.

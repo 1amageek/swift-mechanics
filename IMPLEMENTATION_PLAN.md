@@ -248,6 +248,17 @@ User-approved public boundary: one SwiftMechanics module, with component owners 
 ### AF20 mechanism execution frontier
 After consolidation commit 69a404d, unfinished IM16 execution contracts form the next ready frontier. NonlinearEvolution and SleepContinuation are disjoint sibling source/test responsibilities. Both consume frozen Runtime, numerical, kinematic and dynamics protocols; neither consumes the other's evolving implementation. Their source directories were excluded until the original frozen handoff and are now registered for integration. Lower contracts must be traced and written before production. Original position/velocity/momentum acceptance, failed supplier work, transaction rollback, contributor binding and replay are necessary evidence. Existing frozen observation/fluid/nonlinear-optimization work is preserved; AR01 is no longer an unresolved authorization hold, but their canonical prerequisites and current readiness still govern dispatch.
 
+### AF22 geometry and topology execution frontier
+
+IM16.9 owns GeometricRelations and ManifoldProjection plus MechanicsGeometricConstraintTests. Actual lower geometry/manifold behavioral qualification precedes IM16.10, which owns the common physical evolution engine, compatible quadratic facade and geometric facade under NonlinearEvolution and its dedicated tests. IM16.11 independently owns SubtreeTransitions, TopologyContinuation and MechanicsTopologyReleaseTests using frozen producer contracts. These sibling responsibilities share no evolving implementation; IM16.10 and IM16.11 may proceed in the AF22Mechanisms group after IM16.9 passes. Root owns source registration, exact-profile probes, parent indexes, progress and commits; all build operations use the actual registered graph, with unfinished independent directories excluded. IM16.12 owns final cohort composition. The lower and upper contracts retain the full IM16 requirement owner and explicit remaining domains.
+
+```text
+frozen Joints / Constraints / Numerics -> IM16.9 general geometry + manifold proof
+                                           -> IM16.10 common physical evolution
+frozen Runtime / Compiler / Dynamics / Actuation -> IM16.11 subtree + history
+IM16.10 + IM16.11 -> IM16.12 original-profile composition
+```
+
 ReactionPaths joins that same ready sibling group with isolated source/tests and frozen Dynamics/Loads/Joints dependencies. Original body inertial wrench and identified applied-load balance are its authority; generalized force alone cannot qualify a unique bearing wrench. Root owns all shared manifest/probe registration and final profile execution after freeze.
 
 The AF20 original ordinary/Embedded awake-sleep execution identifies excessive rich temporaries in the consumed AffineEvolution motion path. Root reassigns only that required motion phase/lifetime repair, lower design and affected old mechanism tests to the sleep owner. Source and profile qualification stay serial after freeze; public laws, work ledgers, synchronization and original stack reservation remain fixed.

@@ -13,6 +13,8 @@ The implementation owner owns child component directories under Sources/SwiftMec
 | [CoordinateEquations](CoordinateEquations/DESIGN.md) | child | Scaled polynomial g/J/time terms and knife-edge rows | Actual input/evaluation owner | Qualified selected domain |
 | [AssemblyProjection](AssemblyProjection/DESIGN.md) | child | Local KKT assembly and weighted speed projection | Actual residual/rank owner | Qualified selected domain |
 | [ScalarJointPorts](ScalarJointPorts/DESIGN.md) | child | Scalar passive/limit laws | Actual power/domain owner | Qualified selected domain |
+| [GeometricRelations](GeometricRelations/DESIGN.md) | child | Original frame/point/axis holonomic geometry | AF22 nonpolynomial relation owner | Frozen-source registration and behavioral qualification pending |
+| [ManifoldProjection](ManifoldProjection/DESIGN.md) | child | Bounded tangent-metric local assembly and manifold retraction | AF22 configuration correction owner | Requires actual original geometry acceptance; qualification pending |
 | [MechanicsNonlinear](../../Mathematics/Nonlinear/DESIGN.md) | depends on | original-residual nonlinear solves | Verified initial producer handoff | Consume only documented admitted domains; report missing producer contracts |
 | [MechanicsComplementarity](../../Mathematics/Complementarity/DESIGN.md) | depends on | admitted orthant/cone numerical solves | Verified initial producer handoff | Consume only documented admitted domains; report missing producer contracts |
 | [MechanicsJoints](../../Modeling/Joints/DESIGN.md) | depends on | actual q-v manifolds, framed tree motion and Jacobians | Verified initial producer handoff | Consume only documented admitted domains; report missing producer contracts |
@@ -44,3 +46,19 @@ Native focused execution passed fourteen of fifteen cases; the sole failure was 
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF22 General Geometry Dispatch
+
+IM16.9 owns two independent lower children, GeometricRelations and ManifoldProjection. Their source is excluded until root registers the frozen contract and dedicated behavioral target. Existing quadratic evaluation/closest-point KKT and public Joints/Numerics contracts remain read-only. Actual public point Jacobian/motion, compiled model admission/evaluation and joint/root integration supply the lower primitive path. A geometric tangent sample must retain all original rows, normalized dimensions/time scales and actual centripetal/prescribed bias; it must not duplicate quaternion Ndot correction.
+
+```text
+immutable body/frame relation + bounded source/layout/domain identity
+ -> actual compiled snapshot + public point/axis motion
+ -> original g + tangent A/drift/bias
+ -> bounded tangent-metric correction + manifold retraction
+ -> all-row residual/rank and explicit local correction evidence
+```
+
+The new assembly contract is local manifold correction under a caller tangent metric and path bound. It does not return existing quadratic KKT closest-point/stationarity evidence. Upper mechanism evolution starts only after actual lower behavior is verified. Multiple disconnected physical roots, mixed planar/spatial records and moving prescribed-frame Runtime continuation remain separate prerequisite gaps; successful articulated plus sixDOF/spherical branches do not close CN-004 wholesale. Root owns shared registration/probes/commit; nonlinear_mechanisms owns only the two new children and MechanicsGeometricConstraintTests.
+
+AF22 selected lower qualification is owned by [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af22-selected-general-geometry-qualification). The two children are now registered; this supersedes the dispatch-time exclusion above. Native evidence includes regular axis alignment and mixed manifolds; the exact public three-profile evidence covers the independently constructed four-bar path.
