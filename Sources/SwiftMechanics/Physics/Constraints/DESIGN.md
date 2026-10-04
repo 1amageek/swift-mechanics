@@ -66,3 +66,8 @@ AF22 selected lower qualification is owned by [FoundationVerification](../../../
 ### AF24 original physical geometry handoff
 
 [GeometricRelations](GeometricRelations/DESIGN.md#af24-planar-geometry-and-physical-row-authority) owns original planar point/distance admission and source-bound physical row covectors. This is independent of Dynamics' additive planar inertia source; neither owner consumes the other's evolving implementation. Root serializes shared registration and lower behavioral qualification before upper mechanism/reaction consumers.
+
+
+## AF25 lower ownership frontier
+
+[GeometricRelations](GeometricRelations/DESIGN.md) owns the additive distinction between original multiplier nullity and unique endpoint wrenches. [AssemblyProjection](AssemblyProjection/DESIGN.md) owns active-coordinate rank on the original full layout, including empty active coordinates and zero original rows. These are disjoint lower writers. Full prescribed-root geometry and [ManifoldProjection](ManifoldProjection/DESIGN.md) consume frozen, behaviorally checked contracts after IM16.27; GeometricRelations mutable ownership transfers explicitly at that boundary. [Implementation plan](../../../../IMPLEMENTATION_PLAN.md#af25-remaining-planar-reactions-and-full-prescribed-root-frontier) owns dispatch; child designs own detailed contracts.

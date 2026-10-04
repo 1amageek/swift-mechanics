@@ -279,3 +279,34 @@ After AF23 corrective/integrated commit 4fa27a5, IM16.19 closes read-only planar
 IM16.20 and IM16.21 are disjoint ready siblings in AF24Lower; neither consumes another evolving owner. IM16.23 and IM16.24 may become disjoint AF24Upper siblings only after actual lower qualification and their own component contracts. Root alone changes shared manifest/probe/source registration and commits; workers do not build evolving source or modify existing unrelated producers. No new production module or C target is implied. PROGRESS owns actual readiness; the full 210-requirement DAG is preserved.
 
 The AF24 upper read-only trace fixes disjoint consumer authority. IM16.23 adds actual tagged physical constrained/evolution paths while preserving the existing spatial ConstrainedMotion and injected legacy solver contracts. IM16.24 first admits spatial continuous closed-loop reactions through sealed physical rows and unchanged TreeReactionRecovery; planar individual cut/support recovery remains explicitly unsupported, not implicitly converted. IM16.24 consumes the existing spatial ConstrainedMotion contract and accepts an explicit original drive declaration, refuses nonzero generalized-only drive/loads, and independently rechecks original rows/rank/feasibility/generalized and body balance. It does not depend on an evolving new IM16.23 physical result. Full planar individual reaction allocation remains outside this bounded handoff and within the open full IM16 objective.
+
+
+### AF25 remaining planar reactions and full prescribed-root frontier
+
+The completed read-only handoff IM16.26 follows qualified AF24 commit 446c08d. Two disjoint lower writers update their canonical component designs before declarations. The existing spatial loop nullity refusal remains its qualified contract; an additive planar consumer distinguishes multiplier uniqueness from physical-wrench uniqueness through the lower certificate. Representative multipliers never become unique by relabeling.
+
+| Work | Sole mutable owner / paths | Prerequisite | Behavioral handoff |
+|---|---|---|---|
+| IM16.27.1 | reaction_paths: GeometricRelations physical allocation; ReactionPaths reduced tree recovery; corresponding geometric/reaction tests/designs | IM16.26 | all original rows/rank retained, exact-zero redundant physical rows certified separately, actual planar Newton/Euler/cut/support balance |
+| IM16.27.2 | nonlinear_mechanisms: PrescribedMotions; AssemblyProjection; corresponding Joints/Constraints tests/designs | IM16.26 | sealed planar/spatial base q/v/a/qdot, active-coordinate rank on full original layout including empty D/zero rows |
+| IM16.27.3 | root: registration, focused Native qualification, source review, commits | both lower frozen handoffs | actual original lower behavior |
+| IM16.28 | reaction_paths: planar ClosedLoopReactionPaths; nonlinear_mechanisms: source-bound geometry/projection/constrained solve/power/evolution/history and corresponding tests | IM16.27 plus component contracts | ordinary planar coincidence and root-only/descendant prescribed-root physical acceptance, typed ambiguity and atomic replay/refusal |
+| IM16.29 | root: shared probes, parent indexes, affected/cumulative Native and original three profiles, commits | upper frozen handoffs | integrated selected proof; full IM16/210 remains open |
+
+```text
+sealed base sampler + full-layout active-coordinate rank
+ -> actual root authority/law binding and D-only configuration correction
+ -> original geometric rows + genuine prescribed-root identity motion rows
+ -> existing full original mass/Gram/inertial-force acceptance
+ -> separated root effort / geometric reaction / original partitioned power
+ -> full physical endpoint, history and fresh-context cold replay
+
+all original physical covectors + all-original-row rank
+ -> physical-wrench uniqueness certificate (exact-zero redundant rows only)
+ -> original planar per-body Newton/Euler and tree/support balance
+ -> planar closed-loop composition and independent physical acceptance
+```
+
+GeometricRelations has one mutable writer during IM16.27; full-root geometry starts only after ownership transfers following qualification. AssemblyProjection restricts columns explicitly without manufacturing an empty ConstraintCoordinateLayout. Root-only geometric rows may be truly empty under the new root-bound domain; the physical solve has three/six genuine root-motion rows. No second restricted-mass dynamics algorithm is introduced. Periodic/piecewise laws and broader allocation remain separate open requirement domains.
+
+Reduced reaction outputs claim Fx/Fy/Mz only. Original load rotation and moment translation precede reduced admission, preserving existing off-plane raw-reference/couple cancellation success. Reports retain actual reference points; output frames must preserve the modeled plane and do not claim other bearing axes. Source/time/layout/inertia/law binding, original residuals, monotonic supplier work, cancellation and unchanged physical/history/RNG failure prefixes are component-owned proofs. Root owns actual unchanged profile/128 KiB qualification; private diagnostics never replace original artifacts.
