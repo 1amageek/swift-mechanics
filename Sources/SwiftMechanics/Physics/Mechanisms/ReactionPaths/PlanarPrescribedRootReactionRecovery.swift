@@ -10,14 +10,30 @@ public struct PlanarPrescribedRootReactionRecovery: PlanarPrescribedRootReaction
     public func recover(_ input: PlanarPrescribedRootReactionInput, outputFrame: EntityID,
                         policy: PlanarPrescribedRootReactionPolicy, loadWork: inout LoadWork,
                         work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> PlanarPrescribedRootReactionReport {
-        let context=try prepare(input,policy:policy,work:&work)
+        let request=PlanarPrescribedRootReactionRequest(source:input,policy:policy)
+        let context=try prepare(request,work:&work)
         let full=try originalForce(context,policy:policy,work:&work)
         return try recoverPhysical(context,full:full,outputFrame:outputFrame,policy:policy,loadWork:&loadWork,work:&work)
     }
 
     @inline(never)
-    private func prepare(_ input: PlanarPrescribedRootReactionInput, policy: PlanarPrescribedRootReactionPolicy,
+    private func prepare(_ request: PlanarPrescribedRootReactionRequest,
                          work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> PlanarPrescribedRootReactionContext {
+        try admit(request,work:&work)
+        let supplied=try evaluateGeometry(request,work:&work)
+        let original=try acceptGeometry(request,supplied:supplied,work:&work)
+        try validateSnapshot(request,original:original,motion:false,work:&work)
+        try validateSnapshot(request,original:original,motion:true,work:&work)
+        let base=try acceptBase(request,work:&work)
+        let constraint=try originalConstraint(request,original:original,base:base,work:&work)
+        let rank=try originalRank(request,constraint:constraint,work:&work)
+        return try acceptRows(request,original:original,base:base,constraint:constraint,rank:rank,work:&work)
+    }
+
+    @inline(never)
+    private func admit(_ request: PlanarPrescribedRootReactionRequest,
+                       work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) {
+        let input=request.source,policy=request.policy
         try A.check(policy)
         // FIXME(INCOMPLETE_IMPLEMENTATION): Prescribed spatial/free roots, named supports and original loop rows have no allocation contract in this additive planar tree port. They require separate physical proof before success.
         guard input.geometry.model.tree.rootBase == .planarFloating,
@@ -65,42 +81,92 @@ public struct PlanarPrescribedRootReactionRecovery: PlanarPrescribedRootReaction
             try work.requireStorage(NumericalWork.sum(input.geometry.scalarStorage,NumericalWork.sum(input.dynamics.scalarStorage,local)))
         }
         try A.charge(128,&work)
-        let original: HolonomicGeometrySample
+    }
+
+    @inline(never)
+    private func evaluateGeometry(_ request: PlanarPrescribedRootReactionRequest,
+                                  work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> PlanarPrescribedRootReactionGeometry {
         do throws(GeometricConstraintError) {
-            let supplied=try GeometricRelationEvaluator().evaluate(input.geometry,state:input.state,policy:policy.geometry,work:&work)
-            original=try GeometricOriginalAcceptance.validatedSample(supplied,system:input.geometry,state:input.state,
-                tolerance:0,policy:policy.geometry,work:&work)
-            for snapshot in [input.dynamics.input.snapshot,input.motion.motion.sourceSnapshot] {
-                guard snapshot.time.bitPattern == original.snapshot.time.bitPattern else { throw .staleSource }
-                let candidate=HolonomicGeometrySample(source:input.state,snapshot:snapshot,metadata:original.metadata,
-                    values:original.values,velocity:original.velocity,alignmentResiduals:original.alignmentResiduals)
-                try GeometricOriginalAcceptance.validate(candidate,system:input.geometry,state:input.state,tolerance:0,policy:policy.geometry,work:&work)
-            }
+            return PlanarPrescribedRootReactionGeometry(try GeometricRelationEvaluator().evaluate(request.source.geometry,
+                state:request.source.state,policy:request.policy.geometry,work:&work))
         } catch { throw .geometry(error) }
-        let base: PrescribedBaseMotionSample
+    }
+
+    @inline(never)
+    private func acceptGeometry(_ request: PlanarPrescribedRootReactionRequest, supplied: PlanarPrescribedRootReactionGeometry,
+                                work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> PlanarPrescribedRootReactionGeometry {
+        do throws(GeometricConstraintError) {
+            return PlanarPrescribedRootReactionGeometry(try GeometricOriginalAcceptance.validatedSample(supplied.sample,
+                system:request.source.geometry,state:request.source.state,tolerance:0,policy:request.policy.geometry,work:&work))
+        } catch { throw .geometry(error) }
+    }
+
+    @inline(never)
+    private func validateSnapshot(_ request: PlanarPrescribedRootReactionRequest, original: PlanarPrescribedRootReactionGeometry,
+                                  motion: Bool, work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) {
+        do throws(GeometricConstraintError) {
+            let snapshot=motion ? request.source.motion.motion.sourceSnapshot : request.source.dynamics.input.snapshot
+            guard snapshot.time.bitPattern == original.sample.snapshot.time.bitPattern else { throw .staleSource }
+            let candidate=HolonomicGeometrySample(source:request.source.state,snapshot:snapshot,metadata:original.sample.metadata,
+                values:original.sample.values,velocity:original.sample.velocity,alignmentResiduals:original.sample.alignmentResiduals)
+            try GeometricOriginalAcceptance.validate(candidate,system:request.source.geometry,state:request.source.state,
+                tolerance:0,policy:request.policy.geometry,work:&work)
+        } catch { throw .geometry(error) }
+    }
+
+    @inline(never)
+    private func acceptBase(_ request: PlanarPrescribedRootReactionRequest,
+                            work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> PlanarPrescribedRootReactionBase {
+        guard let binding=request.source.geometry.prescribedRoot else { throw .unsupportedSupportDomain }
         do throws(PrescribedMotionError) {
-            base=try OriginalPrescribedBaseMotionAcceptance.validated(input.constraint.base,program:binding.program,
-                time:input.state.time,policy:binding.program.policy,work:&work)
+            return PlanarPrescribedRootReactionBase(try OriginalPrescribedBaseMotionAcceptance.validated(request.source.constraint.base,
+                program:binding.program,time:request.source.state.time,policy:binding.program.policy,work:&work))
         } catch { throw .motion(error) }
+    }
+
+    @inline(never)
+    private func originalConstraint(_ request: PlanarPrescribedRootReactionRequest, original: PlanarPrescribedRootReactionGeometry,
+                                    base: PlanarPrescribedRootReactionBase,
+                                    work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> PrescribedRootConstraint {
+        let input=request.source,policy=request.policy
+        guard let binding=input.geometry.prescribedRoot else { throw .unsupportedSupportDomain }
         let constraint: PrescribedRootConstraint
         do throws(MechanismError) {
-            constraint=try PrescribedRootConstraint(system:input.dynamics,geometry:original.velocity,base:base,
+            constraint=try PrescribedRootConstraint(system:input.dynamics,geometry:original.sample.velocity,base:base.sample,
                 rowIDs:binding.rowIDs,policy:policy.mechanism,work:&work)
         } catch { throw .mechanism(error) }
-        guard A.equal(input.constraint.geometry,original.velocity),A.equal(input.constraint.sample,constraint.sample),
+        guard A.equal(input.constraint.geometry,original.sample.velocity),A.equal(input.constraint.sample,constraint.sample),
               input.constraint.knownCoordinates == binding.knownCoordinates,input.constraint.dynamicCoordinates == binding.dynamicCoordinates,
               input.motion.motion.rowIDs == constraint.sample.rowIDs else { throw .staleSource }
+        return constraint
+    }
+
+    @inline(never)
+    private func originalRank(_ request: PlanarPrescribedRootReactionRequest, constraint: PrescribedRootConstraint,
+                              work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> ConstraintRankEvidence {
         let rank: ConstraintRankEvidence
-        do throws(ConstraintError) { rank=try WeightedConstraintAssembler().rank(constraint.sample,policy:policy.mechanism.constraints,work:&work) }
-        catch { throw .constraint(error) }
-        let supplied=input.motion.motion.rank
+        do throws(ConstraintError) {
+            rank=try WeightedConstraintAssembler().rank(constraint.sample,policy:request.policy.mechanism.constraints,work:&work)
+        } catch { throw .constraint(error) }
+        let supplied=request.source.motion.motion.rank,k=request.source.constraint.knownCoordinates.count
         guard rank.rank == k,rank.reactionNullity == 0,supplied.rank == rank.rank,
               supplied.independentRows == rank.independentRows,supplied.dependentRowIDs == rank.dependentRowIDs,
               supplied.reactionNullity == rank.reactionNullity else { throw .invalidRankEvidence }
+        return rank
+    }
+
+    @inline(never)
+    private func acceptRows(_ request: PlanarPrescribedRootReactionRequest, original: PlanarPrescribedRootReactionGeometry,
+                            base: PlanarPrescribedRootReactionBase, constraint: PrescribedRootConstraint,
+                            rank: ConstraintRankEvidence,
+                            work: inout NumericalWork) throws(PlanarPrescribedRootReactionError) -> PlanarPrescribedRootReactionContext {
+        let input=request.source,policy=request.policy
+        guard let binding=input.geometry.prescribedRoot else { throw .unsupportedSupportDomain }
+        let n=input.dynamics.velocityCount,k=binding.knownCoordinates.count
         var reaction=[Double](repeating:0,count:n)
         for row in 0..<k {
             try A.check(policy);try A.charge(32,&work)
-            guard input.motion.motion.values[row].bitPattern == base.a[row].bitPattern else { throw .originalRootRow(row:binding.rowIDs[row]) }
+            guard input.motion.motion.values[row].bitPattern == base.sample.a[row].bitPattern else { throw .originalRootRow(row:binding.rowIDs[row]) }
             var v=constraint.sample.drift[row],a=constraint.sample.accelerationBias[row]
             for i in 0..<n {
                 try A.charge(16,&work)
@@ -118,7 +184,7 @@ public struct PlanarPrescribedRootReactionRecovery: PlanarPrescribedRootReaction
         }
         let physical=try A.tree { () throws(ReactionPathError) in try PlanarReactionContext(input.dynamics) }
         try A.check(policy)
-        return PlanarPrescribedRootReactionContext(source:input,physical:physical,original:original,constraint:constraint,
+        return PlanarPrescribedRootReactionContext(source:input,physical:physical,original:original.sample,constraint:constraint,
             rank:rank,reaction:reaction,rootEffort:Array(reaction.prefix(k)))
     }
 

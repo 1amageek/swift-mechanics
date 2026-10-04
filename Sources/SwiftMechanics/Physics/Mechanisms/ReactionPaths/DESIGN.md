@@ -78,6 +78,27 @@ All source/results/suppliers remain immutable Sendable across Native/WASM/Embedd
 
 Root authorized IM16.31.2 after committing the lower contracts. One owned source review traced actual canonical source/law/rows/rank acceptance, supplied and builtin original queries, identified raw load shifts, P/D balance, subtree support/root-column acceptance, failure ledgers and publication. Shared-state review found only immutable stored owners and operation-local workspaces across all targets; reused cancellation test flags retain their common Mutex. No concrete contract finding remains. `git diff --check` passed. The isolated owner Native execution below extends the source review; root still owns canonical full-graph Native and original Native/WASM/Embedded composition and original 128 KiB guards. Existing AF25 evidence stays valid until its actual premises change.
 
+### AF26 original 128 KiB lifetime correction
+
+The original every-write stack guard identified a concrete failure in commit `6de4be9`: the first breach was `GeometricConstraintSystem.snapshot` under the new prescribed-root `prepare` invocation. Raw original prologues measure `prepare` at 84,416 bytes on ordinary WASM and 88,448 on Embedded; original geometry compute and snapshot add 8,368/10,560 and 8,336/10,976 respectively, above the legitimate public caller frames. Native functional success did not establish this resource invariant. `.build/af26-stack-diagnostic/{wasm,embedded}-guard-runtime.log` owns the observed counterexample.
+
+The correction changes only this new consumer's value lifetimes. `PlanarPrescribedRootReactionRequest` owns immutable input/policy; `PlanarPrescribedRootReactionGeometry` and `PlanarPrescribedRootReactionBase` own rich intermediate samples. A reference-only noninline prepare coordinator calls distinct noninline phases in the original order:
+
+```text
+request owner -> admission / checked storage / 128-unit prefix
+ -> supplied geometry invocation owner -> canonical geometry acceptance owner
+ -> original dynamics snapshot validation -> original motion snapshot validation
+ -> original root-law base owner -> canonical root-constraint validation
+ -> original rank validation -> original row/multiplier/context publication
+ -> unchanged canonical force / physical balance / subtree report phases
+```
+
+Rich samples are materialized only within the phase that consumes them; pending root-law, constraint, rank and row workspaces do not share the geometry invocation frame. Each source snapshot is validated separately in the same former order, retaining both actual builtin recomputations. All original equations, bit-pattern checks, tolerance, charge amounts, cancellation ordering, supplier ledger behavior, error mapping and publication authority are preserved. These internal immutable reference owners add no alternative acceptance or physical algorithm; existing conservative simultaneous storage admission covers their retained source/sample backing and local workspace. No target conditional storage, unsafe isolation or changed public API is introduced.
+
+This is a finding-only correction. The isolated selected Native tests establish behavior preservation; root's regenerated raw prologue measurements and actual original ordinary/Embedded 128 KiB guards establish the resource correction. Until those executions pass, this correction is unqualified; increasing the stack or inferring success from smaller source functions is not acceptable.
+
+The corrected frozen source executed the same timeout-wrapped focused command in the isolated copy against the fixed baseline producers. `.build/af26-support-lifetime-native-focused.log` exited zero: build 10.61 seconds, all 15 declarations in three suites (21 expanded cases) passed in 0.008 seconds. No owned compiler/behavior failure occurred; existing baseline missing-exclude and public-caller warnings remain outside this correction. `.build/af26-support-lifetime-freeze.json` records all 45 owned Swift files and their copy equality; source digest is `c588c5366986c4ca7636c3252009151f6a3e97b22040c4d42c2d19c391346b61`. This proves only behavior preservation on isolated Native; the actual original guard remains root's required completion boundary.
+
 ### AF26 isolated owner Native execution
 
 The owner executed the frozen source and actual independent/refusal paths in `.build/af26-independent-support`, prepared from committed baseline `1fbf8f9`. Only ReactionPaths and MechanicsReactionPathTests were overlaid. The exact command was:
