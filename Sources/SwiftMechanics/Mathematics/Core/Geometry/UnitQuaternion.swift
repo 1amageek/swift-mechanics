@@ -15,6 +15,16 @@ public struct UnitQuaternion: Equatable, Sendable, RotationIntegrating {
         self.init(validatedW: sw / norm, x: sx / norm, y: sy / norm, z: sz / norm)
     }
 
+    /// Restores already-unit components without changing their floating-point bits.
+    public init(unitW w: Double, x: Double, y: Double, z: Double) throws(CoreError) {
+        guard w.isFinite, x.isFinite, y.isFinite, z.isFinite else { throw .nonFiniteInput }
+        let squaredNorm = w * w + x * x + y * y + z * z
+        guard squaredNorm.isFinite, abs(squaredNorm - 1) <= 16 * Double.ulpOfOne else {
+            throw .nonUnitQuaternion
+        }
+        self.init(validatedW: w, x: x, y: y, z: z)
+    }
+
     // Constants, normalized components, conjugation and sign reversal preserve unit length.
     internal init(validatedW w: Double, x: Double, y: Double, z: Double) {
         self.w = w

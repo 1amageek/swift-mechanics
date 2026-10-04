@@ -5,6 +5,7 @@ public enum CoreError: Error, Equatable, Sendable {
     case invalidTolerance
     case degenerateVector
     case degenerateQuaternion
+    case nonUnitQuaternion
     case singularMatrix
     case nonRigidMatrix
     case invalidTimeStep

@@ -56,3 +56,5 @@ The SwiftPM EmbeddedUnicode trait explicitly links the matching WASI Embedded SD
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+AF23 adds the exact already-unit component restoration contract owned by [Geometry](Geometry/DESIGN.md), consumed by bounded moving-anchor continuation. Existing normalizing geometry APIs retain their contracts; target qualification of the new path is tracked by its child and system integration.

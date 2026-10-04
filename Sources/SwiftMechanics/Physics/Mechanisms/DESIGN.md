@@ -78,3 +78,32 @@ exact accepted source -> real relative subtree mapping -> compiled target + ID/r
 Repeated same-time cuts use strict accepted sequence/event ordering. History is decoded from bounded payload, not a process registry. Surviving scalar actuator history may be rebound only after public source/target joint identity/range and unchanged law/state contracts are proved with the real codec. Removed or unavailable laws cannot silently reset. Existing Integration, Hybrid and Sleep migrations do not authorize general topology history migration. Prescribed Runtime checkpoints, general loop cuts and unrepresented bearing reactions remain explicit lower gaps. Prepared source/target/catalog authority is issued only through validated owner operations. Root owns parents, manifest, probes, progress and commits; admission_authority owns the two new children.
 
 The selected AF22 lower and upper composition has passed qualification. [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af22-integrated-mechanism-qualification) owns the final registered Native and original public-profile evidence. The selected torque-driven geometric loop, repeated subtree cuts and scalar actuator continuation are qualified within those limits; the remaining IM16 domains above remain open.
+
+## AF23 Imposed Motion and Stationary Physical Loading Contracts
+
+The next scope consumes the actual compiler/Joints moving-anchor path: fixed static root, a zero-DOF fixed joint with a prescribed parent anchor, a prescribed-kinematic base body, then dynamic descendant joints. Independent dynamic q/v remain distinct from complete imposed pose/velocity/acceleration samples. Full floating-root prescribed-coordinate partition remains an additional IM16 domain; the moving-base path does not certify it. Runtime currently rejects or discards samples, and general geometry/retraction/evolution currently rejects or discards them. The geometry facade's half-v-M-v energy currently covers only independent motion and must be replaced by the lower full body-motion energy when imposed drift is enabled.
+
+```text
+Core unit-component restoration -> Runtime bounded exact anchor checkpoint/trial
+  -> immutable versioned trajectory sampled at each requested stage time
+  -> original geometry/retraction with samples retained
+  -> full body-motion mass/energy/prescribed power + original constraint acceptance
+  -> accepted endpoint samples/history or unchanged physical prefix/RNG
+
+immutable bounded stationary load catalog -> accepted selected program/generation
+  -> actual static gravity + scalar passive-law contribution -> actual rigid equations
+  -> equilibrium authority keyed by physical state and selected program
+  -> active stages OR proved stationary omission
+load change -> original new-load acceleration -> atomic wake/selection/history
+```
+
+| Owner | Assumption | Guarantee and failure boundary | Evidence owner |
+|---|---|---|---|
+| [Core Geometry](../../Mathematics/Core/Geometry/DESIGN.md) | finite already-unit components within its declared rounding bound | exact component restoration without normalization; invalid unit data fails | MechanicsCoreTests |
+| [Runtime](../../Execution/Runtime/DESIGN.md) | complete model-required anchors at exact physical time, finite bounded scalar/identifier payload | same storage/isolation on all targets; exact trial/reset/checkpoint/restart; stale/missing/unknown/duplicate/oversized data cannot publish | MechanicsRuntimeTests and public qualification |
+| GeometricRelations / ManifoldProjection / NonlinearEvolution | immutable bounded trajectory identity, frame/law revision, validity interval and full analytic derivative supplier contract | every stage requests its actual time, samples survive retraction, full source-bound energy/power and accepted endpoint/history authority | geometric and nonlinear tests plus selected public qualification |
+| StationaryLoads / AffineEvolution / SleepContinuation | immutable bounded catalog of exact law values: static uniform gravity and coordinate-identified/dimension-bound passive polynomials; accepted selection/generation | actual loaded acceleration/energy, selection-bound memo/prepared proof, complete checkpoint association and atomic relevant-load wake with original supplier accounting | sleep tests plus selected public qualification |
+
+No arbitrary mutable callback establishes stationary-load or trajectory authority. Catalog signatures include all declared program parameters and revisions under metadata capacity; selection and generation are accepted contributor semantics. Selecting another admitted stationary program recomputes actual acceleration at the unchanged source q/v/time and publishes load identity, wake event, acceleration and Integration continuation in one accepted trial. Failed work remains visible even when physical/history/RNG changes roll back. General time-dependent loading, full prescribed floating-root authority, active-loop cuts and remaining IM16 obligations stay explicit.
+
+Lower Core/Runtime implementation and actual behavioral proof precede upper source changes. Root owns Core, shared Runtime registration/probes, parent indexes, progress and commits. Admission authority owns Runtime files only after its contract is fixed. Nonlinear owner owns geometric relations/retraction/evolution; sleep owner owns stationary loading, loaded affine evolution and sleep continuation. No upper worker changes Runtime, Core, parent indexes, manifest or the other's source. All builds consume a frozen registered graph.

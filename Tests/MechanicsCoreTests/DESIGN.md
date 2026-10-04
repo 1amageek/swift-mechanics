@@ -16,3 +16,5 @@ Independent local fixtures -> actual production Core -> analytic invariance and 
 Parallel tests use local immutable objects; loops use only test-local variables. Suite time limits are minutes; commands additionally use an external process deadline.
 ## Verification and Change Impact
 swift test on the native baseline verifies this target. CoreVerification owns the cross-target runtime probe. Change corresponding analytic/domain assertions only when their owner contract actually changes.
+
+AF23 exact quaternion restoration is owned by QuaternionRestorationTests: actual constructor outputs preserve component bits, including sign/signed zero, while zero/non-unit/extreme/nonfinite data fail. Together with existing Core GeometryTests, six tests passed under Swift 6.4.0 RELEASE Native in `.build/af23-core-native.log` (22.66-second build, 240-second external deadline). Other targets remain separately qualified.

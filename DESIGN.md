@@ -242,3 +242,7 @@ Root registered the general frame/point/axis relation and local manifold correct
 ## AF22 Closed-Loop and Topology Integration
 
 [Mechanisms](Sources/SwiftMechanics/Physics/Mechanisms/DESIGN.md#af22-mechanism-frontier) owns the composition boundaries for general geometric evolution and checkpointed subtree release. [FoundationVerification](Verification/FoundationVerification/DESIGN.md#af22-integrated-mechanism-qualification) owns actual registered Native and original Native/WASM/Embedded evidence and its profile limits. The qualified owners were committed independently as ef48e13 (subtree/history/law continuation) and b90af29 (shared physical engine and geometric evolution), after the lower geometry handoff d357b65. No new production module or C target was introduced. PROGRESS retains the remaining IM16 domains and all unclosed 210-requirement/IM48 obligations.
+
+## AF23 Lower Authority Frontier
+
+[Mechanisms](Sources/SwiftMechanics/Physics/Mechanisms/DESIGN.md#af23-imposed-motion-and-stationary-physical-loading-contracts) owns the next imposed-base and stationary physical-loading composition contract. Lower Core unit restoration and Runtime complete-anchor continuation require actual behavioral handoff before upper motion/sleep implementation; existing qualified profiles do not prove these new domains. PROGRESS owns readiness and integrated qualification.
