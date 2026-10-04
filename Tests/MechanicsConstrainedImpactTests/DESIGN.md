@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-This test target proves the [Constrained Normal Impulse](../../Sources/SwiftMechanics/Execution/Hybrid/ConstrainedNormalImpulse/DESIGN.md) child through public producers and physical behavior. Parent: [Tests](../DESIGN.md). It owns the independent constrained gear/striker oracle and scoped failure fixtures; root owns target registration and final profile execution. Evidence is pending implementation and actual execution.
+This test target proves the [Constrained Normal Impulse](../../Sources/SwiftMechanics/Execution/Hybrid/ConstrainedNormalImpulse/DESIGN.md) child through public producers and physical behavior. Parent: [Package](../../DESIGN.md). It owns the independent constrained gear/striker oracle and scoped failure fixtures; root owns target registration and final profile execution. Independent Native evidence passed below; integrated original profiles remain pending.
 
 ## Responsibilities and Boundaries
 
@@ -12,7 +12,7 @@ Tests compile the real fixed-root model, real transmission relation and analytic
 
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Tests](../DESIGN.md) | parent | Target ownership | Dedicated lower behavioral evidence | Registration belongs to root |
+| [Package](../../DESIGN.md) | parent | Target ownership | Dedicated lower behavioral evidence | Registration belongs to root |
 | [Constrained Normal Impulse](../../Sources/SwiftMechanics/Execution/Hybrid/ConstrainedNormalImpulse/DESIGN.md) | depends on | Preparation, opaque source/result, solve, policy and typed failure | Sole algorithm authority | No private producer constructors |
 | [Hybrid Tests](../MechanicsHybridTests/DESIGN.md) | coordinates with | Existing actual analytic-impact approach | Preserve old independent impact behavior | No shared mutable fixture or edits |
 
@@ -54,3 +54,7 @@ Cover nonzero q/time/layout scales and unchanged original source; malformed/revi
 ## Verification and Change Impact
 
 Implement one scoped comprehensive review and finding-limited recheck, then root-controlled focused Native and original Native/WASM/Embedded profiles. Tests exercise both e0/e1 and refusal/work/cancellation behavior. Existing producer algorithms and free Hybrid target are read-only. This target alone cannot qualify upper sleep contact wake or broad multi-contact impact.
+
+### Independent Native evidence
+
+The production [qualification record](../../Sources/SwiftMechanics/Execution/Hybrid/ConstrainedNormalImpulse/DESIGN.md#independent-native-qualification) is authoritative for the exact archive/commands/flags. All18 test definitions in3suites passed, comprising12 standalone cases and15 parameter cases. The actual original free impact is observed before the independent gear projection counterexample; e0/e1 new results are checked against direct original generalized momentum, retained row, rebound and energy oracles. Opaque supplier failures preserve known ledgers and are not retried. The source/law refusal tests use genuinely issued lower results from another source/law, not hand-minted private producer values.
