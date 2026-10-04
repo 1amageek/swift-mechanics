@@ -6,10 +6,11 @@ public enum GeometricConstraintError: Error, Sendable {
     case correctionExceeded(value: Double, limit: Double)
     case iterationLimit
     case constraint(ConstraintError)
+    case motion(PrescribedMotionError)
     case numerical(NumericalError)
     case supplierLedgerReplaced
     case supplierWorkUnavailable
     public var failedSupplierWorkUnavailable: Bool {
-        switch self { case .supplierLedgerReplaced, .supplierWorkUnavailable: true; case .constraint(.linear(_,let unavailable)): unavailable; case .constraint(.nonlinear(let failure)): failure.failedSupplierWorkUnavailable; default: false }
+        switch self { case .supplierLedgerReplaced, .supplierWorkUnavailable: true; case .motion(let error): error.failedSupplierWorkUnavailable; case .constraint(.linear(_,let unavailable)): unavailable; case .constraint(.nonlinear(let failure)): failure.failedSupplierWorkUnavailable; default: false }
     }
 }

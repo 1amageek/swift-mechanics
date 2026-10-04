@@ -42,8 +42,8 @@ Failures retain actual admitted NumericalWork prefix, last attempted valid posit
 Tests cover perturbed fourbar assembly, mixed manifold norm preservation, all-row redundancy versus contradiction, toggle/zero-rank, correction/iteration/work capacities, invalid initial quaternion, stale supplier source, successful and failed ledger reset, late cancellation and failed linear work. Changes require future upper endpoint/impulse/energy tests; lower completion does not qualify long-run TI004 or all CN004 domains.
 
 
-### AF23 planned sample-preserving assembly
-This is design-only pending the root Runtime prerequisite and PrescribedMotions mathematical and GeometricRelations contextual qualification. Current Swift retains the explicit prescribed-domain rejection; no new production domain is qualified by this text.
+### AF23 sample-preserving assembly
+The root Runtime prerequisite is qualified. Source now retains original prescribed samples; new PrescribedMotions/GeometricRelations and assembly behavioral qualification is pending root execution. This text alone does not qualify the new domain.
 
 The sole new responsibility is preserving the exact immutable prescribed samples during local position assembly. Initial state passes GeometricRelations' consumed original-motion and complete model/time/frame validation and actual compiled strict chart admission. Every Newton iterate and public root/joint retraction keeps `state.prescribedAnchors` byte/value-exact, alongside v/time/acceleration. Retraction changes dynamic q only; it never advances the trajectory clock, resamples a law at artificial integration timeStep:1, corrects an imposed motion, or drops a sample. Public JointMotionEvaluating.integrating(timeStep:1) continues to mean only the tangent position increment.
 
@@ -59,3 +59,5 @@ The row Jacobian is with respect to force-driven tangent coordinates only. The p
 Additional capacity reservation includes the complete retained anchor sample array and its identity storage before allocation/callback. The lower law signature is included through GeometricConstraintSystem; correction metadata semantics remain the same tangent metric/path rule. Supplier ledgers on success and failure remain seeded/validated as before. Immutable phase lifetimes and identical Sendable storage across profiles are unchanged.
 
 Completion oracles are a perturbed loop on an actual translating/rotating prescribed base, independent world closure and exact retained samples across every iterate/result, strict external quaternion rejection and unchanged original rank/path behavior. A supplier replacing valid samples with another law/time must be rejected through sealed original source acceptance. Root-owned registered tests and original profiles are required after implementation; AF22 evidence remains local to the unchanged fixed-frame path.
+
+Implemented `ManifoldRetraction.retract` retains the complete original sample array in every reconstructed state. Dedicated [PrescribedGeometryTests](../../../../../Tests/MechanicsGeometricConstraintTests/PrescribedGeometryTests.swift) and [MovingBaseEvolutionTests](../../../../../Tests/MechanicsNonlinearMechanismTests/MovingBaseEvolutionTests.swift) exercise actual spherical/revolute retraction and regular-chart perturbed assembly; test execution is root-owned and pending handoff qualification.

@@ -3,9 +3,9 @@ internal final class GeometricAccelerationContext: Sendable {
     let position:GeometricPositionContext
     let velocity:ConstrainedMotion
     let physical:NonlinearPhysicalSolveContext
-    let energy:Double
+    let velocityEnergyChange:Double
     let positionEnergyChange:Double
-    init(position:GeometricPositionContext,velocity:ConstrainedMotion,physical:NonlinearPhysicalSolveContext,energy:Double,positionEnergyChange:Double) {
-        self.position=position;self.velocity=velocity;self.physical=physical;self.energy=energy;self.positionEnergyChange=positionEnergyChange
+    init(position:GeometricPositionContext,velocity:ConstrainedMotion,physical:NonlinearPhysicalSolveContext,positionEnergyChange:Double,velocityEnergyChange:Double) {
+        self.velocityEnergyChange=velocityEnergyChange;self.position=position;self.velocity=velocity;self.physical=physical;self.positionEnergyChange=positionEnergyChange
     }
 }

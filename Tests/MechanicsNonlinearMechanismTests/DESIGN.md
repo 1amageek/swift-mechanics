@@ -52,3 +52,7 @@ Every test has an explicit time limit. Root supplies a process timeout and exact
 
 ## Verification and Change Impact
 Existing thirteen Native tests and AF20 original-profile paths were qualified before IM16.10. Their original snapshot evidence remains in [Foundation verification](../../Verification/FoundationVerification/DESIGN.md). New IM16.10 evidence is pending stable registered execution; source presence and the interim topology compile do not qualify new physical behavior. Renew affected quadratic/shared-engine and geometric tests once after convergence, then root qualifies the actual original public profiles. No copied dependency package or temporary manifest is used.
+
+AF23 MovingBaseEvolutionTests/MovingBaseFailureTests own regular-axis moving-base coupled rotor q/v/a/reaction, full K/momentum/virtual+prescribed work, mixed quaternion stages, source/law/history association, exact replay and supplier failure prefix. Registered-graph focused/profile execution is root-owned and pending the frozen handoff.
+
+ColdAggregateValidationTests owns the reopened cold solver aggregate arithmetic/iteration admission counterexample. A real delegated solver spends valid local prefixes; the test checks one combined callback envelope, terminal known-prefix capacity/failure and no callback when four local seeds cannot be admitted.

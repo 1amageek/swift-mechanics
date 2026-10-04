@@ -19,3 +19,5 @@ Tests use local immutable descriptors and explicit numerical/capacity policy. No
 
 ## Verification and Change Impact
 Run timeout-wrapped swift test --build-path .build/joint-kernels --filter MechanicsJointsTests. Exact-profile Native/WASM/Embedded execution is root-owned; native behavioral evidence does not imply unrun platforms or complete mechanics integration.
+
+AF23 PrescribedMotionTests owns analytic translation/fixed-axis rotation, exact pinned pose, original sample rejection, interval and metadata capacity. It does not qualify physical moving-base dynamics.

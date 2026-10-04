@@ -11,10 +11,14 @@ internal enum GeometricAxisAcceptance {
             do {
                 func direction(_ endpoint:GeometricFrameEndpoint) throws -> (axis:Vector3,rate:Vector3,second:Vector3) {
                     let frame=try snapshot.frame(endpoint.frame),body=try snapshot.body(endpoint.body)
-                    let axis=try frame.motion.pose.rotation.rotating(endpoint.axis),w=body.motion.velocity.angular
+                    let axis=try frame.motion.pose.rotation.rotating(endpoint.axis),w=frame.motion.velocity.angular
                     let rate=try w.cross(axis)
-                    var alpha=body.accelerationBias.angular
-                    if let acceleration {
+                    let prescribed=snapshot.tree.joints.contains { joint in
+                        guard joint.parentAnchor.frame == endpoint.frame else { return false }
+                        if case .prescribed=joint.parentAnchor.placement { return true };return false
+                    }
+                    var alpha=prescribed ? frame.motion.acceleration.angular : body.accelerationBias.angular
+                    if let acceleration,!prescribed {
                         let columns=try snapshot.geometricColumns(body:endpoint.body)
                         for (i,column) in columns.enumerated() { alpha=try alpha.adding(column.angular.scaled(by:acceleration[i])) }
                     }

@@ -29,7 +29,7 @@ public enum ManifoldRetraction {
             guard let joint=tree.joints.first(where:{$0.id == entry.joint}) else { throw .staleSource }
             try apply(joint.manifold,positions:entry.positions.range,velocities:entry.velocities.range)
         }
-        let result=try ManifoldArithmetic.geometry { try KinematicState(revision:state.revision,time:state.time,q:q,v:state.v,acceleration:state.acceleration) }
+        let result=try ManifoldArithmetic.geometry { try KinematicState(revision:state.revision,time:state.time,q:q,v:state.v,acceleration:state.acceleration,prescribedAnchors:state.prescribedAnchors) }
         _=try CompiledGeometricConfigurationValidator().snapshot(system,state:result,policy:policy,work:&work);try ManifoldArithmetic.check(policy);return result
     }
 }

@@ -10,6 +10,18 @@ internal struct GeometricEndpointMotion {
     let axisBias: Vector3
     let axisColumns: [Vector3]
     static func make(_ endpoint:GeometricFrameEndpoint,snapshot:KinematicSnapshot,original:Bool) throws(GeometricConstraintError) -> Self {
+        if GeometricConstraintSystem.isPrescribed(endpoint,tree:snapshot.tree) {
+            return try GeometricArithmetic.geometry {
+                let frame=try snapshot.frame(endpoint.frame).motion,offset=try frame.pose.rotation.rotating(endpoint.point)
+                let axis=try frame.pose.rotation.rotating(endpoint.axis),w=frame.velocity.angular,alpha=frame.acceleration.angular
+                let velocity=try frame.velocity.linear.adding(w.cross(offset))
+                let bias=try frame.acceleration.linear.adding(alpha.cross(offset)).adding(w.cross(w.cross(offset)))
+                let rate=try w.cross(axis),axisBias=try alpha.cross(axis).adding(w.cross(rate))
+                let zero=[Vector3](repeating:.zero,count:snapshot.tree.layout.velocityCount)
+                return Self(point:try frame.pose.translation.adding(offset),velocity:velocity,drift:velocity,bias:bias,columns:zero,
+                    axis:axis,axisRate:rate,axisDrift:rate,axisBias:axisBias,axisColumns:zero)
+            }
+        }
         let transform=try GeometricConstraintSystem.resolve(endpoint,tree:snapshot.tree)
         return try GeometricArithmetic.geometry {
             let local=try transform.transforming(point:endpoint.point),localAxis=try transform.transforming(direction:endpoint.axis)

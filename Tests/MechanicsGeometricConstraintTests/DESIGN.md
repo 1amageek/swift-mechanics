@@ -26,3 +26,5 @@ No type/existence-only success claims. Explicit analytic geometry, derivatives, 
 
 ## Verification and Change Impact
 Run dedicated Native tests with fixed Swift 6.4.0, -j4 and 240-second timeout on the actual registered repository graph. Root owns registered Native and original WASM/Embedded qualification. There is no shared test resource outside immutable fixtures and operation-local work.
+
+AF23 PrescribedGeometryTests owns actual named moving-anchor point g/rate/bias and mixed 4/3 sample-preserving assembly. Dynamic torque/work/replay belongs MechanicsNonlinearMechanismTests.

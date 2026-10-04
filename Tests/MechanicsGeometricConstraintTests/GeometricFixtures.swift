@@ -9,12 +9,12 @@ internal enum GeometricFixtures {
     static func pose(_ x:Double=0,_ y:Double=0,_ angle:Double=0) throws -> RigidTransform {
         RigidTransform(rotation:try UnitQuaternion(axis:.unitZ,angle:angle),translation:try Vector3(x,y,0))
     }
-    static func compile(names:[String],poses:[RigidTransform],joints:[JointRecord],q:[Double],v:[Double],floating:Bool=false,jointCoordinates:[String:([Double],[Double])]?=nil) throws -> CompiledMechanicalModel {
+    static func compile(names:[String],poses:[RigidTransform],joints:[JointRecord],q:[Double],v:[Double],floating:Bool=false,jointCoordinates:[String:([Double],[Double])]?=nil,prescribed:[PrescribedAnchorState]=[],modes:[BodyMotionMode]?=nil) throws -> CompiledMechanicalModel {
         let tolerance=try NumericalTolerance(absolute:1e-9,relative:1e-9),ip=try InertiaValidationPolicy(symmetry:tolerance,physicalityRelative:0)
         let properties=try MassProperties3D(mass:1,centerOfMass:.zero,inertiaAtCenter:Matrix3(1,0,0,0,1,0,0,0,1),policy:ip)
         var bodies:[MechanicalBody]=[]
         for i in names.indices {
-            bodies.append(.spatial(try BodyRecord3D(id:id(.body,names[i]),frame:id(.frame,names[i]),mode:i == 0 && !floating ? .static : .dynamic,
+            bodies.append(.spatial(try BodyRecord3D(id:id(.body,names[i]),frame:id(.frame,names[i]),mode:modes?[i] ?? (i == 0 && !floating ? .static : .dynamic),
                 bodyToWorld:poses[i],representations:BodyRepresentations(),inertia:InertialRepresentation3D(properties:properties,
                 provenance:SourceProvenance(source:"geometry-test",revision:1),quality:.exact))))
         }
@@ -33,8 +33,8 @@ internal enum GeometricFixtures {
                 for (i,value) in zip(entry.velocities.range,values.1) { velocity[i]=value }
             }
         }
-        let state=try KinematicState(revision:1,time:0,q:position,v:velocity,acceleration:[Double](repeating:0,count:velocity.count))
-        let descriptor=try MechanicalDescriptor(identity:"geometric-fixture",revision:1,bodies:bodies,joints:orderedJoints.map { MechanicalJoint(record:$0,authority:.dynamicState) },
+        let state=try KinematicState(revision:1,time:0,q:position,v:velocity,acceleration:[Double](repeating:0,count:velocity.count),prescribedAnchors:prescribed)
+        let descriptor=try MechanicalDescriptor(identity:"geometric-fixture",revision:1,bodies:bodies,joints:orderedJoints.map { MechanicalJoint(record:$0,authority:$0.manifold.velocityCount == 0 ? .fixed : .dynamicState) },
             root:id(.body,names[0]),rootBase:floating ? .spatialFloating : .fixed,rootAuthority:floating ? .dynamicState : .fixed,
             worldFrame:id(.frame,"world"),initialState:state,representationRequirements:[],features:[],extensions:[])
         let policy=try CompilationPolicy(kinematicCapacity:KinematicCapacity(maximumBodies:12,maximumVelocities:24,maximumJacobianScalars:5000),

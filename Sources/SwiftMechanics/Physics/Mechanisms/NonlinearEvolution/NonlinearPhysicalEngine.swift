@@ -26,20 +26,20 @@ internal final class NonlinearPhysicalEngine: Sendable {
         return bound
     }
     func reservedSlots() throws(NumericalError) -> Int { storage }
-    func snapshot(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> KinematicSnapshot {
-        try control.beginWorkBlock(units:1)
+    func snapshot(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> KinematicSnapshot {
+        if let control { try control.beginWorkBlock(units:1) }
         // Two lower tree evaluations are required by makeState/evaluate. Charge their bounded body/column envelope before either callback.
         do { try work.chargeOperations(try NumericalWork.product(512,try NumericalWork.product(model.tree.bodies.count,try NumericalWork.sum(1,v.count)))) }
         catch { throw RuntimeFailure(.capacityExceeded,message:"Compiled tree callback work admission exhausted.") }
         do { return try model.evaluate(model.makeState(KinematicState(revision:model.stamp.revision,time:time,q:q,v:v,acceleration:[Double](repeating:0,count:v.count)))) }
         catch { throw RuntimeFailure(.invalidState,message:"Actual compiled manifold evaluation failed.") }
     }
-    func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> RigidDynamicsSystem {
+    func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> RigidDynamicsSystem {
         let snapshot=try snapshot(q:q,v:v,time:time,work:&work,control:control)
         return try system(snapshot:snapshot,v:v,work:&work,control:control)
     }
     @inline(never)
-    func system(snapshot:KinematicSnapshot,v:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> RigidDynamicsSystem {
+    func system(snapshot:KinematicSnapshot,v:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> RigidDynamicsSystem {
         let input:RigidDynamicsInput
         do throws(DynamicsError) { input=try RigidDynamicsInput(snapshot:snapshot,velocity:v,inertias:inertias,gravity:nil) }
         catch { throw RuntimeFailure(.invalidState,message:"Rigid dynamics input failed.") }
@@ -57,15 +57,21 @@ internal final class NonlinearPhysicalEngine: Sendable {
         return result
     }
     @inline(never)
-    func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstrainedMotion {
+    func solve(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> ConstrainedMotion {
         let result=try invokePhysicalSupplier(context,work:&work,control:control)
         try acceptPhysicalSupplier(context,result:result,work:&work)
         return result
     }
     @inline(never)
-    func invokePhysicalSupplier(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstrainedMotion {
+    func invokePhysicalSupplier(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> ConstrainedMotion {
         // Reserve an irreversible admission quantum before all opaque callbacks; each independent ledger also has a seed.
-        var a=try supplier(&work,control:control),b=try supplier(&work,control:control),c=try supplier(&work,control:control),d=try supplier(&work,control:control)
+        var a:NumericalWork,b:NumericalWork,c:NumericalWork,d:NumericalWork
+        if control == nil {
+            (a,b,c,d)=try coldSuppliers(&work)
+        } else {
+            a=try supplier(&work,control:control);b=try supplier(&work,control:control)
+            c=try supplier(&work,control:control);d=try supplier(&work,control:control)
+        }
         let before=[a,b,c,d];var result:ConstrainedMotion?,failure:MechanismError?
         do throws(MechanismError) {
             if context.impulse { result=try invokeVelocity(context,a:&a,b:&b,c:&c,d:&d) }
@@ -75,6 +81,21 @@ internal final class NonlinearPhysicalEngine: Sendable {
         if let failure { throw RuntimeFailure(.invalidState,message:"Original constrained physical solve failed.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable) }
         guard let result else { throw RuntimeFailure(.invalidState,message:"Mechanism supplier source/result differs.") }
         return result
+    }
+    /// One aggregate cold allowance is partitioned only after every boundary marker is reserved.
+    private func coldSuppliers(_ work:inout NumericalWork) throws(RuntimeFailure) -> (NumericalWork,NumericalWork,NumericalWork,NumericalWork) {
+        try charge(4,&work)
+        do throws(NumericalError) {
+            let remaining=try work.remainingBudget(reservedStorage:reservedSlots())
+            guard remaining.arithmeticOperations >= 4 else { throw .resourceLimit(resource:.arithmeticOperations,limit:work.budget.arithmeticOperations) }
+            func ledger(_ index:Int) throws(NumericalError) -> NumericalWork {
+                let operations=remaining.arithmeticOperations/4+(index < remaining.arithmeticOperations%4 ? 1 : 0)
+                let iterations=remaining.iterations/4+(index < remaining.iterations%4 ? 1 : 0)
+                var result=NumericalWork(budget:try NumericalBudget(scalarStorage:remaining.scalarStorage,arithmeticOperations:operations,iterations:iterations))
+                try result.chargeOperations(1);return result
+            }
+            return (try ledger(0),try ledger(1),try ledger(2),try ledger(3))
+        } catch { throw RuntimeFailure(.capacityExceeded,message:"Cold aggregate solver admission exhausted.") }
     }
     @inline(never)
     func invokeVelocity(_ context:NonlinearPhysicalSolveContext,a:inout NumericalWork,b:inout NumericalWork,c:inout NumericalWork,d:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
@@ -110,14 +131,34 @@ internal final class NonlinearPhysicalEngine: Sendable {
             guard force.isFinite,abs(force-applied)*s[i]/(e*(impulse ? t : 1)) <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Original mass/momentum equation rejects supplier reaction.") }
         }
     }
+    @inline(never)
+    func energy(_ system:RigidDynamicsSystem,acceleration:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> MechanicalEnergy {
+        var local=try supplier(&work,control:control),result:MechanicalEnergy?,failure:DynamicsError?
+        let before=local
+        do throws(DynamicsError) { result=try kernel.energy(system,acceleration:acceleration,angularMomentumReference:.zero,requireComplete:false,work:&local) }
+        catch { failure=error }
+        try finish(local,before:before,into:&work)
+        if let failure {
+            let code:RuntimeFailureCode
+            switch failure { case .cancelled:code = .cancelled;case .capacityExceeded:code = .capacityExceeded;default:code = .invalidState }
+            throw RuntimeFailure(code,message:"Physical energy supplier failed.",failedSupplierWorkUnavailable:MechanismError.dynamics(failure).failedSupplierWorkUnavailable)
+        }
+        let original:MechanicalEnergy
+        do throws(DynamicsError) { original=try RigidEquationKernel().energy(system,acceleration:acceleration,angularMomentumReference:.zero,requireComplete:false,work:&work) }
+        catch { throw RuntimeFailure(.invalidState,message:"Original physical energy failed.") }
+        guard let result,result == original else { throw RuntimeFailure(.invalidState,message:"Physical energy source or original evidence differs.") }
+        if let control { try control.beginWorkBlock(units:1) }
+        guard !policy.isCancelled(),!admission.isCancelled() else { throw RuntimeFailure(.cancelled,message:"Physical energy cancelled.") }
+        return original
+    }
     func sourceComparisonAdmission(_ work:inout NumericalWork) throws(RuntimeFailure) {
         do {
             let bodyColumns=try NumericalWork.product(model.tree.bodies.count,try NumericalWork.sum(1,model.tree.layout.velocityCount))
             try work.chargeOperations(try NumericalWork.product(512,bodyColumns))
         } catch { throw RuntimeFailure(.capacityExceeded,message:"Physical source comparison work budget exhausted.") }
     }
-    func supplier(_ work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> NumericalWork {
-        try control.beginWorkBlock(units:1);try charge(1,&work)
+    func supplier(_ work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> NumericalWork {
+        if let control { try control.beginWorkBlock(units:1) };try charge(1,&work)
         do { var local=NumericalWork(budget:try work.remainingBudget(reservedStorage:reservedSlots()));try local.chargeOperations(1);return local }
         catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear supplier admission exhausted.") }
     }

@@ -6,6 +6,15 @@ internal struct GeometricDirectionMotion {
     let bias: Vector3
     let columns: [Vector3]
     static func make(_ endpoint:GeometricFrameEndpoint,frameDirection:Vector3,snapshot:KinematicSnapshot) throws(GeometricConstraintError) -> Self {
+        if GeometricConstraintSystem.isPrescribed(endpoint,tree:snapshot.tree) {
+            return try GeometricArithmetic.geometry {
+                let frame=try snapshot.frame(endpoint.frame).motion,direction=try frame.pose.rotation.rotating(frameDirection)
+                let rate=try frame.velocity.angular.cross(direction)
+                return Self(direction:direction,rate:rate,drift:rate,
+                    bias:try frame.acceleration.angular.cross(direction).adding(frame.velocity.angular.cross(rate)),
+                    columns:[Vector3](repeating:.zero,count:snapshot.tree.layout.velocityCount))
+            }
+        }
         let frameToBody=try GeometricConstraintSystem.resolve(endpoint,tree:snapshot.tree)
         return try GeometricArithmetic.geometry {
             let body=try snapshot.body(endpoint.body)

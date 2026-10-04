@@ -1,6 +1,6 @@
 internal enum GeometricMetadata {
     static func encode(model:CompiledMechanicalModel,layout:ConstraintCoordinateLayout,relations:[GeometricRelation],minimum:[Double],maximum:[Double],
-                       minimumTime:Double,maximumTime:Double,limit:Int,work:inout NumericalWork) throws(GeometricConstraintError) -> String {
+                       minimumTime:Double,maximumTime:Double,limit:Int,work:inout NumericalWork,prescribedMotion:PrescribedMotionProgram? = nil) throws(GeometricConstraintError) -> String {
         // First pass bounds encoded bytes. No identifier or string buffer is allocated before the bound passes.
         var count=24
         func walk(_ emit:(UInt64)->Void,_ identifier:(String)->Void) {
@@ -11,9 +11,14 @@ internal enum GeometricMetadata {
             identifier(model.stamp.identity);emit(model.stamp.revision);id(model.tree.worldFrame)
             switch model.tree.rootBase { case .fixed:emit(0);case .planarFloating:emit(1);case .spatialFloating:emit(2) }
             emit(UInt64(model.tree.layout.positionCount));emit(UInt64(model.tree.layout.velocityCount));emit(UInt64(model.tree.bodies.count));emit(UInt64(model.tree.joints.count))
+            if let program=prescribedMotion { identifier(program.metadata);for body in model.descriptor.bodies { id(body.id);switch body.mode { case .static:emit(0);case .dynamic:emit(1);case .prescribedKinematic:emit(2) } } }
             for body in model.tree.bodies { id(body.id);id(body.frame);pose(body.referencePose) }
             for joint in model.tree.joints {
                 id(joint.id);id(joint.parentBody);id(joint.childBody);id(joint.parentAnchor.frame);id(joint.childAnchor.frame)
+                if prescribedMotion != nil {
+                    for anchor in [joint.parentAnchor,joint.childAnchor] { switch anchor.placement { case .fixed:emit(0);case .prescribed:emit(1) } }
+                    if let descriptor=model.descriptor.joints.first(where:{$0.record.id == joint.id}) { switch descriptor.authority { case .fixed:emit(0);case .dynamicState:emit(1);case .prescribedMotion:emit(2) } }
+                }
                 if case .fixed(let p)=joint.parentAnchor.placement { pose(p) };if case .fixed(let p)=joint.childAnchor.placement { pose(p) }
                 emit(UInt64(joint.manifold.positionCount));emit(UInt64(joint.manifold.velocityCount));emit(UInt64(joint.manifold.orderedAxes.count))
                 for axis in joint.manifold.orderedAxes { switch axis.kind { case .revolute:emit(0);case .prismatic:emit(1);case .screw:emit(2) };vector(axis.direction);emit(axis.pitchMetersPerRadian.bitPattern) }
@@ -40,7 +45,7 @@ internal enum GeometricMetadata {
         guard !overflow,count <= limit else { throw .capacityExceeded }
         try GeometricArithmetic.numeric { () throws(NumericalError) -> Void in try work.requireStorage(try NumericalWork.sum(work.peakScalarStorage,count/8+1)) }
         try GeometricArithmetic.charge(count,&work)
-        var result="body-frame-holonomic-v2";result.reserveCapacity(count)
+        var result=prescribedMotion == nil ? "body-frame-holonomic-v2" : "body-frame-holonomic-v3";result.reserveCapacity(count)
         walk({ value in result.append(":");let raw=String(value,radix:16);result.append(String(repeating:"0",count:16-raw.count));result.append(raw) },{ value in
             result.append(":");result.append(String(value.utf8.count,radix:16));result.append(":")
             for byte in value.utf8 { let raw=String(byte,radix:16);if raw.count == 1 { result.append("0") };result.append(raw) }
