@@ -1,7 +1,7 @@
 # MechanicsDerivativesTests
 
 ## Purpose and Scope
-Parent: [package](../../DESIGN.md). Children: none. Behavioral owner for [ScalarCalculus](../../Sources/MechanicsDerivatives/ScalarCalculus/DESIGN.md), [TreeTangents](../../Sources/MechanicsDerivatives/TreeTangents/DESIGN.md), [ConstraintProducts](../../Sources/MechanicsDerivatives/ConstraintProducts/DESIGN.md), and [MechanicalSensitivities](../../Sources/MechanicsDerivatives/MechanicalSensitivities/DESIGN.md). Test/profile execution pending.
+Parent: [package](../../DESIGN.md). Children: none. Behavioral owner for [ScalarCalculus](../../Sources/SwiftMechanics/Analysis/Derivatives/ScalarCalculus/DESIGN.md), [TreeTangents](../../Sources/SwiftMechanics/Analysis/Derivatives/TreeTangents/DESIGN.md), [ConstraintProducts](../../Sources/SwiftMechanics/Analysis/Derivatives/ConstraintProducts/DESIGN.md), and [MechanicalSensitivities](../../Sources/SwiftMechanics/Analysis/Derivatives/MechanicalSensitivities/DESIGN.md). Test/profile execution pending.
 
 ## Responsibilities and Boundaries
 Real verified supplier trees and physical inputs; independent analytic oracles and centered differences only as test oracles. Root owns exact profile composition; tests do not infer general OP qualification.

@@ -1,4 +1,4 @@
-import MechanicsContactLaws
+import SwiftMechanics
 struct ResettingGranularLaw: ContactLawEvaluating, Sendable {
     func initialHistory(identity: ContactIdentity,pair: ContactLawPair,timeSeconds: Double,work: inout ContactWork) throws(ContactLawError) -> ContactHistory {
         try CompliantContactEvaluator().initialHistory(identity:identity,pair:pair,timeSeconds:timeSeconds,work:&work)

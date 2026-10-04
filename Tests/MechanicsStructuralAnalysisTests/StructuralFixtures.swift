@@ -1,9 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsMaterials
-import MechanicsNumerics
-import MechanicsFlexible
-@testable import MechanicsStructuralAnalysis
+@testable import SwiftMechanics
 struct StructuralFixtures {
     static func work(storage:Int=2000000,operations:Int=100000000,iterations:Int=100000) throws -> NumericalWork { NumericalWork(budget:try NumericalBudget(scalarStorage:storage,arithmeticOperations:operations,iterations:iterations)) }
     static func policy(spectral:Double=1e-13,residual:Double=1e-6,cancelled:Bool=false,coordinates:Int=256) throws -> StructuralPolicy {

@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsLoads
 @Suite struct ForcePortsTests {
     @Test func pointJacobianAndPrescribedPower() throws {
         let snapshot = try LoadFixtures.snapshot(prescribed: true), body = try LoadFixtures.body()

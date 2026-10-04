@@ -1,9 +1,14 @@
+import SwiftMechanics
 import Testing
-import CMechanicsMath
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsFluids
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(WASILibc)
+import WASILibc
+#elseif canImport(Glibc)
+import Glibc
+#else
+#error("No admitted scalar mathematics platform module is available.")
+#endif
 struct PlanarFixtures {
     static let pi=3.14159265358979323846
     static func grid(nx:Int=6,ny:Int=6,lengthX:Double=2*pi,lengthY:Double=2*pi,rho:Double=1,mu:Double=0.1) throws -> PlanarGrid {
@@ -26,8 +31,8 @@ struct PlanarFixtures {
         var u=[Double](repeating:0,count:g.count),v=[Double](repeating:0,count:g.count)
         for j in 0..<g.ny { for i in 0..<g.nx {
             let k=j*g.nx+i
-            u[k]=sm_sin(Double(i)*g.dx)*sm_cos((Double(j)+0.5)*g.dy)
-            v[k] = -sm_cos((Double(i)+0.5)*g.dx)*sm_sin(Double(j)*g.dy)
+            u[k]=sin(Double(i)*g.dx)*cos((Double(j)+0.5)*g.dy)
+            v[k] = -cos((Double(i)+0.5)*g.dx)*sin(Double(j)*g.dy)
         } }
         return try state(g,u:u,v:v)
     }

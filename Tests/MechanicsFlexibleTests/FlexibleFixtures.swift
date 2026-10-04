@@ -1,8 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsMaterials
-import MechanicsNumerics
-import MechanicsFlexible
+import SwiftMechanics
 internal enum FlexibleFixtures {
     static func work(storage: Int = 100000, operations: Int = 1000000) throws -> NumericalWork {
         NumericalWork(budget:try NumericalBudget(scalarStorage:storage,arithmeticOperations:operations,iterations:0))

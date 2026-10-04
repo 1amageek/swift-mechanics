@@ -1,8 +1,6 @@
+import SwiftMechanics
 import Testing
 import Synchronization
-import MechanicsJoints
-import MechanicsRuntime
-import MechanicsCompiler
 
 @Suite struct RuntimeReplacementTests {
     @Test func changedChartPublishesCompleteContextAndRestartsWithNewHandler() throws {

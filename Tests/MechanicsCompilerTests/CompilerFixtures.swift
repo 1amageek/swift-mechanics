@@ -1,9 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsCompiler
 
 struct CompilerFixtures {
     static func id(_ kind: EntityKind, _ key: String) throws -> EntityID { try EntityID(kind: kind, key: key) }

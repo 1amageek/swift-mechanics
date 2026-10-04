@@ -1,9 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsNumerics
-import MechanicsRuntime
-import MechanicsFluids
 struct FluidRuntimeTests {
     @Test func actualAcceptedEvolutionRejectedRollbackAndCheckpointReplay() throws {
         if #available(macOS 15.0,iOS 18.0,tvOS 18.0,watchOS 11.0,*) {

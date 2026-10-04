@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsLoads
 @Suite struct CableRoutingTests {
     private func points(_ q: Double) throws -> [RoutePoint] {
         let frame = try LoadFixtures.frame()

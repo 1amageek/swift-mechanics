@@ -1,9 +1,36 @@
+import SwiftMechanics
 import Testing
-import MechanicsCompiler
-import MechanicsJoints
-import MechanicsRuntime
 
 @Suite struct RuntimeCheckpointTests {
+    @Test func requiredValidationAndActualTreeFailureNeverProduceAcceptedState() throws {
+        guard #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) else { Issue.record("Runtime requires the declared Synchronization OS baseline."); return }
+        let model = try RuntimeFixtures.model(), configuration = try RuntimeFixtures.configuration()
+        let handler = try RuntimeFixtures.handler(), session = try RuntimeFixtures.session(model: model)
+        _ = try RuntimeFixtures.advance(session)
+        let prefix = session.snapshot().checkpoint
+        let invalidContributor = try RuntimeContributorState(id: "integrator-counter", category: .integrator, version: 1, bytes: [1])
+        let invalidPhysical = try KinematicState(revision: model.stamp.revision, time: prefix.physical.time,
+            q: [0, 0], v: prefix.physical.v, acceleration: prefix.physical.acceleration)
+        let rejected = [
+            try RuntimeCheckpoint(model: prefix.model, continuation: prefix.continuation, physical: prefix.physical,
+                contributors: [invalidContributor], random: prefix.random, acceptedSteps: prefix.acceptedSteps),
+            try RuntimeCheckpoint(model: prefix.model, continuation: prefix.continuation, physical: invalidPhysical,
+                contributors: prefix.contributors, random: prefix.random, acceptedSteps: prefix.acceptedSteps)
+        ]
+        for (checkpoint, expected) in zip(rejected, [RuntimeFailureCode.invalidContributor, .invalidState]) {
+            var accepted: RuntimeAcceptedState?
+            do throws(RuntimeFailure) {
+                accepted = try handler.admit(checkpoint, model: model, configuration: configuration, cancellation: nil)
+                Issue.record("Failed required validation unexpectedly produced an accepted state.")
+            } catch { #expect(error.code == expected) }
+            #expect(accepted == nil)
+        }
+        let accepted = try handler.admit(prefix, model: model, configuration: configuration, cancellation: nil)
+        #expect(accepted.checkpoint == prefix)
+        #expect(accepted.physical.stamp == model.stamp && accepted.physical.state == prefix.physical)
+        #expect(session.snapshot() == accepted)
+    }
+
     @Test func actualCheckpointRestartMatchesUninterruptedContinuation() throws {
         guard #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) else { Issue.record("Runtime requires the declared Synchronization OS baseline."); return }
         let model = try RuntimeFixtures.model(), first = try RuntimeFixtures.session(model: model), resumed = try RuntimeFixtures.session(model: model)

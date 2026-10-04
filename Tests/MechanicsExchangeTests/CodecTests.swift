@@ -1,8 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-@testable import MechanicsExchange
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
 
 @Suite struct CodecTests {
     @Test func completeWireAndUnicodeRoundTrip() throws {

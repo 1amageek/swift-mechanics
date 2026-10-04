@@ -1,12 +1,6 @@
+import SwiftMechanics
 import Foundation
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsLoads
-import MechanicsDynamics
-import MechanicsNumerics
-import MechanicsDerivatives
 @Suite struct MechanicalDerivativeTests {
     @Test func twoLinkMassBiasGravityAndNonzeroAcceleration() throws {
         let input=try DerivativeFixtures.twoLink(), d=DerivativeFixtures.zero(input,q:[0,1])

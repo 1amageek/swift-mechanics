@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsHybrid
-import MechanicsNumerics
-import MechanicsDynamics
-import MechanicsCollision
 
 @Suite("Hybrid hard normal impulses")
 struct HybridImpulseTests {

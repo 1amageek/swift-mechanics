@@ -1,5 +1,4 @@
-import MechanicsCore
-import MechanicsCollision
+import SwiftMechanics
 internal struct FailingPlaneQueries: CollisionGeometryQuerying {
     private let base=AnalyticCollisionQueries()
     func witness(first: CollisionProxy, second: CollisionProxy, policy: CollisionQueryPolicy, work: inout CollisionWork) throws(CollisionError) -> CollisionWitness { try base.witness(first:first,second:second,policy:policy,work:&work) }

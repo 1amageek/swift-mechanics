@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsLoads
 @Suite struct PassiveLawsTests {
     @Test func nonlinearTranslationAndTorsionEnergyDerivative() throws {
         for kind in [ScalarCoordinateKind.translation, .rotation] {

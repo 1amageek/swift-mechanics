@@ -1,6 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-import MechanicsCore
-@testable import MechanicsModel
 
 @Suite struct CoordinateTests {
     @Test func countsAndRoundTrip() throws {

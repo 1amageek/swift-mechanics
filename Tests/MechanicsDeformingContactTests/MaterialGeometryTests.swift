@@ -1,9 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsFlexible
-import MechanicsDeformingContact
 @Suite struct MaterialGeometryTests {
     @Test func orientedBoundaryAndInteriorCancellation() throws {
         let mesh=try DeformingFixtures.mesh(points:[.zero,.unitX,.unitY,.unitZ,Vector3(0,0,-1)],cells:[[0,1,2,3],[0,2,1,4]])

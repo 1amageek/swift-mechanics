@@ -1,9 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsContactLaws
-import MechanicsDeformingContact
 @Suite struct NodalForceTests {
     private func response(_ snapshot: DeformingSurfaceSnapshot) throws -> SurfaceForceTrial {
         let witness=try DeformingFixtures.selfWitness(snapshot), pair=try DeformingFixtures.pair()

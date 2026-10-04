@@ -1,7 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsLoads
+import SwiftMechanics
 struct LoadFixtures {
     static func work(_ units: Int = 10000, scalars: Int = 10000) throws -> LoadWork {
         LoadWork(budget: try LoadBudget(maximumWork: units, maximumScalars: scalars))

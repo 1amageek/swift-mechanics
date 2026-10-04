@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsCompiler
 
 @Suite struct CompilationRecordsTests {
     @Test func independentStructuralRanksAndFloatingCounts() throws {

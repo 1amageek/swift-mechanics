@@ -1,10 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsExchange
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsCompiler
 
 @Suite struct RoundTripTests {
     @Test func spatialAndPlanarRecompileAndIndependentCircularMotion() throws {

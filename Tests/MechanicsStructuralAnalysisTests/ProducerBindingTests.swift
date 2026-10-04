@@ -1,11 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsNumerics
-import MechanicsFlexible
-import MechanicsEquilibrium
-@testable import MechanicsStructuralAnalysis
 struct ProducerBindingTests {
     @Test func realStressFreeTet4HasSixRigidModesAndIdentifiedBinding() throws {
         let mesh=try StructuralFlexibleFixture.mesh(),state=try StructuralFlexibleFixture.state(mesh)

@@ -1,7 +1,4 @@
-import MechanicsCore
-import MechanicsConstraints
-import MechanicsNumerics
-import MechanicsNonlinear
+import SwiftMechanics
 
 internal enum ConstraintFixtures {
     static func budget(storage: Int = 100_000, operations: Int = 2_000_000, iterations: Int = 1000) throws -> NumericalBudget {

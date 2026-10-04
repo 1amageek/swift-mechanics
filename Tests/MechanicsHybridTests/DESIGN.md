@@ -1,7 +1,7 @@
 # Hybrid Behavioral Proof
 
 ## Purpose and Scope
-Own local evidence for [ImpactPorts](../../Sources/MechanicsHybrid/ImpactPorts/DESIGN.md), [NormalImpulse](../../Sources/MechanicsHybrid/NormalImpulse/DESIGN.md), [EventEvolution](../../Sources/MechanicsHybrid/EventEvolution/DESIGN.md) and [Continuation](../../Sources/MechanicsHybrid/Continuation/DESIGN.md). Parent: [Hybrid](../../Sources/MechanicsHybrid/DESIGN.md). No children.
+Own local evidence for [ImpactPorts](../../Sources/SwiftMechanics/Execution/Hybrid/ImpactPorts/DESIGN.md), [NormalImpulse](../../Sources/SwiftMechanics/Execution/Hybrid/NormalImpulse/DESIGN.md), [EventEvolution](../../Sources/SwiftMechanics/Execution/Hybrid/EventEvolution/DESIGN.md) and [Continuation](../../Sources/SwiftMechanics/Execution/Hybrid/Continuation/DESIGN.md). Parent: [Hybrid](../../Sources/SwiftMechanics/Execution/Hybrid/DESIGN.md). No children.
 
 ## Responsibilities and Boundaries
 Actual Dynamics/Joints mass/point paths, Collision witnesses, ContactLaws restitution, isolated Runtime/Integration queries and outer accepted transactions are tested against independently computed impulse/bounce values. Root owns accumulated graph and exact profiles.

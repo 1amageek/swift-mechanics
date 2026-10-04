@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsDynamics
-import MechanicsMechanisms
-import MechanicsIntegration
 
 @Suite struct MechanismFailureTests {
     @Test func supplierActualWorkResetStopsAndPreservesPrefix() throws {

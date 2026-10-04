@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsNumerics
 
 @Suite struct ScalingTests {
     private func budget() throws -> NumericalBudget {

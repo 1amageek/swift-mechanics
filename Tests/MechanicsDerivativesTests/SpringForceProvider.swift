@@ -1,7 +1,4 @@
-import MechanicsCore
-import MechanicsJoints
-import MechanicsNumerics
-import MechanicsDerivatives
+import SwiftMechanics
 struct SpringForceProvider: DifferentiatedForceProviding {
     enum Behavior: Equatable, Sendable { case valid, unavailable, partial, resized, failed, resetLedger }
     let behavior: Behavior

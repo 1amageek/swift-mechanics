@@ -1,10 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsRuntime
-import MechanicsIntegration
-import MechanicsCollision
-import MechanicsHybrid
 
 @Suite("Hybrid bounded continuation authority")
 struct HybridContinuationTests {

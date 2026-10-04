@@ -1,10 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsNumerics
-import MechanicsTransmissions
-import MechanicsMechanisms
 
 @Suite struct TransmissionReactionTests {
     @Test func actualTransmissionRowsTorqueAndVirtualPower() throws {

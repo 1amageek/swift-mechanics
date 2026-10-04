@@ -1,10 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsLoads
-import MechanicsDynamics
 @Suite struct RigidMechanicsTests {
     @Test func rotatedAsymmetricFreeBodyEulerWithOffsetCOM() throws {
         var loadWork = try DynamicsFixtures.loadWork()

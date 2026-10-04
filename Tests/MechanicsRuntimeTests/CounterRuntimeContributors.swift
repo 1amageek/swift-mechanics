@@ -1,5 +1,4 @@
-import MechanicsCompiler
-import MechanicsRuntime
+import SwiftMechanics
 
 struct CounterRuntimeContributors: RuntimeContributorHandling {
     let schemas: [RuntimeContributorSchema]

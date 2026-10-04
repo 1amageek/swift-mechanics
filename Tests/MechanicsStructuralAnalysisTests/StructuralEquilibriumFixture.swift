@@ -1,13 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsNonlinear
-import MechanicsConstraints
-import MechanicsJoints
-import MechanicsCompiler
-import MechanicsLoads
-import MechanicsDynamics
-import MechanicsEquilibrium
+import SwiftMechanics
 
 struct StructuralEquilibriumFixture {
     static func id(_ kind:EntityKind,_ key:String)throws->EntityID { try EntityID(kind:kind,key:key) }

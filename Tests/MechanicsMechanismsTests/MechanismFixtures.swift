@@ -1,16 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsJoints
-import MechanicsNumerics
-import MechanicsNonlinear
-import MechanicsConstraints
-import MechanicsTransmissions
-import MechanicsDynamics
-import MechanicsLoads
-import MechanicsRuntime
-import MechanicsIntegration
-import MechanicsMechanisms
+import SwiftMechanics
 
 @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
 internal enum MechanismFixtures {

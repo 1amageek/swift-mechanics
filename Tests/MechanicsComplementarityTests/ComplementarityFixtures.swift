@@ -1,5 +1,4 @@
-import MechanicsComplementarity
-import MechanicsNumerics
+import SwiftMechanics
 
 enum ComplementarityFixtures {
     static func problem(values: [Double] = [2, -1, -1, 2], b: [Double] = [-1, 1],

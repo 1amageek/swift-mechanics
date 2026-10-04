@@ -1,13 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsLoads
-import MechanicsDynamics
-import MechanicsCollision
-import MechanicsContactLaws
-import MechanicsComplementarity
-import MechanicsContactResponse
+import SwiftMechanics
 internal enum ResponseFixtures {
     static func id(_ kind: EntityKind,_ key: String) throws -> EntityID { try EntityID(kind:kind,key:key) }
     static func work(storage: Int=1000000, operations: Int=10000000, iterations: Int=10000) throws -> NumericalWork {

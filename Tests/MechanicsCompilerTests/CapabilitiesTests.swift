@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsCompiler
 
 @Suite struct CapabilitiesTests {
     private func spring(stiffness: Double = 10, dimension: PhysicalDimension = PhysicalDimension(mass: 1, time: -2)) throws -> MechanicalExtensionRecord {

@@ -1,6 +1,6 @@
+import SwiftMechanics
 import Testing
 import Synchronization
-import MechanicsRuntime
 
 @Suite struct RuntimeSessionsTests {
     @Test func callbackReentryObservationShutdownAndExactlyOnceRelease() throws {

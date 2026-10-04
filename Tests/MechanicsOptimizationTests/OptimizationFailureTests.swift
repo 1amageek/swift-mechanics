@@ -1,6 +1,4 @@
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsOptimization
+import SwiftMechanics
 import Testing
 
 struct OptimizationFailureTests {

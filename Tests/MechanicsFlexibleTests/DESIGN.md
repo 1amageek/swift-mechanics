@@ -9,8 +9,8 @@ Own analytical element, conservation, objectivity, refinement and typed failure 
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Mesh](../../Sources/MechanicsFlexible/Mesh/DESIGN.md) | depends on | Validation/refinement | Identity/geometry | Closed tetra domain |
-| [Tetrahedra](../../Sources/MechanicsFlexible/Tetrahedra/DESIGN.md) | depends on | Force/energy/tangent/mass | Physical evidence | No general family qualification |
+| [Mesh](../../Sources/SwiftMechanics/Physics/Flexible/Mesh/DESIGN.md) | depends on | Validation/refinement | Identity/geometry | Closed tetra domain |
+| [Tetrahedra](../../Sources/SwiftMechanics/Physics/Flexible/Tetrahedra/DESIGN.md) | depends on | Force/energy/tangent/mass | Physical evidence | No general family qualification |
 
 ## Architecture
 ```text

@@ -1,8 +1,4 @@
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsRuntime
-import MechanicsNumerics
-import MechanicsFluids
+import SwiftMechanics
 @available(macOS 15.0,iOS 18.0,tvOS 18.0,watchOS 11.0,*)
 struct FluidRuntimeFixture {
     typealias Handler=ReferenceRuntimeCheckpointHandler<FluidRuntimeContributors,ReferenceModelRevisionUpdater>

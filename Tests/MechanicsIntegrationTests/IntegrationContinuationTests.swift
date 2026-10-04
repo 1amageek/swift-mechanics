@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCompiler
-import MechanicsRuntime
-import MechanicsIntegration
 
 @Suite struct IntegrationContinuationTests {
     @Test func rejectedActuationAndRandomUpdatesRollbackAndRestartContinuesExactly() throws {

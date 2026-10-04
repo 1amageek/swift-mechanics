@@ -9,8 +9,8 @@ Own analytic effective-mass/normal/momentum/wrench and failure fixtures. Root ow
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Ports](../../Sources/MechanicsContactResponse/WitnessPorts/DESIGN.md) | depends on | Framed adapter | Identity/geometry proof | Closed normal domain |
-| [Response](../../Sources/MechanicsContactResponse/ImplicitNormal/DESIGN.md) | depends on | Coupled response | Original mechanics | Frozen geometry only |
+| [Ports](../../Sources/SwiftMechanics/Physics/ContactResponse/WitnessPorts/DESIGN.md) | depends on | Framed adapter | Identity/geometry proof | Closed normal domain |
+| [Response](../../Sources/SwiftMechanics/Physics/ContactResponse/ImplicitNormal/DESIGN.md) | depends on | Coupled response | Original mechanics | Frozen geometry only |
 
 ## Architecture
 ```text

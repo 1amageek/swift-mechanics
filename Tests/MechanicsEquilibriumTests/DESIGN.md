@@ -1,15 +1,15 @@
 # Equilibrium behavioral verification
 ## Purpose and Scope
-Test owner for [Equations](../../Sources/MechanicsEquilibrium/Equations/DESIGN.md), [Statics](../../Sources/MechanicsEquilibrium/Statics/DESIGN.md), [Linearization](../../Sources/MechanicsEquilibrium/Linearization/DESIGN.md), [Continuation](../../Sources/MechanicsEquilibrium/Continuation/DESIGN.md). Children: none.
+Test owner for [Equations](../../Sources/SwiftMechanics/Analysis/Equilibrium/Equations/DESIGN.md), [Statics](../../Sources/SwiftMechanics/Analysis/Equilibrium/Statics/DESIGN.md), [Linearization](../../Sources/SwiftMechanics/Analysis/Equilibrium/Linearization/DESIGN.md), [Continuation](../../Sources/SwiftMechanics/Analysis/Equilibrium/Continuation/DESIGN.md). Children: none.
 ## Responsibilities and Boundaries
 Actual physical residual/retained rows, branch provenance and original dynamics/directional derivative paths are checked. Numerical convergence cannot establish stability/uniqueness/reaction decomposition.
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Equations](../../Sources/MechanicsEquilibrium/Equations/DESIGN.md) | verifies | original SI force/energy | spring and pendulum analytical authority | caller coefficient domain |
-| [Statics](../../Sources/MechanicsEquilibrium/Statics/DESIGN.md) | verifies | solve/rank/reactions | original retained balance | local stationarity only |
-| [Linearization](../../Sources/MechanicsEquilibrium/Linearization/DESIGN.md) | verifies | actual mass/reduction/probes | original derivatives and association | supplied basis |
-| [Continuation](../../Sources/MechanicsEquilibrium/Continuation/DESIGN.md) | verifies | value history and sweep | mixed failures and cumulative work | no branch switching |
+| [Equations](../../Sources/SwiftMechanics/Analysis/Equilibrium/Equations/DESIGN.md) | verifies | original SI force/energy | spring and pendulum analytical authority | caller coefficient domain |
+| [Statics](../../Sources/SwiftMechanics/Analysis/Equilibrium/Statics/DESIGN.md) | verifies | solve/rank/reactions | original retained balance | local stationarity only |
+| [Linearization](../../Sources/SwiftMechanics/Analysis/Equilibrium/Linearization/DESIGN.md) | verifies | actual mass/reduction/probes | original derivatives and association | supplied basis |
+| [Continuation](../../Sources/SwiftMechanics/Analysis/Equilibrium/Continuation/DESIGN.md) | verifies | value history and sweep | mixed failures and cumulative work | no branch switching |
 Existing supplier behavioral proofs are assumptions only for their published contracts; new analytical expectations are independent.
 ## Architecture
 ```text

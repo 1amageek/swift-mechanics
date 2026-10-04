@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Synchronization
-import MechanicsNumerics
-import MechanicsNonlinear
 
 @available(macOS 15.0, *)
 final class MutatingLayoutEquation: NonlinearEquations, Sendable {

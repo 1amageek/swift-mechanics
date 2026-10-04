@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsJoints
-import MechanicsRuntime
-import MechanicsIntegration
-import MechanicsMechanisms
 
 @Suite struct AffineEvolutionTests {
     @Test func torqueDrivenCompiledGearsAndCheckpointReplay() throws {

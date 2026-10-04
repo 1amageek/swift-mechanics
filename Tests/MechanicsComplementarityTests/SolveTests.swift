@@ -1,5 +1,4 @@
-import MechanicsComplementarity
-import MechanicsNumerics
+import SwiftMechanics
 import Testing
 
 @Suite(.timeLimit(.minutes(1)))

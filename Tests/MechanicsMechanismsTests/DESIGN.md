@@ -1,13 +1,13 @@
 # MechanicsMechanismsTests
 
 ## Purpose and Scope
-Behavioral IM16 evidence; parent [module](../../Sources/MechanicsMechanisms/DESIGN.md); no children.
+Behavioral IM16 evidence; parent [module](../../Sources/SwiftMechanics/Physics/Mechanisms/DESIGN.md); no children.
 
 ## Responsibilities and Boundaries
 Independent physical oracles for constrained mass dynamics, affine invariant evolution, engagement and connected wake. Root owns registration/profile execution.
 
 ## Related Designs
-[ConstrainedDynamics](../../Sources/MechanicsMechanisms/ConstrainedDynamics/DESIGN.md), [AffineEvolution](../../Sources/MechanicsMechanisms/AffineEvolution/DESIGN.md), [AcceptedTransitions](../../Sources/MechanicsMechanisms/AcceptedTransitions/DESIGN.md), [ConnectedSleep](../../Sources/MechanicsMechanisms/ConnectedSleep/DESIGN.md) own contracts.
+[ConstrainedDynamics](../../Sources/SwiftMechanics/Physics/Mechanisms/ConstrainedDynamics/DESIGN.md), [AffineEvolution](../../Sources/SwiftMechanics/Physics/Mechanisms/AffineEvolution/DESIGN.md), [AcceptedTransitions](../../Sources/SwiftMechanics/Physics/Mechanisms/AcceptedTransitions/DESIGN.md), [ConnectedSleep](../../Sources/SwiftMechanics/Physics/Mechanisms/ConnectedSleep/DESIGN.md) own contracts.
 
 ## Architecture
 ```text

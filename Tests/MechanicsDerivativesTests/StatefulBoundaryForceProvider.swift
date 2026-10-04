@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Synchronization
-import MechanicsCore
-import MechanicsJoints
-import MechanicsNumerics
-import MechanicsDerivatives
 @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
 final class StatefulBoundaryForceProvider: DifferentiatedForceProviding, Sendable {
     let changed = Mutex(false)

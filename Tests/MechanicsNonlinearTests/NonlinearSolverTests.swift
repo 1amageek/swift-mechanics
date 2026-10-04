@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsNumerics
-import MechanicsNonlinear
 
 @Suite struct NonlinearSolverTests {
     private func policy(strategy: NonlinearStrategy<Double> = .lineSearch(contraction: 0.5, sufficientDecrease: 1e-4, minimumFraction: 1e-8),

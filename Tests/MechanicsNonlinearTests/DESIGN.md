@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-Parent: [MechanicsNonlinear](../../Sources/MechanicsNonlinear/DESIGN.md). Owns native CPU-reference IM04 manufactured equation tests. SO-003/007/008/009 are qualified for the documented square-equation baseline, not complete mechanical behavior.
+Parent: [MechanicsNonlinear](../../Sources/SwiftMechanics/Mathematics/Nonlinear/DESIGN.md). Owns native CPU-reference IM04 manufactured equation tests. SO-003/007/008/009 are qualified for the documented square-equation baseline, not complete mechanical behavior.
 
 ## Responsibilities and Boundaries
 
@@ -12,8 +12,8 @@ Fixtures supply original equations, analytic Jacobians, known solutions, dimensi
 
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [NonlinearSolve](../../Sources/MechanicsNonlinear/NonlinearSolve/DESIGN.md) | verifies | strategy, domain, derivative and original acceptance | real production path | conditioning belongs to the recorded tangent point |
-| [Linear algebra](../../Sources/MechanicsNumerics/LinearAlgebra/DESIGN.md) | depends on | actual dense LU | singular/rank/resource behavior | failed supplier work is unavailable |
+| [NonlinearSolve](../../Sources/SwiftMechanics/Mathematics/Nonlinear/NonlinearSolve/DESIGN.md) | verifies | strategy, domain, derivative and original acceptance | real production path | conditioning belongs to the recorded tangent point |
+| [Linear algebra](../../Sources/SwiftMechanics/Mathematics/Numerics/LinearAlgebra/DESIGN.md) | depends on | actual dense LU | singular/rank/resource behavior | failed supplier work is unavailable |
 
 ## Architecture
 

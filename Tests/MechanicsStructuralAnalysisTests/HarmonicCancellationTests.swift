@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsNumerics
-import MechanicsStructuralAnalysis
 struct HarmonicCancellationTests {
     @Test func realCompletedLinearSolveCannotPublishAfterCancellation() throws {
         guard #available(macOS 15.0,iOS 18.0,tvOS 18.0,watchOS 11.0,*) else { Issue.record("The cancellation fixture requires Mutex availability.");return }

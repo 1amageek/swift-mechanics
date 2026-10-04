@@ -1,8 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsMaterials
-import MechanicsNumerics
-import MechanicsFlexible
+import SwiftMechanics
 import Testing
 @Suite(.timeLimit(.minutes(1)))
 struct TetrahedronPhysicsTests {

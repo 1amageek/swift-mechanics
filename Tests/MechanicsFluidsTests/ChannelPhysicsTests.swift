@@ -1,9 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsNumerics
-import MechanicsFluids
 struct ChannelPhysicsTests {
     @Test func hydrostaticOriginalGradientAndGauge() throws {
         let c=try FluidFixtures.channel(cells:16,rho:1000,gy:-9.81),b=try FluidFixtures.boundary(pressure:100000)

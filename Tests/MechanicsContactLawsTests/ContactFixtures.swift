@@ -1,6 +1,4 @@
-import MechanicsContactLaws
-import MechanicsCore
-import MechanicsModel
+import SwiftMechanics
 
 enum ContactFixtures {
     static func reference(_ key:String,kind:EntityKind,revision:UInt64=1) throws -> ModelReference {

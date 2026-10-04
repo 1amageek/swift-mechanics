@@ -1,6 +1,13 @@
-import CMechanicsMath
-import MechanicsCore
-import MechanicsConstraints
+import SwiftMechanics
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(WASILibc)
+import WASILibc
+#elseif canImport(Glibc)
+import Glibc
+#else
+#error("No admitted scalar mathematics platform module is available.")
+#endif
 import Testing
 
 @Suite(.timeLimit(.minutes(1)))
@@ -40,7 +47,7 @@ struct AssemblyTests {
     }
     @Test func knifeEdgeProjectionRemovesLateralSpeedWithoutInventedReaction() throws {
         let layout=try ConstraintCoordinateLayout(coordinateIDs:[1,2,3],dimensions:[.length,.length,.angle],scales:[2,2,1],timeScale:3,revision:7)
-        let theta=0.4, c=sm_cos(theta), s=sm_sin(theta), v=[2*c-s,2*s+c,0.7]
+        let theta=0.4, c=cos(theta), s=sin(theta), v=[2*c-s,2*s+c,0.7]
         var query=try ConstraintFixtures.work(), work=try ConstraintFixtures.work(), linear=try ConstraintFixtures.work()
         let sample=try PlanarKnifeEdgeEvaluator().evaluate(layout:layout,rowID:1,position:[0,0,theta],velocity:v,policy:ConstraintFixtures.evaluation(),work:&query)
         let result=try WeightedConstraintAssembler().projectVelocity(sample,initialVelocity:v,policy:ConstraintFixtures.policy(metric:[4,4,2]),work:&work,linearWork:&linear)

@@ -1,5 +1,5 @@
+import SwiftMechanics
 import Synchronization
-import MechanicsLoads
 @available(macOS 15, *)
 final class ChangingCustomFixture: CustomLoadProvider {
     private let value = Mutex(1)

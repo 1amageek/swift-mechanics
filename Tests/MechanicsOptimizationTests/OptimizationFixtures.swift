@@ -1,7 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsOptimization
+import SwiftMechanics
 
 enum OptimizationFixtures {
     static func csr(_ rows: [[Double]],columns: Int) throws -> CSRMatrix<Double>? {

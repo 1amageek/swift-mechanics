@@ -1,10 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsNumerics
-import MechanicsCollision
-import MechanicsContactLaws
-import MechanicsRuntime
-import MechanicsGranular
 
 struct GranularPhysicsTests {
     @Test func twoSphereImpulseAndIndependentWork() throws {

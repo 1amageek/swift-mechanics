@@ -9,8 +9,8 @@ Own original analytic mechanics and failure/budget fixtures. Root owns Native/WA
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [RigidEquations](../../Sources/MechanicsDynamics/RigidEquations/DESIGN.md) | depends on | Actual physical equation/energy/work | Original mechanics | Declared spatial tree only |
-| [DenseDynamics](../../Sources/MechanicsDynamics/DenseDynamics/DESIGN.md) | depends on | Selected solves/physical residual | Numerical composition | No recursive qualification |
+| [RigidEquations](../../Sources/SwiftMechanics/Physics/Dynamics/RigidEquations/DESIGN.md) | depends on | Actual physical equation/energy/work | Original mechanics | Declared spatial tree only |
+| [DenseDynamics](../../Sources/SwiftMechanics/Physics/Dynamics/DenseDynamics/DESIGN.md) | depends on | Selected solves/physical residual | Numerical composition | No recursive qualification |
 
 ## Architecture
 ```text

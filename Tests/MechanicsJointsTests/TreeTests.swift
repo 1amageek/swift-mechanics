@@ -1,7 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-@testable import MechanicsJoints
 
 @Suite struct TreeTests {
     @Test func planarSerialTransformsAndStableOrdering() throws {

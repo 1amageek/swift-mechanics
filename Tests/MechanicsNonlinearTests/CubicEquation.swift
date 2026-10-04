@@ -1,5 +1,4 @@
-import MechanicsNumerics
-import MechanicsNonlinear
+import SwiftMechanics
 
 struct CubicEquation<Scalar: NumericalScalar>: NonlinearEquations {
     let identity = "manufactured-cubic"

@@ -1,13 +1,13 @@
 # Integration Behavioral Proof
 
 ## Purpose and Scope
-Own Native proof for [Equations](../../Sources/MechanicsIntegration/Equations/DESIGN.md), [Continuation](../../Sources/MechanicsIntegration/Continuation/DESIGN.md) and [Stepping](../../Sources/MechanicsIntegration/Stepping/DESIGN.md). Parent: [Integration](../../Sources/MechanicsIntegration/DESIGN.md). No children.
+Own Native proof for [Equations](../../Sources/SwiftMechanics/Execution/Integration/Equations/DESIGN.md), [Continuation](../../Sources/SwiftMechanics/Execution/Integration/Continuation/DESIGN.md) and [Stepping](../../Sources/SwiftMechanics/Execution/Integration/Stepping/DESIGN.md). Parent: [Integration](../../Sources/SwiftMechanics/Execution/Integration/DESIGN.md). No children.
 
 ## Responsibilities and Boundaries
 Independent analytic manufactured smooth equations run through actual compiled hinge state and Runtime transactions. Root owns target qualification and accumulated integration.
 
 ## Related Designs
-The three component links above own equations/chart, payload and stage contracts; [Runtime](../../Sources/MechanicsRuntime/DESIGN.md) supplies real transactions.
+The three component links above own equations/chart, payload and stage contracts; [Runtime](../../Sources/SwiftMechanics/Execution/Runtime/DESIGN.md) supplies real transactions.
 
 ## Architecture
 ```text

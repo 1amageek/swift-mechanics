@@ -1,13 +1,13 @@
 # MechanicsFluidsProjectionTests
 
 ## Purpose and Scope
-Own behavioral proof for [PlanarProjection](../../Sources/MechanicsFluids/PlanarProjection/DESIGN.md), an initial periodic 2D physical domain. Tests and exact-profile execution are pending; no whole EX-005 claim.
+Own behavioral proof for [PlanarProjection](../../Sources/SwiftMechanics/Physics/Fluids/PlanarProjection/DESIGN.md), an initial periodic 2D physical domain. Tests and exact-profile execution are pending; no whole EX-005 claim.
 
 ## Responsibilities and Boundaries
 Use actual Numerics solver and independent discrete/continuum oracles, not mock numeric answers. Verify pressure gauge and all removed/retained original rows, nonlinear advection/viscosity, conservation/work, time/mesh refinement and explicit typed failures.
 
 ## Related Designs
-[Fluids](../../Sources/MechanicsFluids/DESIGN.md) is parent requirement owner; [PlanarProjection](../../Sources/MechanicsFluids/PlanarProjection/DESIGN.md) owns equations/layout; [Numerics](../../Sources/MechanicsNumerics/DESIGN.md) supplies real bounded solves. Frozen Channel tests are separate.
+[Fluids](../../Sources/SwiftMechanics/Physics/Fluids/DESIGN.md) is parent requirement owner; [PlanarProjection](../../Sources/SwiftMechanics/Physics/Fluids/PlanarProjection/DESIGN.md) owns equations/layout; [Numerics](../../Sources/SwiftMechanics/Mathematics/Numerics/DESIGN.md) supplies real bounded solves. Frozen Channel tests are separate.
 
 ## Architecture
 ```text

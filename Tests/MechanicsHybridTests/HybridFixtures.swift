@@ -1,15 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsCompiler
-import MechanicsLoads
-import MechanicsDynamics
-import MechanicsCollision
-import MechanicsContactLaws
-import MechanicsRuntime
-import MechanicsIntegration
-import MechanicsHybrid
+import SwiftMechanics
 
 @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
 internal enum HybridFixtures {

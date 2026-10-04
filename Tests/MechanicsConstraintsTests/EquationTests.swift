@@ -1,6 +1,13 @@
-import CMechanicsMath
-import MechanicsCore
-import MechanicsConstraints
+import SwiftMechanics
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(WASILibc)
+import WASILibc
+#elseif canImport(Glibc)
+import Glibc
+#else
+#error("No admitted scalar mathematics platform module is available.")
+#endif
 import Testing
 
 @Suite(.timeLimit(.minutes(1)))
@@ -38,13 +45,13 @@ struct EquationTests {
     @Test func knifeEdgeNonintegrableVelocityAndAccelerationAreActual() throws {
         let layout=try ConstraintCoordinateLayout(coordinateIDs:[1,2,3],dimensions:[.length,.length,.angle],scales:[2,2,1],timeScale:3,revision:7)
         let theta=0.4, speed=2.0, omega=0.7
-        let v=[speed*sm_cos(theta),speed*sm_sin(theta),omega]
+        let v=[speed*cos(theta),speed*sin(theta),omega]
         var work=try ConstraintFixtures.work()
         let evaluator: any KnifeEdgeEvaluating=PlanarKnifeEdgeEvaluator()
         let sample=try evaluator.evaluate(layout:layout,rowID:9,position:[0,0,theta],velocity:v,policy:ConstraintFixtures.evaluation(),work:&work)
         #expect(!sample.isIntegrable)
         #expect(ConstraintFixtures.close(sample.rows[0]*v[0]*3/2+sample.rows[1]*v[1]*3/2,0))
-        let ax = -speed*omega*sm_sin(theta), ay=speed*omega*sm_cos(theta)
+        let ax = -speed*omega*sin(theta), ay=speed*omega*cos(theta)
         #expect(ConstraintFixtures.close(sample.rows[0]*ax*9/2+sample.rows[1]*ay*9/2+sample.accelerationBias[0],0))
         #expect(ConstraintFixtures.close(sample.accelerationBias[0],-6.3))
     }

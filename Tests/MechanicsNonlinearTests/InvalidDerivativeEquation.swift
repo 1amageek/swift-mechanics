@@ -1,5 +1,4 @@
-import MechanicsNumerics
-import MechanicsNonlinear
+import SwiftMechanics
 
 struct InvalidDerivativeEquation: NonlinearEquations {
     typealias Scalar = Double

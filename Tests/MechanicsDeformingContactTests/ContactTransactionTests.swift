@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsNumerics
-import MechanicsContactLaws
-import MechanicsDeformingContact
 @Suite struct ContactTransactionTests {
     @Test func rejectionIndependentStatesAndDeformedHistoryContinuation() throws {
         let snapshot=try DeformingFixtures.selfMoving(), pair=try DeformingFixtures.pair(), witness=try DeformingFixtures.selfWitness(snapshot)

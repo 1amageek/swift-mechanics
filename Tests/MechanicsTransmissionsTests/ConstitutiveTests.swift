@@ -1,6 +1,4 @@
-import MechanicsCore
-import MechanicsConstraints
-import MechanicsTransmissions
+import SwiftMechanics
 import Testing
 
 @Suite(.timeLimit(.minutes(1)))

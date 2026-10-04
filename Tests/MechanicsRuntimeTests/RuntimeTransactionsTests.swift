@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsJoints
-import MechanicsRuntime
 
 @Suite struct RuntimeTransactionsTests {
     @Test func acceptRejectRestoreWholeContributorAndRandomState() throws {

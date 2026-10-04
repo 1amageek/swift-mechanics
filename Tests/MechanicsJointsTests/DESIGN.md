@@ -1,13 +1,13 @@
 # MechanicsJointsTests
 
 ## Purpose and Scope
-Behavioral ownership of admitted joint manifolds, rooted planar/spatial trees, moving-frame derivatives and Jacobian/power operators (IM06). Parent: [MechanicsJoints](../../Sources/MechanicsJoints/DESIGN.md).
+Behavioral ownership of admitted joint manifolds, rooted planar/spatial trees, moving-frame derivatives and Jacobian/power operators (IM06). Parent: [MechanicsJoints](../../Sources/SwiftMechanics/Modeling/Joints/DESIGN.md).
 
 ## Responsibilities and Boundaries
 Independent analytic fixtures, central configuration-direction derivatives and explicit domain failures. No loop solving, reaction solving or integrated dynamics claims.
 
 ## Related Designs
-[KinematicAlgebra](../../Sources/MechanicsJoints/KinematicAlgebra/DESIGN.md), [JointManifolds](../../Sources/MechanicsJoints/JointManifolds/DESIGN.md), [ArticulatedTrees](../../Sources/MechanicsJoints/ArticulatedTrees/DESIGN.md), [Jacobians](../../Sources/MechanicsJoints/Jacobians/DESIGN.md).
+[KinematicAlgebra](../../Sources/SwiftMechanics/Modeling/Joints/KinematicAlgebra/DESIGN.md), [JointManifolds](../../Sources/SwiftMechanics/Modeling/Joints/JointManifolds/DESIGN.md), [ArticulatedTrees](../../Sources/SwiftMechanics/Modeling/Joints/ArticulatedTrees/DESIGN.md), [Jacobians](../../Sources/SwiftMechanics/Modeling/Joints/Jacobians/DESIGN.md).
 
 ## Architecture
 ```text

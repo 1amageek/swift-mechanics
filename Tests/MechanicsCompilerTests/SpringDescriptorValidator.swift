@@ -1,7 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsCompiler
+import SwiftMechanics
 
 struct SpringDescriptorValidator: MechanicalExtensionValidating {
     let registrations: [ValidatorRegistration]

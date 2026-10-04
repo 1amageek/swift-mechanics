@@ -1,7 +1,7 @@
 # MechanicsContactPatchesTests
 
 ## Purpose and Scope
-Parent [package](../../DESIGN.md), no children. Test owner for [PressureFields](../../Sources/MechanicsContactPatches/PressureFields/DESIGN.md) and [PlanePatches](../../Sources/MechanicsContactPatches/PlanePatches/DESIGN.md).
+Parent [package](../../DESIGN.md), no children. Test owner for [PressureFields](../../Sources/SwiftMechanics/Physics/ContactPatches/PressureFields/DESIGN.md) and [PlanePatches](../../Sources/SwiftMechanics/Physics/ContactPatches/PlanePatches/DESIGN.md).
 
 ## Responsibilities and Boundaries
 Independent analytic pressure/area/resultant/moment and nodal/prescribed work, actual Flexible validation/refinement, and typed failure/resources. Root owns exact profile composition; no equilibrated hydroelastic qualification.

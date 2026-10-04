@@ -2,57 +2,13 @@
 
 ## Purpose and Scope
 
-This root owns system and repository/package-level design. Implementation is active under the full 210-requirement goal. The current SwiftPM graph registers the real source modules indexed below, including the initially qualified AF13 consumer sources. Profile qualification is recorded in each child handoff. No complete mechanism simulator, CAD adapter or feature gate is claimed. The target and acceptance authority is [SPEC.md](SPEC.md); factual dependency/reference observations are owned by [SOURCES.md](SOURCES.md).
+This root owns the system and SwiftPM package. The authorized AR01 migration replaces separately published mechanics modules with one actual public [SwiftMechanics module](Sources/SwiftMechanics/DESIGN.md). The full 210-requirement authority remains [SPEC.md](SPEC.md); requirement ownership and work prerequisites remain [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). Earlier handoff evidence applies only to its documented behavior and profiles; relocation is requalified by the consolidated integration sprint.
 
-Parent: none. Current children are indexed below. Additional responsibility scopes remain planned until their actual contracts and behavior are verified. Each real target/component owns its DESIGN.md beside its implementation. Implemented source and passing tests do not imply all required profiles or whole feature families are supported.
+Parent: none. Direct production child: SwiftMechanics. Executable verification children are [CoreVerification](Verification/CoreVerification/DESIGN.md) and [FoundationVerification](Verification/FoundationVerification/DESIGN.md). Native test targets retain responsibility-specific names and depend on SwiftMechanics. The actual graph is owned by Package.swift. Pending Observations, PlanarContinuation and NonlinearKKT sources are retained and excluded until their own handoff qualification; they are not removed requirements.
 
-| Current child | Responsibility and dependency |
-|---|---|
-| [CMechanicsMath](Sources/CMechanicsMath/DESIGN.md) | System libm adapter; no physics backend or heap/shared state |
-| [MechanicsCore](Sources/MechanicsCore/DESIGN.md) | IM01 immutable units, geometry and spatial algebra; depends only on CMechanicsMath |
-| [CoreVerification](Sources/CoreVerification/DESIGN.md) | Headless actual-Core protocol/runtime probe; depends on MechanicsCore |
-| [MechanicsCoreTests](Tests/MechanicsCoreTests/DESIGN.md) | Native behavioral tests; depends on MechanicsCore |
-| [MechanicsModel](Sources/MechanicsModel/DESIGN.md) | IM02 verified initial model-record/inertia handoff; consumes MechanicsCore |
-| [MechanicsNumerics](Sources/MechanicsNumerics/DESIGN.md) | IM03 verified initial numerical handoff; consumes MechanicsCore |
-| [MechanicsMaterials](Sources/MechanicsMaterials/DESIGN.md) | IM18 verified initial constitutive handoff; consumes MechanicsCore |
-| [FoundationVerification](Sources/FoundationVerification/DESIGN.md) | Root-owned composite public API probe; separate Native/WASM/Embedded real execution |
-| [MechanicsNonlinear](Sources/MechanicsNonlinear/DESIGN.md) | IM04 verified initial handoff; consumes MechanicsNumerics |
-| [MechanicsComplementarity](Sources/MechanicsComplementarity/DESIGN.md) | IM05 verified initial handoff; consumes MechanicsNumerics |
-| [MechanicsJoints](Sources/MechanicsJoints/DESIGN.md) | IM06 verified initial handoff; consumes MechanicsCore, MechanicsModel |
-| [MechanicsCompiler](Sources/MechanicsCompiler/DESIGN.md) | IM07 verified initial descriptor/kinematic handoff; consumes Core, Model, Numerics, Joints |
-| [MechanicsLoads](Sources/MechanicsLoads/DESIGN.md) | IM11 verified initial handoff; consumes Core, Model, Joints |
-| [MechanicsCollision](Sources/MechanicsCollision/DESIGN.md) | IM10 verified initial geometry/CCD handoff; consumes Core, Model |
-| [MechanicsDynamics](Sources/MechanicsDynamics/DESIGN.md) | IM15 verified initial spatial dynamics handoff; consumes Core, Model, Numerics, Joints, Loads |
-| [MechanicsRuntime](Sources/MechanicsRuntime/DESIGN.md) | IM08 verified initial transaction/checkpoint handoff; consumes Compiler and Joints state/layout contracts |
-| [MechanicsIntegration](Sources/MechanicsIntegration/DESIGN.md) | IM09 verified initial explicit integration handoff; consumes Runtime transactions and identified ODE providers |
-| [MechanicsFlexible](Sources/MechanicsFlexible/DESIGN.md) | IM19 verified initial Tet4 handoff; consumes Core, Model, Numerics, Materials |
-| [MechanicsContactLaws](Sources/MechanicsContactLaws/DESIGN.md) | IM20 verified initial compliant-law handoff; consumes Core, Model; collision translation belongs to IM21 |
-| [MechanicsContactResponse](Sources/MechanicsContactResponse/DESIGN.md) | IM21 verified initial coupled normal-response handoff; consumes numerical, witness, law and mass contracts |
-| [MechanicsExchange](Sources/MechanicsExchange/DESIGN.md) | IM35 verified initial native exchange handoff; consumes Compiler model input/validation contracts |
-| [MechanicsEquilibrium](Sources/MechanicsEquilibrium/DESIGN.md) | IM17 dispatched AF13 ownership; consumes verified nonlinear, constraint and rigid operators |
-| [MechanicsTransmissions](Sources/MechanicsTransmissions/DESIGN.md) | IM13 dispatched AF13 ownership; consumes verified initial constraint contracts |
-| [MechanicsConstraints](Sources/MechanicsConstraints/DESIGN.md) | IM12 verified initial stateless constraint/assembly/scalar-port handoff; full domains remain its ownership |
-| [MechanicsActuation](Sources/MechanicsActuation/DESIGN.md) | IM14 verified initial scalar actuation handoff; consumes runtime/load contracts |
-| [MechanicsHybrid](Sources/MechanicsHybrid/DESIGN.md) | IM24 dispatched AF13 ownership; consumes verified runtime/integration/dynamics/contact contracts |
-| [MechanicsContactPatches](Sources/MechanicsContactPatches/DESIGN.md) | IM22 initially qualified admitted pressure handoff; consumes verified flexible and contact contracts |
-| [MechanicsMechanisms](Sources/MechanicsMechanisms/DESIGN.md) | IM16 AF14 exclusive dispatch; consumes Runtime, Integration, Constraints, Transmissions, Actuation, Dynamics |
-| [MechanicsDeformingContact](Sources/MechanicsDeformingContact/DESIGN.md) | IM23 selected handoff; consumes Collision, Flexible, ContactLaws |
-| [MechanicsDerivatives](Sources/MechanicsDerivatives/DESIGN.md) | IM30 AF14 exclusive dispatch; consumes Core, Model, Joints, Constraints, Dynamics, Numerics, Loads |
-| [MechanicsStructuralAnalysis](Sources/MechanicsStructuralAnalysis/DESIGN.md) | IM28 AF14 exclusive dispatch; consumes Equilibrium, Flexible, Numerics, Materials |
-| [MechanicsFluids](Sources/MechanicsFluids/DESIGN.md) | IM44 independent source dispatch; consumes Numerics, Runtime, Integration |
-| [MechanicsObservations](Sources/MechanicsObservations/DESIGN.md) | IM25 unregistered independent observation/mounting source dispatch after the selected mechanism handoff |
-| [MechanicsOptimization](Sources/MechanicsOptimization/DESIGN.md) | IM32 selected convex handoff qualified on Native/original WASM profiles; later nonlinear/identification remains open |
-| [MechanicsGranular](Sources/MechanicsGranular/DESIGN.md) | IM43 independent source dispatch; consumes Runtime, Collision, ContactLaws, ContactResponse, Hybrid contracts |
+The package exports `import SwiftMechanics`. CAD and foreign/environment-specific adapters belong in separate packages consuming its public contracts. The baseline package does not acquire their dependencies. The package has no owned C implementation target; a Swift platform adapter consumes system libm. Native, ordinary WASM and Embedded WASM must execute the actual migrated public path independently. Linux/iOS and unimplemented domains remain unqualified.
 
-Initial IM00 ownership: root agent alone edits Package.swift, global scripts/toolchain configuration, module-root design indexes and progress. IM01 owns Sources/MechanicsCore components and Tests/MechanicsCoreTests. After its verified handoff, IM02 owns Sources/MechanicsModel component directories and Tests/MechanicsModelTests; IM03 owns Sources/MechanicsNumerics component directories and Tests/MechanicsNumericsTests; IM18 owns Sources/MechanicsMaterials component directories and Tests/MechanicsMaterialsTests. Their real modules are registered by IM00 after sources/designs exist; no placeholder target or simulated output is added. The three scopes consume MechanicsCore only and have disjoint source/test paths. PG02 is dispatched with one owner per module; component source and tests remain in those paths, while this root alone registers targets and composes verified handoffs.
-
-Verified IM04/05/06 have handed off their admitted public numerical and kinematic contracts. Root remains the sole module/package composition writer.
-
-Current package product SwiftMechanics distributes registered modules in Package.swift; each also has its own named library product. The table distinguishes verified foundation modules from current active scopes; registration alone is not capability evidence. Consumers import the respective module; no duplicate facade state or type aliases are introduced. CoreVerification is an executable entry point rather than a public placeholder implementation. Toolchain baseline is installed Apple Swift 6.4 (swift-6.4-RELEASE) on arm64-apple-macosx27.0.0; installed SDK identifiers are swift-6.4.0-RELEASE_wasm and swift-6.4.0-RELEASE_wasm-embedded. Actual per-profile evidence is recorded with the implementing sprint; unavailable platforms remain unverified.
-
-[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) is the canonical owner of future work IDs, prerequisite edges, per-requirement implementation ownership and parallel dispatch checks. Its work scopes are not existing modules. This root retains architectural composition authority; the plan sequences the work needed to establish and verify its child contracts.
-
-The result sought is an engineering computation library that applications can use to compile mechanisms, simulate admitted models, obtain physical quantities and detect failures. GUI, document interaction, rendering, CAD geometry construction and robotics-learning infrastructure remain owned by their applications or dependencies.
+Root alone edits the manifest, shared verification entry points, source mapping, design indexes, progress and local commits. Parallel ownership is by component responsibility, not by SwiftPM target. Component details and admission authority are owned by their child designs. The migration preserves accepted-state identity, cancellation, rollback, exactly-once release, typed failure and identical synchronization/Sendable contracts across profiles.
 
 ## Responsibilities and Boundaries
 
@@ -69,7 +25,7 @@ The result sought is an engineering computation library that applications can us
 | Exchange/platform adapters | Schema/foreign-interface fidelity and actual target/backend boundaries | SPEC IO, PF |
 | Domain extensions | Calibrated vehicle, granular/fluid and coupling models | SPEC EX |
 
-These are ownership scopes; they are not ten promised modules. Visibility, independent dependencies, platform differences and verified child contracts will determine native SwiftPM module boundaries. A directory is not a substitute for an enforced API boundary.
+These are responsibility scopes inside SwiftMechanics. Separate adapter packages enforce external dependency and platform boundaries. Validated-value generation within the consolidated module uses owner-issued opaque admission tokens; internal visibility does not grant authority.
 
 swift-CAD owns exact shape, topology, shape revision and geometric integration/query semantics. swift-mechanics owns density/material interpretation, inertial use, joints, mechanical constitutive laws, simulation state and accepted output. Collision and flexible meshes are mechanics-derived representations with CAD provenance. A missing exact geometric query is a CAD dependency gap, not permission to create a second CAD kernel here.
 
@@ -268,3 +224,6 @@ The AF16 mechanism, granular and planar-fluid source snapshots are frozen. The [
 Root registers the frozen MechanicsMechanisms and MechanicsGranular targets and the PlanarProjection child in the existing Fluids target for actual qualification. Registration alone establishes no behavioral success. The dedicated three Native test owners consume the fixed dependency edges recorded in the plan.
 
 AF17 fixed graph qualification adds MechanicsMechanisms, MechanicsGranular and the periodic PlanarProjection child, with 436 passing Native behavioral tests across 30 modules and original exact-profile public gear/break, sphere/value-replay and pressure/mean-work execution. The Embedded stack counterexample was closed by phasing the probe caller; no production algorithm/stack/isolation substitution occurred. Actual imports and hard prerequisite ownership are distinguished by the implementation-plan handoff table. Full domain gaps, CAD full-moment producer deficiency and IM48 remain open.
+
+### AR01 integrated qualification (2026-10-04)
+Swift 6.4.0 RELEASE consolidated Native execution passed 477 tests across 32 targets. Selected public Machine lowering, erased/conditional composition, actual scoped hinge compiler/motion and typed duplicate/iteration failures compiled, linked and executed on Native (macOS 27 runtime, production deployment 13), matching ordinary WASM and Embedded WASM SDKs. Both WASI command artifacts ran under Node.js 24.19.0 Preview 1, reached the Machine and full Foundation completion witnesses and exited zero at their original stack profiles. This qualifies the exercised paths only: Native owns broader branch, lazy closure count, box release and concurrent Runtime tests; WASI does not establish actual multithread execution. Linux/iOS and full 210-requirement closure remain open.

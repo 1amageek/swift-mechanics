@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsNumerics
-import MechanicsNonlinear
-import MechanicsConstraints
-import MechanicsEquilibrium
 
 @Suite struct EquilibriumContinuationTests {
     @Test func selectedDoubleWellBranchesAndReversibleLoadingRemainExplicit()throws {

@@ -1,7 +1,7 @@
 # Structural analysis tests
 
 ## Purpose and Scope
-Parent [module](../../Sources/MechanicsStructuralAnalysis/DESIGN.md). Own local ST-005..007 physical success/failure evidence; no children. Execution qualification pending.
+Parent [module](../../Sources/SwiftMechanics/Analysis/StructuralAnalysis/DESIGN.md). Own local ST-005..007 physical success/failure evidence; no children. Execution qualification pending.
 
 ## Responsibilities and Boundaries
 Tests invoke actual public protocols with beam/truss physical models and actual Flexible/Equilibrium producers. Root owns shared graph and profile probes.

@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-Parent: [MechanicsNumerics](../../Sources/MechanicsNumerics/DESIGN.md). Owns IM03 native CPU reference evidence for SO-001/002/006/010. This is the real SwiftPM MechanicsNumericsTests target.
+Parent: [MechanicsNumerics](../../Sources/SwiftMechanics/Mathematics/Numerics/DESIGN.md). Owns IM03 native CPU reference evidence for SO-001/002/006/010. This is the real SwiftPM MechanicsNumericsTests target.
 
 ## Responsibilities and Boundaries
 
@@ -12,9 +12,9 @@ Manufactured equations and independently assembled dense matrices are frozen bef
 
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Linear algebra](../../Sources/MechanicsNumerics/LinearAlgebra/DESIGN.md) | verifies | operator/solver/capability/work | actual LU, Cholesky and CSR CG | CG admits strict diagonal dominance |
-| [Reduction](../../Sources/MechanicsNumerics/Reduction/DESIGN.md) | verifies | Schur and tree coordinates | independent dense oracle | generic tree only |
-| [Scaling](../../Sources/MechanicsNumerics/Scaling/DESIGN.md) | verifies | SI scales and diagonal perturbation | original equation effects | original residual need not pass after perturbation |
+| [Linear algebra](../../Sources/SwiftMechanics/Mathematics/Numerics/LinearAlgebra/DESIGN.md) | verifies | operator/solver/capability/work | actual LU, Cholesky and CSR CG | CG admits strict diagonal dominance |
+| [Reduction](../../Sources/SwiftMechanics/Mathematics/Numerics/Reduction/DESIGN.md) | verifies | Schur and tree coordinates | independent dense oracle | generic tree only |
+| [Scaling](../../Sources/SwiftMechanics/Mathematics/Numerics/Scaling/DESIGN.md) | verifies | SI scales and diagonal perturbation | original equation effects | original residual need not pass after perturbation |
 
 ## Architecture
 

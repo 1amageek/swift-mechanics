@@ -9,10 +9,10 @@ Own Native behavioral proof of admitted force/energy/derivative/resource contrac
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [ForcePorts](../../Sources/MechanicsLoads/ForcePorts/DESIGN.md) | depends on | Framed load and impulse mapping | Original virtual/actual power | Correct torque reference |
-| [PassiveLaws](../../Sources/MechanicsLoads/PassiveLaws/DESIGN.md) | depends on | Admitted analytic laws | Energy/dissipation/geometry | Chart domain explicit |
-| [CableRouting](../../Sources/MechanicsLoads/CableRouting/DESIGN.md) | depends on | Straight route differential | Independent finite differences | No wrap behavior claimed |
-| [CustomLaws](../../Sources/MechanicsLoads/CustomLaws/DESIGN.md) | depends on | Cooperative immutable callback | Derivative and failure | No runtime rollback claimed |
+| [ForcePorts](../../Sources/SwiftMechanics/Physics/Loads/ForcePorts/DESIGN.md) | depends on | Framed load and impulse mapping | Original virtual/actual power | Correct torque reference |
+| [PassiveLaws](../../Sources/SwiftMechanics/Physics/Loads/PassiveLaws/DESIGN.md) | depends on | Admitted analytic laws | Energy/dissipation/geometry | Chart domain explicit |
+| [CableRouting](../../Sources/SwiftMechanics/Physics/Loads/CableRouting/DESIGN.md) | depends on | Straight route differential | Independent finite differences | No wrap behavior claimed |
+| [CustomLaws](../../Sources/SwiftMechanics/Physics/Loads/CustomLaws/DESIGN.md) | depends on | Cooperative immutable callback | Derivative and failure | No runtime rollback claimed |
 
 ## Architecture
 ```text

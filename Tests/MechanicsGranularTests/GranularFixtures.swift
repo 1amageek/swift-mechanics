@@ -1,10 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsCollision
-import MechanicsContactLaws
-import MechanicsRuntime
-import MechanicsGranular
+import SwiftMechanics
 
 enum GranularFixtures {
     static func ref(_ key: String,_ kind: EntityKind) throws -> ModelReference { ModelReference(id:try EntityID(kind:kind,key:key),revision:1) }

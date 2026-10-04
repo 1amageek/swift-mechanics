@@ -1,5 +1,4 @@
-import MechanicsNumerics
-import MechanicsDynamics
+import SwiftMechanics
 
 internal struct ResettingDynamicsProvider: RigidDynamicsSolving {
     func forward(_ system:RigidDynamicsSystem,driveForce:[Double],policy:DynamicsSolvePolicy,work:inout NumericalWork) throws(DynamicsError) -> DynamicsSolution {

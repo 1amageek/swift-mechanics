@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsNumerics
 
 @Suite struct LinearAlgebraTests {
     private func budget(storage: Int = 10000, operations: Int = 1000000, iterations: Int = 100) throws -> NumericalBudget {

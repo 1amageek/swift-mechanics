@@ -1,13 +1,13 @@
 # Deforming Contact Behavioral Proof
 
 ## Purpose and Scope
-Own actual geometry/force/history fixtures for [MechanicsDeformingContact](../../Sources/MechanicsDeformingContact/DESIGN.md). No children.
+Own actual geometry/force/history fixtures for [MechanicsDeformingContact](../../Sources/SwiftMechanics/Physics/DeformingContact/DESIGN.md). No children.
 
 ## Responsibilities and Boundaries
 Independent geometric, moment and virtual-work oracles prove selected domains only. Full cloth/cable/CCD/dynamic evolution remain unqualified. Root owns commands/registered graph/profile proof.
 
 ## Related Designs
-[MaterialGeometry](../../Sources/MechanicsDeformingContact/MaterialGeometry/DESIGN.md), [WitnessForces](../../Sources/MechanicsDeformingContact/WitnessForces/DESIGN.md), [ContactTransactions](../../Sources/MechanicsDeformingContact/ContactTransactions/DESIGN.md) own production contracts.
+[MaterialGeometry](../../Sources/SwiftMechanics/Physics/DeformingContact/MaterialGeometry/DESIGN.md), [WitnessForces](../../Sources/SwiftMechanics/Physics/DeformingContact/WitnessForces/DESIGN.md), [ContactTransactions](../../Sources/SwiftMechanics/Physics/DeformingContact/ContactTransactions/DESIGN.md) own production contracts.
 
 ## Architecture
 ```text

@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsActuation
-import MechanicsCore
-import MechanicsNumerics
 
 @Suite struct DriveTests {
     @Test func effortVelocityPositionAreRealDistinctEffortLaws() throws {

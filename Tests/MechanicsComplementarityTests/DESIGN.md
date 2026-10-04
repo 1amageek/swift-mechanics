@@ -1,7 +1,7 @@
 # Complementarity behavioral fixtures
 
 ## Purpose and Scope
-Parent: [MechanicsComplementarity](../../Sources/MechanicsComplementarity/DESIGN.md). Tests own independent numerical reference evidence for SO-004/005 subsets; children: none.
+Parent: [MechanicsComplementarity](../../Sources/SwiftMechanics/Mathematics/Complementarity/DESIGN.md). Tests own independent numerical reference evidence for SO-004/005 subsets; children: none.
 
 ## Responsibilities and Boundaries
 Verify original complementarity/QP equations, cone geometry, exact semantic continuation identity and explicit resource/domain failures. Physical contact, geometry, non-associated Coulomb behavior, runtime persistence format and target-profile composition remain outside this target.
@@ -9,9 +9,9 @@ Verify original complementarity/QP equations, cone geometry, exact semantic cont
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Problem](../../Sources/MechanicsComplementarity/Problem/DESIGN.md) | depends on | Immutable input/cache/policy | Semantic identities | Frozen tolerance scales |
-| [Projection](../../Sources/MechanicsComplementarity/Projection/DESIGN.md) | depends on | Cone operations | Independent KKT projection oracle | Associated cone only |
-| [Solve](../../Sources/MechanicsComplementarity/Solve/DESIGN.md) | depends on | Actual public solver protocol | Manufactured optima/failures | General dense SPD via verified Cholesky |
+| [Problem](../../Sources/SwiftMechanics/Mathematics/Complementarity/Problem/DESIGN.md) | depends on | Immutable input/cache/policy | Semantic identities | Frozen tolerance scales |
+| [Projection](../../Sources/SwiftMechanics/Mathematics/Complementarity/Projection/DESIGN.md) | depends on | Cone operations | Independent KKT projection oracle | Associated cone only |
+| [Solve](../../Sources/SwiftMechanics/Mathematics/Complementarity/Solve/DESIGN.md) | depends on | Actual public solver protocol | Manufactured optima/failures | General dense SPD via verified Cholesky |
 
 ## Architecture
 ```text

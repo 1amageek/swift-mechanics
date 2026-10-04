@@ -1,10 +1,36 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsCompiler
 
 @Suite struct ValidationTests {
+    @Test func actualAdmissionFailureNeverPublishesModelOrStateHandle() throws {
+        let compiler = ReferenceMechanicalCompiler(extensions: NoMechanicalExtensions())
+        let policy = try CompilerFixtures.policy()
+        let invalid = try CompilerFixtures.descriptor(q: [], v: [0])
+        var compiled: CompiledMechanicalModel?
+        do throws(CompilationFailure) {
+            compiled = try compiler.compile(invalid, policy: policy)
+            Issue.record("Invalid coordinates unexpectedly produced a compiled model.")
+        } catch { #expect(error.diagnostics.contains { $0.code == .invalidCoordinates }) }
+        #expect(compiled == nil)
+
+        let model = try CompilerFixtures.compile(CompilerFixtures.descriptor())
+        let invalidState = try KinematicState(revision: model.stamp.revision, time: 0,
+            q: [0, 0], v: [0], acceleration: [0])
+        var admitted: CompiledKinematicState?
+        do throws(CompilationFailure) {
+            admitted = try model.makeState(invalidState)
+            Issue.record("Actual tree layout failure unexpectedly produced a state handle.")
+        } catch { #expect(error.diagnostics.contains { $0.code == .invalidCoordinates }) }
+        #expect(admitted == nil)
+        let valid = try model.makeState(model.descriptor.initialState)
+        #expect(valid.stamp == model.stamp && valid.state == model.descriptor.initialState)
+        let evaluated = try model.evaluate(valid)
+        #expect(evaluated.coordinateRate == model.initialSnapshot.coordinateRate)
+        for body in model.tree.bodies {
+            #expect(try evaluated.body(body.id).motion == model.initialSnapshot.body(body.id).motion)
+        }
+    }
+
     @Test func invalidIdentityAndTopologyCatalog() throws {
         let compiler = ReferenceMechanicalCompiler(extensions: NoMechanicalExtensions()), policy = try CompilerFixtures.policy()
         let root = try CompilerFixtures.body("root", mode: .static)

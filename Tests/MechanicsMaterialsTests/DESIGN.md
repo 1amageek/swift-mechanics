@@ -1,7 +1,7 @@
 # Materials behavioral verification
 
 ## Purpose and Scope
-Test owner for [Constitutive](../../Sources/MechanicsMaterials/Constitutive/DESIGN.md), [Elasticity](../../Sources/MechanicsMaterials/Elasticity/DESIGN.md) and [Plasticity](../../Sources/MechanicsMaterials/Plasticity/DESIGN.md). Parent: [MechanicsMaterials](../../Sources/MechanicsMaterials/DESIGN.md). Children: none. Verifies constitutive kernels, not flexible elements.
+Test owner for [Constitutive](../../Sources/SwiftMechanics/Physics/Materials/Constitutive/DESIGN.md), [Elasticity](../../Sources/SwiftMechanics/Physics/Materials/Elasticity/DESIGN.md) and [Plasticity](../../Sources/SwiftMechanics/Physics/Materials/Plasticity/DESIGN.md). Parent: [MechanicsMaterials](../../Sources/SwiftMechanics/Physics/Materials/DESIGN.md). Children: none. Verifies constitutive kernels, not flexible elements.
 
 ## Responsibilities and Boundaries
 Independent analytic SI fixtures establish uniaxial/shear stress and energy, Green-strain response, radial return, discrete dissipation, unloading recovery, directional tangent and rigid-rotation objectivity. Failure fixtures exercise calibration, arithmetic, history compatibility and residual acceptance. Platform composition belongs to root verification.
@@ -9,9 +9,9 @@ Independent analytic SI fixtures establish uniaxial/shear stress and energy, Gre
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Module](../../Sources/MechanicsMaterials/DESIGN.md) | parent | Qualified material support | Test scope | No element/ANCF claim |
-| [Elasticity](../../Sources/MechanicsMaterials/Elasticity/DESIGN.md) | depends on | Stress/energy/tangents | Analytic fixture | Tensor shear |
-| [Plasticity](../../Sources/MechanicsMaterials/Plasticity/DESIGN.md) | depends on | Trial history and active branch tangent | Return/cycle fixture | Accepted history held fixed |
+| [Module](../../Sources/SwiftMechanics/Physics/Materials/DESIGN.md) | parent | Qualified material support | Test scope | No element/ANCF claim |
+| [Elasticity](../../Sources/SwiftMechanics/Physics/Materials/Elasticity/DESIGN.md) | depends on | Stress/energy/tangents | Analytic fixture | Tensor shear |
+| [Plasticity](../../Sources/SwiftMechanics/Physics/Materials/Plasticity/DESIGN.md) | depends on | Trial history and active branch tangent | Return/cycle fixture | Accepted history held fixed |
 
 ## Architecture
 ```text

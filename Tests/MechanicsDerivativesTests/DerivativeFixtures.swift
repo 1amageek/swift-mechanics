@@ -1,10 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsLoads
-import MechanicsDynamics
-import MechanicsDerivatives
+import SwiftMechanics
 struct DerivativeFixtures {
     static func id(_ kind: EntityKind, _ key: String) throws -> EntityID { try EntityID(kind:kind,key:key) }
     static func properties(_ mass: Double, _ com: Vector3 = .zero, _ inertia: Matrix3 = .identity) throws -> MassProperties3D {

@@ -1,4 +1,4 @@
-import MechanicsContactLaws
+import SwiftMechanics
 
 struct CancellingHistoryLaw: ContactLawEvaluating {
     let afterHistory: @Sendable () -> Void

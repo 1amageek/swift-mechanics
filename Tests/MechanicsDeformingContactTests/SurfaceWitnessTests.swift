@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsDeformingContact
 @Suite struct SurfaceWitnessTests {
     @Test func actualPlaneVertexAndBalance() throws {
         let surface=try DeformingFixtures.surface(DeformingFixtures.mesh())

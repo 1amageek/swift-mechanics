@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsRuntime
-import MechanicsIntegration
-import MechanicsHybrid
 
 @Suite("Hybrid reintegrated directed events")
 struct HybridEvolutionTests {

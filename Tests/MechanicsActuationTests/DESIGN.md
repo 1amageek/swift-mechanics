@@ -1,6 +1,6 @@
 # Actuation behavioral verification
 ## Purpose and Scope
-Test owner for [Ports](../../Sources/MechanicsActuation/Ports/DESIGN.md), [DriveLaws](../../Sources/MechanicsActuation/DriveLaws/DESIGN.md), [LumpedLaws](../../Sources/MechanicsActuation/LumpedLaws/DESIGN.md), [Continuation](../../Sources/MechanicsActuation/Continuation/DESIGN.md). Children: none.
+Test owner for [Ports](../../Sources/SwiftMechanics/Physics/Actuation/Ports/DESIGN.md), [DriveLaws](../../Sources/SwiftMechanics/Physics/Actuation/DriveLaws/DESIGN.md), [LumpedLaws](../../Sources/SwiftMechanics/Physics/Actuation/LumpedLaws/DESIGN.md), [Continuation](../../Sources/SwiftMechanics/Physics/Actuation/Continuation/DESIGN.md). Children: none.
 ## Responsibilities and Boundaries
 Independent controller equations and circuit/fluid/muscle balances, actual Loads routing and actual Runtime accepted/rejected/restored state. Numerical effort evaluation does not qualify mechanical dynamics or prescribed reactions.
 ## Related Designs

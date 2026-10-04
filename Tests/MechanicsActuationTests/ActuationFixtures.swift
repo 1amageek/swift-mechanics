@@ -1,11 +1,4 @@
-import MechanicsActuation
-import MechanicsCore
-import MechanicsModel
-import MechanicsLoads
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsCompiler
-import MechanicsRuntime
+import SwiftMechanics
 
 enum ActuationFixtures {
     static func id(_ kind:EntityKind,_ key:String) throws -> EntityID { try EntityID(kind:kind,key:key) }

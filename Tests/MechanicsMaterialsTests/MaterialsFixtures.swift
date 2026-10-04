@@ -1,5 +1,4 @@
-import MechanicsCore
-import MechanicsMaterials
+import SwiftMechanics
 
 enum MaterialsFixtures {
     static func elasticity() throws -> IsotropicElasticity {

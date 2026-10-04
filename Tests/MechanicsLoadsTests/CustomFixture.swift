@@ -1,4 +1,4 @@
-import MechanicsLoads
+import SwiftMechanics
 struct CustomFixture: CustomLoadProvider {
     let identity = 1
     let coordinateKind = ScalarCoordinateKind.translation

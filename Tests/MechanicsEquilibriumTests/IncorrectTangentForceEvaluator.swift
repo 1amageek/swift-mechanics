@@ -1,5 +1,4 @@
-import MechanicsNumerics
-import MechanicsEquilibrium
+import SwiftMechanics
 struct IncorrectTangentForceEvaluator: StaticForceEvaluating {
     typealias Scalar=Double
     let actual=ReferenceStaticForceEvaluator<Double>()

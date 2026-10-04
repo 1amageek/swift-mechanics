@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsActuation
-import MechanicsCore
-import MechanicsLoads
-import MechanicsJoints
 
 @Suite struct TransmissionTests {
     @Test func multiDOFAffineVirtualAndPrescribedWork() throws {

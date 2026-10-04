@@ -1,11 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsNumerics
-import MechanicsNonlinear
-import MechanicsConstraints
-import MechanicsEquilibrium
 
 @Suite struct StaticEquilibriumTests {
     @Test func hangingLoadAndSpringEnergyUseOriginalSIUnits()throws {

@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsFluids
 struct PlanarAdmissionTests {
     @Test func layoutMaterialsGaugeFiniteAndLimits() throws {
         #expect(throws:PlanarFluidError.self) { _=try PlanarFixtures.grid(nx:2) }

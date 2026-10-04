@@ -1,5 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsNumerics
 
 @Suite struct ReductionTests {
     private func budget(iterations: Int = 200) throws -> NumericalBudget {

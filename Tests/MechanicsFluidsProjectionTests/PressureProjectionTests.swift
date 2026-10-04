@@ -1,14 +1,21 @@
+import SwiftMechanics
 import Testing
-import CMechanicsMath
-import MechanicsNumerics
-import MechanicsFluids
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(WASILibc)
+import WASILibc
+#elseif canImport(Glibc)
+import Glibc
+#else
+#error("No admitted scalar mathematics platform module is available.")
+#endif
 struct PressureProjectionTests {
     @Test func nonSquareMACPotentialRecoveryIncludesGaugeRowAndSolenoidalField() throws {
         let g=try PlanarFixtures.grid(nx:5,ny:7,lengthX:3,lengthY:2.5,rho:2),dt=0.02
         var phi=[Double](repeating:0,count:g.count),psi=[Double](repeating:0,count:g.count)
         for j in 0..<g.ny { for i in 0..<g.nx { let k=j*g.nx+i
-            phi[k]=0.3*sm_cos(2*PlanarFixtures.pi*(Double(i)+0.5)/Double(g.nx))+0.2*sm_cos(2*PlanarFixtures.pi*(Double(j)+0.5)/Double(g.ny))
-            psi[k]=0.1*sm_sin(2*PlanarFixtures.pi*Double(i)/Double(g.nx))*sm_sin(2*PlanarFixtures.pi*Double(j)/Double(g.ny))
+            phi[k]=0.3*cos(2*PlanarFixtures.pi*(Double(i)+0.5)/Double(g.nx))+0.2*cos(2*PlanarFixtures.pi*(Double(j)+0.5)/Double(g.ny))
+            psi[k]=0.1*sin(2*PlanarFixtures.pi*Double(i)/Double(g.nx))*sin(2*PlanarFixtures.pi*Double(j)/Double(g.ny))
         } }
         var u=[Double](repeating:0,count:g.count),v=[Double](repeating:0,count:g.count),solU=u,solV=v
         for j in 0..<g.ny { for i in 0..<g.nx { let k=j*g.nx+i,l=j*g.nx+(i+g.nx-1)%g.nx,b=((j+g.ny-1)%g.ny)*g.nx+i

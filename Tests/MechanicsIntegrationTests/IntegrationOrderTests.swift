@@ -1,7 +1,6 @@
+import SwiftMechanics
 import Testing
 import Foundation
-import MechanicsRuntime
-import MechanicsIntegration
 
 @Suite struct IntegrationOrderTests {
     @Test func classicalRK4AndHeunHaveIndependentObservedOrders() throws {

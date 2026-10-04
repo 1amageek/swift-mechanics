@@ -1,4 +1,4 @@
-import MechanicsNumerics
+import SwiftMechanics
 /// Negative fixture: reports valid supplier diagnostics with deliberately incorrect returned values.
 struct ZeroReportingLinearSolver<Scalar: NumericalScalar>: LinearSolving {
     func solve(_ matrix: DenseMatrix<Scalar>, rightHandSide: [Scalar], capability: LinearCapability,

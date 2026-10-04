@@ -1,7 +1,7 @@
 # MechanicsTransmissionsTests
 
 ## Purpose and Scope
-Parent [package](../../DESIGN.md); no children. Behavioral proof for [Bindings](../../Sources/MechanicsTransmissions/PortBindings/DESIGN.md), [Ideal](../../Sources/MechanicsTransmissions/IdealNetworks/DESIGN.md) and [Compliant](../../Sources/MechanicsTransmissions/CompliantPorts/DESIGN.md).
+Parent [package](../../DESIGN.md); no children. Behavioral proof for [Bindings](../../Sources/SwiftMechanics/Physics/Transmissions/PortBindings/DESIGN.md), [Ideal](../../Sources/SwiftMechanics/Physics/Transmissions/IdealNetworks/DESIGN.md) and [Compliant](../../Sources/SwiftMechanics/Physics/Transmissions/CompliantPorts/DESIGN.md).
 
 ## Responsibilities and Boundaries
 Independent analytic signed ratios, dimensioned rack work, network closure, constitutive energy/dissipation and actual failure boundaries; root owns platform composition.

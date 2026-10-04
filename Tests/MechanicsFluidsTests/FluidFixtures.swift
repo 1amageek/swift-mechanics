@@ -1,10 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsJoints
-import MechanicsNumerics
-import MechanicsFluids
 struct FluidFixtures {
     static func policy(cancel: @escaping @Sendable () -> Bool = { false }) throws -> FluidPolicy {
         try FluidPolicy(forceAbsolute:1e-10,forceRelative:1e-10,pressureGradientAbsolute:1e-8,

@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsRuntime
-import MechanicsIntegration
 
 @Suite struct IntegrationFailureTests {
     @Test func supplierLedgerReplacementAndResetCannotPublishOrRetry() throws {

@@ -1,7 +1,14 @@
+import SwiftMechanics
 import Testing
-import CMechanicsMath
-import MechanicsNumerics
-import MechanicsFluids
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(WASILibc)
+import WASILibc
+#elseif canImport(Glibc)
+import Glibc
+#else
+#error("No admitted scalar mathematics platform module is available.")
+#endif
 struct PlanarEvolutionTests {
     @Test func actualTwoDimensionalTaylorGreenMeshRefinement() throws {
         let exactAmplitude=0.9900498337491681,T=0.05,steps=10
@@ -29,10 +36,10 @@ struct PlanarEvolutionTests {
     @Test func shearExactDiscreteViscousAmplificationAndTimeRefinement() throws {
         let g=try PlanarFixtures.grid(nx:4,ny:8),dt=0.02,T=0.2,source=try PlanarFixtures.source()
         var u=[Double](repeating:0,count:g.count)
-        for j in 0..<g.ny { for i in 0..<g.nx { u[j*g.nx+i]=sm_sin((Double(j)+0.5)*g.dy) } }
+        for j in 0..<g.ny { for i in 0..<g.nx { u[j*g.nx+i]=sin((Double(j)+0.5)*g.dy) } }
         let old=try PlanarFixtures.state(g,u:u,v:[Double](repeating:0,count:g.count)),p=try PlanarFixtures.policy()
         var w=try PlanarFixtures.work();let one=try PlanarFixtures.solver().step(state:old,source:source,duration:dt,policy:p,work:&w)
-        let lambda=4*g.nu*sm_sin(PlanarFixtures.pi/Double(g.ny))*sm_sin(PlanarFixtures.pi/Double(g.ny))/(g.dy*g.dy)
+        let lambda=4*g.nu*sin(PlanarFixtures.pi/Double(g.ny))*sin(PlanarFixtures.pi/Double(g.ny))/(g.dy*g.dy)
         for k in 0..<g.count { #expect(abs(one.state.u[k]-(1-lambda*dt)*u[k]) < 1e-10);#expect(abs(one.state.v[k]) < 1e-10) }
         #expect(one.evidence.donorLossPower < 1e-12)
         // Independent exp(-lambda*T) evaluated with a bounded convergent Taylor series.

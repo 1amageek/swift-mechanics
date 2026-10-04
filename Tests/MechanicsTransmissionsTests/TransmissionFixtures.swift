@@ -1,10 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsNumerics
-import MechanicsNonlinear
-import MechanicsConstraints
-import MechanicsTransmissions
+import SwiftMechanics
 
 internal enum TransmissionFixtures {
     static func work(storage: Int = 200_000,operations: Int = 2_000_000) throws -> NumericalWork {

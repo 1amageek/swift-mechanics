@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsNumerics
-import MechanicsRuntime
-import MechanicsIntegration
-import MechanicsMechanisms
 
 @Suite struct AcceptedTransitionTests {
     @Test func actualAcceptedMovingLockAndReplay() throws {

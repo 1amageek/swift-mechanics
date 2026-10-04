@@ -1,7 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-@testable import MechanicsJoints
 
 @Suite struct ManifoldTests {
     @Test func standardJointCountsAndMotionColumns() throws {

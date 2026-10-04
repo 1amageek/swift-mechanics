@@ -1,13 +1,13 @@
 # MechanicsOptimizationTests
 
 ## Purpose and Scope
-Parent [module](../../Sources/MechanicsOptimization/DESIGN.md). Selected initial convex handoff qualified; root owns executions and the [parent evidence record](../../Sources/MechanicsOptimization/DESIGN.md#selected-af18-qualification).
+Parent [module](../../Sources/SwiftMechanics/Analysis/Optimization/DESIGN.md). Selected initial convex handoff qualified; root owns executions and the [parent evidence record](../../Sources/SwiftMechanics/Analysis/Optimization/DESIGN.md#selected-af18-qualification).
 
 ## Responsibilities and Boundaries
 Own independent original primal/dual/KKT/Farkas equations, analytic LP/QP optima and failure/resource oracles. No nonlinear residual-as-optimality or generic mechanical Hessian claim.
 
 ## Related Designs
-[ProblemContracts](../../Sources/MechanicsOptimization/ProblemContracts/DESIGN.md), [ConvexPrograms](../../Sources/MechanicsOptimization/ConvexPrograms/DESIGN.md). Future nonlinear/identification tests have separate responsibility.
+[ProblemContracts](../../Sources/SwiftMechanics/Analysis/Optimization/ProblemContracts/DESIGN.md), [ConvexPrograms](../../Sources/SwiftMechanics/Analysis/Optimization/ConvexPrograms/DESIGN.md). Future nonlinear/identification tests have separate responsibility.
 
 ## Architecture
 ```text

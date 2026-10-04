@@ -1,5 +1,4 @@
-import MechanicsNumerics
-import MechanicsFluids
+import SwiftMechanics
 struct SteadyOnlyFluidEvolution: FluidEvolving, Sendable {
     func steady(state:FluidState,boundary:FluidBoundary,policy:FluidPolicy,work:inout NumericalWork) throws(FluidError)->FluidEvolution {
         try FluidFixtures.solver().steady(state:state,boundary:boundary,policy:policy,work:&work)

@@ -1,6 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-@testable import MechanicsJoints
+@testable import SwiftMechanics
 
 struct JointFixtures {
     static func policy() throws -> JointEvaluationPolicy {

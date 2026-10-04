@@ -1,4 +1,4 @@
-import MechanicsContactLaws
+import SwiftMechanics
 internal struct ResettingContactLaw: ContactLawEvaluating {
     private let base=CompliantContactEvaluator()
     func initialHistory(identity: ContactIdentity, pair: ContactLawPair, timeSeconds: Double, work: inout ContactWork) throws(ContactLawError) -> ContactHistory {

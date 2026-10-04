@@ -1,13 +1,13 @@
 # MechanicsGranularTests
 
 ## Purpose and Scope
-Parent [module](../../Sources/MechanicsGranular/DESIGN.md). Behavioral qualification pending; root owns all executions.
+Parent [module](../../Sources/SwiftMechanics/Physics/Granular/DESIGN.md). Behavioral qualification pending; root owns all executions.
 
 ## Responsibilities and Boundaries
 Own independent physical equations and failure/replay evidence for the admitted sphere/plane CPU domain.
 
 ## Related Designs
-[ParticleState](../../Sources/MechanicsGranular/ParticleState/DESIGN.md), [NeighborContacts](../../Sources/MechanicsGranular/NeighborContacts/DESIGN.md), [ParticleEvolution](../../Sources/MechanicsGranular/ParticleEvolution/DESIGN.md), [Replay](../../Sources/MechanicsGranular/Replay/DESIGN.md).
+[ParticleState](../../Sources/SwiftMechanics/Physics/Granular/ParticleState/DESIGN.md), [NeighborContacts](../../Sources/SwiftMechanics/Physics/Granular/NeighborContacts/DESIGN.md), [ParticleEvolution](../../Sources/SwiftMechanics/Physics/Granular/ParticleEvolution/DESIGN.md), [Replay](../../Sources/SwiftMechanics/Physics/Granular/Replay/DESIGN.md).
 
 ## Architecture
 ```text

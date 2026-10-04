@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsActuation
-import MechanicsCompiler
-import MechanicsNumerics
-import MechanicsRuntime
 
 @Suite struct ContinuationTests {
     @Test func fixedPayloadAllKindsStrictDomainAndStaleIdentity() throws {

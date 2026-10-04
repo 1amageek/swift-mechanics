@@ -1,11 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsCollision
-import MechanicsContactLaws
-import MechanicsRuntime
-import MechanicsGranular
 struct GranularFailureTests {
     @Test func invalidParticlesAndUnsupportedShapesAreTyped() throws {
         let proxy=try GranularFixtures.proxy("p",shape:.sphere(radius:0.5),position:.zero)

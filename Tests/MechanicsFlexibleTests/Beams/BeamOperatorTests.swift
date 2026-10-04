@@ -1,9 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsMaterials
-import MechanicsNumerics
-import MechanicsFlexible
 struct BeamOperatorTests {
     static func beam(elements: Int = 1) throws -> UniformBeam {
         try UniformBeam(identity:"beam",revision:1,frame:EntityID(kind:.frame,key:"world-beam"),source:SourceProvenance(source:"calibrated elastic beam",revision:1),

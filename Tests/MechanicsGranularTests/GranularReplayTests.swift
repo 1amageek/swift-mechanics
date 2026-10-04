@@ -1,9 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsRuntime
-import MechanicsGranular
 struct GranularReplayTests {
     @Test func weightedPhysicalDistributionKeepsActualRandomContinuation() throws {
         let templates=[try GranularDistributionTemplate(weight:1,radius:0.1,density:1000,material:GranularFixtures.ref("a",.material)),

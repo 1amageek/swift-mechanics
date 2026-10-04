@@ -1,5 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsMechanisms
 
 @Suite struct ConnectedSleepTests {
     @Test func realMassAndGearConnectedWake() throws {

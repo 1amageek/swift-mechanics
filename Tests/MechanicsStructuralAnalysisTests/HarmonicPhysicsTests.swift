@@ -1,8 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsNumerics
-import MechanicsFlexible
-@testable import MechanicsStructuralAnalysis
 struct HarmonicPhysicsTests {
     static func tolerance() throws -> LinearTolerance<Double> { try LinearTolerance(absoluteResidual:1e-11,relativeResidual:1e-10,pivotThreshold:1e-14) }
     static func excitation(_ n:Int,omega:Double,force:Double=1,maximum:Double=100) -> HarmonicExcitation {

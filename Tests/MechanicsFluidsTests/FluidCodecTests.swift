@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsRuntime
-import MechanicsNumerics
-import MechanicsFluids
 struct FluidCodecTests {
     @Test func exactPhysicalBindingAndMalformedRecords() throws {
         let c=try FluidFixtures.channel(cells:4),b=try FluidFixtures.boundary(gradient:-2)

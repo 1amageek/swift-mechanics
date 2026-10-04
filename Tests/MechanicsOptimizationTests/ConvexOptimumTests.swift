@@ -1,7 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsNumerics
-import MechanicsOptimization
 struct ConvexOptimumTests {
     @Test func sparseLinearProgramHasIndependentPrimalDualOptimum() throws {
         let problem=try OptimizationFixtures.problem(cost:[-1,-2],inequality:[[1,1]],ineqRHS:[1])

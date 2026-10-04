@@ -1,5 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsLoads
 @Suite struct CustomLawsTests {
     private func policy() throws -> CustomLoadPolicy {
         try CustomLoadPolicy(minimumCoordinate: -2, maximumCoordinate: 2, maximumAbsoluteRate: 3,

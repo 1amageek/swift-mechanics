@@ -1,7 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-import MechanicsNumerics
-import MechanicsFlexible
-@testable import MechanicsStructuralAnalysis
 struct ModalPhysicsTests {
     @Test func cantileverBeamRefinesToIndependentEulerBernoulliFrequency() throws {
         let service:any ModalAnalyzing=ReferenceModalAnalyzer();var errors:[Double]=[]

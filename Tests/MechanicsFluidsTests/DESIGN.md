@@ -1,13 +1,13 @@
 # MechanicsFluidsTests
 
 ## Purpose and Scope
-Own behavioral evidence for [Fluids](../../Sources/MechanicsFluids/DESIGN.md), initial channel formulation. Qualification pending actual execution; no whole EX-005 claim.
+Own behavioral evidence for [Fluids](../../Sources/SwiftMechanics/Physics/Fluids/DESIGN.md), initial channel formulation. Qualification pending actual execution; no whole EX-005 claim.
 
 ## Responsibilities and Boundaries
 Independent continuum hydrostatics/Couette/Poiseuille and transient sine oracles, original discrete momentum and physical/numerical energy, actual Runtime accepted/rejected/checkpoint paths. Tests use real Numerical and Compiler/Runtime implementations; no numerical mock success.
 
 ## Related Designs
-[Channel](../../Sources/MechanicsFluids/ChannelDiscretization/DESIGN.md), [Evolution](../../Sources/MechanicsFluids/ViscousEvolution/DESIGN.md), [Continuation](../../Sources/MechanicsFluids/Continuation/DESIGN.md) own production authority. Existing producer tests remain read-only.
+[Channel](../../Sources/SwiftMechanics/Physics/Fluids/ChannelDiscretization/DESIGN.md), [Evolution](../../Sources/SwiftMechanics/Physics/Fluids/ViscousEvolution/DESIGN.md), [Continuation](../../Sources/SwiftMechanics/Physics/Fluids/Continuation/DESIGN.md) own production authority. Existing producer tests remain read-only.
 
 ## Architecture
 ```text

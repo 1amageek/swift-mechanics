@@ -1,5 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsRuntime
 
 @Suite struct RuntimeExecutionEvidenceTests {
     @Test(.timeLimit(.minutes(1))) func parallelBatchMatchesSequentialIndependentWorlds() async throws {

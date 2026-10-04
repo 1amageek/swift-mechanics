@@ -1,9 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-@testable import MechanicsExchange
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsJoints
 
 @Suite struct AdmissionTests {
     private func raw(_ document:NativeMechanicalDocument) throws -> [UInt8] {

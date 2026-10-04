@@ -1,5 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsActuation
 
 @Suite struct LumpedLawTests {
     @Test func motorIndependentCircuitAndDiscreteEnergy() throws {

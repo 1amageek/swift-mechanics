@@ -1,6 +1,6 @@
 # Contact law verification
 ## Purpose and Scope
-Test owner for [Inputs](../../Sources/MechanicsContactLaws/Inputs/DESIGN.md), [MaterialPairs](../../Sources/MechanicsContactLaws/MaterialPairs/DESIGN.md), [Response](../../Sources/MechanicsContactLaws/Response/DESIGN.md), [Impact](../../Sources/MechanicsContactLaws/Impact/DESIGN.md). Children: none.
+Test owner for [Inputs](../../Sources/SwiftMechanics/Physics/ContactLaws/Inputs/DESIGN.md), [MaterialPairs](../../Sources/SwiftMechanics/Physics/ContactLaws/MaterialPairs/DESIGN.md), [Response](../../Sources/SwiftMechanics/Physics/ContactLaws/Response/DESIGN.md), [Impact](../../Sources/SwiftMechanics/Physics/ContactLaws/Impact/DESIGN.md). Children: none.
 ## Responsibilities and Boundaries
 Independent scalar equations, vector rotations, traction work/energy and failure oracles. No collision, body integration or coupled solver fixture implies those paths are implemented.
 ## Related Designs

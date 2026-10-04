@@ -1,6 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsConstraints
-import MechanicsMechanisms
 
 @Suite struct ConstrainedDynamicsTests {
     @Test func realMassNonunitGearReaction() throws {

@@ -1,12 +1,6 @@
+import SwiftMechanics
 import Testing
 import Foundation
-import MechanicsCore
-import MechanicsModel
-import MechanicsJoints
-import MechanicsNumerics
-import MechanicsLoads
-import MechanicsDynamics
-import MechanicsDerivatives
 @Suite struct DerivativeFailureTests {
     private func providerInput(_ behavior: SpringForceProvider.Behavior) throws -> MechanicalDerivativeInput {
         let x=try DerivativeFixtures.pendulum()

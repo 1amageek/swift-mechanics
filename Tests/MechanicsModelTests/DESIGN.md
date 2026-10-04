@@ -7,7 +7,7 @@ Behavioral ownership of model identity/representation/body/layout records and an
 Independent closed-form oracles, invalid-input corpus, frame composition, representation replacement and q/v round-trip prove the corresponding component contracts.
 
 ## Related Designs
-[Identity](../../Sources/MechanicsModel/Identity/DESIGN.md), [Representations](../../Sources/MechanicsModel/Representations/DESIGN.md), [Inertia](../../Sources/MechanicsModel/Inertia/DESIGN.md), [Bodies](../../Sources/MechanicsModel/Bodies/DESIGN.md), [Coordinates](../../Sources/MechanicsModel/Coordinates/DESIGN.md).
+[Identity](../../Sources/SwiftMechanics/Modeling/Model/Identity/DESIGN.md), [Representations](../../Sources/SwiftMechanics/Modeling/Model/Representations/DESIGN.md), [Inertia](../../Sources/SwiftMechanics/Modeling/Model/Inertia/DESIGN.md), [Bodies](../../Sources/SwiftMechanics/Modeling/Model/Bodies/DESIGN.md), [Coordinates](../../Sources/SwiftMechanics/Modeling/Model/Coordinates/DESIGN.md).
 
 ## Architecture
 ```text

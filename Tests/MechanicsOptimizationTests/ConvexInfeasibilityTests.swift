@@ -1,5 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsOptimization
 struct ConvexInfeasibilityTests {
     @Test func infeasibleRowsHaveIndependentOriginalFarkasCombination() throws {
         let p=try OptimizationFixtures.problem(cost:[0],inequality:[[1]],ineqRHS:[-1],lower:[0],upper:[2])

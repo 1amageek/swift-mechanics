@@ -1,11 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsDynamics
-import MechanicsCollision
-import MechanicsContactLaws
-import MechanicsComplementarity
-import MechanicsContactResponse
+import SwiftMechanics
 import Testing
 @Suite(.timeLimit(.minutes(1)))
 struct ResponseFailureTests {

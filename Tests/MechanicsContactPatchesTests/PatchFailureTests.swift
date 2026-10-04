@@ -1,8 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsFlexible
-import MechanicsContactPatches
+import SwiftMechanics
 import Testing
 @Suite(.timeLimit(.minutes(1)))
 struct PatchFailureTests {

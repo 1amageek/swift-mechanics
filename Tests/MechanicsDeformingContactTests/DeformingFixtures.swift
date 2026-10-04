@@ -1,11 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsMaterials
-import MechanicsNumerics
-import MechanicsFlexible
-import MechanicsCollision
-import MechanicsContactLaws
-import MechanicsDeformingContact
+import SwiftMechanics
 internal enum DeformingFixtures {
     static func work(operations: Int=10_000_000, storage: Int=100_000) throws -> NumericalWork { NumericalWork(budget:try NumericalBudget(scalarStorage:storage,arithmeticOperations:operations,iterations:0)) }
     static func policy(cancelled: Bool=false, faces: Int=100, cells: Int=100, identifiers: Int=100,

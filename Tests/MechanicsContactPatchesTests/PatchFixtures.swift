@@ -1,9 +1,4 @@
-import MechanicsCore
-import MechanicsModel
-import MechanicsMaterials
-import MechanicsNumerics
-import MechanicsFlexible
-import MechanicsContactPatches
+import SwiftMechanics
 internal enum PatchFixtures {
     static func work(storage: Int = 100_000,operations: Int = 1_000_000) throws -> NumericalWork { NumericalWork(budget:try NumericalBudget(scalarStorage:storage,arithmeticOperations:operations,iterations:0)) }
     static func admission() throws -> MeshAdmission { try MeshAdmission(maximumNodes:20,maximumCells:20,maximumMaterials:4,minimumReferenceVolume:1e-12,inverseRelativeTolerance:1e-12) }

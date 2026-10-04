@@ -1,7 +1,14 @@
+import SwiftMechanics
 import Testing
-import CMechanicsMath
-import MechanicsNumerics
-import MechanicsFluids
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(WASILibc)
+import WASILibc
+#elseif canImport(Glibc)
+import Glibc
+#else
+#error("No admitted scalar mathematics platform module is available.")
+#endif
 struct ViscousEvolutionTests {
     @Test func sineDecayTimeAndMeshRefinementWithActualEvolution() throws {
         let pi=3.14159265358979323846,T=1/(pi*pi),expected=0.36787944117144233
@@ -9,7 +16,7 @@ struct ViscousEvolutionTests {
         for steps in [1,4,16,64] {
             let c=try FluidFixtures.channel(cells:32),b=try FluidFixtures.boundary()
             var initial=[Double](repeating:0,count:32)
-            for i in initial.indices { initial[i]=sm_sin(pi*(Double(i)+0.5)/32) }
+            for i in initial.indices { initial[i]=sin(pi*(Double(i)+0.5)/32) }
             var state=try FluidFixtures.state(channel:c,boundary:b,velocities:initial)
             var work=try FluidFixtures.work()
             for _ in 0..<steps {
@@ -29,7 +36,7 @@ struct ViscousEvolutionTests {
         var meshPrevious=Double.infinity
         for n in [4,8,16] {
             let c=try FluidFixtures.channel(cells:n),b=try FluidFixtures.boundary()
-            var u=[Double](repeating:0,count:n); for i in u.indices { u[i]=sm_sin(pi*(Double(i)+0.5)/Double(n)) }
+            var u=[Double](repeating:0,count:n); for i in u.indices { u[i]=sin(pi*(Double(i)+0.5)/Double(n)) }
             let old=try FluidFixtures.state(channel:c,boundary:b,velocities:u),dt=0.001
             var w=try FluidFixtures.work(); let result=try FluidFixtures.solver().step(state:old,boundary:b,duration:dt,policy:FluidFixtures.policy(),work:&w)
             // Independent continuum BE amplitude isolates spatial discretization error.

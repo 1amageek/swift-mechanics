@@ -1,7 +1,5 @@
+@testable import SwiftMechanics
 import Testing
-import MechanicsNumerics
-import MechanicsFlexible
-@testable import MechanicsStructuralAnalysis
 struct BucklingPhysicsTests {
     @Test func assembledPinnedBeamBucklingRefinesToEulerLoad() throws {
         let service:any BucklingAnalyzing=ReferenceBucklingAnalyzer();var errors:[Double]=[]

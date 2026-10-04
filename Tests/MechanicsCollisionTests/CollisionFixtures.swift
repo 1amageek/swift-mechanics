@@ -1,6 +1,4 @@
-import MechanicsCollision
-import MechanicsCore
-import MechanicsModel
+import SwiftMechanics
 
 enum CollisionFixtures {
     static func proxy(_ key: String, shape: CollisionShape, position: Vector3 = .zero,

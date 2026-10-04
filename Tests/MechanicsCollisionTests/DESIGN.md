@@ -1,7 +1,7 @@
 # Analytic collision producer evidence
 
 ## Purpose and Scope
-Parent: [MechanicsCollision](../../Sources/MechanicsCollision/DESIGN.md). Children: none. Owns initial analytic geometry, conservative discovery, value continuation and fixed-rotation translation CCD fixtures; full CL closure remains unimplemented.
+Parent: [MechanicsCollision](../../Sources/SwiftMechanics/Physics/Collision/DESIGN.md). Children: none. Owns initial analytic geometry, conservative discovery, value continuation and fixed-rotation translation CCD fixtures; full CL closure remains unimplemented.
 
 ## Responsibilities and Boundaries
 Independent SI formulas establish sphere/box/plane distance and witness balances, support bounds, inside/edge/tie, rays, filtering, persistence and original TOI brackets. Physical contact/dynamics, generic convex/concave geometry, rotating CCD and accepted-time event scheduling remain outside evidence.
@@ -9,11 +9,11 @@ Independent SI formulas establish sphere/box/plane distance and witness balances
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
-| [Shapes](../../Sources/MechanicsCollision/Shapes/DESIGN.md) | depends on | Proxy/domain identity | Explicit collision authority | Display independent |
-| [Geometry](../../Sources/MechanicsCollision/Geometry/DESIGN.md) | depends on | Actual analytic queries | Geometric original residuals | Feature tolerance band |
-| [Discovery](../../Sources/MechanicsCollision/Discovery/DESIGN.md) | depends on | Candidate/filter/query ordering | Exhaustive independent contacts | Conservative extras allowed |
-| [Persistence](../../Sources/MechanicsCollision/Persistence/DESIGN.md) | depends on | Value-owned histories | Sliding and trigger deltas | Sampled geometry only |
-| [Sweep](../../Sources/MechanicsCollision/Sweep/DESIGN.md) | depends on | Fixed orientation actual interpolation | Independent analytic TOI | No rotation claim |
+| [Shapes](../../Sources/SwiftMechanics/Physics/Collision/Shapes/DESIGN.md) | depends on | Proxy/domain identity | Explicit collision authority | Display independent |
+| [Geometry](../../Sources/SwiftMechanics/Physics/Collision/Geometry/DESIGN.md) | depends on | Actual analytic queries | Geometric original residuals | Feature tolerance band |
+| [Discovery](../../Sources/SwiftMechanics/Physics/Collision/Discovery/DESIGN.md) | depends on | Candidate/filter/query ordering | Exhaustive independent contacts | Conservative extras allowed |
+| [Persistence](../../Sources/SwiftMechanics/Physics/Collision/Persistence/DESIGN.md) | depends on | Value-owned histories | Sliding and trigger deltas | Sampled geometry only |
+| [Sweep](../../Sources/SwiftMechanics/Physics/Collision/Sweep/DESIGN.md) | depends on | Fixed orientation actual interpolation | Independent analytic TOI | No rotation claim |
 
 ## Architecture
 ```text

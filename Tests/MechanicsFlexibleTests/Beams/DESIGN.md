@@ -1,7 +1,7 @@
 # Beam component tests
 
 ## Purpose and Scope
-Parent [Beams](../../../Sources/MechanicsFlexible/Beams/DESIGN.md). Own element operator evidence, no children.
+Parent [Beams](../../../Sources/SwiftMechanics/Physics/Flexible/Beams/DESIGN.md). Own element operator evidence, no children.
 
 ## Responsibilities and Boundaries
 Actual assembly is compared to integrated Hermite physical energies; structural spectra belong to StructuralAnalysis tests.

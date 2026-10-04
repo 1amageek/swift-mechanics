@@ -1,7 +1,7 @@
 # MechanicsConstraintsTests
 
 ## Purpose and Scope
-Parent [package](../../DESIGN.md); no children. Own actual Native behavioral evidence for [CoordinateEquations](../../Sources/MechanicsConstraints/CoordinateEquations/DESIGN.md), [AssemblyProjection](../../Sources/MechanicsConstraints/AssemblyProjection/DESIGN.md), [ScalarJointPorts](../../Sources/MechanicsConstraints/ScalarJointPorts/DESIGN.md).
+Parent [package](../../DESIGN.md); no children. Own actual Native behavioral evidence for [CoordinateEquations](../../Sources/SwiftMechanics/Physics/Constraints/CoordinateEquations/DESIGN.md), [AssemblyProjection](../../Sources/SwiftMechanics/Physics/Constraints/AssemblyProjection/DESIGN.md), [ScalarJointPorts](../../Sources/SwiftMechanics/Physics/Constraints/ScalarJointPorts/DESIGN.md).
 
 ## Responsibilities and Boundaries
 Analytic independent expected equations, derivatives, weighted corrections/energy and real supplier failure boundaries; root owns integration/platform probes.

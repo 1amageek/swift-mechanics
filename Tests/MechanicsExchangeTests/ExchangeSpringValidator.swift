@@ -1,7 +1,4 @@
-import MechanicsCompiler
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
+import SwiftMechanics
 struct ExchangeSpringValidator: MechanicalExtensionValidating {
     let registrations:[ValidatorRegistration]
     init() throws {

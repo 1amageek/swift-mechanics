@@ -1,6 +1,6 @@
 # Exchange behavioral verification
 ## Purpose and Scope
-Test owner of [Schema](../../Sources/MechanicsExchange/Schema/DESIGN.md), [BinaryCodec](../../Sources/MechanicsExchange/BinaryCodec/DESIGN.md), [Admission](../../Sources/MechanicsExchange/Admission/DESIGN.md). Children: none.
+Test owner of [Schema](../../Sources/SwiftMechanics/Exchange/Schema/DESIGN.md), [BinaryCodec](../../Sources/SwiftMechanics/Exchange/BinaryCodec/DESIGN.md), [Admission](../../Sources/SwiftMechanics/Exchange/Admission/DESIGN.md). Children: none.
 ## Responsibilities and Boundaries
 Round-trip is checked through real Compiler compilation and actual kinematic snapshots/layout/sparsity, with a real bounded spring descriptor validator. Opaque asset equality proves data admission only. No Runtime continuation or external I/O success is implied.
 ## Related Designs

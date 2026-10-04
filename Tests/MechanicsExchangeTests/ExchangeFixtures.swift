@@ -1,9 +1,4 @@
-import MechanicsExchange
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsJoints
-import MechanicsCompiler
+import SwiftMechanics
 
 enum ExchangeFixtures {
     static func id(_ kind:EntityKind,_ key:String) throws -> EntityID { try EntityID(kind:kind,key:key) }

@@ -1,4 +1,4 @@
-import MechanicsNumerics
+import SwiftMechanics
 struct PlanarWrongEquationSolver: LinearSolving, Sendable {
     typealias Scalar=Double
     func solve(_ matrix:DenseMatrix<Double>,rightHandSide rhs:[Double],capability:LinearCapability,tolerance:LinearTolerance<Double>,budget:NumericalBudget) throws(NumericalError)->LinearSolution<Double> {

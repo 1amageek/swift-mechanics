@@ -1,10 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsCompiler
-import MechanicsJoints
-import MechanicsMechanisms
-import MechanicsRuntime
 
 @Suite struct DetachedLeafTests {
     @Test func actualRemovedJointFreeLayoutAndMomentum() throws {

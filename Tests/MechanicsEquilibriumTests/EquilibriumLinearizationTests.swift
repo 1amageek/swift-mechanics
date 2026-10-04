@@ -1,13 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsModel
-import MechanicsNumerics
-import MechanicsConstraints
-import MechanicsJoints
-import MechanicsCompiler
-import MechanicsLoads
-import MechanicsDynamics
-import MechanicsEquilibrium
 
 @Suite struct EquilibriumLinearizationTests {
     @Test func pendulumUsesActualMassAndOriginalDirectionalStiffness()throws {

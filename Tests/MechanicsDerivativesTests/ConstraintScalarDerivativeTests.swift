@@ -1,8 +1,5 @@
+import SwiftMechanics
 import Testing
-import MechanicsCore
-import MechanicsConstraints
-import MechanicsNumerics
-import MechanicsDerivatives
 @Suite struct ConstraintScalarDerivativeTests {
     @Test func exactScalarChainAndDomain() throws {
         var w=try DerivativeFixtures.work()
