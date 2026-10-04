@@ -34,3 +34,5 @@ Run the focused SwiftMechanicsMachineTests target with an external timeout after
 ### Target authoring qualification
 
 The [Machines verification matrix](../../Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#target-verification-matrix) owns the obligations for the approved structural authoring surface. These tests are planned, not present or passed. This target will own syntax lowering, typed reference/role admission, coordinate placement and actual compiler equivalence. Physical law, deformation, contact and accepted-transition tests remain with their existing responsibility-specific targets; root owns integrated profile qualification. Existing record-based hinge evidence does not qualify the proposed nested primitives.
+
+The [optional label contract](../../Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#optional-labels-and-initializer-contract) additionally requires identical physical output for label-free/string/closure overloads, label-versus-ID separation, scoped metadata binding, once-only construction and explicit metadata failure. The canonical matrix owns these planned cases; this target has not implemented or passed them.

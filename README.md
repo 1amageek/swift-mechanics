@@ -46,6 +46,8 @@ The [declarative authoring design](Sources/SwiftMechanics/Modeling/Machines/DESI
 
 The implemented foundation currently uses `MachineBody` and `MachineJoint` to compose validated records. Its builder supports conditionals, `switch`, optional content, reusable scoped instances, type erasure through `AnyMachine`, and bounded lazy repetition through `ForEachMachine`.
 
+The target design also provides optional display labels: a content-only initializer, a `label: "Motor"` convenience, or a trailing `label: { Text("Motor") }` closure. The explicit mechanical ID is separate from the display label. These forms are planned, not implemented; the [label and initializer contract](Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#optional-labels-and-initializer-contract) owns examples, metadata lifetime and overload equivalence. The illustrated `Text` is a library label declaration and does not introduce a SwiftUI dependency.
+
 `MachineDefinition` lowers declarations into a descriptor and delegates physical admission to the mechanical compiler. A successfully constructed declaration is not yet a valid compiled model. Simulation steps operate on compiled models and state; they do not reevaluate the declaration.
 
 See the [Machine contract](Sources/SwiftMechanics/Modeling/Machines/DESIGN.md) and [compilation tests](Tests/SwiftMechanicsMachineTests/MachineCompilationTests.swift) for actual compilation, articulated motion, scoped identity and failure behavior.

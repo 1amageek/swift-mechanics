@@ -124,6 +124,61 @@ Content-bearing declarations are generic over Content: Machine, accept an @Machi
 
 References do not own simulation state. ShaftReference may identify a rotary terminal only when its declared shaft/connection provides a unique admitted binding. Multiple possible coordinates or reference supports require an explicit port binding and otherwise fail. Geometry/part identity is not itself a generalized coordinate.
 
+### Optional Labels and Initializer Contract
+
+Content-bearing primitives with a display label provide three construction forms. Mechanical content is required; display metadata is optional. TorqueMotor illustrates the contract, which should be applied consistently to other label-bearing primitives. This is target design, not an implemented overload set.
+
+| Form | Illustrative call | Retained label |
+|---|---|---|
+| No label | TorqueMotor("drive", axis: .z) { content } | EmptyMachineLabel; no display name |
+| String label | TorqueMotor("drive", axis: .z, label: "Motor") { content } | Text containing the supplied string |
+| Label closure | TorqueMotor("drive", axis: .z) { content } label: { Text("Motor") } | The immutable label value returned by the closure |
+
+The unlabeled first string is the explicit mechanical ID in all three forms. It is never interpreted as a display name. Labels may be absent, empty, localized by the application, duplicated or changed without changing entity identity, reference resolution, rigid composition, coordinates, physical parameters or equations. Omitting a label does not omit a rotor/stator binding or any required physical input.
+
+```swift
+TorqueMotor("drive", axis: .z) {
+    Rotor { BodyReference("shaft") }
+    Stator { BodyReference("housing") }
+}
+
+TorqueMotor("drive", axis: .z, label: "Motor") {
+    Rotor { BodyReference("shaft") }
+    Stator { BodyReference("housing") }
+}
+
+TorqueMotor("drive", axis: .z) {
+    Rotor { BodyReference("shaft") }
+    Stator { BodyReference("housing") }
+} label: {
+    Text("Motor")
+}
+```
+
+These are alternative sketches for one entity, not three definitions to place in the same scope. Full physical and initialization inputs remain omitted as in the other structural examples.
+
+#### Label Interface and Ownership
+
+The target label interface is a focused MachineLabel: Sendable protocol with a non-generic `text: String?` requirement. EmptyMachineLabel returns nil; the library's Text label returns its supplied text, including an explicit empty string. Label values are immutable metadata and do not conform to Machine or add physical entities. The illustrated Text belongs to SwiftMechanics, not SwiftUI; consumers importing both qualify the type when necessary. Rendering, styling and localization policy remain with application/adapters. Core label declarations acquire no SwiftUI dependency.
+
+The closure overload is generic over Content: Machine and Label: MachineLabel. Its content parameter uses MachineBuilder; its label parameter is an ordinary closure returning one label value, requiring no additional result builder. It evaluates each construction closure exactly once per declaration instance and stores the resulting values rather than escaping the closures. The label-free overload specializes Label to EmptyMachineLabel; the string overload specializes it to Text. All overloads share the same physical construction/lowering path. A missing label neither fabricates a name from the ID nor creates an additional graph node.
+
+```mermaid
+flowchart LR
+  Init[Three initializer forms] --> Content[Immutable mechanical content]
+  Init --> Label[Optional immutable label]
+  Content --> Admission[Physical identity and compiler admission]
+  Label --> Metadata[Presentation metadata keyed by admitted entity identity]
+  Admission --> Model[Compiled physical model]
+  Metadata --> Adapter[Application or display adapter]
+```
+
+Lowering owns bounded collection and identity binding of presentation metadata. The target annotated definition retains a separate immutable metadata collection alongside the physical output; physics and Execution do not consume it. Label-only edits invalidate presentation metadata, not physical caches, state compatibility or accepted continuation. Explicit caller changes to mechanical IDs/revisions still follow the existing model contracts. No annotation is published with an unresolved or failed physical binding.
+
+Metadata byte/work limits and typed metadata failures must be finalized before this path is implemented; they are not currently fields of MachineDefinitionPolicy. Do not silently truncate text, charge it as identifier content, or weaken existing physical budgets to fit labels. Failure to construct an annotated result publishes no partial result and preserves an already accepted model/state. SwiftUI views, render callbacks and mutable presentation state are not retained by the mechanical model.
+
+The concrete immutable metadata schema and its publication facade remain implementation decisions for this scope. Existing MachineBody/MachineDefinition have no label storage or these overloads. No current test establishes this target behavior.
+
 ### Coordinate and Placement Contract
 
 Storage and conversion follow SPEC MD-002..003. Structural examples use meters for lengths and radians for unwrapped angular coordinates unless a dimensioned conversion is explicit. Axes are expressed in their declared attachment frames. A transform maps coordinates from its source frame to its destination frame.
@@ -339,6 +394,8 @@ The [Machine test owner](../../../../Tests/SwiftMechanicsMachineTests/DESIGN.md)
 | Coordinate placement | Nonidentity parent and child translations/rotations match explicit anchor algebra; repeated instance transform applied once | Machine + Joint tests; MD, KI |
 | Geometry versus motion | Coaxial independent shafts retain different speeds; initial placement alone installs no persistent constraint | Machine + Constraint tests; CN |
 | Identity/reference resolution | Forward/reordered definitions bind the same graph; missing/wrong-kind/ambiguous/duplicate references fail without publication | Machine + Compiler tests; MD |
+| Optional labels and overload equivalence | All three initializer forms lower to identical physical records and evaluated motion; absent/empty/duplicate labels remain distinct from IDs; changing label text preserves bindings, physical layout and state compatibility | Machine + Compiler tests; MD |
+| Label ownership and bounds | Content/label construction closures each run once and never on a step; presentation metadata binds to admitted scoped identities; wrong-kind label content is rejected; metadata exhaustion publishes no partial annotated result and preserves accepted state | Machine tests; MD, PF |
 | Closed loops | Four-bar assembly satisfies original position/velocity constraints; contradictory loop fails with documented diagnosis | Machine + Mechanism tests; CN, KI |
 | Multi-terminal transfer | Planetary/differential terminal signs, units, relative supports and power balance match analytic equations; missing role fails | Machine + Transmission tests; TR |
 | Routes | Pulley block displacement/tension and force application match an independent oracle; winding/slack ambiguity is explicit | Machine + Load/Transmission tests; FL, TR |
