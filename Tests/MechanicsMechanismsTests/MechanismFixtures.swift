@@ -6,11 +6,18 @@ internal enum MechanismFixtures {
     static func work(storage:Int = 1_000_000,operations:Int = 20_000_000) throws -> NumericalWork {
         NumericalWork(budget:try NumericalBudget(scalarStorage:storage,arithmeticOperations:operations,iterations:100000))
     }
-    static func model(q:[Double] = [0,0],v:[Double] = [0,0]) throws -> CompiledMechanicalModel {
+    static func model(q:[Double] = [0,0],v:[Double] = [0,0],planar:Bool = false) throws -> CompiledMechanicalModel {
         let tolerance=try NumericalTolerance(absolute:1e-12,relative:1e-12),inertiaPolicy=try InertiaValidationPolicy(symmetry:tolerance,physicalityRelative:0)
         var bodies:[MechanicalBody]=[]
         for (index,key) in ["root","a","b"].enumerated() {
             let j=[1.0,2.0,4.0][index]
+            if planar {
+                let properties=try MassProperties2D(mass:1,centerX:0,centerY:0,polarInertiaAtCenter:j)
+                bodies.append(.planar(try BodyRecord2D(id:id(.body,key),frame:id(.frame,key+"-frame"),mode:index == 0 ? .static : .dynamic,
+                    bodyToWorld:PlanarPose(x:0,y:0,angle:index == 0 ? 0 : q[index-1]),representations:BodyRepresentations(),
+                    inertia:InertialRepresentation2D(properties:properties,provenance:SourceProvenance(source:"mechanism-inertia",revision:1),quality:.exact))))
+                continue
+            }
             let properties=try MassProperties3D(mass:1,centerOfMass:.zero,inertiaAtCenter:Matrix3(j,0,0,0,j,0,0,0,j),policy:inertiaPolicy)
             let record=try BodyRecord3D(id:id(.body,key),frame:id(.frame,key+"-frame"),mode:index == 0 ? .static : .dynamic,
                 bodyToWorld:RigidTransform(rotation:UnitQuaternion(axis:.unitZ,angle:index == 0 ? 0 : q[index-1]),translation:.zero),representations:BodyRepresentations(),inertia:InertialRepresentation3D(properties:properties,

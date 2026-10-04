@@ -340,7 +340,7 @@ public final class NonlinearMechanismEquation: ProjectedMechanismEquations, Send
     private func snapshot(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> KinematicSnapshot {
         try physical.snapshot(q:q,v:v,time:time,work:&work,control:control)
     }
-    private func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> RigidDynamicsSystem {
+    private func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
         try physical.system(q:q,v:v,time:time,work:&work,control:control)
     }
     @inline(never)

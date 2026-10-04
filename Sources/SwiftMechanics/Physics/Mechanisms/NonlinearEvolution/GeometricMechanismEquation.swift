@@ -14,11 +14,33 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     private let evaluator:any HolonomicGeometryProviding
     private let assembler:TangentManifoldAssembler
     private let quaternionStarts:[Int]
-    public init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
+    public convenience init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
                 projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
                 admission:DynamicsAdmission,maximumIdentityBytes:Int,
                 kernel:any RigidEquationComputing = RigidEquationKernel(),evaluator:any HolonomicGeometryProviding = GeometricRelationEvaluator(),
                 solver:any ConstrainedMechanismSolving = MassWeightedMechanismSolver(),ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(),
+                linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),motionSampler:any PrescribedMotionSampling = AnalyticPrescribedMotionSampler()) throws(RuntimeFailure) {
+        try self.init(identity:identity,geometry:geometry,drive:drive,policy:policy,projection:projection,
+            maximumStageChartCorrection:maximumStageChartCorrection,publicationBudget:publicationBudget,admission:admission,
+            maximumIdentityBytes:maximumIdentityBytes,suppliers:.spatial(kernel,solver),evaluator:evaluator,
+            ranker:ranker,linear:linear,motionSampler:motionSampler)
+    }
+    public convenience init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
+                projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
+                admission:DynamicsAdmission,maximumIdentityBytes:Int,
+                physicalKernel:any PhysicalRigidEquationComputing,evaluator:any HolonomicGeometryProviding = GeometricRelationEvaluator(),
+                physicalSolver:any PhysicalConstrainedMechanismSolving,ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(),
+                linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),motionSampler:any PrescribedMotionSampling = AnalyticPrescribedMotionSampler()) throws(RuntimeFailure) {
+        try self.init(identity:identity,geometry:geometry,drive:drive,policy:policy,projection:projection,
+            maximumStageChartCorrection:maximumStageChartCorrection,publicationBudget:publicationBudget,admission:admission,
+            maximumIdentityBytes:maximumIdentityBytes,suppliers:.physical(physicalKernel,physicalSolver),evaluator:evaluator,
+            ranker:ranker,linear:linear,motionSampler:motionSampler)
+    }
+    private init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
+                projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
+                admission:DynamicsAdmission,maximumIdentityBytes:Int,
+                suppliers:NonlinearPhysicalSuppliers,evaluator:any HolonomicGeometryProviding = GeometricRelationEvaluator(),
+                ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(),
                 linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),motionSampler:any PrescribedMotionSampling = AnalyticPrescribedMotionSampler()) throws(RuntimeFailure) {
         let model=geometry.model,p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount,m=geometry.rowIDs.count
         guard maximumStageChartCorrection.isFinite,maximumStageChartCorrection > 0,identity.utf8.count <= maximumIdentityBytes,
@@ -51,9 +73,9 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
             dimensions.append(PhysicalDimension(length:d.length,mass:d.mass,time:d.time-1,angle:d.angle,electricCurrent:d.electricCurrent,
                 temperature:d.temperature,amount:d.amount,luminousIntensity:d.luminousIntensity))
         }
-        let inertias:[RigidBodyInertia]
-        do throws(MechanismError) { inertias=try NonlinearPhysicalEngine.bind(model) }
-        catch { throw RuntimeFailure(.invalidState,message:"Geometric spatial inertia unavailable.") }
+        let inertias:NonlinearPhysicalInertias
+        do throws(MechanismError) { inertias=suppliers.usesPhysical ? try NonlinearPhysicalInertias.bind(model) : .spatial(try NonlinearPhysicalEngine.bind(model)) }
+        catch { throw RuntimeFailure(.invalidState,message:"Geometric original physical inertia or supplier capability unavailable.") }
         let storage:Int
         do { storage=try NumericalWork.sum(geometry.scalarStorage,try NumericalWork.sum(try NumericalWork.product(32,try NumericalWork.product(m,max(m,n))),try NumericalWork.product(64,p+n))) }
         catch { throw RuntimeFailure(.capacityExceeded,message:"Geometric workspace envelope overflow.") }
@@ -66,7 +88,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         self.maximumStageChartCorrection=maximumStageChartCorrection;self.publicationBudget=publicationBudget;quaternionStarts=starts
         self.motionSampler=motionSampler;self.evaluator=evaluator;assembler=TangentManifoldAssembler(evaluator:evaluator,ranker:ranker,linear:linear)
         physical=NonlinearPhysicalEngine(model:model,velocityLayout:geometry.layout,drive:drive,policy:policy,admission:admission,
-            inertias:inertias,kernel:kernel,solver:solver,storage:storage)
+            inertias:inertias,suppliers:suppliers,storage:storage)
     }
     public func validate(model:CompiledMechanicalModel) throws(RuntimeFailure) {
         guard model.stamp == self.model.stamp,model.descriptor == self.model.descriptor,model.tree.layout == self.model.tree.layout else { throw RuntimeFailure(.incompatibleModel,message:"Geometric model source differs.") }

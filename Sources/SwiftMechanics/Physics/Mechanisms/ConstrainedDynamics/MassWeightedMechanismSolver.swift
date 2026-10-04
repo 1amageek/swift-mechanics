@@ -1,28 +1,61 @@
 
-public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving {
-    private let dynamics: any RigidDynamicsSolving
-    private let equations: any RigidEquationComputing
+public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving, PhysicalConstrainedMechanismSolving {
+    private let suppliers: MechanismPhysicalSuppliers
     private let rankAnalyzer: any ConstraintRankAnalyzing
     private let linear: any LinearSolving<Double>
     public init(dynamics: any RigidDynamicsSolving = DenseRigidDynamics(), equations: any RigidEquationComputing = RigidEquationKernel(),
                 rank: any ConstraintRankAnalyzing = WeightedConstraintAssembler(), linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
-        self.dynamics=dynamics; self.equations=equations; rankAnalyzer=rank; self.linear=linear
+        suppliers = .spatial(dynamics,equations); rankAnalyzer=rank; self.linear=linear
+    }
+    public init(physicalDynamics: any PhysicalRigidDynamicsSolving, physicalEquations: any PhysicalRigidEquationComputing,
+                rank: any ConstraintRankAnalyzing = WeightedConstraintAssembler(), linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
+        suppliers = .physical(physicalDynamics,physicalEquations);rankAnalyzer=rank;self.linear=linear
     }
     @inline(never)
     public func acceleration(_ system: RigidDynamicsSystem, sample: VelocityConstraintSample, drive: [Double],
                              policy: MechanismSolvePolicy, work: inout NumericalWork, dynamicsWork: inout NumericalWork,
                              rankWork: inout NumericalWork, linearWork: inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
+        try accelerationValue(PhysicalRigidDynamicsSystem(spatial:system),sample:sample,drive:drive,policy:policy,
+            work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork)
+    }
+    @inline(never)
+    public func reconcileVelocity(_ system: RigidDynamicsSystem, sample: VelocityConstraintSample,
+                                  policy: MechanismSolvePolicy, work: inout NumericalWork, dynamicsWork: inout NumericalWork,
+                                  rankWork: inout NumericalWork, linearWork: inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
+        try velocityValue(PhysicalRigidDynamicsSystem(spatial:system),sample:sample,policy:policy,
+            work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork)
+    }
+    @inline(never)
+    public func acceleration(_ system: PhysicalRigidDynamicsSystem, sample: VelocityConstraintSample, drive: [Double],
+                             policy: MechanismSolvePolicy, work: inout NumericalWork, dynamicsWork: inout NumericalWork,
+                             rankWork: inout NumericalWork, linearWork: inout NumericalWork) throws(MechanismError) -> PhysicalConstrainedMotion {
+        let motion=try accelerationValue(system,sample:sample,drive:drive,policy:policy,
+            work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork)
+        return PhysicalConstrainedMotion(system:system,motion:motion)
+    }
+    @inline(never)
+    public func reconcileVelocity(_ system: PhysicalRigidDynamicsSystem, sample: VelocityConstraintSample,
+                                  policy: MechanismSolvePolicy, work: inout NumericalWork, dynamicsWork: inout NumericalWork,
+                                  rankWork: inout NumericalWork, linearWork: inout NumericalWork) throws(MechanismError) -> PhysicalConstrainedMotion {
+        let motion=try velocityValue(system,sample:sample,policy:policy,
+            work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork)
+        return PhysicalConstrainedMotion(system:system,motion:motion)
+    }
+    @inline(never)
+    private func accelerationValue(_ system: PhysicalRigidDynamicsSystem, sample: VelocityConstraintSample, drive: [Double],
+                             policy: MechanismSolvePolicy, work: inout NumericalWork, dynamicsWork: inout NumericalWork,
+                             rankWork: inout NumericalWork, linearWork: inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
         try admit(system,sample:sample,policy:policy,work:&work)
         guard drive.count == system.velocityCount, drive.allSatisfy({ $0.isFinite }) else { throw .invalidShape }
         let free=try dynamicsCall(work:&dynamicsWork) { ledger throws(DynamicsError) in
-            try dynamics.forward(system,driveForce:drive,policy:policy.dynamics,work:&ledger)
+            try suppliers.solve(system,values:drive,massOnly:false,policy:policy.dynamics,work:&ledger)
         }
         guard free.acceleration.count == system.velocityCount else { throw .invalidShape }
         return try solve(system,sample:sample,base:free.acceleration,drive:drive,impulse:false,policy:policy,
             work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork)
     }
     @inline(never)
-    public func reconcileVelocity(_ system: RigidDynamicsSystem, sample: VelocityConstraintSample,
+    private func velocityValue(_ system: PhysicalRigidDynamicsSystem, sample: VelocityConstraintSample,
                                   policy: MechanismSolvePolicy, work: inout NumericalWork, dynamicsWork: inout NumericalWork,
                                   rankWork: inout NumericalWork, linearWork: inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
         try admit(system,sample:sample,policy:policy,work:&work)
@@ -30,9 +63,10 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving {
             work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork)
     }
     @inline(never)
-    private func admit(_ system: RigidDynamicsSystem, sample: VelocityConstraintSample, policy: MechanismSolvePolicy,
+    private func admit(_ system: PhysicalRigidDynamicsSystem, sample: VelocityConstraintSample, policy: MechanismSolvePolicy,
                        work: inout NumericalWork) throws(MechanismError) {
         try MechanismArithmetic.check(policy)
+        try suppliers.admit(system)
         let n=system.velocityCount,m=sample.rowIDs.count
         guard n > 0, n <= policy.maximumCoordinates, m > 0, m <= policy.maximumRows else { throw .capacityExceeded }
         let entries=try MechanismArithmetic.numerical { () throws(NumericalError) in try NumericalWork.product(n,m) }
@@ -53,7 +87,7 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving {
         try MechanismArithmetic.charge(admissionCharge, &work)
     }
     @inline(never)
-    private func solve(_ system: RigidDynamicsSystem, sample: VelocityConstraintSample, base: [Double], drive:[Double], impulse:Bool,
+    private func solve(_ system: PhysicalRigidDynamicsSystem, sample: VelocityConstraintSample, base: [Double], drive:[Double], impulse:Bool,
                        policy:MechanismSolvePolicy, work:inout NumericalWork, dynamicsWork:inout NumericalWork,
                        rankWork:inout NumericalWork, linearWork:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
         let n=system.velocityCount,m=sample.rowIDs.count,t=sample.layout.timeScale,e=policy.dynamics.energyScale,s=sample.layout.scales
@@ -76,7 +110,7 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving {
             let row=rank.independentRows[k]
             for i in 0..<n { try MechanismArithmetic.charge(2,&work); physicalRHS[i]=try MechanismArithmetic.finite(e*sample.rows[row*n+i]/s[i]) }
             let column=try dynamicsCall(work:&dynamicsWork) { ledger throws(DynamicsError) in
-                try dynamics.inverseMassProduct(system,rightHandSide:physicalRHS,policy:policy.dynamics,work:&ledger)
+                try suppliers.solve(system,values:physicalRHS,massOnly:true,policy:policy.dynamics,work:&ledger)
             }
             guard column.acceleration.count == n else { throw .invalidShape }
             for i in 0..<n { columns[k*n+i]=column.acceleration[i] }
@@ -159,7 +193,7 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving {
         let before=dynamicsWork
         var failure:DynamicsError?
         do throws(DynamicsError) {
-            try equations.originalInertialForce(context.system,acceleration:context.values,includeBias:true,into:&original,work:&dynamicsWork)
+            try suppliers.original(context.system,acceleration:context.values,into:&original,work:&dynamicsWork)
         } catch { failure=error }
         guard MechanismArithmetic.preserved(before,dynamicsWork) else { dynamicsWork=before; throw .supplierLedgerReplaced }
         if let failure { throw .dynamics(failure) }
@@ -193,10 +227,10 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving {
             energy:context.impulse ? energy : nil,time:context.system.input.snapshot.time,
             meaning:context.impulse ? .instantaneousVelocityImpulse : .accelerationForce)
     }
-    private func dynamicsCall(work:inout NumericalWork,_ call:(inout NumericalWork) throws(DynamicsError) -> DynamicsSolution) throws(MechanismError) -> DynamicsSolution {
+    private func dynamicsCall(work:inout NumericalWork,_ call:(inout NumericalWork) throws(DynamicsError) -> MechanismDynamicsValues) throws(MechanismError) -> MechanismDynamicsValues {
         try MechanismArithmetic.charge(1,&work)
         let before=work
-        var value:DynamicsSolution?,failure:DynamicsError?
+        var value:MechanismDynamicsValues?,failure:DynamicsError?
         do throws(DynamicsError) { value=try call(&work) } catch { failure=error }
         guard MechanismArithmetic.preserved(before,work) else { work=before; throw .supplierLedgerReplaced }
         if let failure { throw .dynamics(failure) }

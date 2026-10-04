@@ -1,6 +1,6 @@
 /// Immutable retained inputs for original acceptance; array backing remains retained by its COW values.
 internal final class MechanismAcceptanceContext: Sendable {
-    let system:RigidDynamicsSystem
+    let system:PhysicalRigidDynamicsSystem
     let sample:VelocityConstraintSample
     let base:[Double]
     let values:[Double]
@@ -14,7 +14,7 @@ internal final class MechanismAcceptanceContext: Sendable {
     let timeScale:Double
     let energyScale:Double
     let scales:[Double]
-    init(system:RigidDynamicsSystem,sample:VelocityConstraintSample,base:[Double],values:[Double],drive:[Double],
+    init(system:PhysicalRigidDynamicsSystem,sample:VelocityConstraintSample,base:[Double],values:[Double],drive:[Double],
          multipliers:[Double],reaction:[Double],rank:ConstraintRankEvidence,impulse:Bool,policy:MechanismSolvePolicy) {
         self.system=system;self.sample=sample;self.base=base;self.values=values;self.drive=drive
         self.multipliers=multipliers;self.reaction=reaction;self.rank=rank;self.impulse=impulse;self.policy=policy

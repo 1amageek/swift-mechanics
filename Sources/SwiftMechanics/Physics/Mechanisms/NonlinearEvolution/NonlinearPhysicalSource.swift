@@ -5,6 +5,15 @@ internal enum NonlinearPhysicalSource {
             && actual.bodyWrenches == expected.bodyWrenches && actual.generalizedForces == expected.generalizedForces
             && matches(actual.snapshot,expected.snapshot)
     }
+    static func matches(_ actual:PhysicalRigidDynamicsInput,_ expected:PhysicalRigidDynamicsInput) -> Bool {
+        switch (actual.source,expected.source) {
+        case (.spatial(let a),.spatial(let e)): return matches(a,e)
+        case (.planar(let a),.planar(let e)):
+            return a.velocity == e.velocity && a.inertias == e.inertias && a.gravity == e.gravity
+                && a.bodyWrenches == e.bodyWrenches && a.generalizedForces == e.generalizedForces && matches(a.snapshot,e.snapshot)
+        default: return false
+        }
+    }
     static func matches(_ actual:KinematicSnapshot,_ expected:KinematicSnapshot) -> Bool {
         let a=actual.tree,e=expected.tree
         guard actual.time == expected.time,a.revision == e.revision,a.layout == e.layout,a.rootBase == e.rootBase,

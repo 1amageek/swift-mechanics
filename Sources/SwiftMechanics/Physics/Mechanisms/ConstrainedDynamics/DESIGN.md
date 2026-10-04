@@ -13,7 +13,7 @@ Actual assembled rigid mass, inertial bias and known loads; normalized original 
 | [Numerics](../../../Mathematics/Numerics/DESIGN.md) | depends on | Required linear solve and work | Independent Gram solve | Failed linear work may be unavailable |
 | [Transmissions](../../Transmissions/DESIGN.md) | depends on | Required idealEfforts | Physical identified shaft reactions | Axial fidelity only |
 | [Joints](../../../Modeling/Joints/DESIGN.md) | depends on | Actual source snapshot/layout | Reaction provenance | No graph internals |
-| [Dynamics](../../Dynamics/DESIGN.md) | depends on | Rigid equations and solve | Real compiled physical mass | No diagonal proxy |
+| [Dynamics](../../Dynamics/DESIGN.md) | depends on | Original and tagged physical equation/solve requirements | Real compiled physical mass | No diagonal proxy |
 | [Constraints](../../Constraints/DESIGN.md) | depends on | Required rank and evaluation | Original identified rows | Rank does not imply force or feasibility |
 | [Runtime](../../../Execution/Runtime/DESIGN.md) | coordinates with | Accepted physical transactions | Immutable accepted prefix | Model replacement has separate admission authority |
 | [Integration](../../../Execution/Integration/DESIGN.md) | coordinates with | Equation and continuation witnesses | Actual stage/time acceptance | Exact chart readback |
@@ -54,3 +54,13 @@ The single source review of this repair compared every original acceptance formu
 
 ### AF20 selected public profile evidence
 Root executed the final unmodified Native, ordinary-WASM and Embedded-WASM compositions with all path completion witnesses and exit zero. [Exact profile evidence](../../../../../Verification/FoundationVerification/DESIGN.md#af20-selected-original-profile-qualification) owns toolchain, stack, runtime and test-snapshot qualification. This extends only the selected public paths documented there; the remaining domain and concurrency limitations above persist.
+
+### AF24 additive physical constrained contract
+
+`PhysicalConstrainedMechanismSolving` owns non-generic acceleration and velocity-reconciliation requirements accepting the complete original `PhysicalRigidDynamicsSystem` with the same four caller ledgers and policies. `PhysicalConstrainedMotion` is immutable Sendable evidence retaining that exact system plus the existing `ConstrainedMotion` accepted values/rows/rank/source/temporal evidence. It does not claim uniquely allocated body wrenches. Legacy protocol, result and constructors remain unchanged; spatial reaction consumers continue using their original contract.
+
+`MassWeightedMechanismSolver` selects explicit immutable legacy or physical supplier witnesses. Its original constructor preserves injected legacy Dynamics and equations for spatial calls, including tagged spatial calls; planar use of a legacy-only supplier is an explicit unsupportedChart capability refusal. A new required `physicalDynamics:physicalEquations:` constructor preserves those witnesses for physical and legacy spatial calls. One Gram, correction, all-row acceptance, original inertia-force callback, impulse momentum/energy and final publication algorithm serves both ports. Physical Dynamics results must retain the exact supplied physical system; another source is an explicit Dynamics inertiaIdentityMismatch failure even if dimensions/time match. No default substitution or fictional spatial inertia is permitted.
+
+Rich source and supplier handles cross phases as immutable references. Original acceptance remains separate noninline rows, original-force/impulse, momentum and publication phases at the unchanged profile stack boundary. Work/storage admission precedes allocations and opaque callbacks; all four ledger reset/failure prefixes and unavailable work stay terminal. New lower Dynamics supplierLedgerReplaced preserves unavailable-work authority through MechanismError. New values own no shared mutable state and have identical Sendable contracts on every target.
+
+[MechanicsMechanismsTests](../../../../../Tests/MechanicsMechanismsTests/DESIGN.md) owns additive original physical acceleration/impulse, source rejection and injected witness/capability/ledger proofs. The planar loop evolution composition is owned by [NonlinearEvolution](../NonlinearEvolution/DESIGN.md#af24-planar-physical-composition). Root renews original Native/WASM/Embedded evidence after frozen handoff.

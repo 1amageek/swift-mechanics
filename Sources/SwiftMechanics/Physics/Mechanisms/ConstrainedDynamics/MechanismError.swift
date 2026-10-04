@@ -18,7 +18,7 @@ public enum MechanismError: Error, Sendable {
         case .constraint(let error):
             switch error { case .linear(_,let missing): missing; case .nonlinear(let failure): failure.failedSupplierWorkUnavailable; default: false }
         case .dynamics(let error):
-            switch error { case .numerical(_,let missing): missing; default: false }
+            error.failedSupplierWorkUnavailable
         case .runtime(let error): error.failedSupplierWorkUnavailable
         case .transmission(let error): error.failedSupplierWorkUnavailable
         default: false

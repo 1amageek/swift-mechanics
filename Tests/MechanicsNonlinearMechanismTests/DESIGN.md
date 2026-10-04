@@ -56,3 +56,8 @@ Existing thirteen Native tests and AF20 original-profile paths were qualified be
 AF23 MovingBaseEvolutionTests/MovingBaseFailureTests own regular-axis moving-base coupled rotor q/v/a/reaction, full K/momentum/virtual+prescribed work, mixed quaternion stages, source/law/history association, exact replay and supplier failure prefix. Registered-graph focused/profile execution is root-owned and pending the frozen handoff.
 
 ColdAggregateValidationTests owns the reopened cold solver aggregate arithmetic/iteration admission counterexample. A real delegated solver spends valid local prefixes; the test checks one combined callback envelope, terminal known-prefix capacity/failure and no callback when four local seeds cannot be admitted.
+
+## AF24 planar evolution evidence
+Use actual compiled planar fourbar geometry and original mass/COM/Iz. Independent sin/cos closure, velocity, acceleration, rod kinetic energy/torque work, refinement and long run exercise the common projected engine. Exact fresh restart/replay, forged tangent acceleration, changed Iz, wrong physical source, cancellation and failed supplier ledger preserve accepted bytes/RNG. Production contract belongs to [NonlinearEvolution](../../Sources/SwiftMechanics/Physics/Mechanisms/NonlinearEvolution/DESIGN.md#af24-planar-physical-composition); individual body reaction allocation belongs to its separate owner.
+
+The first registered affected Native run passed 39 cases in eleven suites on macOS 27 arm64 with Swift 6.4.0 release, `-j 4`, `.build/ar01-native` and a 240-second command bound (`.build/af24-upper-native-tests.log`). Actual original physical constrained/evolution success and refusal paths executed. Original WASM/Embedded qualification remains owned by IM.IM16.25.

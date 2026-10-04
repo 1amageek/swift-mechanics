@@ -6,20 +6,24 @@ internal final class NonlinearPhysicalEngine: Sendable {
     let drive:[Double]
     let policy:MechanismSolvePolicy
     let admission:DynamicsAdmission
-    let inertias:[RigidBodyInertia]
-    let kernel:any RigidEquationComputing
-    let solver:any ConstrainedMechanismSolving
+    let inertias:NonlinearPhysicalInertias
+    let suppliers:NonlinearPhysicalSuppliers
     let storage:Int
-    init(model:CompiledMechanicalModel,velocityLayout:ConstraintCoordinateLayout,drive:[Double],policy:MechanismSolvePolicy,
+    convenience init(model:CompiledMechanicalModel,velocityLayout:ConstraintCoordinateLayout,drive:[Double],policy:MechanismSolvePolicy,
          admission:DynamicsAdmission,inertias:[RigidBodyInertia],kernel:any RigidEquationComputing,
          solver:any ConstrainedMechanismSolving,storage:Int) {
+        self.init(model:model,velocityLayout:velocityLayout,drive:drive,policy:policy,admission:admission,
+            inertias:.spatial(inertias),suppliers:.spatial(kernel,solver),storage:storage)
+    }
+    init(model:CompiledMechanicalModel,velocityLayout:ConstraintCoordinateLayout,drive:[Double],policy:MechanismSolvePolicy,
+         admission:DynamicsAdmission,inertias:NonlinearPhysicalInertias,suppliers:NonlinearPhysicalSuppliers,storage:Int) {
         self.model=model;self.velocityLayout=velocityLayout;self.drive=drive;self.policy=policy;self.admission=admission
-        self.inertias=inertias;self.kernel=kernel;self.solver=solver;self.storage=storage
+        self.inertias=inertias;self.suppliers=suppliers;self.storage=storage
     }
     static func bind(_ model:CompiledMechanicalModel) throws(MechanismError) -> [RigidBodyInertia] {
         var bound:[RigidBodyInertia]=[];bound.reserveCapacity(model.tree.bodies.count)
         for body in model.tree.bodies {
-            // FIXME(INCOMPLETE_IMPLEMENTATION): Physical evolution admits spatial inertia only. Planar inertia needs original mass/reaction/energy adapter proof before admission.
+            // FIXME(INCOMPLETE_IMPLEMENTATION): The legacy-only evolution supplier admits spatial inertia. Planar sources require the explicit physical supplier initializer and its original mass/reaction/energy evidence.
             guard let raw=model.descriptor.bodies.first(where:{$0.id == body.id}),case .spatial(let source)=raw,let inertia=source.inertia else { throw .unsupportedChart }
             do throws(DynamicsError) { bound.append(try RigidBodyInertia(body:body.id,frame:body.frame,properties:inertia.properties)) } catch { throw .dynamics(error) }
         }
@@ -34,19 +38,19 @@ internal final class NonlinearPhysicalEngine: Sendable {
         do { return try model.evaluate(model.makeState(KinematicState(revision:model.stamp.revision,time:time,q:q,v:v,acceleration:[Double](repeating:0,count:v.count)))) }
         catch { throw RuntimeFailure(.invalidState,message:"Actual compiled manifold evaluation failed.") }
     }
-    func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> RigidDynamicsSystem {
+    func system(q:[Double],v:[Double],time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
         let snapshot=try snapshot(q:q,v:v,time:time,work:&work,control:control)
         return try system(snapshot:snapshot,v:v,work:&work,control:control)
     }
     @inline(never)
-    func system(snapshot:KinematicSnapshot,v:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> RigidDynamicsSystem {
-        let input:RigidDynamicsInput
-        do throws(DynamicsError) { input=try RigidDynamicsInput(snapshot:snapshot,velocity:v,inertias:inertias,gravity:nil) }
+    func system(snapshot:KinematicSnapshot,v:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> PhysicalRigidDynamicsSystem {
+        let input:PhysicalRigidDynamicsInput
+        do throws(DynamicsError) { input=try inertias.input(snapshot:snapshot,velocity:v) }
         catch { throw RuntimeFailure(.invalidState,message:"Rigid dynamics input failed.") }
         var local=try supplier(&work,control:control),load:LoadWork
         do { load=LoadWork(budget:try LoadBudget(maximumWork:0,maximumScalars:0)) } catch { throw RuntimeFailure(.invalidInput,message:"Load budget invalid.") }
-        let before=local;var result:RigidDynamicsSystem?,failure:DynamicsError?
-        do throws(DynamicsError) { result=try kernel.assemble(input,admission:admission,loadWork:&load,work:&local) } catch { failure=error }
+        let before=local;var result:PhysicalRigidDynamicsSystem?,failure:DynamicsError?
+        do throws(DynamicsError) { result=try suppliers.assemble(input,admission:admission,load:&load,work:&local) } catch { failure=error }
         try finish(local,before:before,into:&work)
         guard load.budget.maximumWork == 0,load.budget.maximumScalars == 0,load.consumed == 0,load.peakScalars == 0 else {
             throw RuntimeFailure(.invalidOwnerAccess,message:"Rigid supplier changed zero-load admission.",failedSupplierWorkUnavailable:true)
@@ -99,11 +103,11 @@ internal final class NonlinearPhysicalEngine: Sendable {
     }
     @inline(never)
     func invokeVelocity(_ context:NonlinearPhysicalSolveContext,a:inout NumericalWork,b:inout NumericalWork,c:inout NumericalWork,d:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
-        try solver.reconcileVelocity(context.system,sample:context.sample,policy:policy,work:&a,dynamicsWork:&b,rankWork:&c,linearWork:&d)
+        try suppliers.solve(context,drive:drive,policy:policy,a:&a,b:&b,c:&c,d:&d)
     }
     @inline(never)
     func invokeAcceleration(_ context:NonlinearPhysicalSolveContext,a:inout NumericalWork,b:inout NumericalWork,c:inout NumericalWork,d:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
-        try solver.acceleration(context.system,sample:context.sample,drive:drive,policy:policy,work:&a,dynamicsWork:&b,rankWork:&c,linearWork:&d)
+        try suppliers.solve(context,drive:drive,policy:policy,a:&a,b:&b,c:&c,d:&d)
     }
     @inline(never)
     func acceptPhysicalSupplier(_ context:NonlinearPhysicalSolveContext,result:ConstrainedMotion,work:inout NumericalWork) throws(RuntimeFailure) {
@@ -132,10 +136,10 @@ internal final class NonlinearPhysicalEngine: Sendable {
         }
     }
     @inline(never)
-    func energy(_ system:RigidDynamicsSystem,acceleration:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> MechanicalEnergy {
+    func energy(_ system:PhysicalRigidDynamicsSystem,acceleration:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> MechanicalEnergy {
         var local=try supplier(&work,control:control),result:MechanicalEnergy?,failure:DynamicsError?
         let before=local
-        do throws(DynamicsError) { result=try kernel.energy(system,acceleration:acceleration,angularMomentumReference:.zero,requireComplete:false,work:&local) }
+        do throws(DynamicsError) { result=try suppliers.energy(system,acceleration:acceleration,work:&local) }
         catch { failure=error }
         try finish(local,before:before,into:&work)
         if let failure {
