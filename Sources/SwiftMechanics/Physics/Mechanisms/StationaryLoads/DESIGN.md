@@ -1,7 +1,7 @@
 # StationaryLoads
 
 ## Purpose and Scope
-Planned AF23 component; no production implementation or qualification is claimed. Parent: [Mechanisms](../DESIGN.md); no children. Own a bounded immutable catalog of time-invariant physical loads, accepted-selection binding, and explicit logical load-work execution receipts. Uniform spatial gravity and scalar polynomial passive laws are the initial domain. Full RB-007 still requires the separate contact, topology, floating/planar and general-time load domains.
+AF23 production contract; qualification remains pending root execution. Parent: [Mechanisms](../DESIGN.md); no children. Own a bounded immutable catalog of time-invariant physical loads, accepted-selection binding, and explicit logical load-work execution receipts. Uniform spatial gravity and scalar polynomial passive laws are the initial domain. Full RB-007 still requires the separate contact, topology, floating/planar and general-time load domains.
 
 ## Responsibilities and Boundaries
 Catalog authority is explicit data, not an arbitrary callback's stationarity assertion. Existing Loads owns force/potential/dissipation equations; Dynamics owns spatial mapping and original mass/force acceptance; AffineEvolution owns constrained physical motion; SleepContinuation owns accepted selection and wake publication. This component owns canonical catalog bytes, selection lookup, load dependency support and load invocation accounting. It never mutates a Runtime accepted state or draws RNG.
@@ -27,8 +27,8 @@ operation-local execution owner -> bounded invocation lease -> exclusive local L
 ```
 
 ## Contracts and Invariants
-### Planned data contracts
-These names and signatures are the production contract proposal, not existing APIs.
+### Data contracts
+These contracts are implemented for root-owned qualification.
 
 | Type | Owned immutable data / admission |
 |---|---|
@@ -42,7 +42,7 @@ These names and signatures are the production contract proposal, not existing AP
 
 Catalog serialization uses exact finite scalar bit patterns, IDs, versions, coordinate IDs/dimensions, gravity values and every law coefficient/domain. Its bounded canonical signature binds the ODE chart; accepted records additionally bind the selected version/generation. Zero coefficients, zero instantaneous forces and zero gravity vectors retain their structural dependencies. Scalar terms depend on their declared coordinate. Gravity support is the union of ancestor joint coordinates of admitted inertial bodies, resolved from public tree.joints/layout; no private parent indices or sampled-zero inference. Whole-mechanism wake is a valid conservative closure.
 
-### Planned public operations
+### Public operations
 ```swift
 public protocol StationaryLoadEvaluating: Sendable {
     func evaluate(_ program: StationaryLoadProgram, catalog: StationaryLoadCatalog,
@@ -73,7 +73,7 @@ For L scalar terms and B inertial bodies, a concrete loaded evaluation consumes 
 The generic SmoothODE interface has only NumericalWork. Its loaded adapter therefore captures this explicit execution owner rather than silently converting LoadWork into arithmeticOperations. Stage/prepare/equilibrium/wake supplier calls consume that execution's K and logical budget; known receipts are returned by the loaded sleep port on both success and failure. Runtime-owned full checkpoint validation has a separate operation-local execution derived from RuntimeValidationBudget, with K=1 for its cold loaded proof. Its explicit admission port returns a separate validation receipt. Before any cold proof, the validator reserves the exact concrete upper load allowance 1+L+(gravity-present ? B : 0) from the remaining Runtime work units and n load scalars from remaining scratch; NumericalWork receives only the remaining work/scratch after byte/source and load reservations. If either allocation is impossible, admission fails before that supplier. Thus separately valid ledgers cannot together execute past the whole validation budget. Actual evidence uses the consumed units and simultaneous peaks, not these reserved maxima. Each non-cached required cold proof uses one lease; a cache hit reports its actual bounded association cost and no fabricated load invocation. Standard Runtime admission reports only its existing generic validation evidence: bytes + numerical validation units + load logical units are combined as documented validation units, never as numerical arithmetic. Its scratch evidence includes simultaneously live record, numerical and load buffers. Equation-execution receipts include loaded evaluations during preparation, stages and explicit physical wake, but exclude required-checkpoint validation, byte work and unrelated numerical work. They are not total operation work. Every loaded evaluation in the named execution scope consumes its K, including failures; separately Runtime-owned cold proofs consume the validation scope K. The explicit full-handler admission result/failure retains the validation load receipt; the standard Runtime requirement preserves its existing result/failure contract.
 
 ## Verification and Change Impact
-See the test owner for independent loaded equilibrium, actual omission, changed-load motion, replay and known/unknown work failures. Catalog/selection/schema changes invalidate loaded chart/checkpoint tests. Zero-load behavior and existing facade source compatibility must remain proven. Original 128 KiB debug profiles require noninline source/evaluation/assembly/solver/association/publication phases with immutable bounded contexts; no stack enlargement or lower-producer fallback establishes qualification. Production work is gated on root's completed lower Runtime admission proof and scoped design review.
+See the test owner for independent loaded equilibrium, actual omission, changed-load motion, replay and known/unknown work failures. Catalog/selection/schema changes invalidate loaded chart/checkpoint tests. Zero-load behavior and existing facade source compatibility must remain proven. Original 128 KiB debug profiles require noninline source/evaluation/assembly/solver/association/publication phases with immutable bounded contexts; no stack enlargement or lower-producer fallback establishes qualification. Production follows the qualified lower Runtime proof; root owns actual target evidence.
 
 ### Assume-guarantee summary
 | Consumer assumption | Component guarantee / detecting failure |
@@ -88,3 +88,13 @@ See the test owner for independent loaded equilibrium, actual omission, changed-
 | Logical state | Native | ordinary WASM | Embedded WASM | Read / mutation / release |
 |---|---|---|---|---|
 | Invocation tickets, known/aggregate accounting and terminal status | Mutex<State> | identical Mutex<State> | identical Mutex<State> | report / beginInvocation, finishInvocation, close / operation-owned final receipt and release |
+
+### Loaded physical source signature
+Loaded chart authority is an exact bounded encoding of the actual compiled scalar spatial model's public body IDs/frames/reference poses, mass/COM/inertia, joint IDs/parent/child/anchors/ordered axes, layout, constant drive, and every solver/admission numerical policy field. It additionally includes every canonical catalog program and coefficient. ModelStamp/layout alone do not authorize the mechanical law. Fresh owners with the same identity/revision/layout but changed mass, inertia, drive, solver policy or catalog parameters must refuse restoration. Callback cancellation functions are runtime authority rather than serializable physical coefficients; their cancellation is polled and never inferred from a signature. The old zero-load signature is unchanged.
+
+`close` may race with a callback outside Mutex. A provisional known prefix is merged once while retaining the outstanding identity; a late finalization merges only additional valid known work and fails publication. If close occurs during checkout, lease publication rechecks the sealed owner before any supplier call. Callback/close reentry never makes an admitted known prefix disappear or authorize a new invocation. The finite total logical bound is the caller's maximumWork and K times the concrete per-invocation upper bound; products are checked when materialized and no allocation depends on an unchecked product.
+
+`StationaryLoadSourceBinding` owns public catalog/model validation and exact `physicalSignature(model:policy:admission:drive:maximumBytes:)` admission; AffineEvolution consumes that public requirement. The byte encoder remains private to this component. Catalog scalar laws use public Loads producers, and the equation uses public Dynamics/Constraints producers; no peer component reads private tree indices or producer reporting constructors.
+
+### Scoped source review handoff
+One AF23 source review traced catalog signature/lookup -> invocation boundary -> actual scalar law/rigid gravity -> original constrained acceptance -> source-bound local proof or physical wake -> actual Runtime required admission and Integration continuation. Reviewed corrections are close/checkout reentry with exact prefix merging, disjoint loaded numerical supplier allowances, and reuse of immutable mechanical configuration in cold validation. Boundary guards execute before source-array/aggregate allocation; all lower success/failure paths finalize the explicit load receipt. Callback/producer calls occur outside Mutex. Source review and diff whitespace checks are not behavioral or target qualification; root owns Native focused execution and original Native/WASM/Embedded public artifacts.

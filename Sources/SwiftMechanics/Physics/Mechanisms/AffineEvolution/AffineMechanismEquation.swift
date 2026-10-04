@@ -8,8 +8,8 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
     public let drive: [Double]
     public let policy: MechanismSolvePolicy
     public let admission: DynamicsAdmission
-    private let inertias: [RigidBodyInertia]
-    private let kernel: any RigidEquationComputing
+    internal let inertias: [RigidBodyInertia]
+    internal let kernel: any RigidEquationComputing
     private let evaluator: any ConstraintEvaluating
     private let solver: any ConstrainedMechanismSolving
     public init(identity: String, model: CompiledMechanicalModel, constraints: QuadraticConstraintSystem,
@@ -124,7 +124,7 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
         catch { throw RuntimeFailure(.invalidState,message:"Actual compiled scalar tree state validation failed.") }
     }
     @inline(never)
-    private func motionSnapshot(_ physical:AffineMotionPhysical) throws(RuntimeFailure) -> AffineMotionSnapshot {
+    internal func motionSnapshot(_ physical:AffineMotionPhysical) throws(RuntimeFailure) -> AffineMotionSnapshot {
         let state=try motionCompiledState(physical)
         do throws(CompilationFailure) { return AffineMotionSnapshot(try model.evaluate(state)) }
         catch { throw RuntimeFailure(.invalidState,message:"Actual compiled scalar tree state validation failed.") }
@@ -147,15 +147,22 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
         guard let output else { throw RuntimeFailure(.invalidState,message:"Rigid mass assembly has no result.") };return output
     }
     @inline(never)
-    private func motionSolve(_ system:AffineMotionSystem,rows:AffineMotionRows,work:inout NumericalWork) throws(RuntimeFailure) -> ConstrainedMotion {
-        let reserved=system.reserved
-        var local=try localWork(work,reserved:reserved),dynamics=try localWork(work,reserved:reserved),rank=try localWork(work,reserved:reserved),linear=try localWork(work,reserved:reserved)
+    internal func motionSolve(_ system:AffineMotionSystem,rows:AffineMotionRows,work:inout NumericalWork,partitionWork:Bool = false,driveOverride:[Double]? = nil) throws(RuntimeFailure) -> ConstrainedMotion {
+        let reserved=system.reserved,partitions=partitionWork ? 4 : 1
+        var local=try localWork(work,reserved:reserved,partitions:partitions),dynamics=try localWork(work,reserved:reserved,partitions:partitions),rank=try localWork(work,reserved:reserved,partitions:partitions),linear=try localWork(work,reserved:reserved,partitions:partitions)
         let budgets=[local.budget,dynamics.budget,rank.budget,linear.budget]
         var result:ConstrainedMotion?,failure:MechanismError?
-        do throws(MechanismError) { result=try solver.acceleration(system.value,sample:rows.value,drive:drive,policy:policy,
+        do throws(MechanismError) { result=try solver.acceleration(system.value,sample:rows.value,drive:driveOverride ?? drive,policy:policy,
             work:&local,dynamicsWork:&dynamics,rankWork:&rank,linearWork:&linear) } catch { failure=error }
         for (ledger,budget) in zip([local,dynamics,rank,linear],budgets) { try validLocal(ledger,budget:budget);try absorb(ledger,into:&work,reserved:reserved) }
         if let failure {
+            if partitionWork {
+                switch failure {
+                case .cancelled,.numerical(.cancelled,_),.constraint(.cancelled),.dynamics(.cancelled),.dynamics(.loads(.cancelled)),.dynamics(.numerical(.cancelled,_)):
+                    throw RuntimeFailure(.cancelled,message:"Loaded original constrained acceleration cancelled.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable)
+                default:break
+                }
+            }
             throw RuntimeFailure(failure.failedSupplierWorkUnavailable ? .invalidOwnerAccess : .invalidState,
                 message:failure.failedSupplierWorkUnavailable ? "Mechanism supplier work is unavailable; integration stops without retry." : "Original constrained acceleration failed.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable)
         }
@@ -183,8 +190,8 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
         try trial.setTime(time)
     }
     @inline(never)
-    private func checkedSample(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> VelocityConstraintSample {
-        try control.beginWorkBlock(units:1)
+    internal func checkedSample(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> VelocityConstraintSample {
+        if let control { try control.beginWorkBlock(units:1) }
         let n=model.tree.layout.velocityCount
         guard point.count == 2*n,point.allSatisfy({$0.isFinite}) else { throw RuntimeFailure(.invalidState,message:"Invalid affine chart point.") }
         let reserved=try reserve(work:&work);var local=try localWork(work,reserved:reserved)
@@ -192,6 +199,7 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
         do throws(ConstraintError) { evaluation=try evaluator.evaluate(constraints,position:Array(point[..<n]),velocity:Array(point[n...]),time:time,policy:policy.constraints.evaluation,work:&local) }
         catch {
             try validLocal(local,budget:evaluationBudget);try absorb(local,into:&work,reserved:reserved)
+            if case nil=control,case .cancelled=error { throw RuntimeFailure(.cancelled,message:"Loaded original row evaluation cancelled.",failedSupplierWorkUnavailable:MechanismError.constraint(error).failedSupplierWorkUnavailable) }
             throw RuntimeFailure(.invalidState,message:"Original affine row evaluation failed.",failedSupplierWorkUnavailable:MechanismError.constraint(error).failedSupplierWorkUnavailable)
         }
         try validLocal(local,budget:evaluationBudget);try absorb(local,into:&work,reserved:reserved)
@@ -216,7 +224,7 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
         }
         return VelocityConstraintSample(layout:constraints.layout,holonomic:evaluation)
     }
-    private func reserve(work:inout NumericalWork) throws(RuntimeFailure) -> Int {
+    internal func reserve(work:inout NumericalWork) throws(RuntimeFailure) -> Int {
         do {
             let n=model.tree.layout.velocityCount,m=constraints.rows.count
             let slots=try NumericalWork.sum(try NumericalWork.product(128,model.tree.bodies.count),try NumericalWork.sum(try NumericalWork.product(4,try NumericalWork.product(n,n)),try NumericalWork.sum(try NumericalWork.product(16,n),try NumericalWork.product(4,try NumericalWork.product(n,m)))))
@@ -224,17 +232,18 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
             return slots
         } catch { throw RuntimeFailure(.capacityExceeded,message:"Mechanism derivative orchestration budget exhausted.") }
     }
-    private func localWork(_ work:NumericalWork,reserved:Int) throws(RuntimeFailure) -> NumericalWork {
+    internal func localWork(_ work:NumericalWork,reserved:Int,partitions:Int = 1) throws(RuntimeFailure) -> NumericalWork {
         do {
-            var local=NumericalWork(budget:try work.remainingBudget(reservedStorage:reserved))
+            let remaining=try work.remainingBudget(reservedStorage:reserved)
+            var local=NumericalWork(budget:try NumericalBudget(scalarStorage:remaining.scalarStorage,arithmeticOperations:remaining.arithmeticOperations/partitions,iterations:remaining.iterations/partitions))
             try local.chargeOperations(1);return local
         }
         catch { throw RuntimeFailure(.capacityExceeded,message:"Mechanism supplier budget exhausted.") }
     }
-    private func validLocal(_ local:NumericalWork,budget:NumericalBudget) throws(RuntimeFailure) {
+    internal func validLocal(_ local:NumericalWork,budget:NumericalBudget) throws(RuntimeFailure) {
         guard local.budget == budget,local.operations >= 1 else { throw RuntimeFailure(.invalidOwnerAccess,message:"Mechanism supplier replaced/reset its admitted ledger.",failedSupplierWorkUnavailable:true) }
     }
-    private func absorb(_ local:NumericalWork,into work:inout NumericalWork,reserved:Int) throws(RuntimeFailure) {
+    internal func absorb(_ local:NumericalWork,into work:inout NumericalWork,reserved:Int) throws(RuntimeFailure) {
         do { try work.absorb(local,reservedStorage:reserved) }
         catch { throw RuntimeFailure(.capacityExceeded,message:"Mechanism aggregate supplier budget exhausted.") }
     }
