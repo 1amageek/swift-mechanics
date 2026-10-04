@@ -59,6 +59,63 @@ flowchart LR
     Runtime --> Output[Motion, forces and diagnostics]
 ```
 
+## Mechanism catalog (target)
+
+The following mechanisms and structural relationships are the intended declarative scope. **This is a target catalog, not a claim that every entry is implemented or qualified.** Current availability depends on the admitted model, formulation and execution profile; see [PROGRESS.md](PROGRESS.md) and the corresponding component evidence.
+
+This reader-facing index follows the canonical [mechanical structure coverage](Sources/SwiftMechanics/Modeling/Machines/DESIGN.md#mechanical-structure-coverage). That design owns declaration forms, coordinate conventions, dependencies and verification obligations. Composite mechanisms are built from the same `Machine` primitives and relationships; each catalog entry does not require a separate primitive API.
+
+| Family | Mechanisms and structures | Declarative representation |
+|---|---|---|
+| Composition | One rigid body; rigid assembly | Rigid owner content or explicit fixed connection |
+| Supports | Fixed, moving and floating supports | Explicit root/support mode and bindings |
+| Graph topology | Serial chains, branches, closed loops, parallel mechanisms, shared loops, independent mechanisms | Nested articulation plus reference connections |
+| Reuse | Repeated/reusable assemblies | Scoped Machine instances and bounded repetition |
+| Coordinates | Local and mounting frames | Identified frames and placements |
+| Geometry | Coincident points; coaxial/concentric; parallel; perpendicular; specified angle | Kind-specific geometric relations |
+| Distance | Distances and offsets between points, axes and planes | Placement or persistent relation, explicitly distinguished |
+| Guided motion | Point-on-line, point-on-plane, point-on-curve, point-on-surface | Attachment and admitted guide references |
+| Layout | Symmetric, circular, linear and grid patterns | Placement/repetition composition, not implicit runtime constraints |
+| Elementary pairs | Fixed/weld, revolute, prismatic, screw/helical, cylindrical, universal, spherical, planar, free/floating | Concrete joint with nested or explicit endpoints |
+| Common shafts | Rigidly mounted gears/pulleys/rotors; compound gears | One rigid shaft owner with constituents |
+| Independent coaxial shafts | Independent rotation; nested hollow shafts | Distinct bodies/joints with axis alignment |
+| Shaft mounts | Keyed/fixed spline; sliding spline | Explicit rotary and axial connection semantics |
+| Shaft couplings | Rigid coupling; flexible coupling | Fixed connection or elastic frame relation |
+| Bearings | Radial/thrust support; locating/nonlocating support; multiple bearings | Supported directions at declared mounts; explicit ideal/detailed model |
+| Articulated shaft drives | Constant-velocity joints; Cardan shaft | Joint/transfer composition |
+| Gear pairs | External/internal spur; helical; bevel; worm; hypoid | Gear geometry plus explicit mesh formulation |
+| Gear networks | Simple, compound and reverted trains | Rigid mounts and mesh relationships |
+| Multi-terminal drives | Planetary gears; differentials; power split | Named mechanical roles and admitted terminals |
+| Variable/friction transfer | Noncircular gears; friction wheels | Position-dependent transfer or explicit contact law |
+| Flexible transmissions | Open/crossed/timing belts; chains and sprockets | Routes, winding and explicit transfer/contact laws |
+| Cable systems | Wires; tendons; capstan/wrapping; fixed/moving pulleys; pulley blocks | Ordered endpoint/guide route and tension law |
+| Rotary-linear drives | Rack/pinion; lead screw; ball screw | Rotary and linear terminals with an explicit formulation |
+| Composite reducers | Strain-wave/harmonic and cycloidal drives | Composite Machine with qualified transfer/contact/deformation model |
+| Four-bar structures | Four-bar; crank-rocker; double-crank; double-rocker; parallelogram | Body/joint composition and loop closure |
+| Rotary-reciprocating links | Slider-crank; offset slider-crank; Scotch yoke | Revolute/prismatic structure plus loop/slot relation |
+| Multi-link structures | Toggle; pantograph; scissor; Watt/Stephenson six-bar; general multi-bar | Reusable link compositions and shared loops |
+| Path/spatial linkages | Straight-line generators; spatial and spherical linkages | Spatial mounts and composite loops |
+| Robots | Serial robot; Stewart platform; Delta; other parallel robots | Serial/parallel composites and admitted actuation |
+| Vehicle linkages | Double-wishbone/MacPherson suspension; steering/Ackermann linkage | Bodies, joints, loops and force elements |
+| Cams | Disc, translating, cylindrical/barrel, grooved and conjugate cams | Cam/follower geometry and explicit contact/ideal law |
+| Followers | Roller; flat-face; tip followers | Shape-specific follower connection |
+| Intermittent mechanisms | Geneva; ratchet/pawl; escapement | Composite contact, direction and engagement relations |
+| Directional transmission | One-way/overrunning clutch | State-dependent transmission law |
+| Passive force elements | Translational/torsional springs and dampers; series/parallel networks | Point/frame/rotary terminals and constitutive law |
+| Compliant supports | Bushings; elastic mounts | Frame terminals and multidirectional law |
+| Flexible structures | Flexible shaft/link/beam; flexure mechanisms | Deformable constituents and boundary bindings |
+| Mixed rigid/flexible structures | Rigid-to-flexible attachments | Body mount to material point/node/region binding |
+| Constitutive state | Preload; nonlinear and history-dependent laws | Explicit parameters and continuation state contract |
+| Tension-only systems | Slack/taut cable | Route and unilateral tension law |
+| Contact | Unilateral/frictional contact; no-slip/slipping rolling; impact/rebound; tooth contact | Geometry pairs/sets and explicit contact or velocity law |
+| Clearance | Backlash; bearing/guide clearance | Dead-zone/contact model and declared geometry |
+| Stops | Joint limits and physical stops | Coordinate limit or contact surface |
+| Switching connections | Friction/toothed clutch; brake; latch; lock | Terminals, explicit model and declared input/condition |
+| Release | Breakable/disengaging connection | Physical criterion and accepted transition |
+| Actuation | Torque/force drive; prescribed angle/position/speed | Typed input and effort or motion authority |
+| Drive composition | Elastic drive; hydraulic/pneumatic cylinder; tendon/cable drive | Mechanical and domain ports plus qualified suppliers |
+| Reactions and networks | Rotor/stator; housing support; multi-terminal power network | Explicit support and power-conjugate terminal bindings |
+
 ## Scope
 
 The target includes the following areas. Each area has its own supported subsets and remaining work.
