@@ -25,6 +25,21 @@ enum PlanarPhysicalProbeModel {
             state: KinematicState(revision: 1, time: 0, q: [0, 2], v: [0.3, 0.3], acceleration: [0, 0]))
     }
 
+    @inline(never)
+    static func pendulum() throws -> CompiledMechanicalModel {
+        let ground = try record("ground", properties: MassProperties2D(mass: 1, centerX: 0, centerY: 0,
+            polarInertiaAtCenter: 1), mode: .static)
+        let moving = try record("pendulum", properties: MassProperties2D(mass: 2, centerX: 1, centerY: 0,
+            polarInertiaAtCenter: 4), mode: .dynamic)
+        let joint = try JointRecord(id: id(.joint, "hinge"), parentBody: id(.body, "ground"), childBody: id(.body, "pendulum"),
+            parentAnchor: JointAnchor(frame: id(.frame, "hinge-parent"), placement: .fixed(.identity)),
+            childAnchor: JointAnchor(frame: id(.frame, "hinge-child"), placement: .fixed(.identity)),
+            manifold: JointManifold(.revolute(axis: .unitZ)))
+        return try compile(bodies: [ground, moving], joints: [MechanicalJoint(record: joint, authority: .dynamicState)],
+            root: "ground", base: .fixed,
+            state: KinematicState(revision: 1, time: 0, q: [0], v: [1], acceleration: [-10.0 / 3]))
+    }
+
     private static func record(_ key: String, properties: MassProperties2D, mode: BodyMotionMode,
                                pose: PlanarPose? = nil) throws -> MechanicalBody {
         .planar(try BodyRecord2D(id: id(.body, key), frame: id(.frame, key), mode: mode,

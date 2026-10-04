@@ -310,3 +310,33 @@ Actual planar upper public evidence includes original mass/COM/Iz construction, 
 A private diagnostic copy instrumented all 17,917 stack-pointer writes against the same original 128 KiB boundary (initial 307584; lower 176512), completed every upper and inherited witness and exited zero (`.build/af24-stack-diagnostic/upper-embedded-guard.log`). This bounds the exercised stack paths and supplements, rather than replaces, unmodified artifact execution. There was no production change after the Native 614-case proof; only public fixture/oracle source changed and was actually executed on each profile.
 
 This qualifies the selected AF24 planar constrained evolution and spatial continuous closed-loop recovery cohort only. Planar individual support/bearing allocation, prescribed physical loops/supports, impulse wrench recovery, broader geometric domains, actual WASI multithreading and the full IM16/210 requirement objective remain open. The validated source sprints are b1b562b and fb65df3; root's integrated commit owns this final public evidence.
+
+
+## AF25 Lower Public Composition Contract
+
+Root owns prospective public proof of frozen [PrescribedMotions](../../Sources/SwiftMechanics/Modeling/Joints/PrescribedMotions/DESIGN.md), [AssemblyProjection](../../Sources/SwiftMechanics/Physics/Constraints/AssemblyProjection/DESIGN.md), [GeometricRelations](../../Sources/SwiftMechanics/Physics/Constraints/GeometricRelations/DESIGN.md) and [ReactionPaths](../../Sources/SwiftMechanics/Physics/Mechanisms/ReactionPaths/DESIGN.md) contracts. This section is a verification plan, not runtime qualification. Complete source tests and all three original profiles are required; new fixture source never inherits AF24 evidence automatically.
+
+```text
+original planar COM/Iz + actual velocity/acceleration/gravity
+ -> original Newton/Euler + reduced tree/support report -> independent force/moment
+original planar coincidence + all retained geometric rows
+ -> physical allocation certificate -> rank/nullity preserved, physical uniqueness distinct
+original analytic floating-root law + full original coordinate layout
+ -> sealed q/v/a/qdot + explicit active-coordinate rank -> independent planar/spatial rates
+```
+
+The planar pendulum fixture has a static root of mass1, child mass2, COM=(1,0), Iz=4, angle0, angular speed1, angular acceleration -10/3 and gravity=(0,-10). Actual COM acceleration is (-1,-10/3), so the child cut is (-2,40/3) N with zero z moment; root support is (-2,70/3) N. A raw world force (10,0,0) at z1 paired with raw torque (0,-10,0) cancels its transverse moment at body origin. It changes only cut/support Fx by -10 and must remain an admitted physical load. No transverse bearing axes are inferred.
+
+Ordinary planar fourbar coincidence retains all three rows including exact structural-zero Z. Original rank2/nullity1/multiplier-nonuniqueness must coexist with active XY physical-wrench uniqueness. Active duplicates and stale geometry/source fail; arbitrary finite zero-row multiplier has no physical action. Planar/spatial quadratic root laws use nonidentity reference rotation, nonzero translation derivatives and exact interval/time/chart identity. Independent rates must distinguish body angular coordinates from world angular motion and spatial nq7/nv6 from planar3/3. Active-coordinate rank retains the original full layout and truly empty original rows/active indices without fabricated constraints.
+
+Model/sampling/assembly/recovery/assertion are separate noninline phases; immutable backing stays owned and caller numerical/load ledgers remain exclusive. No target-dependent synchronization or changed stack profile exists. New Native/WASM/Embedded source executes only after owner freeze; exact original artifact behavior and refused-prefix accounting establish qualification. Upper root force/evolution/history and planar closed-loop fourbar physical recovery remain separate IM16.28 proofs.
+
+### AF25 lower integrated qualification
+
+Source sprint `27fffee` implements the sealed planar/spatial prescribed-base sampler, full-layout active-coordinate rank, original physical allocation certificate and reduced planar tree/support recovery. The focused Native run executed 98 declarations in 20 suites across four targets: Joints26, Constraints24, Reaction20 and Geometry28. All production behavior passed; one allocation test initially asserted computation on a stale-source fast refusal. Its test-only correction proves exact typed stale refusal with unchanged zero/precharged work. All seven allocation declarations passed the finding-only recheck. Exact logs: `.build/af25-lower-native-tests.log` and `.build/af25-allocation-native-recheck.log`. No broader cumulative Native rerun is claimed here.
+
+The final unmodified public artifact separately built, linked and executed every AF25 lower and inherited Foundation witness with exit zero on Native, ordinary WASM and Embedded WASM. Logs: `.build/af25-lower-{native,wasm,embedded}-build.log` and `.build/af25-lower-{native,wasm,embedded}-runtime.log`. Fixed profiles remain Swift6.4.0 release/macOS27 arm64, matching `swift-6.4.0-RELEASE_wasm` / `swift-6.4.0-RELEASE_wasm-embedded`, EmbeddedUnicode, Node24.19.0 WASI Preview1, `-j4`, 240-second command bounds and the unchanged original 128 KiB WASI stack. Production remained unchanged throughout final public proof and Native test-helper repairs.
+
+Independent public behavior verifies noncommuting spatial/body-angular q/v/a/qdot, unwrapped planar angle, exact source/time/chart/law refusal, full original empty-active/zero-row rank, actual planar COM/Iz Newton balance, distinct root gravity, raw off-plane load/couple cancellation and ordinary coincidence rank2/nullity1 with physical uniqueness distinct from multiplier nonuniqueness. Wrong acceleration, duplicate active physical rows and stale source cannot publish accepted output. Upper full-root solve/power/evolution/history and planar closed-loop physical composition remain IM16.28.
+
+A private diagnostic copy instrumented all 18,202 stack-pointer writes against the same original 128 KiB boundary (initial308944; lower177872), completed every witness and exited zero (`.build/af25-stack-diagnostic/lower-embedded-guard.log`). This supplements the unmodified artifacts rather than replacing their qualification. The exercised synchronous WASI paths do not establish actual multithreading, minimum-OS runtime or full IM16/210 completion.
