@@ -41,6 +41,8 @@ The child source/test snapshot is frozen for root registration and actual behavi
 | [NonlinearEvolution](NonlinearEvolution/DESIGN.md) | child | Projected nonlinear mechanical evolution | Registered frozen source; selected Native residual/replay and original public profiles qualified |
 | [SleepContinuation](SleepContinuation/DESIGN.md) | child | Checkpointed sleep and accepted wake transactions | Registered frozen source; selected checkpoint binding, actual omitted/active dynamics and original public profiles qualified |
 | [ReactionPaths](ReactionPaths/DESIGN.md) | child | Identified tree support wrench recovery | Registered frozen source; selected Native physical/ambiguity/ledger cases and original public profiles qualified |
+| [SubtreeTransitions](SubtreeTransitions/DESIGN.md) | child | Root-relative subtree release and target acceleration reconciliation | Qualified selected AF22 paths; active-loop cuts remain unsupported |
+| [TopologyContinuation](TopologyContinuation/DESIGN.md) | child | Bounded repeated-event history and complete contributor migration | Qualified selected AF22 paths; broader law migration remains unsupported |
 
 ## Selected AF17 Qualification
 
@@ -59,3 +61,18 @@ ReactionPaths is an independent sibling handoff using only frozen Dynamics, Load
 AF20 Embedded qualification still fails at original residual acceptance after the owned sleep/affine phases. Root assigns only ConstrainedDynamics MassWeightedMechanismSolver private acceptance lifetime phases, lower design and new immutable private context files to the nonlinear owner. All original laws, callback work, result provenance and public contracts remain fixed; root renews the registered Native test graph and original profiles after source freeze.
 
 AF20 selected final original-profile execution and inherited/renewed Native evidence are owned by [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af20-selected-original-profile-qualification). General IM16 and whole-target requirements remain open.
+
+## AF22 Mechanism Frontier
+
+Lower geometric relation/manifold contracts belong to [Constraints](../Constraints/DESIGN.md#af22-general-geometry-dispatch); their behavioral handoff precedes IM16.10 upper physical evolution. The existing quadratic facade remains compatible. Shared physical projection, original retained-row/mass acceptance, source binding and exact endpoint/continuation authority are reused through a common engine; duplicating the equation implementation or inventing a quadratic payload for geometry is not admitted.
+
+IM16.11 independently owns new SubtreeTransitions and TopologyContinuation children and MechanicsTopologyReleaseTests. Current direct-root single-leaf behavior remains a legacy compatibility path. New subtree cuts reparent to the actual model root through a virtual sixDOF connector derived from public inverse/composed root-to-child motion. Root base/authority/prefix and surviving internal joints retain their meaning while numeric ranges may change. Pure mapping carries an explicitly identified incoming acceleration limit; target publication requires original target force reconciliation.
+
+```text
+exact accepted source -> real relative subtree mapping -> compiled target + ID/range map
+ -> bounded event history + explicit complete contributor dispositions
+ -> target physical acceleration and required catalog admission
+ -> existing atomic Runtime model/context switch or unchanged source/RNG
+```
+
+Repeated same-time cuts use strict accepted sequence/event ordering. History is decoded from bounded payload, not a process registry. Surviving scalar actuator history may be rebound only after public source/target joint identity/range and unchanged law/state contracts are proved with the real codec. Removed or unavailable laws cannot silently reset. Existing Integration, Hybrid and Sleep migrations do not authorize general topology history migration. Prescribed Runtime checkpoints, general loop cuts and unrepresented bearing reactions remain explicit lower gaps. Prepared source/target/catalog authority is issued only through validated owner operations. Root owns parents, manifest, probes, progress and commits; admission_authority owns the two new children.
