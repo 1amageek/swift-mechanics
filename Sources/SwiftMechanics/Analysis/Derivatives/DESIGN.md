@@ -34,7 +34,7 @@ The assigned owner traces producer implementations and fixes each required physi
 | [TreeTangents](TreeTangents/DESIGN.md) | Actual spatial motion/Jacobian/chart products |
 | [ConstraintProducts](ConstraintProducts/DESIGN.md) | Scaled physical quadratic-constraint products |
 | [MechanicalSensitivities](MechanicalSensitivities/DESIGN.md) | Mass/bias/force and implicit acceleration products |
-| [ContactProducts](ContactProducts/DESIGN.md) | AF27 selected constitutive/impact fixed-branch products and refusal boundaries; canonical qualification pending |
+| [ContactProducts](ContactProducts/DESIGN.md) | AF27 selected constitutive/impact fixed-branch products and refusal boundaries; selected canonical Native/WASM/Embedded qualification passed; [evidence](../../../../Verification/FoundationVerification/DESIGN.md#af27-integrated-selected-qualification) |
 
 Root reviewed actual primal tree/dynamics, differentiated physical products, original equation acceptance and failure budgets. Twenty-two Native tests pass after rejecting callback ledger reset and correcting independent fixture expectations for stationary hinge origins and cumulative nested solver iterations. Required public pendulum mass/gravity/implicit product and complete drive Jacobian plus unavailable scalar domain compiled, linked and exited 0 on original Native/ordinary-WASM/Embedded WASM profiles. All production state is immutable or exclusive call-local; no target-conditioned synchronization or conformance. These selected paths do not qualify missing planar/geometric-parameter/rank-transition/contact derivative domains.
 

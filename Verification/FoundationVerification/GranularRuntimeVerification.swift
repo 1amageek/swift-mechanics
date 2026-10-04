@@ -6,19 +6,32 @@ extension FoundationVerification {
     static func verifyGranularRuntime() throws {
         let context = try GranularRuntimeProbeContext()
         defer { _ = context.session.shutdown() }
+        try verifyGranularRuntimeAccepted(context)
+        let expected = try granularRuntimeExpected(context)
+        try verifyGranularRuntimeFresh(expected)
+        try verifyGranularRuntimeSourceRefusal(expected.checkpoint)
+        print("Granular Runtime public verification passed: physical shear, rejected history/RNG and fresh original-physics replay.")
+    }
+
+    @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
+    @inline(never)
+    private static func verifyGranularRuntimeAccepted(_ context: GranularRuntimeProbeContext) throws {
         let prefix = context.session.snapshot()
         let rejected = try granularRuntimeTrial(context, decision: .reject)
         try require(rejected.0.accepted == prefix && context.session.snapshot() == prefix)
         let accepted = try granularRuntimeTrial(context)
         try require(accepted.0.accepted.checkpoint.random.draws == 1)
         try verifyGranularRuntimePhysics(context, report: accepted.1)
+    }
+
+    @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
+    @inline(never)
+    private static func granularRuntimeExpected(_ context: GranularRuntimeProbeContext) throws -> GranularRuntimeReplayEvidence {
         let checkpoint = try context.checkpoint()
         let uninterrupted = try granularRuntimeTrial(context)
         let final = try context.checkpoint()
-        try verifyGranularRuntimeFresh(checkpoint, expected: uninterrupted.0.accepted,
+        return GranularRuntimeReplayEvidence(checkpoint: checkpoint, accepted: uninterrupted.0.accepted,
             particles: uninterrupted.1.state, final: final)
-        try verifyGranularRuntimeSourceRefusal(checkpoint)
-        print("Granular Runtime public verification passed: physical shear, rejected history/RNG and fresh original-physics replay.")
     }
 
     @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
@@ -101,21 +114,50 @@ extension FoundationVerification {
 
     @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
     @inline(never)
-    private static func verifyGranularRuntimeFresh(_ checkpoint: [UInt8], expected: RuntimeAcceptedState,
-        particles: GranularState, final: [UInt8]) throws {
+    private static func verifyGranularRuntimeFresh(_ expected: GranularRuntimeReplayEvidence) throws {
         let fresh = try GranularRuntimeProbeContext()
         defer { _ = fresh.session.shutdown() }
-        try require(fresh.fixture.initial.model !== particles.model)
+        try verifyGranularRuntimeFreshModel(fresh, expected: expected)
+        try granularRuntimeRestart(fresh, checkpoint: expected.checkpoint)
+        let replay = try granularRuntimeReplayed(fresh, checkpoint: expected.checkpoint)
+        try verifyGranularRuntimeReplayResult(replay, expected: expected)
+    }
+
+    @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
+    @inline(never)
+    private static func verifyGranularRuntimeFreshModel(_ fresh: GranularRuntimeProbeContext,
+        expected: GranularRuntimeReplayEvidence) throws {
+        try require(fresh.fixture.initial.model !== expected.particles.model)
+    }
+
+    @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
+    @inline(never)
+    private static func granularRuntimeRestart(_ fresh: GranularRuntimeProbeContext, checkpoint: [UInt8]) throws {
         _ = try fresh.session.restart(checkpoint, codec: NativeRuntimeCheckpointCodec())
+    }
+
+    @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
+    @inline(never)
+    private static func granularRuntimeReplayed(_ fresh: GranularRuntimeProbeContext,
+        checkpoint: [UInt8]) throws -> GranularRuntimeReplayEvidence {
         let replay = try granularRuntimeTrial(fresh)
-        try require(replay.0.accepted == expected && replay.1.state.motions == particles.motions)
-        try require(replay.1.state.steps == particles.steps && replay.1.state.timeSeconds.bitPattern == particles.timeSeconds.bitPattern)
-        try require(replay.1.state.random == particles.random && replay.1.state.contacts.count == particles.contacts.count)
+        let final = try fresh.checkpoint()
+        return GranularRuntimeReplayEvidence(checkpoint: checkpoint, accepted: replay.0.accepted,
+            particles: replay.1.state, final: final)
+    }
+
+    @inline(never)
+    private static func verifyGranularRuntimeReplayResult(_ replay: GranularRuntimeReplayEvidence,
+        expected: GranularRuntimeReplayEvidence) throws {
+        let particles = expected.particles
+        try require(replay.accepted == expected.accepted && replay.particles.motions == particles.motions)
+        try require(replay.particles.steps == particles.steps && replay.particles.timeSeconds.bitPattern == particles.timeSeconds.bitPattern)
+        try require(replay.particles.random == particles.random && replay.particles.contacts.count == particles.contacts.count)
         for index in particles.contacts.indices {
-            try require(replay.1.state.contacts[index].history == particles.contacts[index].history)
-            try require(replay.1.state.contacts[index].basis == particles.contacts[index].basis)
+            try require(replay.particles.contacts[index].history == particles.contacts[index].history)
+            try require(replay.particles.contacts[index].basis == particles.contacts[index].basis)
         }
-        try require(try fresh.checkpoint() == final)
+        try require(replay.final == expected.final)
     }
 
     @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)

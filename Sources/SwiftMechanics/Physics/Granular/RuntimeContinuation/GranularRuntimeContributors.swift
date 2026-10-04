@@ -11,21 +11,34 @@ public struct GranularRuntimeContributors: RuntimeContributorHandling, Sendable 
     @inline(never)
     public func validate(_ record: RuntimeContributorState,model: CompiledMechanicalModel,
                          budget: RuntimeValidationBudget) throws(RuntimeFailure) -> RuntimeValidationEvidence {
-        var work: GranularRuntimeWork
+        var work=try makeWork(budget)
         do throws(GranularRuntimeError) {
-            work=try GranularRuntimeWork(physics:journal.source.physicsBudget,maximumBytes:budget.scratchBytes,maximumWorkUnits:budget.workUnits)
-            let source=cancellation
-            work.safePoint={ () throws(RuntimeFailure) in try source?.check() }
             try GranularRuntimeCarrier.validate(model,source:journal.source,work:&work)
             let continuation=try journal.decode(record,work:&work)
-            if let expected {
-                try work.charge(8)
-                guard expected.physical.time.bitPattern == continuation.particles.timeSeconds.bitPattern,
-                      expected.acceptedSteps == continuation.particles.steps,expected.random == continuation.random else { throw .runtime(RuntimeFailure(.invalidState,contributor:record.id,message:"Whole checkpoint granular time/steps/RNG differ.")) }
-            }
-            try journal.source.poll(work)
+            try accept(continuation,recordID:record.id,work:&work)
         } catch { throw error.runtimeFailure(journal.schema.id) }
         return try RuntimeValidationEvidence(workUnitsUsed:work.workUnits,scratchBytesUsed:work.peakBytes)
+    }
+    @inline(never)
+    private func makeWork(_ budget: RuntimeValidationBudget) throws(RuntimeFailure) -> GranularRuntimeWork {
+        do throws(GranularRuntimeError) {
+            var work=try GranularRuntimeWork(physics:journal.source.physicsBudget,maximumBytes:budget.scratchBytes,maximumWorkUnits:budget.workUnits)
+            let source=cancellation
+            work.safePoint={ () throws(RuntimeFailure) in try source?.check() }
+            return work
+        } catch { throw error.runtimeFailure(journal.schema.id) }
+    }
+    @inline(never)
+    private func accept(_ continuation: GranularRuntimeContinuation,recordID: String,
+                        work: inout GranularRuntimeWork) throws(GranularRuntimeError) {
+        if let expected {
+            try work.charge(8)
+            guard expected.physical.time.bitPattern == continuation.particles.timeSeconds.bitPattern,
+                  expected.acceptedSteps == continuation.particles.steps,expected.random == continuation.random else {
+                throw .runtime(RuntimeFailure(.invalidState,contributor:recordID,message:"Whole checkpoint granular time/steps/RNG differ."))
+            }
+        }
+        try journal.source.poll(work)
     }
     // FIXME(INCOMPLETE_IMPLEMENTATION): Runtime model replacement calls this requirement. Granular source/law/geometry migration and conservation are not implemented; a changed source must not publish a migrated journal before those original physical proofs exist.
     public func migrate(_ record: RuntimeContributorState,transition: ModelTransition,target: CompiledMechanicalModel,

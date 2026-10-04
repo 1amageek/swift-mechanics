@@ -52,8 +52,11 @@ struct FoundationVerification {
             stage = "verifyDeformingContact"; try verifyDeformingContact()
             stage = "verifyStructuralAnalysis"; try verifyStructuralAnalysis()
             stage = "verifyDerivatives"; try verifyDerivatives()
+            stage = "verifyContactDerivatives"; try verifyContactDerivatives()
             stage = "verifyOptimization"; try verifyOptimization()
+            stage = "verifyNonlinearOptimization"; try verifyNonlinearOptimization()
             stage = "verifyGranular"; try verifyGranular()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyGranularRuntime"; try verifyGranularRuntime() }
             stage = "verifyPlanarFluids"; try verifyPlanarFluids()
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyRuntime"; try verifyRuntime(); stage = "verifyMovingAnchorRuntime"; try verifyMovingAnchorRuntime(); stage = "verifyRuntimeReplacement"; try verifyRuntimeReplacement(); stage = "verifyMechanisms"; try verifyMechanisms(); stage = "verifyNonlinearMechanisms"; try verifyNonlinearMechanisms(); stage = "verifySleepMechanisms"; try verifySleepMechanisms(); stage = "verifyReactionPaths"; try verifyReactionPaths(); stage = "verifyTopologyContinuation"; try verifyTopologyContinuation(); stage = "verifyFluids"; try verifyFluids(); stage = "verifyPlanarRuntime"; try verifyPlanarRuntime(); stage = "verifyIntegration"; try verifyIntegration(); stage = "verifyActuation"; try verifyActuation(); stage = "verifyHybrid"; try verifyHybrid() }
             else { throw FoundationVerificationError.unexpectedFailure }

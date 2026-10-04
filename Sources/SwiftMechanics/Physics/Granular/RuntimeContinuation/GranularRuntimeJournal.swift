@@ -26,6 +26,13 @@ public final class GranularRuntimeJournal: GranularRuntimeContinuing, Sendable {
     }
     @inline(never)
     public func decode(_ record: RuntimeContributorState, work: inout GranularRuntimeWork) throws(GranularRuntimeError) -> GranularRuntimeContinuation {
+        let request=try parse(record,work:&work)
+        let continuation=try replay(request,work:&work)
+        try accept(request,continuation:continuation,work:&work)
+        return continuation
+    }
+    @inline(never)
+    private func parse(_ record: RuntimeContributorState,work: inout GranularRuntimeWork) throws(GranularRuntimeError) -> GranularRuntimeReplayRequest {
         try admit(&work)
         var metadata=source.maximumMetadataBytes
         for _ in record.id.utf8 { try work.charge(3);guard metadata > 0 else { throw .capacityExceeded };metadata-=1 }
@@ -42,20 +49,44 @@ public final class GranularRuntimeJournal: GranularRuntimeContinuing, Sendable {
         guard count <= UInt64(source.maximumAcceptedSteps),steps == count else { throw .malformedJournal }
         let length=try GranularJournalWire.sum(minimum,GranularJournalWire.product(8,Int(count)))
         guard record.bytes.count == length else { throw .malformedJournal }
-        var current=source.initial,random=source.initial.random,choices:[UInt64]=[],workspace=GranularWorkspace()
-        choices.reserveCapacity(Int(count))
-        for _ in 0..<Int(count) {
+        return GranularRuntimeReplayRequest(record:record,time:time,steps:steps,seed:seed,state:state,draws:draws,count:Int(count),cursor:cursor)
+    }
+    @inline(never)
+    private func replay(_ request: GranularRuntimeReplayRequest,work: inout GranularRuntimeWork) throws(GranularRuntimeError) -> GranularRuntimeContinuation {
+        var current=replaySeed(),workspace=GranularWorkspace(),cursor=request.cursor,choices:[UInt64]=[]
+        choices.reserveCapacity(request.count)
+        for _ in 0..<request.count {
             try source.poll(work)
-            let choice=GranularJournalWire.read(record.bytes,cursor:&cursor),draw: UInt64
-            do throws(RuntimeFailure) { draw=try random.next() } catch { throw .runtime(error) }
-            guard choice == draw % UInt64(source.gravityChoices.count) else { throw .malformedJournal }
-            let result=try step(current,choice:choice,workspace:&workspace,work:&work)
-            current=result.state;choices.append(choice)
+            let choice=GranularJournalWire.read(request.record.bytes,cursor:&cursor)
+            current=try replayIteration(current,choice:choice,workspace:&workspace,work:&work)
+            choices.append(choice)
         }
-        guard current.timeSeconds.bitPattern == time,current.steps == steps,random.seed == seed,
-              random.state == state,random.draws == draws else { throw .malformedJournal }
+        return replayPublication(current,choices:choices)
+    }
+    @inline(never)
+    private func replaySeed() -> GranularRuntimeReplayState {
+        GranularRuntimeReplayState(particles:source.initial,random:source.initial.random)
+    }
+    @inline(never)
+    private func replayIteration(_ accepted: GranularRuntimeReplayState,choice: UInt64,workspace: inout GranularWorkspace,
+                                 work: inout GranularRuntimeWork) throws(GranularRuntimeError) -> GranularRuntimeReplayState {
+        var random=accepted.random
+        let draw: UInt64
+        do throws(RuntimeFailure) { draw=try random.next() } catch { throw .runtime(error) }
+        guard choice == draw % UInt64(source.gravityChoices.count) else { throw .malformedJournal }
+        let result=try step(accepted.particles,choice:choice,workspace:&workspace,work:&work)
+        return GranularRuntimeReplayState(particles:result.state,random:random)
+    }
+    @inline(never)
+    private func replayPublication(_ state: GranularRuntimeReplayState,choices: [UInt64]) -> GranularRuntimeContinuation {
+        GranularRuntimeContinuation(source:source,particles:state.particles,random:state.random,choices:choices)
+    }
+    @inline(never)
+    private func accept(_ request: GranularRuntimeReplayRequest,continuation: GranularRuntimeContinuation,
+                        work: inout GranularRuntimeWork) throws(GranularRuntimeError) {
+        guard continuation.particles.timeSeconds.bitPattern == request.time,continuation.particles.steps == request.steps,
+              continuation.random.seed == request.seed,continuation.random.state == request.state,continuation.random.draws == request.draws else { throw .malformedJournal }
         try source.poll(work)
-        return GranularRuntimeContinuation(source:source,particles:current,random:random,choices:choices)
     }
     internal func admit(_ work: inout GranularRuntimeWork) throws(GranularRuntimeError) {
         try source.poll(work);guard work.physics.matches(source.physicsBudget),work.nativeBudgetsMatch() else { throw .staleSource }

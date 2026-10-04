@@ -38,7 +38,7 @@ The child source/test snapshot is frozen for root registration and actual behavi
 | [NeighborContacts](NeighborContacts/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
 | [ParticleEvolution](ParticleEvolution/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
 | [Replay](Replay/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
-| [RuntimeContinuation](RuntimeContinuation/DESIGN.md) | child | AF27 bounded accepted-step journal and genuine original-physics replay | Independent Native source/public proof passed; canonical/original profiles pending |
+| [RuntimeContinuation](RuntimeContinuation/DESIGN.md) | child | AF27 bounded accepted-step journal and genuine original-physics replay | Selected canonical Native/WASM/Embedded original-profile proof passed; [evidence](../../../../Verification/FoundationVerification/DESIGN.md#af27-integrated-selected-qualification) |
 
 ## Selected AF17 Qualification
 
