@@ -31,7 +31,7 @@ Own analytic target records, bounded canonical equation metadata, dimensionless 
 |---|---|---|---|---|
 | [Constraints](../DESIGN.md) | parent | Requirement owner/index | Direct requirement/design owner | Root updates registration |
 | [Joints](../../../Modeling/Joints/DESIGN.md) | depends on | Compiled snapshot, point Jacobian/motion, public body/frame/column access | Lower producer consumed by this component | No internal tree storage |
-| [PrescribedMotions](../../../Modeling/Joints/PrescribedMotions/DESIGN.md) | depends on | proposed immutable program, sampling, original law verification | Mathematical imposed motion source | Planned AF23 dependency; source production waits for lower proof |
+| [PrescribedMotions](../../../Modeling/Joints/PrescribedMotions/DESIGN.md) | depends on | Immutable quadratic and source-tagged trajectory programs, sampling and original acceptance | Mathematical imposed motion source | Qualified lower AF26 handoff; model binding remains here |
 | [CoordinateEquations](../CoordinateEquations/DESIGN.md) | depends on | VelocityConstraintSample, layout, policy | Lower producer consumed by this component | Tangent columns are nv, not nq |
 | [ManifoldProjection](../ManifoldProjection/DESIGN.md) | used by | Evaluation and sealed original acceptance | Consumer of this component | Initial chart must already be valid |
 | [Tests](../../../../../Tests/MechanicsGeometricConstraintTests/DESIGN.md) | used by | Independent physical oracles | Consumer of this component | Root owns platform qualification |
@@ -125,3 +125,52 @@ A physical-row witness proves the original geometric derivative/source at its de
 
 ### AF25 verification boundary
 The original compiled root frame/layout/authority and complete canonical q/v/a are bound outside anchor slots, with one distinct metadata version containing the full lower law, P/D inventory and root row IDs. Empty geometric rows retain the full original layout. [PrescribedRootGeometryTests](../../../../../Tests/MechanicsGeometricConstraintTests/PrescribedRootGeometryTests.swift) owns actual planar/spatial empty-row/rank/source/ID behavior; lower source review is not runtime qualification. Existing GeometricPhysicalAllocation producers and legacy geometry behavior are unchanged.
+
+
+## AF26 source-tagged trajectory binding contract
+
+This is the design handoff for IM16.33.1, not implementation or execution evidence. The qualified lower handoff is `56a57ba`. Existing quadratic getter types, constructors, field meanings, original sample bits and geometric metadata schemas remain unchanged. The new law family never manufactures a quadratic record.
+
+### Confirmed execution path and additive API
+`GeometricConstraintSystem.snapshot` validates prescribed source before actual public `CompiledMechanicalModel.makeState/evaluate`; `GeometricPrescribedBinding` binds the complete public placement inventory. `PrescribedRootBinding` binds root authority, actual root/world frames and BaseLayout separately from anchor slots. `GeometricMetadata` binds actual body/joint/frame/layout roles and full law metadata. The frozen physical-allocation files and physical-row behavior above remain unchanged.
+
+The existing `GeometricConstraintSystem` initializer gains trailing arguments after `rootRowIDs`:
+
+```swift
+prescribedTrajectory: PrescribedTrajectoryProgram? = nil,
+prescribedBaseTrajectory: PrescribedBaseTrajectoryProgram? = nil
+```
+
+The original arguments and typed `throws(GeometricConstraintError)` remain. Anchor quadratic/trajectory families are mutually exclusive; root quadratic/trajectory families are mutually exclusive; the current separate root versus prescribed-anchor domain is retained. New public getters are `prescribedTrajectory: PrescribedTrajectoryProgram?` and `prescribedTrajectoryRoot: PrescribedTrajectoryRootBinding?`. Existing `prescribedMotion` and `prescribedRoot` return only their original quadratic authority, and remain nil for a new trajectory authority. `isExplicitTime`, empty-geometric-row admission and canonical source checks recognize either actual law family.
+
+```swift
+public protocol PrescribedRootBindingProviding: Sendable {
+    var knownCoordinates: [Int] { get }
+    var dynamicCoordinates: [Int] { get }
+    var rowIDs: [UInt64] { get }
+    func sample(time: Double, work: inout NumericalWork)
+        throws(GeometricConstraintError) -> PrescribedBaseMotionSample
+    func validate(_ state: KinematicState, work: inout NumericalWork)
+        throws(GeometricConstraintError)
+}
+```
+
+Existing `PrescribedRootBinding` conforms without changing its public record or sampling. New immutable final Sendable `PrescribedTrajectoryRootBinding` conforms, exposes `program: PrescribedBaseTrajectoryProgram` and the three partition/row getters, and has only a producer-owned model-binding constructor. `GeometricConstraintSystem.rootBinding: (any PrescribedRootBindingProviding)?` exposes the selected actual root authority. Every existential operation is a requirement; no generic operation or extension-only invocation is used.
+
+### Authority, lifetime and failure
+New anchor programs bind every required actual prescribed frame and its public owning parent frame, actual body modes, zero-DOF bridge authority, initial original sample, domain and full layout. New root programs bind actual root frame/world frame/BaseLayout, complete initial q/v/a and the original P/D/row partition. Matching count, stamp or IDs alone cannot establish association. Original builtin lower trajectory acceptance verifies every supplied pose/velocity/acceleration/time and root q/v/a/qdot; actual compiled source evaluation remains mandatory. Domain intersection is explicit. The new canonical metadata version includes full lower source-tagged law metadata, actual inventory/root partition and existing geometry rules. Legacy schema strings and bits do not change.
+
+Selected domains preserve current admission: fixed-root spatial prescribed anchors, and prescribed planar/spatial floating roots with root-only or dynamic descendants. Planar prescribed anchors, prescribed nonroot free coordinates and root-plus-anchor combinations are not newly admitted. Harmonic and C2 piecewise laws use the qualified lower chart and plane restrictions. Non-C2 seams remain exact lower typed refusals; real discontinuity events remain incomplete KI-006 work.
+
+```text
+immutable trajectory program -> actual model/frame/chart inventory binding
+ -> builtin original sample -> complete state at t -> compiled makeState/evaluate
+ -> unchanged original geometry/J/drift/bias/all-axis acceptance
+```
+
+New program payloads and root binding are held by bounded immutable reference owners, not added as rich value payloads to every `GeometricConstraintSystem` copy. Public output materialization follows kinematics callbacks in existing noninline phases. No cache, mutable shared state, unsafe storage, target branch or new synchronization is introduced. Counts, identifier bytes, metadata, simultaneous sample storage and source traversal work are reserved before allocation/callback. Opaque trajectory ports use their sealed lower admission/seed/finalization contract on success and failure; known prefix and unknown-work classification survive Geometry's typed `.motion` error wrapper. Geometry does not own knot selection, actuator force or work.
+
+### Change paths and behavioral owner
+Production paths proposed for the next item: `GeometricConstraintSystem.swift`, `GeometricPrescribedBinding.swift`, `GeometricDimensionAdmission.swift` (new family recognition only), `GeometricMetadata.swift`, `PrescribedRootBinding.swift` conformance, and new `PrescribedRootBindingProviding.swift`, `PrescribedTrajectoryRootBinding.swift` plus a bounded immutable trajectory owner file. `GeometricPhysicalAllocation*`, frozen physical-row producers and Joints/Compiler are not changed.
+
+[Trajectory binding tests](../../../../../Tests/MechanicsGeometricConstraintTests/DESIGN.md#af26-trajectory-binding-proof-contract) own actual model/frame association, analytic geometry derivatives, empty/root-only and D-only projection, changed same-revision law, source/time/plane/domain refusal, cancellation and capacity. [NonlinearEvolution](../../Mechanisms/NonlinearEvolution/DESIGN.md#af26-knot-aware-trajectory-evolution-contract) consumes this contract for original force/power and history. Root updates parent indexes and owns shared/profile integration after owner-isolated Native proof.

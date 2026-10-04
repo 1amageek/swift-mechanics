@@ -45,3 +45,22 @@ The frozen source executed 28 declarations in six suites: 27 initially passed; t
 
 ### AF25 selected proof ownership
 AF25 PrescribedRootGeometryTests owns actual root-only planar/spatial full-layout empty rows and active rank0, D-only perturbed-loop projection, unchanged canonical P, public source refusal, missing active-rank capability and root/geometry identity collisions.
+
+
+## AF26 trajectory binding proof contract
+
+This proposed owner consumes [GeometricRelations](../../Sources/SwiftMechanics/Physics/Constraints/GeometricRelations/DESIGN.md#af26-source-tagged-trajectory-binding-contract) and [ManifoldProjection](../../Sources/SwiftMechanics/Physics/Constraints/ManifoldProjection/DESIGN.md#af26-trajectory-root-partition-consumption), not a fabricated quadratic program. New dedicated files are `TrajectoryGeometryFixtures.swift`, `TrajectoryGeometryTests.swift` and `TrajectoryManifoldTests.swift`; existing physical-allocation and reaction-prerequisite tests remain untouched.
+
+| Bound invariant | Independent actual oracle |
+|---|---|
+| Actual law/model association | Real compiler body/frame/parent IDs, prescribed role and initial source; same IDs/counts with changed full coefficients, layout, initial derivative or frame refuse. |
+| Harmonic geometry | Nonidentity reference orientation, scalar sine/cosine point/direction position, rate, acceleration and centripetal/Coriolis terms, including spatial body-angular qdot. |
+| C2 seam | Actual knot samples from independent polynomial jets agree in q/v/a while jerk may change; before/at/after domain and seam ownership are exact. |
+| Root partition/retraction | Actual planar/spatial root-only full layout and zero rows; descendant original full rows with D-only correction, exact P q/v/a and anchor samples retained. |
+| Original acceptance | Genuine lower-produced wrong-time/law/source samples fail before original geometry is treated as accepted; no diagnostic field is authority. |
+| Bounds/refusal | Plane/domain/chart, collision, missing active-rank capability, capacity and late cancellation retain original rows and irreversible known work without output. |
+| Legacy compatibility | Existing quadratic constructor/getter/metadata/sample bits and original fixed-frame/AF23/AF25 geometry paths remain the same. |
+
+Tests use public compiler layout IDs/ranges and genuine sampling/geometry/assembly operations. Planar floating-root motion is selected; planar prescribed-anchor admission is not expanded. Root-only no-row behavior retains actual root layout and source. Non-C2 seam refusal remains lower proof, and no upper event success is inferred. New test resources are immutable/local; any supplier capture uses the same Mutex contract on every target with callbacks outside the lock.
+
+Owner-isolated bounded Native verification follows complete source/test overlay; no future execution is claimed here. Root qualifies the canonical registered graph and original public profiles/128KiB guards after all parallel owners freeze. Physical dynamics, knot-aware evolution and cold history evidence belongs to [MechanicsNonlinearMechanismTests](../MechanicsNonlinearMechanismTests/DESIGN.md#af26-trajectory-evolution-proof-contract).

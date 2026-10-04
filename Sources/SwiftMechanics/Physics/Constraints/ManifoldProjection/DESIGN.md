@@ -71,3 +71,18 @@ The additive active-rank initializer is mandatory for prescribed roots; absence 
 
 ### Measured original-stack phase boundary
 The original ordinary WASM 128KiB guard observed overflow during original geometry reevaluation, with run retaining a 14,368-byte frame and evaluation a 5,936-byte frame. Private immutable Sendable evidence owners separate opaque evaluation, ledger completion, original acceptance, iteration rank/residual, and final publication. The iteration loop retains references to accepted geometry/rank rather than future rich public result temporaries. Public ManifoldAssemblyResult is materialized after run has returned. Every snapshot, original evaluation, rank operation, iteration charge, correction/path bound, retraction and final cancellation check remains in its original order; failure carries the same latest state and caller work. The fixed-count owners are covered by the existing bounded workspace envelope and have no shared mutation or target branch. This is a lifetime correction, with original-profile frame/runtime proof owned by root.
+
+
+## AF26 trajectory root partition consumption
+
+This proposed change consumes [GeometricRelations' source-tagged binding contract](../GeometricRelations/DESIGN.md#af26-source-tagged-trajectory-binding-contract), with no new law or force authority. `TangentManifoldAssembler` and `ManifoldRetraction` replace old-root-only partition checks with the public `rootBinding` provider requirements. They retain the existing actual original sample, full layout/rows, explicit injected active-rank capability, builtin active-rank comparison, D-only correction and exact zero P tangent. Known root q/v/a and complete anchor samples remain unchanged throughout retraction at the same time. Empty D and zero geometric rows keep their qualified source-bound semantics.
+
+```text
+strict original trajectory state at t -> full original geometry + active D rank
+ -> existing D Gram/path correction -> same canonical P and anchor samples
+ -> original full-row/rank acceptance -> separate result publication
+```
+
+No rank, Gram, tolerance, Newton correction, chart integration, operation ordering or failed-work algorithm is replaced. Existing immutable evidence owners and noninline callback/publication phases remain; new law payloads are referenced through Geometry's bounded owner rather than copied through the iteration stack. No supplier runs without the same irreversible seed/storage admission. A caller unable to supply the required active-rank port receives the existing capability refusal. New family classification renews the affected projection evidence; it does not invalidate unchanged lower rank mathematics or claim global closest-point/stationarity.
+
+The next production ownership is only `TangentManifoldAssembler.swift` and `ManifoldRetraction.swift`; public projection signatures stay unchanged. [Dedicated tests](../../../../../Tests/MechanicsGeometricConstraintTests/DESIGN.md#af26-trajectory-binding-proof-contract) verify root-only rank0 and perturbed descendant correction with exact P/sample retention for harmonic/C2 sources. Original stack/runtime qualification remains root-owned and must execute under the unchanged 128KiB profile.

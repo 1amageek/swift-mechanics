@@ -11,7 +11,7 @@ Immutable equation binds compiled model, original quadratic geometric/time rows,
 |---|---|---|---|---|
 | [Joints](../../../Modeling/Joints/DESIGN.md) | depends on | snapshot.coordinateRate, spherical/sixDOF body angular velocity | Actual qdot=N(q)v | Quaternion q has four entries, angular velocity three |
 | [Constraints](../../Constraints/DESIGN.md) | depends on | QuadraticConstraintEvaluator, rank | Original residual/J and analytic Hessian bias | Coordinate rows need tangent conversion |
-| [PrescribedMotions](../../../Modeling/Joints/PrescribedMotions/DESIGN.md) | depends on | proposed law/sample/original verification requirements | Actual stage-time imposed motion | Planned AF23; full model/history association stays upper |
+| [PrescribedMotions](../../../Modeling/Joints/PrescribedMotions/DESIGN.md) | depends on | Qualified quadratic/trajectory sampling, original acceptance and earliest boundary requirements | Actual stage-time imposed motion | Full model/history association stays upper |
 | [GeometricRelations](../../Constraints/GeometricRelations/DESIGN.md) | depends on | immutable metadata, configuration validator, original sample acceptance | Actual body/frame closure and velocity-tangent bias | No added Ndot term; full physical axes remain acceptance authority |
 | [ManifoldProjection](../../Constraints/ManifoldProjection/DESIGN.md) | depends on | assemble, bounded tangent retraction | Local feasible position assembly | Path correction is bounded; no global closest-point claim |
 | [Dynamics](../../Dynamics/DESIGN.md) | depends on | Original and tagged physical kernel requirements | Actual physical mass, inertial bias | Explicit physical witnesses admit homogeneous planar inertia |
@@ -235,3 +235,82 @@ AF26 focused owners are QuadraticColdFixture, QuadraticColdTests, QuadraticColdF
 The owner executed actual SwiftMechanics production, compiler, original constrained solver, Runtime and public Integration/Actuator validators in the committed 1fbf8f9 baseline copy at `.build/af26-independent-quadratic-cold`, overlaying only this component and MechanicsNonlinearMechanismTests. Three 240-second initial full test-registration invocations retained completed objects but timed out while compiling unrelated test products; they are not success evidence. After the build stopped, root authorized copy-only removal of 38 other testTarget declarations, retaining the exact original MechanicsNonlinearMechanismTests declaration and every production/executable/dependency/settings line unchanged. The workspace manifest was never changed. The narrowed graph qualifies this lower target only; canonical shared/profile integration remains root-owned.
 
 Exact command from the isolated copy: `python3 Scripts/run_with_timeout.py 240 /Users/1amageek/Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift test --build-path .build/native -j 4 --filter 'QuadraticCold'`. The first executed run passed seven tests and exposed one test expectation error: actual Integration signature mismatch is incompatibleContinuation, not invalidContributor. The expectation was corrected to the original precise refusal; production was unchanged. Final `.build/quadratic-cold-native-final.log` reports exit zero, build 15.99 seconds and eight tests in two suites passed in 9.597 seconds. Source review and its causal corrections cover bounded source/history admission, retained reset seeds/all known cold prefixes, exact physical/history bits and genuine issuer boundaries. This is Native evidence only and does not qualify WASM/Embedded, the upper wake adapter, shared cumulative registration or general loaded/migration domains.
+
+
+## AF26 knot-aware trajectory evolution contract
+
+This IM16.33.1 design consumes qualified lower `56a57ba`; new upper source and behavior are not yet qualified. [Geometry](../../Constraints/GeometricRelations/DESIGN.md#af26-source-tagged-trajectory-binding-contract) owns actual source binding and [PrescribedMotions](../../../Modeling/Joints/PrescribedMotions/DESIGN.md) owns source-tagged mathematical laws, original sampling and earliest-knot authority. The existing quadratic cold-authority section and sleep/topology consumers remain unchanged.
+
+### Confirmed path and exact additive ports
+Current `GeometricMechanismEquation.state/baseSample/samples` creates stage-time physical state, `consistent` runs position/velocity/original acceleration phases, `acceptEndpoint` recomputes original full physical authority, and `publish` writes complete q/v/a/samples/time. `ProjectedNonlinearMechanismEvolution.prepare` currently clips only to target; this is the single interval gap. `GeometricMechanismCheckpointHandler.admit` already validates actual prescribed physical source and original force before exact Integration association. `PrescribedRootConstraint` accepts the same lower sealed `PrescribedBaseMotionSample` independently of law type; existing full mass, genuine identity rows, original root effort and partitioned power therefore remain the sole algorithms.
+
+Two additive `GeometricMechanismEquation` convenience initializers expose the actual new sampling witnesses. Their labels and typed failures are fixed as follows; all legacy initializers remain unchanged:
+
+```swift
+public convenience init(
+    identity: String, geometry: GeometricConstraintSystem, drive: [Double],
+    policy: MechanismSolvePolicy, projection: ManifoldProjectionPolicy,
+    maximumStageChartCorrection: Double, publicationBudget: NumericalBudget,
+    admission: DynamicsAdmission, maximumIdentityBytes: Int,
+    physicalKernel: any PhysicalRigidEquationComputing,
+    prescribedRootSolver: any PrescribedRootMechanismSolving,
+    activeRanker: any ActiveCoordinateRankAnalyzing,
+    evaluator: any HolonomicGeometryProviding = GeometricRelationEvaluator(),
+    linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>(),
+    baseTrajectorySampler: any PrescribedBaseTrajectorySampling,
+    powerPartitioner: any PhysicalPowerPartitioning = RigidEquationKernel(),
+    boundaryQuery: any PrescribedTrajectoryBoundaryQuerying = PrescribedTrajectoryBoundaryQuery()
+) throws(RuntimeFailure)
+
+public convenience init(
+    identity: String, geometry: GeometricConstraintSystem, drive: [Double],
+    policy: MechanismSolvePolicy, projection: ManifoldProjectionPolicy,
+    maximumStageChartCorrection: Double, publicationBudget: NumericalBudget,
+    admission: DynamicsAdmission, maximumIdentityBytes: Int,
+    physicalKernel: any PhysicalRigidEquationComputing,
+    evaluator: any HolonomicGeometryProviding = GeometricRelationEvaluator(),
+    physicalSolver: any PhysicalConstrainedMechanismSolving,
+    ranker: any ConstraintRankAnalyzing = WeightedConstraintAssembler(),
+    linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>(),
+    trajectorySampler: any PrescribedTrajectorySampling,
+    boundaryQuery: any PrescribedTrajectoryBoundaryQuerying = PrescribedTrajectoryBoundaryQuery()
+) throws(RuntimeFailure)
+```
+
+The root overload requires actual `geometry.prescribedTrajectoryRoot`; the anchor overload requires actual `geometry.prescribedTrajectory`. Capability/family mismatch is a typed input/domain refusal, never substitution of a default legacy sampler/solver. Old constructor injection authority remains unchanged. The optional new immutable reference authority owns new ports/program references; legacy equation instances retain their old execution path. Same class, physical engine, state/result/power types and checkpoint handler are reused.
+
+`ProjectedMechanismEquations` adds this non-generic protocol requirement:
+
+```swift
+func nextBoundary(after time: Double, through limit: Double,
+                  work: inout NumericalWork, control: RuntimeStepControl)
+    throws(RuntimeFailure) -> Double?
+```
+
+A default witness preserves old custom conformer source compatibility and asserts the pre-existing smooth-interval contract: no declared internal knot in the requested interval. The quadratic builtin has an explicit no-knot witness. The geometric builtin has an explicit witness dispatching actual new authority through `OriginalPrescribedTrajectoryBoundaryAcceptance.nextBoundary` or `nextBaseBoundary`; it never uses the default for new trajectories. A custom conformer admitting declared trajectory knots must implement the requirement. Calls through `any ProjectedMechanismEquations` always use the requirement witness on Embedded; no generic member, runtime reflection, dynamic cast or extension-only existential call is introduced.
+
+### Canonical interval and endpoint semantics
+The common prepare phase first forms the same legacy proposed endpoint, then requests the earliest actual internal knot in `acceptedTime < knot <= proposedEnd`. The lower sealed boundary operation recomputes builtin original authority and validates the injected query, including a wrong nil, later knot or changed bits. If no knot exists, original time/step/endpoint arithmetic is unchanged. If a knot exists, the exact returned bit pattern becomes endpoint and `step = endpoint - acceptedTime`; the endpoint is not reconstructed by addition. Positive finite progress remains mandatory. Clipping below the normal minimum step follows existing exact target-endpoint clipping semantics; error rejection/minimum-step policy is not weakened.
+
+```text
+actual accepted time/full history -> proposed end -> sealed earliest knot
+ -> same RK stages within this smooth interval -> projected exact endpoint
+ -> final derivative + full original q/v/a/force/power checks
+ -> one atomic physical/history/RNG publication or unchanged prefix
+```
+
+A C2 knot is an ordinary accepted smooth boundary, not a fabricated Runtime event or reset. Exact knot sampling belongs to the lower right segment; final domain endpoint belongs to the last left segment. The next query excludes the accepted knot and cannot create a zero-step loop. No stage crosses a knot, no upper code reads segment internals, and no knot cursor or new wire schema is required. Harmonic laws have no internal knot. Non-C2 law construction retains exact derivative-specific refusal; callable unsupported real discontinuity-event paths retain the English incomplete marker. Full KI-006 remains open.
+
+At each actual stage and endpoint, the supplied new sampler is consumed through sealed lower original acceptance at that time. All anchor slots and original P q/v/a/qdot remain law-bound, strict on external admission and explicitly bounded at RK-stage correction. Position correction affects only D via explicit active-rank capability. Original geometric rows/full axis derivatives, full source M/J/loads/inertia and original acceptance remain. Known-coordinate power, dynamic drive power, geometry reaction power and anchor drift power retain separate existing authority; full body energy is not replaced by half vMv. No new Ndot term is added to geometric bias.
+
+### History, ledgers and lifetime
+The existing descriptor incorporates Geometry's complete source-tagged canonical metadata and actual inertia/drive/policies. Cold admission validates original law samples/q/v/a/time and original force before the unchanged associatedHistory check. Same stamp/revision/identity with changed future coefficients is rejected by exact chart association even if the current physical sample is equal. Changed present derivatives fail original physical validation first. Original Integration error precedence is preserved (`incompatibleContinuation` for chart mismatch); malformed physical state remains `invalidState`. Constructor seam refusal cannot publish a state.
+
+Boundary and sampling work belongs to the projected caller ledger, including rejected attempts. Lower sealed ports reserve storage and irreversible seeds before opaque entry, validate success and failure/reset/cancellation, retain every known prefix and terminate unknown work without retry. No outer full-budget reseeding hides or duplicates lower admission. Boundary errors map through the existing typed motion/capacity/cancellation/reset/unavailable categories. The ordinary SmoothODE write still uses its separately declared publication budget; caller-ledger accepted write remains the only projected publication route. The existing cold four-ledger aggregate ceiling is unchanged.
+
+New program/supplier ownership is immutable Sendable and referenced across existing noninline preparation/sampling/physical/publication phases. Simultaneous program/sample metadata and operation context storage are reserved before materialization. Future rich public outputs do not overlap original tree/snapshot callbacks. All mutable work/stage arrays stay caller-exclusive; operation failure capture remains identical Mutex storage on Native/WASM/Embedded. No unsafe lifetime, target-dependent synchronization or original128KiB limit change is permitted.
+
+### Exact next-item ownership and proof
+Owned existing production paths: `GeometricMechanismEquation.swift`, `ProjectedMechanismEquations.swift`, `ProjectedNonlinearMechanismEvolution.swift`; new `GeometricTrajectoryAuthority.swift` and `NonlinearMechanismEquation+SmoothInterval.swift` if needed for explicit quadratic witness. The qualified quadratic equation/cold validator, `NonlinearPhysicalEngine`, physical suppliers, ConstrainedDynamics, Dynamics, Runtime and Integration algorithms are not changed. Geometry/Manifold paths are enumerated by their child contracts. SleepContinuation/TopologyContinuation and ReactionPaths are independently owned and retain their frozen prerequisites.
+
+[Dedicated trajectory tests](../../../../../Tests/MechanicsNonlinearMechanismTests/DESIGN.md#af26-trajectory-evolution-proof-contract) own actual harmonic and C2 root/anchor stages, root-only and coupled descendant planar/spatial original effort/K/Kdot/work, knot crossing, accepted sequence/history and exact fresh replay; wrong source/law/query/sampler work and cancellation retain byte/RNG prefix. One owned review and causal repairs precede bounded owner-isolated exact Swift6.4.0 Native execution on committed baseline plus owned overlays. Root owns canonical cumulative Native and original Native/WASM/Embedded public execution and every-write128KiB guards. New snapshot evidence cannot be inferred from the prior lower qualification.
