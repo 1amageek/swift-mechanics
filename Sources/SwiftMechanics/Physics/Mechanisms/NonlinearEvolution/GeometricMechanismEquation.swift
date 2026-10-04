@@ -11,6 +11,8 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     public let publicationBudget:NumericalBudget
     private let physical:NonlinearPhysicalEngine
     private let motionSampler:any PrescribedMotionSampling
+    private let baseSampler:any PrescribedBaseMotionSampling
+    private let powerPartitioner:any PhysicalPowerPartitioning
     private let evaluator:any HolonomicGeometryProviding
     private let assembler:TangentManifoldAssembler
     private let quaternionStarts:[Int]
@@ -24,6 +26,19 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
             maximumStageChartCorrection:maximumStageChartCorrection,publicationBudget:publicationBudget,admission:admission,
             maximumIdentityBytes:maximumIdentityBytes,suppliers:.spatial(kernel,solver),evaluator:evaluator,
             ranker:ranker,linear:linear,motionSampler:motionSampler)
+    }
+    public convenience init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
+                projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
+                admission:DynamicsAdmission,maximumIdentityBytes:Int,physicalKernel:any PhysicalRigidEquationComputing,
+                prescribedRootSolver:any PrescribedRootMechanismSolving,activeRanker:any ActiveCoordinateRankAnalyzing,
+                evaluator:any HolonomicGeometryProviding = GeometricRelationEvaluator(),linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),
+                baseSampler:any PrescribedBaseMotionSampling = AnalyticPrescribedBaseMotionSampler(),
+                powerPartitioner:any PhysicalPowerPartitioning = RigidEquationKernel()) throws(RuntimeFailure) {
+        guard geometry.prescribedRoot != nil else { throw RuntimeFailure(.invalidInput,message:"Prescribed-root source absent.") }
+        try self.init(identity:identity,geometry:geometry,drive:drive,policy:policy,projection:projection,
+            maximumStageChartCorrection:maximumStageChartCorrection,publicationBudget:publicationBudget,admission:admission,
+            maximumIdentityBytes:maximumIdentityBytes,suppliers:.prescribed(physicalKernel,prescribedRootSolver),evaluator:evaluator,
+            linear:linear,activeRanker:activeRanker,baseSampler:baseSampler,powerPartitioner:powerPartitioner)
     }
     public convenience init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
                 projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
@@ -41,8 +56,10 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
                 admission:DynamicsAdmission,maximumIdentityBytes:Int,
                 suppliers:NonlinearPhysicalSuppliers,evaluator:any HolonomicGeometryProviding = GeometricRelationEvaluator(),
                 ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(),
-                linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),motionSampler:any PrescribedMotionSampling = AnalyticPrescribedMotionSampler()) throws(RuntimeFailure) {
-        let model=geometry.model,p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount,m=geometry.rowIDs.count
+                linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),motionSampler:any PrescribedMotionSampling = AnalyticPrescribedMotionSampler(),
+                activeRanker:(any ActiveCoordinateRankAnalyzing)? = nil,baseSampler:any PrescribedBaseMotionSampling = AnalyticPrescribedBaseMotionSampler(),
+                powerPartitioner:any PhysicalPowerPartitioning = RigidEquationKernel()) throws(RuntimeFailure) {
+        let model=geometry.model,p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount,m=geometry.rowIDs.count+(geometry.prescribedRoot?.knownCoordinates.count ?? 0)
         guard maximumStageChartCorrection.isFinite,maximumStageChartCorrection > 0,identity.utf8.count <= maximumIdentityBytes,
               n <= policy.maximumCoordinates,m <= policy.maximumRows,n <= admission.capacity.maximumVelocities,
               model.tree.bodies.count <= admission.capacity.maximumBodies,drive.count == n,drive.allSatisfy({$0.isFinite}),
@@ -50,9 +67,13 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
               projection.constraints.diagonalMetric.count == n,policy.constraints.diagonalMetric.count == n,
               p <= projection.constraints.evaluation.maximumCoordinates,m <= projection.constraints.evaluation.maximumRows,
               projection.constraints.evaluation.expectedLayoutRevision == model.stamp.revision else { throw RuntimeFailure(.invalidInput,message:"Geometric physical chart/policy differs.") }
-        // FIXME(INCOMPLETE_IMPLEMENTATION): Fully prescribed floating-root partitions and prescribed free joints need separate force-coordinate partition evidence. Fixed zero-DOF bridges are admitted through the geometry-bound anchor programme.
+        if let root=geometry.prescribedRoot {
+            guard case .prescribed = suppliers,activeRanker != nil else { throw RuntimeFailure(.unsupportedDomain,message:"Explicit prescribed-root solve/rank capability required.") }
+            for index in root.knownCoordinates { guard drive[index] == 0 else { throw RuntimeFailure(.invalidInput,message:"Prescribed-root motion conflicts with root drive.") } }
+        }
+        // FIXME(INCOMPLETE_IMPLEMENTATION): Prescribed nonroot free joints need their own coordinate partition and original force/power evidence. They are rejected here; selected root and fixed-anchor paths have actual execution contracts.
         guard model.descriptor.joints.allSatisfy({$0.record.manifold.velocityCount == 0 ? $0.authority == .fixed : $0.authority == .dynamicState}),
-              model.descriptor.rootAuthority == (model.tree.rootBase == .fixed ? .fixed : .dynamicState) else { throw RuntimeFailure(.unsupportedDomain,message:"Geometric dynamic authority unavailable.") }
+              model.descriptor.rootAuthority == (geometry.prescribedRoot != nil ? .prescribedMotion : (model.tree.rootBase == .fixed ? .fixed : .dynamicState)) else { throw RuntimeFailure(.unsupportedDomain,message:"Geometric dynamic authority unavailable.") }
         var dimensions:[PhysicalDimension]=[],starts:[Int]=[]
         switch model.tree.rootBase {
         case .fixed: break
@@ -86,7 +107,9 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         catch { throw RuntimeFailure(.invalidInput,message:"Geometric ODE descriptor invalid.") }
         self.model=model;self.geometry=geometry;self.drive=drive;self.policy=policy;self.projection=projection
         self.maximumStageChartCorrection=maximumStageChartCorrection;self.publicationBudget=publicationBudget;quaternionStarts=starts
-        self.motionSampler=motionSampler;self.evaluator=evaluator;assembler=TangentManifoldAssembler(evaluator:evaluator,ranker:ranker,linear:linear)
+        self.motionSampler=motionSampler;self.baseSampler=baseSampler;self.powerPartitioner=powerPartitioner;self.evaluator=evaluator
+        if let activeRanker { assembler=TangentManifoldAssembler(evaluator:evaluator,activeRanker:activeRanker,linear:linear) }
+        else { assembler=TangentManifoldAssembler(evaluator:evaluator,ranker:ranker,linear:linear) }
         physical=NonlinearPhysicalEngine(model:model,velocityLayout:geometry.layout,drive:drive,policy:policy,admission:admission,
             inertias:inertias,suppliers:suppliers,storage:storage)
     }
@@ -115,6 +138,15 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
             } catch { throw Self.failure(.motion(error)) }
         }
         for i in 0..<p { point[i]=try trial.position(at:i) };for i in 0..<n { point[p+i]=try trial.velocity(at:i) }
+        if let root=geometry.prescribedRoot {
+            let base:PrescribedBaseMotionSample
+            do throws(GeometricConstraintError) { base=try root.sample(time:trial.timeSeconds,work:&validation) }
+            catch { throw Self.failure(error) }
+            for i in base.q.indices { guard point[i].bitPattern == base.q[i].bitPattern else { throw RuntimeFailure(.invalidState,message:"Trial prescribed-root position differs.") } }
+            for i in base.v.indices {
+                guard point[p+i].bitPattern == base.v[i].bitPattern,try trial.acceleration(at:i).bitPattern == base.a[i].bitPattern else { throw RuntimeFailure(.invalidState,message:"Trial prescribed-root derivatives differ.") }
+            }
+        }
     }
     public func prepare(trial:inout RuntimeTrial,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
         try reserve(&work,control:control)
@@ -144,7 +176,13 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     private func positionContext(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> GeometricPositionContext {
         let stage=try correctedStage(time:time,point:point,work:&work,control:control)
         let assembled=try assemble(stage.state,work:&work,control:control)
-        return GeometricPositionContext(initial:stage.state,assembly:assembled,chartCorrection:stage.correction)
+        return try positionPublication(initial:stage.state,assembly:assembled,chartCorrection:stage.correction)
+    }
+    @inline(never)
+    private func positionPublication(initial:KinematicState,assembly:GeometricAssemblyAttempt,
+                                     chartCorrection:Double) throws(RuntimeFailure) -> GeometricPositionContext {
+        guard let result=assembly.result else { throw RuntimeFailure(.invalidState,message:"Geometric assembly source differs.") }
+        return GeometricPositionContext(initial:initial,assembly:result,chartCorrection:chartCorrection)
     }
     @inline(never)
     private func velocityContext(_ position:GeometricPositionContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> GeometricVelocityContext {
@@ -153,8 +191,8 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         let r=try residual(original,velocity:false,work:&work)
         let system=try physical.system(snapshot:original.snapshot,v:assembled.state.v,work:&work,control:control)
         let projectedEnergy=try physical.energy(system,acceleration:assembled.state.acceleration,work:&work,control:control).kineticEnergy
-        return GeometricVelocityContext(position:position,physical:NonlinearPhysicalSolveContext(system:system,sample:original.velocity,
-            impulse:true,positionResidual:r.position,velocityResidual:r.velocity),positionEnergyChange:projectedEnergy-beforeEnergy)
+        return GeometricVelocityContext(position:position,physical:try solveContext(system,sample:original.velocity,impulse:true,
+            positionResidual:r.position,velocityResidual:r.velocity,work:&work),positionEnergyChange:projectedEnergy-beforeEnergy)
     }
     @inline(never)
     private func reconciledContext(_ position:GeometricPositionContext,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> GeometricAccelerationContext {
@@ -172,8 +210,8 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         let system=try physical.system(snapshot:original.snapshot,v:state.v,work:&work,control:control)
         let kinetic=try physical.energy(system,acceleration:state.acceleration,work:&work,control:control).kineticEnergy
         let before=try originalEnergy(position,work:&work,control:control)
-        return GeometricAccelerationContext(position:context.position,velocity:velocity,physical:NonlinearPhysicalSolveContext(system:system,
-            sample:original.velocity,impulse:false,positionResidual:r.position,velocityResidual:r.velocity),
+        return GeometricAccelerationContext(position:context.position,velocity:velocity,physical:try solveContext(system,
+            sample:original.velocity,impulse:false,positionResidual:r.position,velocityResidual:r.velocity,work:&work),
             positionEnergyChange:context.positionEnergyChange,velocityEnergyChange:kinetic-before)
     }
     @inline(never)
@@ -189,18 +227,30 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         }
         guard abs(energy.requiredVirtualPower-virtual) <= policy.originalTolerance*(1+abs(virtual)),
               abs(energy.kineticEnergyRate-energy.requiredVirtualPower-energy.requiredPrescribedPower) <= policy.originalTolerance*(1+abs(energy.kineticEnergyRate)) else { throw RuntimeFailure(.invalidState,message:"Original physical power identity rejected.") }
-        return publication(context,acceleration:acceleration,energy:energy)
+        let partition=try physical.partitionedPower(context.physical,motion:acceleration,operation:powerPartitioner,work:&work,control:control)
+        return publication(context,acceleration:acceleration,energy:energy,partition:partition)
     }
     @inline(never)
-    private func publication(_ context:GeometricAccelerationContext,acceleration:ConstrainedMotion,energy:MechanicalEnergy) -> NonlinearMechanismState {
+    private func publication(_ context:GeometricAccelerationContext,acceleration:ConstrainedMotion,energy:MechanicalEnergy,
+                             partition:PartitionedMechanicalPower?) -> NonlinearMechanismState {
         NonlinearMechanismState(point:context.position.assembly.state.q+context.velocity.values,acceleration:acceleration,velocity:context.velocity,
             positionResidual:context.physical.positionResidual,velocityResidual:context.physical.velocityResidual,
             correction:context.position.assembly.pathCorrection,kineticEnergy:energy.kineticEnergy,chartCorrection:context.position.chartCorrection,
-            positionEnergyChange:context.positionEnergyChange,mechanicalEnergy:energy,velocityEnergyChange:context.velocityEnergyChange)
+            positionEnergyChange:context.positionEnergyChange,mechanicalEnergy:energy,velocityEnergyChange:context.velocityEnergyChange,partitionedPower:partition)
     }
     private func correctedStage(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> (state:KinematicState,correction:Double) {
-        let raw=try state(time:time,point:point,work:&work,control:control);var q=raw.q,delta=0.0
+        let raw=try state(time:time,point:point,work:&work,control:control,strictRoot:false);var q=raw.q,delta=0.0
+        if geometry.prescribedRoot != nil {
+            let p=model.tree.layout.positionCount,k=model.tree.rootBase.velocityCount
+            for i in 0..<model.tree.rootBase.positionCount {
+                try physical.charge(4,&work)
+                let scale=i < 3 ? geometry.layout.scales[i] : 1
+                let difference=(q[i]-point[i])/scale;delta+=difference*difference
+            }
+            for i in 0..<k { try physical.charge(5,&work);let difference=(raw.v[i]-point[p+i])*geometry.layout.timeScale/geometry.layout.scales[i];delta+=difference*difference }
+        }
         for start in quaternionStarts {
+            if geometry.prescribedRoot != nil,start == 3 { continue }
             var square=0.0
             for i in start..<(start+4) { try physical.charge(2,&work);square+=q[i]*q[i] }
             guard square.isFinite,square > 0 else { throw RuntimeFailure(.invalidState,message:"Geometric RK quaternion chart singular.") }
@@ -212,24 +262,43 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         do throws(JointError) { return (try KinematicState(revision:raw.revision,time:time,q:q,v:raw.v,acceleration:raw.acceleration,prescribedAnchors:raw.prescribedAnchors),delta) }
         catch { throw RuntimeFailure(.invalidState,message:"Geometric stage state invalid.") }
     }
-    private func state(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> KinematicState {
+    private func state(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl?,strictRoot:Bool = true) throws(RuntimeFailure) -> KinematicState {
         let p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount
         guard point.count == p+n,point.allSatisfy({$0.isFinite}) else { throw RuntimeFailure(.invalidState,message:"Geometric point invalid.") }
         let anchors=try samples(time:time,work:&work,control:control)
-        do throws(JointError) { return try KinematicState(revision:model.stamp.revision,time:time,q:Array(point[..<p]),v:Array(point[p...]),acceleration:[Double](repeating:0,count:n),prescribedAnchors:anchors) }
+        var q=Array(point[..<p]),v=Array(point[p...]),a=[Double](repeating:0,count:n)
+        if let base=try baseSample(time:time,work:&work,control:control) {
+            if strictRoot {
+                for i in base.q.indices { guard q[i].bitPattern == base.q[i].bitPattern else { throw RuntimeFailure(.invalidState,message:"Original prescribed-root q differs.") } }
+                for i in base.v.indices { guard v[i].bitPattern == base.v[i].bitPattern else { throw RuntimeFailure(.invalidState,message:"Original prescribed-root v differs.") } }
+            }
+            for i in base.q.indices { q[i]=base.q[i] };for i in base.v.indices { v[i]=base.v[i];a[i]=base.a[i] }
+        }
+        do throws(JointError) { return try KinematicState(revision:model.stamp.revision,time:time,q:q,v:v,acceleration:a,prescribedAnchors:anchors) }
         catch { throw RuntimeFailure(.invalidState,message:"Geometric source state invalid.") }
     }
     @inline(never)
-    private func assemble(_ state:KinematicState,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ManifoldAssemblyResult {
-        var local=try physical.supplier(&work,control:control);let before=local
-        var result:ManifoldAssemblyResult?,failure:ManifoldProjectionFailure?
-        do throws(ManifoldProjectionFailure) { result=try assembler.assemble(geometry,initial:state,policy:projection,work:&local) } catch { failure=error }
-        try physical.finish(local,before:before,into:&work)
-        if let failure { throw Self.failure(failure.cause) }
+    private func assemble(_ state:KinematicState,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> GeometricAssemblyAttempt {
+        let local=try physical.supplier(&work,control:control)
+        let attempt=invokeAssembly(state,local:local)
+        try physical.finish(attempt.work,before:attempt.before,into:&work)
+        if let failure=attempt.failure { throw Self.failure(failure.cause) }
         try reserve(&work,control:control)
-        guard let result,result.correctionMetadata == projection.metadata,result.state.time == state.time,result.state.v == state.v,
+        try acceptAssembly(attempt,state:state)
+        return attempt
+    }
+    @inline(never)
+    private func invokeAssembly(_ state:KinematicState,local:NumericalWork) -> GeometricAssemblyAttempt {
+        var work=local
+        do throws(ManifoldProjectionFailure) {
+            let result=try assembler.assemble(geometry,initial:state,policy:projection,work:&work)
+            return GeometricAssemblyAttempt(result:result,failure:nil,work:work,before:local)
+        } catch { return GeometricAssemblyAttempt(result:nil,failure:error,work:work,before:local) }
+    }
+    @inline(never)
+    private func acceptAssembly(_ attempt:GeometricAssemblyAttempt,state:KinematicState) throws(RuntimeFailure) {
+        guard let result=attempt.result,result.correctionMetadata == projection.metadata,result.state.time == state.time,result.state.v == state.v,
               result.state.acceleration == state.acceleration,result.state.prescribedAnchors == state.prescribedAnchors,result.pathCorrection.isFinite,result.pathCorrection <= projection.maximumPathCorrection else { throw RuntimeFailure(.invalidState,message:"Geometric assembly source differs.") }
-        return result
     }
     @inline(never)
     private func evaluate(_ state:KinematicState,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> HolonomicGeometrySample {
@@ -272,7 +341,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     @inline(never)
     internal func validateStoredPhysical(_ state:KinematicState,acceptedSteps:UInt64,work:inout NumericalWork) throws(RuntimeFailure) {
         let context=try storedPhysicalContext(state,work:&work)
-        if acceptedSteps > 0 {
+        if acceptedSteps > 0 || geometry.prescribedRoot != nil {
             let solution=try physical.solve(context,work:&work,control:nil)
             for i in state.acceleration.indices { try physical.charge(3,&work)
                 guard abs(state.acceleration[i]-solution.values[i])*geometry.layout.timeScale*geometry.layout.timeScale/geometry.layout.scales[i] <= policy.originalTolerance else {
@@ -293,7 +362,24 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         }
         try GeometricAxisAcceptance.validate(geometry,snapshot:original.snapshot,acceleration:state.acceleration,tolerance:policy.originalTolerance,work:&work)
         let system=try physical.system(snapshot:original.snapshot,v:state.v,work:&work,control:nil)
-        return NonlinearPhysicalSolveContext(system:system,sample:original.velocity,impulse:false,positionResidual:r.position,velocityResidual:r.velocity)
+        return try solveContext(system,sample:original.velocity,impulse:false,positionResidual:r.position,velocityResidual:r.velocity,work:&work)
+    }
+    @inline(never)
+    private func solveContext(_ system:PhysicalRigidDynamicsSystem,sample:VelocityConstraintSample,impulse:Bool,
+                              positionResidual:Double,velocityResidual:Double,work:inout NumericalWork) throws(RuntimeFailure) -> NonlinearPhysicalSolveContext {
+        guard let root=geometry.prescribedRoot else { return NonlinearPhysicalSolveContext(system:system,sample:sample,impulse:impulse,positionResidual:positionResidual,velocityResidual:velocityResidual) }
+        let base:PrescribedBaseMotionSample,constraint:PrescribedRootConstraint
+        do throws(GeometricConstraintError) { base=try root.sample(time:system.input.snapshot.time,work:&work) } catch { throw Self.failure(error) }
+        do throws(MechanismError) { constraint=try PrescribedRootConstraint(system:system,geometry:sample,base:base,rowIDs:root.rowIDs,policy:policy,work:&work) }
+        catch { throw RuntimeFailure(.invalidState,message:"Original prescribed-root physical source rejected.",failedSupplierWorkUnavailable:error.failedSupplierWorkUnavailable) }
+        return NonlinearPhysicalSolveContext(system:system,sample:constraint.sample,impulse:impulse,positionResidual:positionResidual,velocityResidual:velocityResidual,prescribedRoot:constraint)
+    }
+    private func baseSample(time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> PrescribedBaseMotionSample? {
+        guard let root=geometry.prescribedRoot else { return nil }
+        try reserve(&work,control:control)
+        do throws(PrescribedMotionError) {
+            return try OriginalPrescribedBaseMotionAcceptance.sealedBaseMotion(root.program,time:time,policy:root.program.policy,sampler:baseSampler,work:&work)
+        } catch { throw Self.failure(.motion(error)) }
     }
     internal func validatePrescribed(_ state:KinematicState,work:inout NumericalWork) throws(RuntimeFailure) {
         do throws(GeometricConstraintError) { try geometry.validatePrescribed(state,work:&work) }
@@ -352,6 +438,16 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
             guard value.isFinite,abs(value) <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Original geometric endpoint acceleration inconsistent.") }
         }
         try GeometricAxisAcceptance.validate(geometry,snapshot:sample.snapshot,acceleration:Array(derivative[p...]),tolerance:policy.originalTolerance,work:&work)
+        if let root=geometry.prescribedRoot {
+            let base:PrescribedBaseMotionSample
+            do throws(GeometricConstraintError) { base=try root.sample(time:time,work:&work) } catch { throw Self.failure(error) }
+            for i in base.q.indices { guard derivative[i].bitPattern == sample.snapshot.coordinateRate[i].bitPattern else { throw RuntimeFailure(.invalidState,message:"Endpoint prescribed-root coordinate rate differs.") } }
+            for i in base.a.indices { guard derivative[p+i].bitPattern == base.a[i].bitPattern else { throw RuntimeFailure(.invalidState,message:"Endpoint prescribed-root acceleration differs.") } }
+            let system=try physical.system(snapshot:sample.snapshot,v:state.v,work:&work,control:control)
+            let context=try solveContext(system,sample:sample.velocity,impulse:false,positionResidual:0,velocityResidual:0,work:&work)
+            let original=try physical.solve(context,work:&work,control:control)
+            for i in 0..<n { try physical.charge(3,&work);guard abs(original.values[i]-derivative[p+i])*geometry.layout.timeScale*geometry.layout.timeScale/geometry.layout.scales[i] <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Endpoint original prescribed-root force differs.") } }
+        }
         try reserve(&work,control:control)
     }
     private func publish(point:[Double],derivative:[Double],time:Double,trial:inout RuntimeTrial,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) {

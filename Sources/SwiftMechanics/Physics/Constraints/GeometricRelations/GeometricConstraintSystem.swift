@@ -11,13 +11,16 @@ public struct GeometricConstraintSystem: Sendable {
     public let metadata: String
     public let scalarStorage: Int
     public let prescribedMotion:PrescribedMotionProgram?
-    public var isExplicitTime: Bool { prescribedMotion != nil || relations.contains { $0.target.isExplicitTime } }
+    public let prescribedRoot:PrescribedRootBinding?
+    public var isExplicitTime: Bool { prescribedMotion != nil || prescribedRoot != nil || relations.contains { $0.target.isExplicitTime } }
     public init(model:CompiledMechanicalModel,layout:ConstraintCoordinateLayout,relations:[GeometricRelation],
                 minimumPosition:[Double],maximumPosition:[Double],minimumTime:Double,maximumTime:Double,
-                capacity:GeometricConstraintCapacity,work:inout NumericalWork,prescribedMotion:PrescribedMotionProgram? = nil) throws(GeometricConstraintError) {
+                capacity:GeometricConstraintCapacity,work:inout NumericalWork,prescribedMotion:PrescribedMotionProgram? = nil,
+                prescribedBase:PrescribedBaseMotionProgram? = nil,rootRowIDs:[UInt64] = []) throws(GeometricConstraintError) {
         let tree=model.tree,p=tree.layout.positionCount,n=tree.layout.velocityCount,b=tree.bodies.count
         guard b <= capacity.maximumBodies,p <= capacity.maximumPositions,n > 0,n <= capacity.maximumVelocities,
-              !relations.isEmpty,relations.count <= capacity.maximumRows else { throw .capacityExceeded }
+              (!relations.isEmpty || prescribedBase != nil),relations.count <= capacity.maximumRows,
+              rootRowIDs.count <= capacity.maximumRows else { throw .capacityExceeded }
         guard layout.scales.count == n,layout.revision == model.stamp.revision,
               minimumPosition.count == p,maximumPosition.count == p,minimumTime.isFinite,maximumTime.isFinite,minimumTime <= maximumTime else { throw .invalidShape }
         var m=0
@@ -33,8 +36,21 @@ public struct GeometricConstraintSystem: Sendable {
                 try NumericalWork.sum(try NumericalWork.product(b,m),try NumericalWork.sum(b+p+n,m)))))
         }
         try GeometricArithmetic.charge(admissionWork,&work)
-        try GeometricDimensionAdmission.validate(model,relations:relations,program:prescribedMotion)
+        let root:PrescribedRootBinding?
+        if let base=prescribedBase {
+            guard tree.rootBase.velocityCount <= capacity.maximumRows-m else { throw .capacityExceeded }
+            guard prescribedMotion == nil,minimumTime >= base.law.minimumTime,maximumTime <= base.law.maximumTime else { throw .unsupportedDomain }
+            let ids=rootRowIDs.isEmpty ? (0..<tree.rootBase.velocityCount).map { UInt64.max-UInt64($0) } : rootRowIDs
+            root=try PrescribedRootBinding(model:model,program:base,rowIDs:ids,work:&work)
+        } else {
+            guard rootRowIDs.isEmpty,model.descriptor.rootAuthority != .prescribedMotion else { throw .staleSource }
+            root=nil
+        }
+        try GeometricDimensionAdmission.validate(model,relations:relations,program:prescribedMotion,prescribedBase:prescribedBase)
         try GeometricPrescribedBinding.validate(model,program:prescribedMotion,work:&work)
+        if root != nil {
+            guard model.descriptor.joints.allSatisfy({ $0.record.manifold.velocityCount == 0 ? $0.authority == .fixed : $0.authority == .dynamicState }) else { throw .unsupportedDomain }
+        }
         for i in 0..<p { guard minimumPosition[i].isFinite,maximumPosition[i].isFinite,minimumPosition[i] <= maximumPosition[i] else { throw .invalidInput } }
         for i in 0..<n {
             guard layout.scales[i].isFinite,layout.scales[i] > 0,!layout.coordinateIDs[..<i].contains(layout.coordinateIDs[i]) else { throw .invalidInput }
@@ -55,7 +71,7 @@ public struct GeometricConstraintSystem: Sendable {
         guard expected == layout.dimensions else { throw .invalidInput }
         var ids:[UInt64]=[];ids.reserveCapacity(m)
         for relation in relations {
-            for id in relation.rowIDs { guard !ids.contains(id) else { throw .invalidInput };ids.append(id) }
+            for id in relation.rowIDs { guard !ids.contains(id),!(root?.rowIDs.contains(id) ?? false) else { throw .invalidInput };ids.append(id) }
             _=try Self.resolve(relation.first,tree:tree);_=try Self.resolve(relation.second,tree:tree)
         }
         if let program=prescribedMotion {
@@ -66,7 +82,8 @@ public struct GeometricConstraintSystem: Sendable {
             } catch { throw .motion(error) }
         }
         let metadata=try GeometricMetadata.encode(model:model,layout:layout,relations:relations,minimum:minimumPosition,maximum:maximumPosition,
-            minimumTime:minimumTime,maximumTime:maximumTime,limit:capacity.maximumMetadataBytes,work:&work,prescribedMotion:prescribedMotion)
+            minimumTime:minimumTime,maximumTime:maximumTime,limit:capacity.maximumMetadataBytes,work:&work,prescribedMotion:prescribedMotion,prescribedRoot:root)
+        prescribedRoot=root
         self.prescribedMotion=prescribedMotion;self.model=model;self.layout=layout;self.relations=relations;rowIDs=ids;self.minimumPosition=minimumPosition
         self.maximumPosition=maximumPosition;self.minimumTime=minimumTime;self.maximumTime=maximumTime;self.metadata=metadata;scalarStorage=try GeometricArithmetic.numeric { () throws(NumericalError) -> Int in try NumericalWork.sum(storage,metadata.utf8.count/8+1) }
     }
@@ -97,6 +114,7 @@ public struct GeometricConstraintSystem: Sendable {
         try GeometricArithmetic.check(policy);return snapshot
     }
     public func validatePrescribed(_ state:KinematicState,work:inout NumericalWork) throws(GeometricConstraintError) {
+        if let root=prescribedRoot { try root.validate(state,work:&work) }
         if let program=prescribedMotion {
             do throws(PrescribedMotionError) {
                 let supplied=try PrescribedMotionSample(metadata:program.metadata,time:state.time,anchors:state.prescribedAnchors,policy:program.policy)

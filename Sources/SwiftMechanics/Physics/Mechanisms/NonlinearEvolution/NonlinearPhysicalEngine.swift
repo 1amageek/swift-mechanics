@@ -70,7 +70,8 @@ internal final class NonlinearPhysicalEngine: Sendable {
     func invokePhysicalSupplier(_ context:NonlinearPhysicalSolveContext,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> ConstrainedMotion {
         // Reserve an irreversible admission quantum before all opaque callbacks; each independent ledger also has a seed.
         var a:NumericalWork,b:NumericalWork,c:NumericalWork,d:NumericalWork
-        if control == nil {
+        if control == nil || context.prescribedRoot != nil {
+            if let control { try control.beginWorkBlock(units:4) }
             (a,b,c,d)=try coldSuppliers(&work)
         } else {
             a=try supplier(&work,control:control);b=try supplier(&work,control:control)
@@ -81,7 +82,8 @@ internal final class NonlinearPhysicalEngine: Sendable {
             if context.impulse { result=try invokeVelocity(context,a:&a,b:&b,c:&c,d:&d) }
             else { result=try invokeAcceleration(context,a:&a,b:&b,c:&c,d:&d) }
         } catch { failure=error }
-        for (ledger,prior) in zip([a,b,c,d],before) { try finish(ledger,before:prior,into:&work) }
+        if context.prescribedRoot != nil { try finishRootLedgers([a,b,c,d],before:before,into:&work) }
+        else { for (ledger,prior) in zip([a,b,c,d],before) { try finish(ledger,before:prior,into:&work) } }
         if let failure { throw RuntimeFailure(.invalidState,message:"Original constrained physical solve failed.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable) }
         guard let result else { throw RuntimeFailure(.invalidState,message:"Mechanism supplier source/result differs.") }
         return result
@@ -116,6 +118,12 @@ internal final class NonlinearPhysicalEngine: Sendable {
         guard NonlinearPhysicalSource.matches(result.sourceSnapshot,system.input.snapshot),result.values.count == system.velocityCount,result.values.allSatisfy({$0.isFinite}),result.generalizedReaction.count == system.velocityCount,
               result.rowIDs == sample.rowIDs,result.rowMultipliers.count == sample.rowIDs.count,result.rank.reactionNullity == sample.rowIDs.count-result.rank.rank,
               result.temporalMeaning == (impulse ? .instantaneousVelocityImpulse : .accelerationForce),result.time == system.input.snapshot.time,result.basis == model.tree.layout,result.sourceVelocity == system.input.velocity else { throw RuntimeFailure(.invalidState,message:"Mechanism supplier source/result differs.") }
+        if let root=context.prescribedRoot {
+            for index in root.knownCoordinates {
+                let canonical=impulse ? root.base.v[index] : root.base.a[index]
+                guard result.values[index].bitPattern == canonical.bitPattern else { throw RuntimeFailure(.invalidState,message:"Supplier changed canonical known motion.") }
+            }
+        }
         // Independent acceptance from original mass and retained tangent rows, including redundant rows.
         let n=system.velocityCount,t=velocityLayout.timeScale,s=velocityLayout.scales,e=policy.dynamics.energyScale
         for row in sample.rowIDs.indices {
@@ -155,6 +163,63 @@ internal final class NonlinearPhysicalEngine: Sendable {
         guard !policy.isCancelled(),!admission.isCancelled() else { throw RuntimeFailure(.cancelled,message:"Physical energy cancelled.") }
         return original
     }
+    @inline(never)
+    func partitionedPower(_ context:NonlinearPhysicalSolveContext,motion:ConstrainedMotion,
+                          operation:any PhysicalPowerPartitioning,work:inout NumericalWork,
+                          control:RuntimeStepControl?) throws(RuntimeFailure) -> PartitionedMechanicalPower? {
+        guard let root=context.prescribedRoot else { return nil }
+        let reaction:[Double]
+        do throws(MechanismError) { reaction=try root.geometricReaction(motion,work:&work) }
+        catch { throw RuntimeFailure(.invalidState,message:"Original geometry reaction unavailable.") }
+        var local=try supplier(&work,control:control),result:PartitionedMechanicalPower?,failure:DynamicsError?
+        let before=local
+        do throws(DynamicsError) {
+            result=try operation.partitionedPower(context.system,acceleration:motion.values,knownCoordinates:root.knownCoordinates,
+                drive:drive,geometricReaction:reaction,policy:policy.dynamics,work:&local)
+        } catch { failure=error }
+        try finishRootLedgers([local],before:[before],into:&work)
+        if let failure {
+            let code:RuntimeFailureCode
+            switch failure { case .cancelled:code = .cancelled;case .capacityExceeded:code = .capacityExceeded;default:code = .invalidState }
+            throw RuntimeFailure(code,message:"Partitioned power supplier failed.",failedSupplierWorkUnavailable:MechanismError.dynamics(failure).failedSupplierWorkUnavailable)
+        }
+        return try acceptPartition(context,motion:motion,reaction:reaction,result:result,work:&work,control:control)
+    }
+    @inline(never)
+    private func acceptPartition(_ context:NonlinearPhysicalSolveContext,motion:ConstrainedMotion,reaction:[Double],
+                                 result:PartitionedMechanicalPower?,work:inout NumericalWork,
+                                 control:RuntimeStepControl?) throws(RuntimeFailure) -> PartitionedMechanicalPower {
+        guard let root=context.prescribedRoot else { throw RuntimeFailure(.invalidState,message:"Root partition absent.") }
+        let original:PartitionedMechanicalPower
+        do throws(DynamicsError) {
+            original=try RigidEquationKernel().partitionedPower(context.system,acceleration:motion.values,knownCoordinates:root.knownCoordinates,
+                drive:drive,geometricReaction:reaction,policy:policy.dynamics,work:&work)
+        } catch { throw RuntimeFailure(.invalidState,message:"Original partitioned power failed.") }
+        for i in root.knownCoordinates.indices {
+            let index=root.knownCoordinates[i]
+            try charge(5,&work)
+            guard abs(original.rootActuationEffort[i]+reaction[index]-motion.generalizedReaction[index])*velocityLayout.scales[index]/policy.dynamics.energyScale <= policy.originalTolerance else {
+                throw RuntimeFailure(.invalidState,message:"Original root actuation balance differs.")
+            }
+        }
+        try charge(try partitionComparisonCount(context.system.velocityCount),&work)
+        guard let result,result.system === context.system,result.acceleration == original.acceleration,
+              result.knownCoordinates == original.knownCoordinates,result.drive == original.drive,
+              result.geometricReaction == original.geometricReaction,result.energy == original.energy,
+              result.originalGeneralizedInertialForce == original.originalGeneralizedInertialForce,
+              result.rootActuationEffort == original.rootActuationEffort,
+              result.knownCoordinatePower == original.knownCoordinatePower,result.dynamicCoordinatePower == original.dynamicCoordinatePower,
+              result.rootActuationPower == original.rootActuationPower,result.geometricReactionPower == original.geometricReactionPower,
+              result.anchorPrescribedPower == original.anchorPrescribedPower,result.drivePower == original.drivePower,
+              result.knownLoadPower == original.knownLoadPower else { throw RuntimeFailure(.invalidState,message:"Partitioned power source or original balance differs.") }
+        if let control { try control.beginWorkBlock(units:1) }
+        guard !policy.isCancelled(),!admission.isCancelled() else { throw RuntimeFailure(.cancelled,message:"Partitioned power cancelled.") }
+        return original
+    }
+    private func partitionComparisonCount(_ count:Int) throws(RuntimeFailure) -> Int {
+        do throws(NumericalError) { return try NumericalWork.product(16,count) }
+        catch { throw RuntimeFailure(.capacityExceeded,message:"Partitioned power comparison overflow.") }
+    }
     func sourceComparisonAdmission(_ work:inout NumericalWork) throws(RuntimeFailure) {
         do {
             let bodyColumns=try NumericalWork.product(model.tree.bodies.count,try NumericalWork.sum(1,model.tree.layout.velocityCount))
@@ -165,6 +230,18 @@ internal final class NonlinearPhysicalEngine: Sendable {
         if let control { try control.beginWorkBlock(units:1) };try charge(1,&work)
         do { var local=NumericalWork(budget:try work.remainingBudget(reservedStorage:reservedSlots()));try local.chargeOperations(1);return local }
         catch { throw RuntimeFailure(.capacityExceeded,message:"Nonlinear supplier admission exhausted.") }
+    }
+    @inline(never)
+    private func finishRootLedgers(_ ledgers:[NumericalWork],before:[NumericalWork],into work:inout NumericalWork) throws(RuntimeFailure) {
+        var replaced=false
+        for (local,prior) in zip(ledgers,before) {
+            let preserved=local.budget == prior.budget && local.operations >= prior.operations && local.iterations >= prior.iterations && local.peakScalarStorage >= prior.peakScalarStorage
+            if !preserved { replaced=true }
+            // Retained seed is a known prefix, not an estimate of the unavailable supplier work.
+            do throws(NumericalError) { try work.absorb(preserved ? local : prior,reservedStorage:reservedSlots()) }
+            catch { throw RuntimeFailure(.capacityExceeded,message:"Root aggregate supplier work exhausted.",failedSupplierWorkUnavailable:replaced) }
+        }
+        if replaced { throw RuntimeFailure(.invalidOwnerAccess,message:"Root supplier replaced/reset admitted ledger.",failedSupplierWorkUnavailable:true) }
     }
     func finish(_ local:NumericalWork,before:NumericalWork,into work:inout NumericalWork) throws(RuntimeFailure) {
         guard local.budget == before.budget,local.operations >= before.operations,local.iterations >= before.iterations,local.peakScalarStorage >= before.peakScalarStorage else { throw RuntimeFailure(.invalidOwnerAccess,message:"Nonlinear supplier replaced/reset its admitted ledger.",failedSupplierWorkUnavailable:true) }

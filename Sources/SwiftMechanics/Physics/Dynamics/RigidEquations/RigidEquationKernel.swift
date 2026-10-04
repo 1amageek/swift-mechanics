@@ -1,4 +1,4 @@
-public struct RigidEquationKernel: RigidEquationComputing, PhysicalRigidEquationComputing {
+public struct RigidEquationKernel: RigidEquationComputing, PhysicalRigidEquationComputing, PhysicalPowerPartitioning {
     public init() {}
     @inline(never)
     public func assemble(_ input: RigidDynamicsInput, admission: DynamicsAdmission, loadWork: inout LoadWork,

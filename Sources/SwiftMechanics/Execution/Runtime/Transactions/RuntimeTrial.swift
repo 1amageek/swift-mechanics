@@ -39,6 +39,9 @@ public struct RuntimeTrial: Sendable {
     public func velocity(at index: Int) throws(RuntimeFailure) -> Double {
         guard v.indices.contains(index) else { throw RuntimeFailure(.invalidInput, message: "Velocity index is outside trial layout.") }; return v[index]
     }
+    public func acceleration(at index: Int) throws(RuntimeFailure) -> Double {
+        guard acceleration.indices.contains(index) else { throw RuntimeFailure(.invalidInput, message: "Acceleration index is outside trial layout.") }; return acceleration[index]
+    }
     public mutating func setPosition(_ value: Double, at index: Int) throws(RuntimeFailure) {
         guard value.isFinite, q.indices.contains(index) else { throw RuntimeFailure(.invalidState, message: "Invalid trial position/index.") }; q[index] = value
     }

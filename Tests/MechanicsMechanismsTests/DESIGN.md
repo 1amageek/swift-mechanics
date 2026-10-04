@@ -28,3 +28,8 @@ Root AF17 qualification: Sixteen actual Native cases pass in `.build/af17-integr
 Additive physical witnesses use real planar source and actual Dense/Rigid producers. Independently verify acceleration rows and original momentum, velocity impulse/energy, exact tagged system retention, legacy-only capability refusal, physical injected witness preservation, changed source and failed ledger prefix. Production authority belongs to [ConstrainedDynamics](../../Sources/SwiftMechanics/Physics/Mechanisms/ConstrainedDynamics/DESIGN.md#af24-additive-physical-constrained-contract); root owns actual execution and profile qualification.
 
 The first registered affected Native run passed 19 cases in eight suites on macOS 27 arm64 with Swift 6.4.0 release, `-j 4`, `.build/ar01-native` and a 240-second command bound (`.build/af24-upper-native-tests.log`). Actual original physical constrained/evolution success and refusal paths executed. Original WASM/Embedded qualification remains owned by IM.IM16.25.
+
+### AF25 selected proof ownership
+AF25 PrescribedRootConstraintTests executes both actual root charts through full physical M and genuine normalized identity rows at nonunit scales, zero original geometry, original root effort and physical power, exact accepted canonical acceleration and stale source refusal.
+
+Its mass solve retains Cholesky because the actual dense producer mirrors each normalized mass entry. Its constraint Gram solve explicitly selects partial-pivot LU: independently evaluated inverse-mass columns do not promise bit-exact Gram symmetry. Original matrix entries, residual tolerances and physical acceptance remain unchanged. Root bias exact checks use the declared left-associated `-a*T*T/S` evaluation.

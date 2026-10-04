@@ -45,3 +45,5 @@ Additive qualification: timeout-wrapped `.build/cohort-integration` AF16 focused
 AR01.8 constructor access proof is recorded by [Compiler tests](../MechanicsCompilerTests/DESIGN.md). The added no-publication behavioral case and unchanged session cases require the root frozen-snapshot Native suite; three-profile runtime evidence remains separately owned by root.
 
 AF23 frozen Native qualification: the exact Swift 6.4.0 release frontend ran `swift test -j 4 --filter MechanicsRuntimeTests` under a 240-second deadline. All 31 tests in seven suites passed with exit 0 (`.build/af23-runtime-native.log`), including nine new complete-anchor cases. This evidence covers Runtime retention and actual model admission on Native; new moving-anchor public WASM/Embedded behavior and prescribed-law dynamics remain separately unqualified until integrated execution.
+
+AF25 RuntimeTransactionsTests exercises acceleration reading after an actual inout trial setter, rejects negative/end indices with invalidInput, and proves reject plus workspace reset preserves the original accepted acceleration. The Transactions owner defines this fixed-buffer contract.

@@ -2,6 +2,26 @@ import SwiftMechanics
 import Testing
 
 @Suite struct RuntimeTransactionsTests {
+    @Test func accelerationReadsCurrentTrialAndRejectsBoundsWithoutChangingAcceptedState() throws {
+        guard #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) else { Issue.record("Runtime requires the declared Synchronization OS baseline."); return }
+        let session = try RuntimeFixtures.session(), prefix = session.snapshot()
+        _ = try session.performTrial { (trial: inout RuntimeTrial, control: inout RuntimeStepControl) throws(RuntimeFailure) in
+            #expect(try trial.acceleration(at: 0) == prefix.physical.state.acceleration[0])
+            try trial.setAcceleration(0.75, at: 0)
+            #expect(try trial.acceleration(at: 0) == 0.75)
+            for index in [-1, 1] {
+                do throws(RuntimeFailure) { _ = try trial.acceleration(at: index); Issue.record("Out-of-bounds acceleration read succeeded.") }
+                catch { #expect(error.code == .invalidInput) }
+            }
+            return .reject
+        }
+        #expect(session.snapshot() == prefix)
+        _ = try session.performTrial { (trial: inout RuntimeTrial, control: inout RuntimeStepControl) throws(RuntimeFailure) in
+            #expect(try trial.acceleration(at: 0) == prefix.physical.state.acceleration[0])
+            return .reject
+        }
+        #expect(session.snapshot() == prefix)
+    }
     @Test func acceptRejectRestoreWholeContributorAndRandomState() throws {
         guard #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) else { Issue.record("Runtime requires the declared Synchronization OS baseline."); return }
         let session = try RuntimeFixtures.session(), control = try RuntimeFixtures.session()

@@ -14,8 +14,11 @@ internal final class MechanismAcceptanceContext: Sendable {
     let timeScale:Double
     let energyScale:Double
     let scales:[Double]
+    let prescribedRoot:PrescribedRootConstraint?
     init(system:PhysicalRigidDynamicsSystem,sample:VelocityConstraintSample,base:[Double],values:[Double],drive:[Double],
-         multipliers:[Double],reaction:[Double],rank:ConstraintRankEvidence,impulse:Bool,policy:MechanismSolvePolicy) {
+         multipliers:[Double],reaction:[Double],rank:ConstraintRankEvidence,impulse:Bool,policy:MechanismSolvePolicy,
+         prescribedRoot:PrescribedRootConstraint? = nil) {
+        self.prescribedRoot=prescribedRoot
         self.system=system;self.sample=sample;self.base=base;self.values=values;self.drive=drive
         self.multipliers=multipliers;self.reaction=reaction;self.rank=rank;self.impulse=impulse;self.policy=policy
         count=system.velocityCount;timeScale=sample.layout.timeScale;energyScale=policy.dynamics.energyScale;scales=sample.layout.scales

@@ -42,3 +42,6 @@ AF24 frozen Native handoff: the registered exact Swift 6.4.0 release graph `.bui
 ### AF25 lower Native qualification
 
 The frozen source executed 28 declarations in six suites: 27 initially passed; the allocation stale-gate accounting test was corrected and all seven PhysicalAllocation declarations then passed. Exact Swift 6.4.0 release/macOS 27 arm64, `.build/ar01-native`, `-j 4`, and a 240-second external timeout were used. Logs: `.build/af25-lower-native-tests.log` and the allocation-only `.build/af25-allocation-native-recheck.log`. Original production did not change during test-helper corrections. Source/profile composition is canonical in [FoundationVerification](../../Verification/FoundationVerification/DESIGN.md#af25-lower-integrated-qualification); full upper/root/loop domains remain separate.
+
+### AF25 selected proof ownership
+AF25 PrescribedRootGeometryTests owns actual root-only planar/spatial full-layout empty rows and active rank0, D-only perturbed-loop projection, unchanged canonical P, public source refusal, missing active-rank capability and root/geometry identity collisions.

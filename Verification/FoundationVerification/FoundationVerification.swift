@@ -1,50 +1,74 @@
 import SwiftMechanics
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(WASILibc)
+import WASILibc
+#elseif canImport(Glibc)
+import Glibc
+#else
+#error("The verification profile must provide standard output diagnostics.")
+#endif
 
 @main
 struct FoundationVerification {
     static func main() throws(FoundationVerificationError) {
+        var stage: StaticString = "initial"
         do {
-            try verify()
-            try verifyNumericalExtensions()
-            try verifyKinematics()
-            try verifyLoads()
-            try verifyCompiler()
-            try verifyMachines()
-            try verifyCollision()
-            try verifyDynamics()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyPlanarPhysicalLower() }
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyPrescribedBaseLower(); try verifyPlanarReactionLower() }
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyClosedLoopReactions() }
-            try verifyFlexible()
-            try verifyContactLaws()
-            try verifyMaterialSites()
-            try verifyContactResponse()
-            try verifyExchange()
-            try verifyConstraints()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyGeometricConstraints() }
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyGeometricEvolution() }
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyPlanarEvolution() }
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyMovingBaseEvolution() }
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyLoadedSleepMechanisms() }
-            try verifyTransmissions()
-            try verifyEquilibrium()
-            try verifyContactPatches()
-            try verifyDeformingContact()
-            try verifyStructuralAnalysis()
-            try verifyDerivatives()
-            try verifyOptimization()
-            try verifyGranular()
-            try verifyPlanarFluids()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyMovingAnchorRuntime(); try verifyRuntimeReplacement(); try verifyMechanisms(); try verifyNonlinearMechanisms(); try verifySleepMechanisms(); try verifyReactionPaths(); try verifyTopologyContinuation(); try verifyFluids(); try verifyPlanarRuntime(); try verifyIntegration(); try verifyActuation(); try verifyHybrid() }
+            stage = "verify"; try verify()
+            stage = "verifyNumericalExtensions"; try verifyNumericalExtensions()
+            stage = "verifyKinematics"; try verifyKinematics()
+            stage = "verifyLoads"; try verifyLoads()
+            stage = "verifyCompiler"; try verifyCompiler()
+            stage = "verifyMachines"; try verifyMachines()
+            stage = "verifyCollision"; try verifyCollision()
+            stage = "verifyDynamics"; try verifyDynamics()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPlanarPhysicalLower"; try verifyPlanarPhysicalLower() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPrescribedBaseLower"; try verifyPrescribedBaseLower(); stage = "verifyPlanarReactionLower"; try verifyPlanarReactionLower() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyClosedLoopReactions"; try verifyClosedLoopReactions() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) {
+                stage = "verifyPlanarClosedLoopReactions"; try verifyPlanarClosedLoopReactions()
+                stage = "verifyPrescribedRootMotion"; try verifyPrescribedRootMotion()
+                stage = "verifyPrescribedRotorEvolution"; try verifyPrescribedRotorEvolution()
+            }
+            stage = "verifyFlexible"; try verifyFlexible()
+            stage = "verifyContactLaws"; try verifyContactLaws()
+            stage = "verifyMaterialSites"; try verifyMaterialSites()
+            stage = "verifyContactResponse"; try verifyContactResponse()
+            stage = "verifyExchange"; try verifyExchange()
+            stage = "verifyConstraints"; try verifyConstraints()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyGeometricConstraints"; try verifyGeometricConstraints() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyGeometricEvolution"; try verifyGeometricEvolution() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPlanarEvolution"; try verifyPlanarEvolution() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyMovingBaseEvolution"; try verifyMovingBaseEvolution() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyLoadedSleepMechanisms"; try verifyLoadedSleepMechanisms() }
+            stage = "verifyTransmissions"; try verifyTransmissions()
+            stage = "verifyEquilibrium"; try verifyEquilibrium()
+            stage = "verifyContactPatches"; try verifyContactPatches()
+            stage = "verifyDeformingContact"; try verifyDeformingContact()
+            stage = "verifyStructuralAnalysis"; try verifyStructuralAnalysis()
+            stage = "verifyDerivatives"; try verifyDerivatives()
+            stage = "verifyOptimization"; try verifyOptimization()
+            stage = "verifyGranular"; try verifyGranular()
+            stage = "verifyPlanarFluids"; try verifyPlanarFluids()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyRuntime"; try verifyRuntime(); stage = "verifyMovingAnchorRuntime"; try verifyMovingAnchorRuntime(); stage = "verifyRuntimeReplacement"; try verifyRuntimeReplacement(); stage = "verifyMechanisms"; try verifyMechanisms(); stage = "verifyNonlinearMechanisms"; try verifyNonlinearMechanisms(); stage = "verifySleepMechanisms"; try verifySleepMechanisms(); stage = "verifyReactionPaths"; try verifyReactionPaths(); stage = "verifyTopologyContinuation"; try verifyTopologyContinuation(); stage = "verifyFluids"; try verifyFluids(); stage = "verifyPlanarRuntime"; try verifyPlanarRuntime(); stage = "verifyIntegration"; try verifyIntegration(); stage = "verifyActuation"; try verifyActuation(); stage = "verifyHybrid"; try verifyHybrid() }
             else { throw FoundationVerificationError.unexpectedFailure }
         } catch {
+            print("Foundation verification failed in \(stage).")
+#if !hasFeature(Embedded)
+            print(error)
+#endif
+            _ = fflush(nil)
             throw .unexpectedFailure
         }
         print("Foundation runtime verification passed: inertia, solves, materials, kinematics, loads, compiler, collision, dynamics, tetrahedra, contact laws, coupled response, runtime transactions, explicit integration and native model exchange.")
     }
 
-    static func require(_ condition: Bool) throws(FoundationVerificationError) {
-        guard condition else { throw .analyticCheckFailed }
+    static func require(_ condition: Bool, file: StaticString = #fileID, line: UInt = #line) throws(FoundationVerificationError) {
+        guard condition else {
+            print("Analytic check failed at \(file):\(line).")
+            _ = fflush(nil)
+            throw .analyticCheckFailed
+        }
     }
 
     private static func verify() throws {

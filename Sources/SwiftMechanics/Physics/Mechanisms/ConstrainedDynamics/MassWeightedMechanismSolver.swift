@@ -1,11 +1,35 @@
 
-public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving, PhysicalConstrainedMechanismSolving {
+public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving, PhysicalConstrainedMechanismSolving, PrescribedRootMechanismSolving {
     private let suppliers: MechanismPhysicalSuppliers
     private let rankAnalyzer: any ConstraintRankAnalyzing
     private let linear: any LinearSolving<Double>
     public init(dynamics: any RigidDynamicsSolving = DenseRigidDynamics(), equations: any RigidEquationComputing = RigidEquationKernel(),
                 rank: any ConstraintRankAnalyzing = WeightedConstraintAssembler(), linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
         suppliers = .spatial(dynamics,equations); rankAnalyzer=rank; self.linear=linear
+    }
+    @inline(never)
+    public func acceleration(_ constraint:PrescribedRootConstraint,drive:[Double],policy:MechanismSolvePolicy,
+                             work:inout NumericalWork,dynamicsWork:inout NumericalWork,rankWork:inout NumericalWork,
+                             linearWork:inout NumericalWork) throws(MechanismError) -> PhysicalConstrainedMotion {
+        guard drive.count == constraint.system.velocityCount,drive.allSatisfy({$0.isFinite}) else { throw .invalidShape }
+        for index in constraint.knownCoordinates { guard drive[index] == 0 else { throw .invalidInput } }
+        try admit(constraint.system,sample:constraint.sample,policy:policy,work:&work)
+        let free=try dynamicsCall(work:&dynamicsWork) { ledger throws(DynamicsError) in
+            try suppliers.solve(constraint.system,values:drive,massOnly:false,policy:policy.dynamics,work:&ledger)
+        }
+        guard free.acceleration.count == constraint.system.velocityCount else { throw .invalidShape }
+        let motion=try solve(constraint.system,sample:constraint.sample,base:free.acceleration,drive:drive,impulse:false,policy:policy,
+            work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork,prescribedRoot:constraint)
+        return PhysicalConstrainedMotion(system:constraint.system,motion:motion)
+    }
+    @inline(never)
+    public func reconcileVelocity(_ constraint:PrescribedRootConstraint,policy:MechanismSolvePolicy,
+                                  work:inout NumericalWork,dynamicsWork:inout NumericalWork,rankWork:inout NumericalWork,
+                                  linearWork:inout NumericalWork) throws(MechanismError) -> PhysicalConstrainedMotion {
+        try admit(constraint.system,sample:constraint.sample,policy:policy,work:&work)
+        let motion=try solve(constraint.system,sample:constraint.sample,base:constraint.system.input.velocity,drive:[],impulse:true,policy:policy,
+            work:&work,dynamicsWork:&dynamicsWork,rankWork:&rankWork,linearWork:&linearWork,prescribedRoot:constraint)
+        return PhysicalConstrainedMotion(system:constraint.system,motion:motion)
     }
     public init(physicalDynamics: any PhysicalRigidDynamicsSolving, physicalEquations: any PhysicalRigidEquationComputing,
                 rank: any ConstraintRankAnalyzing = WeightedConstraintAssembler(), linear: any LinearSolving<Double> = ReferenceLinearSolver<Double>()) {
@@ -89,7 +113,8 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving, Physical
     @inline(never)
     private func solve(_ system: PhysicalRigidDynamicsSystem, sample: VelocityConstraintSample, base: [Double], drive:[Double], impulse:Bool,
                        policy:MechanismSolvePolicy, work:inout NumericalWork, dynamicsWork:inout NumericalWork,
-                       rankWork:inout NumericalWork, linearWork:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
+                       rankWork:inout NumericalWork, linearWork:inout NumericalWork,
+                       prescribedRoot:PrescribedRootConstraint? = nil) throws(MechanismError) -> ConstrainedMotion {
         let n=system.velocityCount,m=sample.rowIDs.count,t=sample.layout.timeScale,e=policy.dynamics.energyScale,s=sample.layout.scales
         try MechanismArithmetic.charge(1,&rankWork)
         let before=rankWork
@@ -99,6 +124,9 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving, Physical
         if let rankFailure { throw .constraint(rankFailure) }
         guard let rank,rank.rank >= 0,rank.rank <= min(n,m),rank.independentRows.count == rank.rank,
               rank.reactionNullity == m-rank.rank else { throw .invalidRankEvidence }
+        if let root=prescribedRoot {
+            try acceptPrescribedRootRank(root,rank:rank,policy:policy,work:&work)
+        }
         for i in rank.independentRows.indices {
             guard sample.rowIDs.indices.contains(rank.independentRows[i]), !rank.independentRows[..<i].contains(rank.independentRows[i]) else { throw .invalidRankEvidence }
         }
@@ -138,19 +166,61 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving, Physical
             }
         }
         let acceptance=MechanismAcceptanceContext(system:system,sample:sample,base:base,values:values,drive:drive,
-            multipliers:multipliers,reaction:reaction,rank:rank,impulse:impulse,policy:policy)
+            multipliers:multipliers,reaction:reaction,rank:rank,impulse:impulse,policy:policy,prescribedRoot:prescribedRoot)
         return try accept(acceptance,work:&work,dynamicsWork:&dynamicsWork)
     }
     @inline(never)
-    private func accept(_ context:MechanismAcceptanceContext,work:inout NumericalWork,
+    private func acceptPrescribedRootRank(_ root:PrescribedRootConstraint,rank:ConstraintRankEvidence,
+                                          policy:MechanismSolvePolicy,work:inout NumericalWork) throws(MechanismError) {
+        let original:ActiveCoordinateRankEvidence
+        do throws(ConstraintError) { original=try WeightedConstraintAssembler().rank(root.geometry,activeCoordinates:root.dynamicCoordinates,policy:policy.constraints,work:&work) }
+        catch { throw .constraint(error) }
+        guard rank.rank == root.knownCoordinates.count+original.rank.rank,
+              rank.reactionNullity == original.rank.reactionNullity else { throw .invalidRankEvidence }
+    }
+    @inline(never)
+    private func accept(_ supplied:MechanismAcceptanceContext,work:inout NumericalWork,
                         dynamicsWork:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
+        // Canonical known motion is part of acceptance before original row and force evaluation.
+        let context=canonicalRootContext(supplied)
         // Preserve the original buffer allocation order; future publication provenance exists only in its final phase.
         var original=[Double](repeating:0,count:context.count)
         let rowResidual=try acceptOriginalRows(context,work:&work)
         let energy=try originalPhysicalForce(context,original:&original,work:&work,dynamicsWork:&dynamicsWork)
-        let physicalResidual=try acceptOriginalMomentum(context,original:original,work:&work)
+        let balanced=try completeRootBalance(context,original:original,work:&work)
+        let physicalResidual=try acceptOriginalMomentum(balanced,original:original,work:&work)
         try MechanismArithmetic.check(context.policy)
-        return publishAcceptedMotion(context,rowResidual:rowResidual,physicalResidual:physicalResidual,energy:energy)
+        return publishAcceptedMotion(balanced,rowResidual:rowResidual,physicalResidual:physicalResidual,energy:energy)
+    }
+    @inline(never)
+    private func canonicalRootContext(_ context:MechanismAcceptanceContext) -> MechanismAcceptanceContext {
+        guard let root=context.prescribedRoot else { return context }
+        var values=context.values
+        for index in root.knownCoordinates { values[index]=context.impulse ? root.base.v[index] : root.base.a[index] }
+        return MechanismAcceptanceContext(system:context.system,sample:context.sample,base:context.base,values:values,
+            drive:context.drive,multipliers:context.multipliers,reaction:context.reaction,rank:context.rank,
+            impulse:context.impulse,policy:context.policy,prescribedRoot:root)
+    }
+    @inline(never)
+    private func completeRootBalance(_ context:MechanismAcceptanceContext,original:[Double],work:inout NumericalWork) throws(MechanismError) -> MechanismAcceptanceContext {
+        guard let root=context.prescribedRoot else { return context }
+        let k=root.knownCoordinates.count,n=context.count
+        var multipliers=context.multipliers,reaction=context.reaction
+        for i in root.knownCoordinates {
+            var geometry=0.0
+            for row in k..<context.sample.rowIDs.count {
+                try MechanismArithmetic.charge(4,&work)
+                geometry=try MechanismArithmetic.finite(geometry+context.sample.rows[row*n+i]*multipliers[row]/context.scales[i])
+            }
+            let applied:Double
+            if context.impulse { applied=0 }
+            else { do throws(DynamicsError) { applied=context.drive[i]+(try context.system.forces.total(at:i)) } catch { throw .dynamics(error) } }
+            try MechanismArithmetic.charge(5,&work)
+            let effort=try MechanismArithmetic.finite(original[i]-applied-geometry)
+            multipliers[i]=try MechanismArithmetic.finite(effort*context.scales[i]);reaction[i]=try MechanismArithmetic.finite(geometry+effort)
+        }
+        return MechanismAcceptanceContext(system:context.system,sample:context.sample,base:context.base,values:context.values,
+            drive:context.drive,multipliers:multipliers,reaction:reaction,rank:context.rank,impulse:context.impulse,policy:context.policy,prescribedRoot:root)
     }
     @inline(never)
     private func acceptOriginalRows(_ context:MechanismAcceptanceContext,work:inout NumericalWork) throws(MechanismError) -> Double {
