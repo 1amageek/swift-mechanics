@@ -1,7 +1,7 @@
 # Observations component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). IM25 owns SE-001..003. This is an unregistered AF18 source dispatch, based on qualified kinematic/dynamic contracts and selected mechanism handoff 965c326. model_records owns only new ObservationRecords, KinematicObservations, InertialObservations and WrenchObservations child directories plus Tests/MechanicsObservationsTests. Root owns this index, graph/probes/scripts/progress, producer changes and commits. Children are indexed only after their contracts exist.
+Parent: [responsibility owner](../DESIGN.md). IM25 owns SE-001..003. The stopped AF18 source handoff remains unregistered. AF30 resumes it on the qualified48cf8df supplier baseline. No live model_records writer exists; root transfers exclusive ObservationRecords, KinematicObservations, InertialObservations and WrenchObservations child/source/test ownership to reaction_paths. The existing selected13 physical cases and original contracts remain obligations, with the concrete successful-supplier association counterexamples closed before registration. Root owns this index, graph/probes/scripts/progress, producer changes and commits. Children are indexed only after their contracts exist.
 
 | Child | Owned contract |
 |---|---|
@@ -46,3 +46,9 @@ Independent accelerated/rotating motion, frame/mount covariance, free-fall zero 
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF30 source-bound supplier qualification
+
+The source owner closes two concrete original-path counterexamples: an injected FrameMotionComposing returning a stationary identity for a moving offset sensor, and an injected KinematicObserving retaining source/header IDs while changing the mounting offset. Original source/mount pose, linear/angular velocity and acceleration must match before IMU/wrench publication. Child contracts own exact association, typed refusal and additional bounded work before source declarations. Existing suppliers, sensor schedules, noise and general bearing decomposition stay outside this responsibility. Root freezes and registers the actual source/tests before selected Native and original WASM/Embedded public qualification.
+
+AF30 frozen source/test Native and original selected public Native/ordinary-WASM/Embedded qualification passed; [canonical evidence](../../../../Verification/FoundationVerification/DESIGN.md#af30-selected-observation-qualification) owns exact execution and131072-byte guard results. This admission does not certify the unavailable bearing port or IM26 schedules.

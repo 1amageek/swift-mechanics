@@ -1,10 +1,10 @@
 # SwiftMechanicsCAD module
 
 ## Purpose and Scope
-Parent [companion package](../../DESIGN.md); children [GeometryAdmission](GeometryAdmission/DESIGN.md) and [GearBindings](GearBindings/DESIGN.md). Owns exact geometry-source admission, occurrence-bound queries and explicit gear-to-shaft association.
+Parent [companion package](../../DESIGN.md); children [GeometryAdmission](GeometryAdmission/DESIGN.md) and [GearBindings](GearBindings/DESIGN.md), plus the AF30 [GearReinitialization](GearReinitialization/DESIGN.md) responsibility. Owns exact geometry-source admission, occurrence-bound queries and explicit gear-to-shaft association.
 
 ## Responsibilities and Boundaries
-Consume CAD public records and builtin evaluation, return source-associated mechanics points/directions and original CAD query values. Validate explicit gear-to-shaft association and delegate transmission compilation and motion/load equations to the original mechanics owners. Caller owns body/frame/occurrence identity, placement, inertia and material selection. This module supplies neither a CAD kernel nor a dynamics, contact-proxy, FEM, transmission-law or migration algorithm.
+Consume CAD public records and builtin evaluation, return source-associated mechanics points/directions and original CAD query values. Validate explicit gear-to-shaft association and delegate transmission compilation and motion/load equations to the original mechanics owners. Caller owns body/frame/occurrence identity, placement, inertia and material selection. The AF30 explicit gear reinitialization coordinator delegates physical admission and atomic replacement to the original mechanics owners. This module supplies neither a CAD kernel nor a dynamics, contact-proxy, FEM, transmission-law or compatible-state migration algorithm.
 
 ## Related Designs
 | Design | Relationship | Contract used | Summary | Caution |
@@ -31,3 +31,7 @@ Changes to source association or coordinate conversion require GeometryAdmission
 AF29 GearBindings implementation is owned by admission_authority after this shared registration. Its child contract owns selected ideal external spur support and explicit refusal of other requested fidelities. Root owns registration, public integration and commits; the owner uses an immutable baseline with only its authorized overlay for independent proof.
 
 AF28 module source is frozen and its selected public contract passed the [whole companion Native tests](../../Tests/SwiftMechanicsCADTests/DESIGN.md#executed-af28-native-evidence). Root's external public composition remains the direct upper proof owner.
+
+## AF30 explicit edited-gear reinitialization
+
+Admission_authority exclusively owns GearReinitialization and its test child. Original GeometryAdmission, GearBindings, CAD and core providers remain read-only. The selected operation re-admits the edited document, actually compiles a caller-declared fresh spatial fixed-root two-scalar-shaft descriptor, binds original ideal external spur gears, proves original constrained cold q/v/a/time and delegates whole-checkpoint model replacement to Runtime. Caller inertia is explicit; no exact CAD moments are claimed. CAD recipe and reset integration records must be source/model/time/sequence-bound before publication; unknown contributors cannot be dropped. The compatible migration branch is an explicit marked refusal until its physical/lifecycle proof exists. Child contracts precede Swift and own exact APIs/lifetime/failures. Root owns parent registration, immutable proof dispatch and commits.

@@ -23,6 +23,7 @@ mounted geometric motion + exact-time gravity -> sensor-axis gyro/specific force
 
 ## Contracts and Invariants
 Gyro is R_SW omega_W; specific force is R_SW(a_sensor_W - g_W(x_sensor)). Gravity is explicitly bound to source stamp, exact time and world frame, and evaluated at that instant without integrating its time derivative. Fixed mounting offset uses actual alpha-cross-offset and centripetal terms. Acceleration provenance remains explicit.
+AF30 uses the shared exact reference-equivalent mounted-result acceptance before evaluating the field or rotating gyro/specific force. A genuine supplier result for a different sensorToBody transform with unchanged identity headers is insufficient and fails `invalidSupplierEvidence`. Additional original verification is charged to the same caller budget; original gravity evaluation and specific-force equations remain unchanged.
 [ObservationRecords](../ObservationRecords/DESIGN.md#contracts-and-invariants) owns the shared SI, exact-time, temporal, required-service and failure contract. This child adds only the quantity meanings above.
 
 ## State, Ownership, and Lifecycle
@@ -33,3 +34,4 @@ Source/result ownership and all-target Sendable are defined by [ObservationRecor
 
 ## Verification and Change Impact
 Free-fall zero specific force, stationary supported minus-gravity, offcenter centripetal/tangential acceleration and rotated gyro, instantaneous spatial gravity with no time-derivative integration, stale-time and actual supplier ledger replacement rejection. [Test owner](../../../../../Tests/MechanicsObservationsTests/DESIGN.md) owns execution. Shared evidence/profile limits are in [ObservationRecords](../ObservationRecords/DESIGN.md#verification-and-change-impact). Changed quantity semantics require these affected oracles and consumers to be requalified.
+The existing gravity/supplier case adds a real ReferenceKinematicObserver query at a changed fixed offset with identical sensor/body/frame IDs; no IMU sample may be published from that evidence.

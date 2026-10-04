@@ -21,7 +21,7 @@ core package -> no adapter/CAD dependency
 ```
 
 ## Contracts and Invariants
-The companion manifest alone resolves CADCore, CADGeometry, CADTopology, CADIR, CADModeling and CADKernel. CAD's package graph also resolves its pinned OpenUSD and collections dependencies despite selected targets not linking exchange. Local mechanics dependency is intentional development configuration, not release certification. No adapter result grants Runtime model publication or physical-state migration authority.
+The companion manifest alone resolves CADCore, CADGeometry, CADTopology, CADIR, CADModeling and CADKernel. CAD's package graph also resolves its pinned OpenUSD and collections dependencies despite selected targets not linking exchange. Local mechanics dependency is intentional development configuration, not release certification. Geometry/query results grant no Runtime model publication or physical-state migration authority. The AF30 explicit reinitialization coordinator must delegate atomic publication to Runtime after the original source-bound physical cold-admission and complete contributor-catalog contracts pass; compatible migration remains unsupported.
 
 ## Verification and Change Impact
 The adapter owner runs the frozen whole companion package tests using Swift 6.4.0 in an immutable mechanics baseline copy, with setup timeout 1200 seconds, four jobs and behavior timeout 240 seconds. Root owns external public composition and commits. Parent core profile evidence remains separate; no unexecuted CAD profile is qualified.

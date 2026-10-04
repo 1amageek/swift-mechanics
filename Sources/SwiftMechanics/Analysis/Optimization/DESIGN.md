@@ -1,7 +1,7 @@
 # Optimization component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). Own IM32 / OP-004 and OP-009 under [SPEC](../../../../SPEC.md). The AF18 convex handoff is registered and qualified. The AF27 nonlinear child is registered and selected-profile qualified; [actual evidence](../../../../Verification/FoundationVerification/DESIGN.md#af27-integrated-selected-qualification) owns the Native/WASM/Embedded proof. Physical identification remains unimplemented. Lower child contracts precede production; child links are added only when their designs exist. The first complete handoff is bounded affine LP / strictly convex QP and its physical feasibility/optimality certificates. Broader nonlinear and mechanical estimation responsibilities remain assigned but unqualified.
+Parent: [responsibility owner](../DESIGN.md). Own IM32 / OP-004 and OP-009 under [SPEC](../../../../SPEC.md). The AF18 convex handoff is registered and qualified. The AF27 nonlinear child is registered and selected-profile qualified; [actual evidence](../../../../Verification/FoundationVerification/DESIGN.md#af27-integrated-selected-qualification) owns the Native/WASM/Embedded proof. AF30 dispatch owns physical identification; it remains unqualified until actual execution. Lower child contracts precede production; child links are added only when their designs exist. The first complete handoff is bounded affine LP / strictly convex QP and its physical feasibility/optimality certificates. Broader nonlinear and mechanical estimation responsibilities remain assigned but unqualified.
 
 | Child | Owned contract |
 |---|---|
@@ -12,7 +12,7 @@ Parent: [responsibility owner](../DESIGN.md). Own IM32 / OP-004 and OP-009 under
 The first handoff directly consumes Core, Model and Numerics. Nonlinear, Derivatives and Dynamics are later responsibility prerequisites, not imports of the initial convex implementation.
 
 ## Responsibilities and Boundaries
-linear_kernels exclusively owns new ProblemContracts, ConvexPrograms, NonlinearKKT and ParameterEstimation child directories plus Tests/MechanicsOptimizationTests. Root alone owns this index, shared registration/probes/scripts/progress, producer changes and commits. Other workers are present; all existing suppliers and the frozen Granular handoff are read-only. Own optimization/identifiability meanings; a root solver's residual is not an optimality certificate.
+linear_kernels exclusively owns new ProblemContracts, ConvexPrograms, NonlinearKKT child directories and their registered tests. AF30 assigns only the new ParameterIdentification child (replacing the previously undeclared planned ParameterEstimation name) and MechanicsParameterIdentificationTests to linear_kernels; existing producer and optimization children remain read-only. Root alone owns this index, shared registration/probes/scripts/progress, producer changes and commits. Other workers are present; all existing suppliers and the frozen Granular handoff are read-only. Own optimization/identifiability meanings; a root solver's residual is not an optimality certificate.
 
 ## Related Designs
 | Design | Relationship | Contract used | Cautions |
@@ -62,3 +62,7 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## AF27 nonlinear implementation resumption
 
 linear_kernels exclusively owns NonlinearKKT and Tests/MechanicsNonlinearOptimizationTests under the existing AF19 mathematical contract. The excluded child had no source files at dispatch; its actual supplier paths now support the qualified selected Native/WASM/Embedded handoff. Existing convex producers/tests remain read-only. Root owns this index, registration, public composition and commits. See [AF27 dispatch](../../../../IMPLEMENTATION_PLAN.md#af27-independent-source-and-verification-dispatch).
+
+## AF30 physical parameter identification
+
+Linear_kernels exclusively owns the new [ParameterIdentification](ParameterIdentification/DESIGN.md) and its dedicated test target. The selected immutable physical source is one fixed-base spatial prismatic dynamic body with known geometry/axis/COM/per-mass inertia shape; unknown positive mass and nonnegative linear dashpot. Exact q/v/a/time-revision observations, measured conjugate effort and positive force sigma are explicit inputs. Actual rigid Newton-Euler, passive dashpot and analytic mechanical parameter products produce residuals/sensitivities; no scalar-only regression or finite-difference provider substitutes their authority. The original bounded convex optimizer consumes the normalized weighted problem. Rebuilt fitted physical residual/objective/gradient/box KKT, identifiable directions and declared uncertainty assumptions decide publication. Child design owns exact units, source/lifetime, noise-domain, failures and budgets before Swift. Root owns shared graph/index/probes/progress and commits. Unrelated nonlinear/latent-trajectory/general geometry domains are not certified.

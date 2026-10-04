@@ -65,3 +65,7 @@ python3 /Users/1amageek/Desktop/3D/swift-mechanics/.build/af28-independent-cad-a
 ```
 
 Final 17 Swift files match the executed private source byte-for-byte and are frozen. Final aggregate SHA-256 using the same path/file-hash algorithm is `314c5a45ebfe94a847439362d7d9170719f17be149babc536eacfe44aa4fd3b6`. `.build-native-setup-signature-review.log` records final compile/link; `.build-native-behavior-signature-review.log` records the targeted success, SHA-256 `f91c711867a1d55d243141a6471b455396dfa6e784af4658ad1150478de09396`. `.build-native-evidence-signature-review.json` retains final file/log hashes. No source, provider, manifest or unrelated test was changed by this scoped correction.
+
+## AF30 child ownership
+
+[GearReinitialization](GearReinitialization/DESIGN.md) owns the new explicit edited-gear restart and complete checkpoint/refusal proof. Its source remains excluded until the frozen Native handoff; actual execution evidence must precede a success claim. Root owns this parent index, package registration and cumulative optional integration.
