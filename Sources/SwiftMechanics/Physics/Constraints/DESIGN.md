@@ -71,3 +71,6 @@ AF22 selected lower qualification is owned by [FoundationVerification](../../../
 ## AF25 lower ownership frontier
 
 [GeometricRelations](GeometricRelations/DESIGN.md) owns the additive distinction between original multiplier nullity and unique endpoint wrenches. [AssemblyProjection](AssemblyProjection/DESIGN.md) owns active-coordinate rank on the original full layout, including empty active coordinates and zero original rows. These are disjoint lower writers. Full prescribed-root geometry and [ManifoldProjection](ManifoldProjection/DESIGN.md) consume frozen, behaviorally checked contracts after IM16.27; GeometricRelations mutable ownership transfers explicitly at that boundary. [Implementation plan](../../../../IMPLEMENTATION_PLAN.md#af25-remaining-planar-reactions-and-full-prescribed-root-frontier) owns dispatch; child designs own detailed contracts.
+
+
+AF25 selected prescribed-root geometry and D-only projection now compose the frozen lower contracts. GeometricRelations and ManifoldProjection own their original-row, source-binding and lifetime guarantees. Their changed contracts and inherited paths have [final integrated behavior evidence](../../../../Verification/FoundationVerification/DESIGN.md#af25-upper-integrated-qualification); broader domains remain child-declared refusals.

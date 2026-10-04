@@ -340,3 +340,52 @@ The final unmodified public artifact separately built, linked and executed every
 Independent public behavior verifies noncommuting spatial/body-angular q/v/a/qdot, unwrapped planar angle, exact source/time/chart/law refusal, full original empty-active/zero-row rank, actual planar COM/Iz Newton balance, distinct root gravity, raw off-plane load/couple cancellation and ordinary coincidence rank2/nullity1 with physical uniqueness distinct from multiplier nonuniqueness. Wrong acceleration, duplicate active physical rows and stale source cannot publish accepted output. Upper full-root solve/power/evolution/history and planar closed-loop physical composition remain IM16.28.
 
 A private diagnostic copy instrumented all 18,202 stack-pointer writes against the same original 128 KiB boundary (initial308944; lower177872), completed every witness and exited zero (`.build/af25-stack-diagnostic/lower-embedded-guard.log`). This supplements the unmodified artifacts rather than replacing their qualification. The exercised synchronous WASI paths do not establish actual multithreading, minimum-OS runtime or full IM16/210 completion.
+
+## AF25 Upper Public Composition Contract
+
+Root owns independent public callers after the frozen lower qualification and upper child interface handoff. The full prescribed-root caller uses actual prescribedKinematic floating-root compiler authority in both planar3/3 and spatial7/6 layouts, original nonzero COM and nonidentity orientation/inertia, root-only empty geometry and actual dynamic descendants. The planar loop caller consumes actual original PhysicalConstrainedMotion and every original coincidence row including structural-zero Z; it checks physical uniqueness independently of multiplier uniqueness. Child authority and algorithm contracts remain in their canonical designs.
+
+```text
+actual prescribed floating-root compiler authority + original analytic law
+ -> sealed full-root geometry / D-only projection
+ -> full original M/J with genuine root identity motion rows
+ -> original force acceptance + separately identified root effort/power
+ -> actual accepted stage/endpoint + atomic history + fresh cold replay
+
+actual planar coincidence + accepted physical motion + frozen allocation certificate
+ -> identified original endpoint action/reaction
+ -> reduced original tree/support balance -> independent Newton/Euler oracle
+```
+
+For the root-only source, independently compute Vcom=V+omega cross r and Acom=c+alpha cross r+omega cross(omega cross r), F=m Acom, tauOrigin=Iworld alpha+omega cross(Iworld omega)+r cross F, and K=0.5m|Vcom|²+0.5omega dot Iworld omega. With no loads, original root actuator power must equal Kdot and integrated work must equal DeltaK. Actual body-angular coordinate effort is obtained by the original world/body rotation; neither generalized power nor physical actuator effort may be moved to anchor drift. Descendant fixtures independently check relative acceleration/root effort and power partition, not just motion-row residual.
+
+Planar ordinary coincidence at a nonsingular configuration retains rank2/nullity1 and all original XYZ row IDs. Independent endpoint force, support/cut moment, normalization invariance, changed source/time/inertia, active duplicate, unrepresented drive and original-residual refusal establish physical behavior. Selected owner tests also establish caller-prefix/cancellation/capacity and immutable physical/history/RNG failure.
+
+Root runs affected Native after both owner source/test freezes, then cumulative registered Native and original Native/WASM/Embedded public build/link/runtime using the unchanged profiles and original128KiB reservation. Fixture construction, geometry, projection, solving, power, accepted evolution, history and assertion phases remain separate noninline lifetimes. Supplemental private diagnostics do not replace original artifact evidence. No whole IM16/210, actual WASI multithreading, periodic/piecewise-law or unsupported bearing-domain qualification follows from this prospective contract.
+
+## AF25 Upper Native Qualification
+
+The frozen upper implementation has actual Native behavior evidence under Swift 6.4.0 release on arm64 macOS 27. Source qualification uses the original matrices, tolerances, rows and force/energy acceptance. The added RuntimeTrial acceleration reader exposes only the operation-owned fixed scalar buffer and has actual read/bounds/reject-reset proof.
+
+| Evidence | Result | Scope |
+|---|---|---|
+| `.build/af25-upper-native-tests-4.log` | Four unaffected selected runs passed; root and loop fixture Gram capability findings isolated | Runtime transactions, nonlinear evolution, geometry and dynamics |
+| `.build/af25-upper-native-finding-recheck.log` | 46 declarations / 15 suites passed, exit 0 | Mechanisms and closed-loop reactions after fixture-only LU/bias corrections |
+| Combined selected Native evidence | 154 declarations / 42 suites passed | Five affected mechanics targets plus RuntimeTransactions |
+| `.build/af25-upper-native-cumulative.log` | 693 declarations / 171 suites / 39 runs passed, exit 0 | All currently registered Native tests |
+
+Concrete repairs: required RuntimeTrial acceleration read; two test-only missing-try/gravity connections; root bias oracle preserves declared left-associated operations; independently accumulated constraint Gram matrices select LU explicitly because their bitwise symmetry is not guaranteed. Mirrored physical mass matrices retain Cholesky. No original physical equations or acceptance tolerances were changed to satisfy the fixtures.
+
+### AF25 upper integrated qualification
+
+Final frozen production and public callers passed all 693 registered Native declarations in 171 suites across 39 runs (`.build/af25-upper-native-cumulative-3.log`, exit 0). The final root-rank lifetime correction separately passed 116 declarations in 37 suites across SleepMechanism, NonlinearMechanism, Mechanisms and ClosedLoopReaction targets (`.build/af25-upper-native-root-rank-recheck.log`). The earlier Manifold/position lifetime correction passed 80 nonlinear/geometric declarations (`.build/af25-upper-native-lifetime-recheck-2.log`). One preceding Native build exceeded its 240-second bound before tests began; the frozen incremental retry built in 1.80 seconds and executed those 80 declarations. That timeout is not successful behavioral evidence.
+
+Unmodified final public artifacts built, linked and completed all AF25 and inherited Foundation witnesses with exit 0. Native logs are `.build/af25-upper-native-build-2.log` and `.build/af25-upper-native-runtime-2.log`; ordinary WASM logs are `.build/af25-upper-wasm-build-12.log` and `.build/af25-upper-wasm-runtime-12.log`; Embedded logs are `.build/af25-upper-embedded-build-3.log` and `.build/af25-upper-embedded-runtime-3.log`. Exact profiles remain Swift 6.4.0 release, macOS 27 arm64, matching `swift-6.4.0-RELEASE_wasm` / `swift-6.4.0-RELEASE_wasm-embedded` SDKs, EmbeddedUnicode, Node 24.19.0 WASI Preview 1, `-j 4`, `.build/ar01-{native,wasm,embedded}`, 240-second bounds and unchanged original 128 KiB WASI stack.
+
+Actual public execution covers planar/spatial root-only and descendant prescribed motion, noncommuting orientation/body-coordinate effort, original COM/inertia force and energy, separately identified root/drive/geometric/anchor power, integrated actuator work, all original rows/rank/nullity, dynamic-coordinate projection, exact existing/fresh-owner history replay and atomic forged-acceleration refusal. Planar coincidence execution covers original endpoint action/reaction, per-body and tree/support Newton/Euler balance, normalization invariance, offset gravity and rotated references, stale source/time/inertia, dependent active physical allocation and unrepresented-drive refusals. Structural-zero Z remains an original row; physical uniqueness is not multiplier uniqueness.
+
+Concrete source repairs preserved equations, tolerances, authority, operation order and supplier-prefix accounting. Opaque Manifold evaluation, original acceptance, iteration evidence and final publication now have separate rich-value lifetimes; geometric position assembly releases invocation evidence before validation/publication. The common constrained solve moves prescribed-root-only rank acceptance to a separate noninline phase at its original branch position, so legacy sleep does not reserve that root-only frame. Public endpoint owners retain immutable evidence and release restart return values before integration. Measured ordinary-WASM caller frame fell from 8400 to 4624 bytes, Manifold run from 14368 to 10800, and geometric assembly from 12912 to 2672; these individual frame measurements are not a claim of total stack consumption. Caller-only corrections supply inertia in actual compiled body order and admit the original identified load plus all endpoint actions before testing physical ambiguity. Independently accumulated constraint Gram matrices explicitly use LU; original mirrored mass matrices retain Cholesky.
+
+Separate private copies of the final original artifacts guarded every canonical stack-pointer write against the same 128 KiB boundary and completed every witness with exit 0. Ordinary WASM: initial1887488, lower1756416, 34212 guarded writes, `.build/af25-stack-diagnostic/upper-wasm-guard-12.log`. Embedded: initial318288, lower187216, 18802 writes, `.build/af25-stack-diagnostic/upper-embedded-guard-3.log`. These exercised-boundary diagnostics supplement the independent unmodified executions. No larger stack, alternate backend, changed acceptance tolerance or silent fallback establishes qualification.
+
+Source commit `76983de` and the integrated qualification commit close the selected AF25 upper handoff. Periodic/piecewise trajectories, broader physical allocation and prescribed-loop/support domains, actual WASI multithreading, other platforms and the complete IM16/210 objective remain open. Child designs retain detailed contract authority; parent indexes link this qualification rather than duplicating it.

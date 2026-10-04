@@ -50,3 +50,7 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ### AF24 lower physical handoff
 
 [RigidEquations](RigidEquations/DESIGN.md#af24-additive-planar-physical-source-contract) owns additive planar/source-tagged equation authority; [DenseDynamics](DenseDynamics/DESIGN.md#af24-additive-physical-solve-contract) owns consumed physical solve witnesses. Existing spatial public values and calls remain available. Actual lower behavioral qualification precedes planar constrained consumers; source dispatch grants no qualification.
+
+## AF25 original coordinate power composition
+
+[RigidEquations](RigidEquations/DESIGN.md) owns additive original physical coordinate partition evidence consumed by [NonlinearEvolution](../Mechanisms/NonlinearEvolution/DESIGN.md). Full-column MechanicalEnergy virtual power and genuine prescribed-anchor drift power retain their existing meanings. The child publishes known/dynamic coordinate, root-actuation, geometric-reaction, drive and known-load powers from the original full source; the parent introduces no alternative energy or force algorithm. Selected original-profile qualification belongs [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af25-upper-public-composition-contract); prospective interfaces alone are not evidence.
