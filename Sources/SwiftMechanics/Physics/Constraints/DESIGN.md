@@ -74,3 +74,8 @@ AF22 selected lower qualification is owned by [FoundationVerification](../../../
 
 
 AF25 selected prescribed-root geometry and D-only projection now compose the frozen lower contracts. GeometricRelations and ManifoldProjection own their original-row, source-binding and lifetime guarantees. Their changed contracts and inherited paths have [final integrated behavior evidence](../../../../Verification/FoundationVerification/DESIGN.md#af25-upper-integrated-qualification); broader domains remain child-declared refusals.
+
+
+## AF26 trajectory consumer ownership
+
+[GeometricRelations](GeometricRelations/DESIGN.md#af26-source-tagged-trajectory-binding-contract) and [ManifoldProjection](ManifoldProjection/DESIGN.md) consume the actually qualified lower trajectory ports and preserve original quadratic behavior. Child designs own new source-tagged frame/chart/law binding and D-only projection. [Upper parallel ownership](../../../../IMPLEMENTATION_PLAN.md#af26-upper-exclusive-implementation-and-independent-verification) assigns their exclusive writer and downstream nonlinear consumer; the frozen handoff is not upper behavioral evidence. Selected lower interaction is [qualified separately](../../../../Verification/FoundationVerification/DESIGN.md#af26-support-lifetime-correction-profile-evidence). Full constraint/trajectory domains remain open.

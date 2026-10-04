@@ -1,5 +1,5 @@
 /// Actual compiled root authority, independent of the prescribed-anchor inventory.
-public struct PrescribedRootBinding: Sendable {
+public struct PrescribedRootBinding: PrescribedRootBindingProviding {
     public let program: PrescribedBaseMotionProgram
     public let knownCoordinates: [Int]
     public let dynamicCoordinates: [Int]

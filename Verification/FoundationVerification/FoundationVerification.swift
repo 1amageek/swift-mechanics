@@ -32,6 +32,7 @@ struct FoundationVerification {
                 stage = "verifyTrajectoryLower"; try verifyTrajectoryLower()
                 stage = "verifyPrescribedRootSupports"; try verifyPrescribedRootSupports()
                 stage = "verifyQuadraticColdAuthority"; try verifyQuadraticColdAuthority()
+                stage = "verifyTrajectoryEvolution"; try verifyTrajectoryEvolution()
             }
             stage = "verifyFlexible"; try verifyFlexible()
             stage = "verifyContactLaws"; try verifyContactLaws()

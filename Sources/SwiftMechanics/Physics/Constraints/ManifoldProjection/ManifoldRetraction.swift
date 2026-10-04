@@ -6,7 +6,7 @@ public enum ManifoldRetraction {
         _=try CompiledGeometricConfigurationValidator().snapshot(system,state:state,policy:policy,work:&work)
         let tree=system.model.tree,n=state.v.count
         guard dimensionlessTangent.count == n,dimensionlessTangent.allSatisfy({$0.isFinite}) else { throw .invalidShape }
-        if let root=system.prescribedRoot {
+        if let root=system.rootBinding {
             for index in root.knownCoordinates { guard dimensionlessTangent[index] == 0 else { throw .invalidInput } }
         }
         try ManifoldArithmetic.charge(try ManifoldArithmetic.numeric { () throws(NumericalError) -> Int in try NumericalWork.product(512,n+1) },&work)
@@ -20,7 +20,7 @@ public enum ManifoldRetraction {
             guard result.count == positions.count else { throw .invalidShape }
             for (index,value) in zip(positions,result) { q[index]=value }
         }
-        switch system.prescribedRoot == nil ? tree.rootBase : .fixed {
+        switch system.rootBinding == nil ? tree.rootBase : .fixed {
         case .fixed: break
         case .planarFloating:
             let manifold=try ManifoldArithmetic.geometry { try JointManifold(.planar(firstTranslationAxis:.unitX,secondTranslationAxis:.unitY)) }

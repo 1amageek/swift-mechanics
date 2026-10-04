@@ -10,6 +10,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     public let maximumStageChartCorrection:Double
     public let publicationBudget:NumericalBudget
     private let physical:NonlinearPhysicalEngine
+    private let trajectoryAuthority:GeometricTrajectoryAuthority?
     private let motionSampler:any PrescribedMotionSampling
     private let baseSampler:any PrescribedBaseMotionSampling
     private let powerPartitioner:any PhysicalPowerPartitioning
@@ -51,6 +52,32 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
             maximumIdentityBytes:maximumIdentityBytes,suppliers:.physical(physicalKernel,physicalSolver),evaluator:evaluator,
             ranker:ranker,linear:linear,motionSampler:motionSampler)
     }
+    public convenience init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
+                projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
+                admission:DynamicsAdmission,maximumIdentityBytes:Int,physicalKernel:any PhysicalRigidEquationComputing,
+                prescribedRootSolver:any PrescribedRootMechanismSolving,activeRanker:any ActiveCoordinateRankAnalyzing,
+                evaluator:any HolonomicGeometryProviding = GeometricRelationEvaluator(),linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),
+                baseTrajectorySampler:any PrescribedBaseTrajectorySampling,powerPartitioner:any PhysicalPowerPartitioning = RigidEquationKernel(),
+                boundaryQuery:any PrescribedTrajectoryBoundaryQuerying = PrescribedTrajectoryBoundaryQuery()) throws(RuntimeFailure) {
+        guard let root=geometry.prescribedTrajectoryRoot else { throw RuntimeFailure(.invalidInput,message:"Source-tagged prescribed-root trajectory absent.") }
+        try self.init(identity:identity,geometry:geometry,drive:drive,policy:policy,projection:projection,
+            maximumStageChartCorrection:maximumStageChartCorrection,publicationBudget:publicationBudget,admission:admission,
+            maximumIdentityBytes:maximumIdentityBytes,suppliers:.prescribed(physicalKernel,prescribedRootSolver),evaluator:evaluator,
+            linear:linear,activeRanker:activeRanker,powerPartitioner:powerPartitioner,
+            trajectoryAuthority:GeometricTrajectoryAuthority(base:root.program,sampler:baseTrajectorySampler,query:boundaryQuery))
+    }
+    public convenience init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
+                projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
+                admission:DynamicsAdmission,maximumIdentityBytes:Int,physicalKernel:any PhysicalRigidEquationComputing,
+                evaluator:any HolonomicGeometryProviding = GeometricRelationEvaluator(),physicalSolver:any PhysicalConstrainedMechanismSolving,
+                ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(),linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),
+                trajectorySampler:any PrescribedTrajectorySampling,boundaryQuery:any PrescribedTrajectoryBoundaryQuerying = PrescribedTrajectoryBoundaryQuery()) throws(RuntimeFailure) {
+        guard let program=geometry.prescribedTrajectory else { throw RuntimeFailure(.invalidInput,message:"Source-tagged prescribed-anchor trajectory absent.") }
+        try self.init(identity:identity,geometry:geometry,drive:drive,policy:policy,projection:projection,
+            maximumStageChartCorrection:maximumStageChartCorrection,publicationBudget:publicationBudget,admission:admission,
+            maximumIdentityBytes:maximumIdentityBytes,suppliers:.physical(physicalKernel,physicalSolver),evaluator:evaluator,
+            ranker:ranker,linear:linear,trajectoryAuthority:GeometricTrajectoryAuthority(anchors:program,sampler:trajectorySampler,query:boundaryQuery))
+    }
     private init(identity:String,geometry:GeometricConstraintSystem,drive:[Double],policy:MechanismSolvePolicy,
                 projection:ManifoldProjectionPolicy,maximumStageChartCorrection:Double,publicationBudget:NumericalBudget,
                 admission:DynamicsAdmission,maximumIdentityBytes:Int,
@@ -58,8 +85,8 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
                 ranker:any ConstraintRankAnalyzing = WeightedConstraintAssembler(),
                 linear:any LinearSolving<Double> = ReferenceLinearSolver<Double>(),motionSampler:any PrescribedMotionSampling = AnalyticPrescribedMotionSampler(),
                 activeRanker:(any ActiveCoordinateRankAnalyzing)? = nil,baseSampler:any PrescribedBaseMotionSampling = AnalyticPrescribedBaseMotionSampler(),
-                powerPartitioner:any PhysicalPowerPartitioning = RigidEquationKernel()) throws(RuntimeFailure) {
-        let model=geometry.model,p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount,m=geometry.rowIDs.count+(geometry.prescribedRoot?.knownCoordinates.count ?? 0)
+                powerPartitioner:any PhysicalPowerPartitioning = RigidEquationKernel(),trajectoryAuthority:GeometricTrajectoryAuthority? = nil) throws(RuntimeFailure) {
+        let model=geometry.model,p=model.tree.layout.positionCount,n=model.tree.layout.velocityCount,m=geometry.rowIDs.count+(geometry.rootBinding?.knownCoordinates.count ?? 0)
         guard maximumStageChartCorrection.isFinite,maximumStageChartCorrection > 0,identity.utf8.count <= maximumIdentityBytes,
               n <= policy.maximumCoordinates,m <= policy.maximumRows,n <= admission.capacity.maximumVelocities,
               model.tree.bodies.count <= admission.capacity.maximumBodies,drive.count == n,drive.allSatisfy({$0.isFinite}),
@@ -67,13 +94,16 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
               projection.constraints.diagonalMetric.count == n,policy.constraints.diagonalMetric.count == n,
               p <= projection.constraints.evaluation.maximumCoordinates,m <= projection.constraints.evaluation.maximumRows,
               projection.constraints.evaluation.expectedLayoutRevision == model.stamp.revision else { throw RuntimeFailure(.invalidInput,message:"Geometric physical chart/policy differs.") }
-        if let root=geometry.prescribedRoot {
+        guard (geometry.prescribedTrajectory == nil && geometry.prescribedTrajectoryRoot == nil) || trajectoryAuthority != nil else {
+            throw RuntimeFailure(.unsupportedDomain,message:"Explicit source-tagged trajectory sampling capability required.")
+        }
+        if let root=geometry.rootBinding {
             guard case .prescribed = suppliers,activeRanker != nil else { throw RuntimeFailure(.unsupportedDomain,message:"Explicit prescribed-root solve/rank capability required.") }
             for index in root.knownCoordinates { guard drive[index] == 0 else { throw RuntimeFailure(.invalidInput,message:"Prescribed-root motion conflicts with root drive.") } }
         }
         // FIXME(INCOMPLETE_IMPLEMENTATION): Prescribed nonroot free joints need their own coordinate partition and original force/power evidence. They are rejected here; selected root and fixed-anchor paths have actual execution contracts.
         guard model.descriptor.joints.allSatisfy({$0.record.manifold.velocityCount == 0 ? $0.authority == .fixed : $0.authority == .dynamicState}),
-              model.descriptor.rootAuthority == (geometry.prescribedRoot != nil ? .prescribedMotion : (model.tree.rootBase == .fixed ? .fixed : .dynamicState)) else { throw RuntimeFailure(.unsupportedDomain,message:"Geometric dynamic authority unavailable.") }
+              model.descriptor.rootAuthority == (geometry.rootBinding != nil ? .prescribedMotion : (model.tree.rootBase == .fixed ? .fixed : .dynamicState)) else { throw RuntimeFailure(.unsupportedDomain,message:"Geometric dynamic authority unavailable.") }
         var dimensions:[PhysicalDimension]=[],starts:[Int]=[]
         switch model.tree.rootBase {
         case .fixed: break
@@ -107,6 +137,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         catch { throw RuntimeFailure(.invalidInput,message:"Geometric ODE descriptor invalid.") }
         self.model=model;self.geometry=geometry;self.drive=drive;self.policy=policy;self.projection=projection
         self.maximumStageChartCorrection=maximumStageChartCorrection;self.publicationBudget=publicationBudget;quaternionStarts=starts
+        self.trajectoryAuthority=trajectoryAuthority
         self.motionSampler=motionSampler;self.baseSampler=baseSampler;self.powerPartitioner=powerPartitioner;self.evaluator=evaluator
         if let activeRanker { assembler=TangentManifoldAssembler(evaluator:evaluator,activeRanker:activeRanker,linear:linear) }
         else { assembler=TangentManifoldAssembler(evaluator:evaluator,ranker:ranker,linear:linear) }
@@ -137,8 +168,18 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
                 _=try OriginalPrescribedMotionAcceptance.validated(supplied,program:program,time:trial.timeSeconds,policy:program.policy,work:&validation)
             } catch { throw Self.failure(.motion(error)) }
         }
+        if let program=geometry.prescribedTrajectory {
+            do throws(NumericalError) { try validation.requireStorage(physical.storage);try validation.chargeOperations(try NumericalWork.product(64,program.trajectories.count)) }
+            catch { throw RuntimeFailure(.capacityExceeded,message:"Trajectory trial association budget exhausted.") }
+            var anchors:[PrescribedAnchorState]=[];anchors.reserveCapacity(program.trajectories.count)
+            for trajectory in program.trajectories { anchors.append(try trial.prescribedAnchor(trajectory.frame)) }
+            do throws(PrescribedMotionError) {
+                let supplied=try PrescribedMotionSample(metadata:program.metadata,time:trial.timeSeconds,anchors:anchors,policy:program.policy.motion)
+                _=try OriginalPrescribedTrajectoryAcceptance.validated(supplied,program:program,time:trial.timeSeconds,policy:program.policy,work:&validation)
+            } catch { throw Self.failure(.motion(error)) }
+        }
         for i in 0..<p { point[i]=try trial.position(at:i) };for i in 0..<n { point[p+i]=try trial.velocity(at:i) }
-        if let root=geometry.prescribedRoot {
+        if let root=geometry.rootBinding {
             let base:PrescribedBaseMotionSample
             do throws(GeometricConstraintError) { base=try root.sample(time:trial.timeSeconds,work:&validation) }
             catch { throw Self.failure(error) }
@@ -152,6 +193,15 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         try reserve(&work,control:control)
         var point=[Double](repeating:0,count:descriptor.dimensions.count);try read(trial,into:&point)
         try validateInitial(time:trial.timeSeconds,point:point,work:&work,control:control)
+    }
+    public func nextBoundary(after time:Double,through limit:Double,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> Double? {
+        // Legacy quadratic laws have no internal smooth-interval boundary.
+        guard let trajectoryAuthority else { return nil }
+        try reserve(&work,control:control)
+        let boundary:Double?
+        do throws(PrescribedMotionError) { boundary=try trajectoryAuthority.nextBoundary(after:time,through:limit,work:&work) }
+        catch { throw Self.failure(.motion(error)) }
+        try reserve(&work,control:control);return boundary
     }
     public func validateInitial(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
         try reserve(&work,control:control)
@@ -240,7 +290,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     }
     private func correctedStage(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> (state:KinematicState,correction:Double) {
         let raw=try state(time:time,point:point,work:&work,control:control,strictRoot:false);var q=raw.q,delta=0.0
-        if geometry.prescribedRoot != nil {
+        if geometry.rootBinding != nil {
             let p=model.tree.layout.positionCount,k=model.tree.rootBase.velocityCount
             for i in 0..<model.tree.rootBase.positionCount {
                 try physical.charge(4,&work)
@@ -250,7 +300,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
             for i in 0..<k { try physical.charge(5,&work);let difference=(raw.v[i]-point[p+i])*geometry.layout.timeScale/geometry.layout.scales[i];delta+=difference*difference }
         }
         for start in quaternionStarts {
-            if geometry.prescribedRoot != nil,start == 3 { continue }
+            if geometry.rootBinding != nil,start == 3 { continue }
             var square=0.0
             for i in start..<(start+4) { try physical.charge(2,&work);square+=q[i]*q[i] }
             guard square.isFinite,square > 0 else { throw RuntimeFailure(.invalidState,message:"Geometric RK quaternion chart singular.") }
@@ -341,7 +391,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     @inline(never)
     internal func validateStoredPhysical(_ state:KinematicState,acceptedSteps:UInt64,work:inout NumericalWork) throws(RuntimeFailure) {
         let context=try storedPhysicalContext(state,work:&work)
-        if acceptedSteps > 0 || geometry.prescribedRoot != nil {
+        if acceptedSteps > 0 || geometry.rootBinding != nil {
             let solution=try physical.solve(context,work:&work,control:nil)
             for i in state.acceleration.indices { try physical.charge(3,&work)
                 guard abs(state.acceleration[i]-solution.values[i])*geometry.layout.timeScale*geometry.layout.timeScale/geometry.layout.scales[i] <= policy.originalTolerance else {
@@ -367,7 +417,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
     @inline(never)
     private func solveContext(_ system:PhysicalRigidDynamicsSystem,sample:VelocityConstraintSample,impulse:Bool,
                               positionResidual:Double,velocityResidual:Double,work:inout NumericalWork) throws(RuntimeFailure) -> NonlinearPhysicalSolveContext {
-        guard let root=geometry.prescribedRoot else { return NonlinearPhysicalSolveContext(system:system,sample:sample,impulse:impulse,positionResidual:positionResidual,velocityResidual:velocityResidual) }
+        guard let root=geometry.rootBinding else { return NonlinearPhysicalSolveContext(system:system,sample:sample,impulse:impulse,positionResidual:positionResidual,velocityResidual:velocityResidual) }
         let base:PrescribedBaseMotionSample,constraint:PrescribedRootConstraint
         do throws(GeometricConstraintError) { base=try root.sample(time:system.input.snapshot.time,work:&work) } catch { throw Self.failure(error) }
         do throws(MechanismError) { constraint=try PrescribedRootConstraint(system:system,geometry:sample,base:base,rowIDs:root.rowIDs,policy:policy,work:&work) }
@@ -375,6 +425,13 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         return NonlinearPhysicalSolveContext(system:system,sample:constraint.sample,impulse:impulse,positionResidual:positionResidual,velocityResidual:velocityResidual,prescribedRoot:constraint)
     }
     private func baseSample(time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> PrescribedBaseMotionSample? {
+        if let trajectoryAuthority {
+            try reserve(&work,control:control)
+            let result:PrescribedBaseMotionSample?
+            do throws(PrescribedMotionError) { result=try trajectoryAuthority.baseSample(time:time,work:&work) }
+            catch { throw Self.failure(.motion(error)) }
+            try reserve(&work,control:control);return result
+        }
         guard let root=geometry.prescribedRoot else { return nil }
         try reserve(&work,control:control)
         do throws(PrescribedMotionError) {
@@ -386,6 +443,13 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
         catch { throw Self.failure(error) }
     }
     private func samples(time:Double,work:inout NumericalWork,control:RuntimeStepControl?) throws(RuntimeFailure) -> [PrescribedAnchorState] {
+        if let trajectoryAuthority {
+            try reserve(&work,control:control)
+            let result:[PrescribedAnchorState]
+            do throws(PrescribedMotionError) { result=try trajectoryAuthority.anchorSample(time:time,work:&work) }
+            catch { throw Self.failure(.motion(error)) }
+            try reserve(&work,control:control);return result
+        }
         guard let program=geometry.prescribedMotion else { return [] }
         try reserve(&work,control:control)
         var local=try physical.supplier(&work,control:control),result:PrescribedMotionSample?,failure:PrescribedMotionError?
@@ -438,7 +502,7 @@ public final class GeometricMechanismEquation: ProjectedMechanismEquations, Send
             guard value.isFinite,abs(value) <= policy.originalTolerance else { throw RuntimeFailure(.invalidState,message:"Original geometric endpoint acceleration inconsistent.") }
         }
         try GeometricAxisAcceptance.validate(geometry,snapshot:sample.snapshot,acceleration:Array(derivative[p...]),tolerance:policy.originalTolerance,work:&work)
-        if let root=geometry.prescribedRoot {
+        if let root=geometry.rootBinding {
             let base:PrescribedBaseMotionSample
             do throws(GeometricConstraintError) { base=try root.sample(time:time,work:&work) } catch { throw Self.failure(error) }
             for i in base.q.indices { guard derivative[i].bitPattern == sample.snapshot.coordinateRate[i].bitPattern else { throw RuntimeFailure(.invalidState,message:"Endpoint prescribed-root coordinate rate differs.") } }

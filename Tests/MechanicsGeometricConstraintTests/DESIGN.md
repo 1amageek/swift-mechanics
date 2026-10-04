@@ -49,7 +49,7 @@ AF25 PrescribedRootGeometryTests owns actual root-only planar/spatial full-layou
 
 ## AF26 trajectory binding proof contract
 
-This proposed owner consumes [GeometricRelations](../../Sources/SwiftMechanics/Physics/Constraints/GeometricRelations/DESIGN.md#af26-source-tagged-trajectory-binding-contract) and [ManifoldProjection](../../Sources/SwiftMechanics/Physics/Constraints/ManifoldProjection/DESIGN.md#af26-trajectory-root-partition-consumption), not a fabricated quadratic program. New dedicated files are `TrajectoryGeometryFixtures.swift`, `TrajectoryGeometryTests.swift` and `TrajectoryManifoldTests.swift`; existing physical-allocation and reaction-prerequisite tests remain untouched.
+This owner consumes [GeometricRelations](../../Sources/SwiftMechanics/Physics/Constraints/GeometricRelations/DESIGN.md#af26-source-tagged-trajectory-binding-contract) and [ManifoldProjection](../../Sources/SwiftMechanics/Physics/Constraints/ManifoldProjection/DESIGN.md#af26-trajectory-root-partition-consumption), not a fabricated quadratic program. New dedicated files are `TrajectoryGeometryFixtures.swift`, `TrajectoryGeometryTests.swift` and `TrajectoryManifoldTests.swift`; existing physical-allocation and reaction-prerequisite tests remain untouched.
 
 | Bound invariant | Independent actual oracle |
 |---|---|
@@ -64,3 +64,21 @@ This proposed owner consumes [GeometricRelations](../../Sources/SwiftMechanics/P
 Tests use public compiler layout IDs/ranges and genuine sampling/geometry/assembly operations. Planar floating-root motion is selected; planar prescribed-anchor admission is not expanded. Root-only no-row behavior retains actual root layout and source. Non-C2 seam refusal remains lower proof, and no upper event success is inferred. New test resources are immutable/local; any supplier capture uses the same Mutex contract on every target with callbacks outside the lock.
 
 Owner-isolated bounded Native verification follows complete source/test overlay; no future execution is claimed here. Root qualifies the canonical registered graph and original public profiles/128KiB guards after all parallel owners freeze. Physical dynamics, knot-aware evolution and cold history evidence belongs to [MechanicsNonlinearMechanismTests](../MechanicsNonlinearMechanismTests/DESIGN.md#af26-trajectory-evolution-proof-contract).
+
+
+### IM16.34.1 implementation and verification boundary
+The selected trajectory source and dedicated tests are implemented. One owned source-path review and its scoped test-getter repair are complete; the bounded owner-isolated Native proof below passed without compile or behavior repairs. Only owned production/test directories overlay committed qualified baseline `56a57ba` at `.build/af26-upper-independent-trajectory`. Its private registration retains the exact existing MechanicsGeometricConstraintTests and MechanicsNonlinearMechanismTests declarations while removing unrelated test targets; production, executable, dependency and flags remain baseline. Exact Swift6.4.0 release and four jobs were used. Initial setup used swift test with a total 1200-second deadline; its automatic test execution is setup observation, not the final bounded proof. Final behavior used the separate 240-second --skip-build command. Canonical shared/profile integration and commits remain root-owned.
+
+
+### IM16.34.1 isolated actual Native qualification
+Owner copy baseline: `56a57ba`; actual registered production/executable/dependency/flags stayed baseline plus the five owned component/test directory overlays. Only unrelated testTarget declarations were removed in that private manifest; the exact two existing test target declarations were retained. Source and test files did not change during either run. Setup compiled/linked in 327.47 seconds, exit zero; its automatic observations passed Nonlinear67/19 suites/50.302 seconds and Geometry34/9 suites/.070 seconds. No compile/behavior causal repair was needed.
+
+Final command, run inside `.build/af26-upper-independent-trajectory`:
+
+```text
+python3 Scripts/run_with_timeout.py 240 /Users/1amageek/Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift test --skip-build --build-path .build/native -j 4 --filter 'MechanicsGeometricConstraintTests|MechanicsNonlinearMechanismTests'
+```
+
+Final exit zero: 101 declarations in 28 suites, failure0; Nonlinear67/19 suites/47.858 seconds plus Geometry34/9 suites/.056 seconds. Thirteen new trajectory declarations and 88 legacy declarations executed actual producers and Runtime paths. Harmonic/C2 root-only and coupled-descendant planar/spatial force/K/Kdot/work, spatial anchor full prescribed power, real knot clipping/right-law sampling, exact fresh replay/history, same-revision future-law incompatibleContinuation, ledger source/reset/cancel/unknown failures, pre-callback capacity/RNG and forged tangent original-force refusal, and the old custom smooth conformer all passed. Existing quadratic, physical-allocation, original source, manifold, root/moving-base and long-run regressions passed in the same target graph. Native proof is limited to these actual conditions; original upper WASM/Embedded and128KiB evidence remains root-owned.
+
+Logs: `.build/af26-upper-independent-trajectory/.build/af26-upper-trajectory-native-setup.log` and `.build/af26-upper-independent-trajectory/.build/af26-upper-trajectory-native-tests.log`. The independent copy retains completed objects for root's additional frozen public composition. Full KI-006 discontinuity events remain incomplete; no additional domain is qualified here.
