@@ -148,15 +148,33 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
     }
     @inline(never)
     internal func motionSolve(_ system:AffineMotionSystem,rows:AffineMotionRows,work:inout NumericalWork,partitionWork:Bool = false,driveOverride:[Double]? = nil) throws(RuntimeFailure) -> ConstrainedMotion {
+        let invocation=try admitMotionSolve(system,work:work,partitionWork:partitionWork,drive:driveOverride ?? drive)
+        let outcome=invokeMotionSolve(system,rows:rows,invocation:invocation)
+        return try finishMotionSolve(invocation,outcome:outcome,work:&work)
+    }
+    @inline(never)
+    private func admitMotionSolve(_ system:AffineMotionSystem,work:NumericalWork,partitionWork:Bool,drive:[Double]) throws(RuntimeFailure) -> AffineSolveInvocation {
         let reserved=system.reserved,partitions=partitionWork ? 4 : 1
-        var local=try localWork(work,reserved:reserved,partitions:partitions),dynamics=try localWork(work,reserved:reserved,partitions:partitions),rank=try localWork(work,reserved:reserved,partitions:partitions),linear=try localWork(work,reserved:reserved,partitions:partitions)
-        let budgets=[local.budget,dynamics.budget,rank.budget,linear.budget]
-        var result:ConstrainedMotion?,failure:MechanismError?
-        do throws(MechanismError) { result=try solver.acceleration(system.value,sample:rows.value,drive:driveOverride ?? drive,policy:policy,
-            work:&local,dynamicsWork:&dynamics,rankWork:&rank,linearWork:&linear) } catch { failure=error }
-        for (ledger,budget) in zip([local,dynamics,rank,linear],budgets) { try validLocal(ledger,budget:budget);try absorb(ledger,into:&work,reserved:reserved) }
-        if let failure {
-            if partitionWork {
+        let local=try localWork(work,reserved:reserved,partitions:partitions),dynamics=try localWork(work,reserved:reserved,partitions:partitions),rank=try localWork(work,reserved:reserved,partitions:partitions),linear=try localWork(work,reserved:reserved,partitions:partitions)
+        return AffineSolveInvocation(reserved:reserved,partitionWork:partitionWork,drive:drive,local:local,dynamics:dynamics,rank:rank,linear:linear)
+    }
+    @inline(never)
+    private func invokeMotionSolve(_ system:AffineMotionSystem,rows:AffineMotionRows,invocation:AffineSolveInvocation) -> AffineSolveOutcome {
+        var local=invocation.local,dynamics=invocation.dynamics,rank=invocation.rank,linear=invocation.linear
+        do throws(MechanismError) {
+            let result=try solver.acceleration(system.value,sample:rows.value,drive:invocation.drive,policy:policy,
+                work:&local,dynamicsWork:&dynamics,rankWork:&rank,linearWork:&linear)
+            return AffineSolveOutcome(result:result,local:local,dynamics:dynamics,rank:rank,linear:linear)
+        } catch { return AffineSolveOutcome(failure:error,local:local,dynamics:dynamics,rank:rank,linear:linear) }
+    }
+    @inline(never)
+    private func finishMotionSolve(_ invocation:AffineSolveInvocation,outcome:AffineSolveOutcome,work:inout NumericalWork) throws(RuntimeFailure) -> ConstrainedMotion {
+        try validLocal(outcome.local,budget:invocation.local.budget);try absorb(outcome.local,into:&work,reserved:invocation.reserved)
+        try validLocal(outcome.dynamics,budget:invocation.dynamics.budget);try absorb(outcome.dynamics,into:&work,reserved:invocation.reserved)
+        try validLocal(outcome.rank,budget:invocation.rank.budget);try absorb(outcome.rank,into:&work,reserved:invocation.reserved)
+        try validLocal(outcome.linear,budget:invocation.linear.budget);try absorb(outcome.linear,into:&work,reserved:invocation.reserved)
+        if let failure=outcome.failure {
+            if invocation.partitionWork {
                 switch failure {
                 case .cancelled,.numerical(.cancelled,_),.constraint(.cancelled),.dynamics(.cancelled),.dynamics(.loads(.cancelled)),.dynamics(.numerical(.cancelled,_)):
                     throw RuntimeFailure(.cancelled,message:"Loaded original constrained acceleration cancelled.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable)
@@ -166,7 +184,7 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
             throw RuntimeFailure(failure.failedSupplierWorkUnavailable ? .invalidOwnerAccess : .invalidState,
                 message:failure.failedSupplierWorkUnavailable ? "Mechanism supplier work is unavailable; integration stops without retry." : "Original constrained acceleration failed.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable)
         }
-        guard let result else { throw RuntimeFailure(.invalidState,message:"Constrained acceleration has no result.") };return result
+        guard let result=outcome.result else { throw RuntimeFailure(.invalidState,message:"Constrained acceleration has no result.") };return result
     }
     @inline(never)
     private func associateMotion(_ result:ConstrainedMotion,input:AffineMotionInput,time:Double) throws(RuntimeFailure) -> ConstrainedMotion {

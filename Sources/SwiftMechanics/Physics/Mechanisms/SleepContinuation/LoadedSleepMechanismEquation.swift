@@ -18,13 +18,21 @@ internal final class LoadedSleepMechanismEquation:SmoothODEEquations, Sendable {
     @inline(never)
     func prepare(trial:inout RuntimeTrial,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
         try control.beginWorkBlock(units:1);try owner.check()
+        try validatePreparationSource(trial:&trial,control:control)
+        try prepareRestProof(work:&work)
+        if !omitted { try base.prepare(trial:&trial,work:&work,control:control) }
+    }
+    @inline(never)
+    private func validatePreparationSource(trial:inout RuntimeTrial,control:RuntimeStepControl) throws(RuntimeFailure) {
         let h=history.mechanics
         guard let expected=source.checkpoint.contributors.first(where:{$0.id == owner.schema.id}),try trial.contributor(owner.schema.id) == expected,trial.timeSeconds == h.acceptedTime else { throw RuntimeFailure(.invalidOwnerAccess,message:"Loaded trial record/time source changed.") }
         for i in h.position.indices { try control.beginWorkBlock(units:1);guard try trial.position(at:i) == h.position[i],try trial.velocity(at:i) == h.velocity[i] else { throw RuntimeFailure(.invalidOwnerAccess,message:"Loaded trial q/v source changed.") } }
+    }
+    @inline(never)
+    private func prepareRestProof(work:inout NumericalWork) throws(RuntimeFailure) {
         let proof=try owner.restProof(physical:source.checkpoint.physical,history:history,equation:base,execution:execution,work:&work)
         prepared.store(proof)
         guard !omitted || proof != nil else { throw RuntimeFailure(.invalidContributor,message:"Loaded sleeping source has no actual equilibrium proof.") }
-        if !omitted { try base.prepare(trial:&trial,work:&work,control:control) }
     }
     func derivative(time:Double,point:[Double],into output:inout [Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
         try owner.check();try control.beginWorkBlock(units:1)

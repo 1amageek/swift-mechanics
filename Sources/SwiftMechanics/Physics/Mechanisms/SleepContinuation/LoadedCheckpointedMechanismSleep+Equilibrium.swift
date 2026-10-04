@@ -2,15 +2,32 @@
 extension LoadedCheckpointedMechanismSleep {
     @inline(never)
     internal func restProof(physical:KinematicState,history:LoadedMechanismSleepHistory,equation:any StationaryAffineMotionComputing,execution:any StationaryLoadExecuting,work:inout NumericalWork) throws(RuntimeFailure) -> LoadedSleepRestProof? {
+        guard let source=try restSource(physical:physical,history:history,work:&work) else { return nil }
+        return try restProof(source,equation:equation,execution:execution,work:&work)
+    }
+    @inline(never)
+    private func restProof(_ source:LoadedSleepRestSource,equation:any StationaryAffineMotionComputing,execution:any StationaryLoadExecuting,work:inout NumericalWork) throws(RuntimeFailure) -> LoadedSleepRestProof? {
+        if let proof=memo.read(position:source.physical.q,drive:source.history.mechanics.drive,selection:source.history.selection) { return proof }
+        let motion=try restMotion(source,equation:equation,execution:execution,work:&work)
+        return try restMotionProof(motion,source:source,work:&work)
+    }
+    @inline(never)
+    private func restSource(physical:KinematicState,history:LoadedMechanismSleepHistory,work:inout NumericalWork) throws(RuntimeFailure) -> LoadedSleepRestSource? {
         try check()
         let h=history.mechanics
         guard physical.q == h.position,physical.v == h.velocity,physical.time == h.acceptedTime else { throw RuntimeFailure(.invalidState,message:"Loaded proof accepted physical source differs.") }
         guard physical.v.allSatisfy({$0 == 0}) else { return nil }
         try numerical { () throws(NumericalError) in try work.chargeOperations(try NumericalWork.product(4,physical.v.count)) }
-        if let proof=memo.read(position:physical.q,drive:h.drive,selection:history.selection) { return proof }
-        let motion=try equation.loadedMotion(physical:physical,selection:history.selection,drive:h.drive,execution:execution,work:&work)
+        return LoadedSleepRestSource(physical:physical,history:history)
+    }
+    @inline(never)
+    private func restMotion(_ source:LoadedSleepRestSource,equation:any StationaryAffineMotionComputing,execution:any StationaryLoadExecuting,work:inout NumericalWork) throws(RuntimeFailure) -> StationaryAffineMotion {
+        try equation.loadedMotion(physical:source.physical,selection:source.history.selection,drive:source.history.mechanics.drive,execution:execution,work:&work)
+    }
+    @inline(never)
+    private func restMotionProof(_ motion:StationaryAffineMotion,source:LoadedSleepRestSource,work:inout NumericalWork) throws(RuntimeFailure) -> LoadedSleepRestProof? {
         guard motion.motion.values.allSatisfy({$0 == 0}) else { return nil }
-        return try restMetric(motion,physical:physical,history:history,work:&work)
+        return try restMetric(motion,physical:source.physical,history:source.history,work:&work)
     }
     @inline(never)
     private func restMetric(_ motion:StationaryAffineMotion,physical:KinematicState,history:LoadedMechanismSleepHistory,work:inout NumericalWork) throws(RuntimeFailure) -> LoadedSleepRestProof? {
