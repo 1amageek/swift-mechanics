@@ -177,7 +177,7 @@ let package = Package(
                 ],
                 linkerSettings: [.linkedLibrary("swiftUnicodeDataTables", .when(platforms: [.wasi], traits: ["EmbeddedUnicode"]))]),
         .executableTarget(name: "CoreVerification", dependencies: ["SwiftMechanics"], path: "Verification/CoreVerification", exclude: ["DESIGN.md"]),
-        .executableTarget(name: "FoundationVerification", dependencies: ["SwiftMechanics"], path: "Verification/FoundationVerification", exclude: ["DESIGN.md", "ObservationProbeContext.swift", "ObservationVerification.swift", "MaterialToothContactProbeContext.swift", "MaterialToothContactVerification.swift"]),
+        .executableTarget(name: "FoundationVerification", dependencies: ["SwiftMechanics"], path: "Verification/FoundationVerification", exclude: ["DESIGN.md", "ObservationProbeContext.swift", "ObservationVerification.swift"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsModelTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsMaterialsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),

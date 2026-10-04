@@ -112,7 +112,7 @@ public struct ReferenceNonlinearStabilityContinuation: NonlinearStabilityContinu
         let eq=StabilityArcEquations(source:s,policy:p,forces:forces,predictor:predictor,direction:direction)
         let np=try StabilityArithmetic.limited(p.equilibrium.nonlinear,work:work,reserve:s.reserve)
         let result:NonlinearSolution<Double>
-        do { result=try nonlinear.solve(eq,initialPoint:initial,policy:np) }
+        do { result=try nonlinear.solve(StabilitySolverEquations(original:eq),initialPoint:initial,policy:np) }
         catch {
             guard error.work.budget==np.budget else { throw .invalidSupplierWork }
             try StabilityArithmetic.numerical { () throws(NumericalError) in try work.absorb(error.work,reservedStorage:s.reserve) };throw .nonlinear(error)

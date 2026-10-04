@@ -49,6 +49,7 @@ struct FoundationVerification {
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyLoadedSleepMechanisms"; try verifyLoadedSleepMechanisms() }
             stage = "verifyTransmissions"; try verifyTransmissions()
             stage = "verifyToothContactEvolution"; try verifyToothContactEvolution()
+            stage = "verifyMaterialToothContacts"; try verifyMaterialToothContacts()
             stage = "verifyEquilibrium"; try verifyEquilibrium()
             stage = "verifyContactPatches"; try verifyContactPatches()
             stage = "verifyDeformingContact"; try verifyDeformingContact()
