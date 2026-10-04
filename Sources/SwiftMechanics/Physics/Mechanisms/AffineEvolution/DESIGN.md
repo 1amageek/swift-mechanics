@@ -21,7 +21,10 @@ Explicit index-reduced affine holonomic constraints over dynamic scalar revolute
 
 ## Architecture
 ```text
-real q/v chart -> compiled tree snapshot -> mass and known force witness -> constrained acceleration -> derivative -> exact endpoint publication
+real q/v chart -> noninline rows/source admission -> immutable input owner
+    -> noninline rigid assembly -> immutable system owner
+    -> noninline constrained supplier invocation -> source/output association
+    -> derivative -> exact endpoint publication
 ```
 Actual dependencies used: CompiledMechanicalModel.evaluate; SmoothODEEquations required witnesses; IntegrationContinuationProvider and RuntimeSessionOperating trials; dynamics and constrained solver public contracts.
 
@@ -30,9 +33,11 @@ Admission proves qdot=v by scalar manifold and explicit layout/authority validat
 All values and public witnesses are Sendable on every target. Frames, model/layout revision, temporal force versus impulse interpretation and physical units stay explicit. Output is published only after original physical acceptance.
 
 ## State, Ownership, and Lifecycle
-Source records are immutable; workspace and authoritative NumericalWork are caller-exclusive values. Required suppliers execute outside locks. No global cache or mutable shared producer state is introduced. Rich operation contexts may be immutable final Sendable owners to bound debug stack overlap. Structural scalar-slot budgets do not claim allocator or physical-copy measurements.
+Source records are immutable; workspace and authoritative NumericalWork are caller-exclusive values. Required suppliers execute outside locks. No global cache or mutable shared producer state is introduced. Bounded operation-local physical/snapshot/input/system/row contexts are immutable final Sendable owners. Their lifetime spans only one derivative call; phase callbacks consume public values and never mutate those owners. Rows/source setup finishes before assembly; assembly locals finish before constrained solve; solve ledgers/result handling finish before output association. Each phase is noninline to prevent rich past/future temporaries from overlapping lower callback frames. This adds no cache or shared mutable state. Structural scalar-slot budgets do not claim allocator or physical-copy measurements.
 
 ## Failure, Concurrency, and Constraints
+The original public debug WASM stack is 128 KiB. Root measured an ordinary-WASM motion frame of 19,776 bytes retained over the frozen constrained solver (12,736 bytes), its accept phase (12,304 bytes), and WorldRigidBody.evaluate; cumulative Runtime/Integrator/public composition exceeded that original boundary. Motion now passes immutable reference contexts between noninline input setup, assembly, solver invocation and source/output association phases. The original callback ledger seeds, remaining budgets, success/failure absorption and unknown-work evidence are preserved. Structural reservation is retained; root owns exact frame diagnostics and target runtime qualification. Stack enlargement, backend fallback or edits to lower frozen producers cannot establish this owner's completion.
+
 Typed failures distinguish stale binding, shape/domain/physical residual, cancellation, overflow, capacity and supplier error. Caller maxima are checked before allocation; checked integer products bound workspaces. Supplier work is separate from orchestration work; unknown partial supplier failure stops without retry. Ledger replacement/reset is rejected. Unavailable callable paths carry FIXME(INCOMPLETE_IMPLEMENTATION) and typed failure.
 
 ## Verification and Change Impact
@@ -43,3 +48,6 @@ The equation descriptor chart contains an exact bounded ASCII encoding of origin
 ### Selected AF17 execution evidence
 
 Native fixed/adaptive gear replay and inconsistent-initial-state tests passed. Original Native/WASM/Embedded public RK4 gear evolution and actual checkpoint replay execute with the same affine chart/physics. Exact profile identity and root logs are indexed by the [parent design](../DESIGN.md); the corresponding test owner retains the independent physical oracles. Private stack diagnostics are not qualification.
+
+### AF20 selected public profile evidence
+Root executed the final unmodified Native, ordinary-WASM and Embedded-WASM compositions with all path completion witnesses and exit zero. [Exact profile evidence](../../../../../Verification/FoundationVerification/DESIGN.md#af20-selected-original-profile-qualification) owns toolchain, stack, runtime and test-snapshot qualification. This extends only the selected public paths documented there; the remaining domain and concurrency limitations above persist.

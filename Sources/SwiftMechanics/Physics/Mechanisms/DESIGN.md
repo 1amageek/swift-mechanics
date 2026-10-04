@@ -4,7 +4,7 @@
 Parent: [responsibility owner](../DESIGN.md). IM16 owns constrained mechanism execution under [SPEC](../../../../SPEC.md). The frozen AF16 source is registered for root behavioral qualification. The complete IM16 requirement domain remains open; actual child designs own admitted contracts and selected evidence.
 
 ## Responsibilities and Boundaries
-model_records exclusively owns new child production directories and Tests/MechanicsMechanismsTests after the IM23 source/test freeze. Root exclusively owns this module index, Package.swift, shared probes/scripts, PROGRESS and commits. Dependencies are read-only: Runtime, Integration, Constraints, Transmissions, Actuation, Dynamics. Root owns an additive public Constraints rank operation; source availability is not qualification. Producer changes require root coordination and an explicit reassignment before editing.
+Each child owns the mechanism meaning, physical acceptance and state contract stated in its design. The earlier AF16 source/test handoff is frozen. AF20 assigns disjoint NonlinearEvolution, SleepContinuation and ReactionPaths source/test owners; the implementation plan and PROGRESS record their current dispatch. Root exclusively owns this index, Package.swift, shared probes/scripts, PROGRESS and commits. Existing Runtime, Constraints, Transmissions, Actuation, Dynamics and prior mechanism producers are read-only. Root owns the additive public Integration endpoint record proposal used by NonlinearEvolution; its original validation and publication authority are preserved. Producer changes require root coordination and an explicit reassignment before editing. The confirmed AF20 awake-sleep stack counterexample assigns the necessary AffineEvolution motion lifetime repair and affected old tests to the sleep owner; no frozen numerical, Integration or Runtime producer is reassigned.
 
 ## Related Designs
 [Canonical implementation plan](../../../../IMPLEMENTATION_PLAN.md) owns prerequisite IDs; [root](../../../../DESIGN.md) owns composition. Only verified public producer contracts may be consumed. Child designs own exact selected operations, assumptions and evidence, without duplicating supplier internals.
@@ -38,6 +38,9 @@ The child source/test snapshot is frozen for root registration and actual behavi
 | [AffineEvolution](AffineEvolution/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
 | [AcceptedTransitions](AcceptedTransitions/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
 | [ConnectedSleep](ConnectedSleep/DESIGN.md) | child | Selected public operations defined by the child | Exact admitted domain and behavioral qualification belong to that child |
+| [NonlinearEvolution](NonlinearEvolution/DESIGN.md) | child | Projected nonlinear mechanical evolution | Registered frozen source; selected Native residual/replay and original public profiles qualified |
+| [SleepContinuation](SleepContinuation/DESIGN.md) | child | Checkpointed sleep and accepted wake transactions | Registered frozen source; selected checkpoint binding, actual omitted/active dynamics and original public profiles qualified |
+| [ReactionPaths](ReactionPaths/DESIGN.md) | child | Identified tree support wrench recovery | Registered frozen source; selected Native physical/ambiguity/ledger cases and original public profiles qualified |
 
 ## Selected AF17 Qualification
 
@@ -47,3 +50,12 @@ Native: sixteen constrained/redundant/momentum/gear/accepted-lock/leaf-break/con
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF20 remaining execution handoffs
+Root assigns separate new NonlinearEvolution and SleepContinuation directories with separate test targets. Their sources stay excluded until frozen qualification. Existing producers and previous mechanism children are immutable dependencies. NonlinearEvolution owns constraint-aware integration and q/v manifold treatment using actual kinematics, mass and constraint equations. SleepContinuation owns bounded contributor state, actual dynamics omission/activation and accepted-time wake/replay authority. It consumes existing admitted protocols and never depends on the evolving NonlinearEvolution source. Each worker first traces the real lower APIs and writes its lower DESIGN; unsupported configurations remain explicit without reducing the full IM16 requirement owner. Root owns registration, shared probes, parent indexes, integration and commits.
+
+ReactionPaths is an independent sibling handoff using only frozen Dynamics, Loads and Joints public contracts. It owns tree joint/support wrench recovery from original per-body inertia and identified external loads, explicit world/frame/reference-point conversion and action/reaction balance. It must reject physical load allocations not determined by the input representation. It does not consume evolving nonlinear or sleep source. Separate Tests/MechanicsReactionPathTests owns its behavioral evidence; source remains excluded until freeze.
+
+AF20 Embedded qualification still fails at original residual acceptance after the owned sleep/affine phases. Root assigns only ConstrainedDynamics MassWeightedMechanismSolver private acceptance lifetime phases, lower design and new immutable private context files to the nonlinear owner. All original laws, callback work, result provenance and public contracts remain fixed; root renews the registered Native test graph and original profiles after source freeze.
+
+AF20 selected final original-profile execution and inherited/renewed Native evidence are owned by [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af20-selected-original-profile-qualification). General IM16 and whole-target requirements remain open.

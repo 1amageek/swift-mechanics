@@ -12,6 +12,7 @@ Integrator owns stage equations, error/order/acceptance, retry and accepted-time
 | [Equations](Equations/DESIGN.md) | child | Pure identified coordinate/equation/chart methods | Owned responsibility | See the qualified handoff below |
 | [Continuation](Continuation/DESIGN.md) | child | Required integrator history and association | Owned responsibility | See the qualified handoff below |
 | [Stepping](Stepping/DESIGN.md) | child | Actual explicit stages, error control and trial acceptance | Owned responsibility | See the qualified handoff below |
+| [NonlinearEvolution](../../Physics/Mechanisms/NonlinearEvolution/DESIGN.md) | used by | Public validated endpoint record proposal | The projected owner computes physical consistency before using Continuation | Does not expose internal Integration reporting/capture or Runtime authority |
 | [Responsibility owner](../DESIGN.md) | parent | Composition/global invariants | Sole registration authority | Full closure remains IM48 |
 | [Runtime](../Runtime/DESIGN.md) | depends on | Required session/trial methods, explicit contributor continuation, bounded work and acceptance | Verified initial handoff 6ae2742 | Fixed-anchor kinematic domain, API availability and nonqueuing busy; no hidden integrator state |
 | [Nonlinear](../../Mathematics/Nonlinear/DESIGN.md) | depends on | Generic equation providers and original-residual acceptance | Verified admitted numerical kernel | Embedded fixed compiler requires exercised generic scalar provider; failure work not invented |

@@ -6,7 +6,7 @@ enum MechanismProbeContext {
     static func work(storage:Int = 1_000_000,operations:Int = 20_000_000) throws -> NumericalWork {
         NumericalWork(budget:try NumericalBudget(scalarStorage:storage,arithmeticOperations:operations,iterations:100000))
     }
-    static func model(q:[Double] = [0,0],v:[Double] = [0,0]) throws -> CompiledMechanicalModel {
+    static func model(q:[Double] = [0,0],v:[Double] = [0,0],acceleration:[Double] = [0,0]) throws -> CompiledMechanicalModel {
         let tolerance=try NumericalTolerance(absolute:1e-12,relative:1e-12),inertiaPolicy=try InertiaValidationPolicy(symmetry:tolerance,physicalityRelative:0)
         var bodies:[MechanicalBody]=[]
         for (index,key) in ["root","a","b"].enumerated() {
@@ -24,13 +24,13 @@ enum MechanismProbeContext {
                 childAnchor:JointAnchor(frame:id(.frame,key+"-child"),placement:.fixed(.identity)),manifold:JointManifold(.revolute(axis:.unitZ)))
             joints.append(MechanicalJoint(record:record,authority:.dynamicState))
         }
-        let initial=try KinematicState(revision:1,time:0,q:q,v:v,acceleration:[0,0])
+        let initial=try KinematicState(revision:1,time:0,q:q,v:v,acceleration:acceleration)
         let descriptor=try MechanicalDescriptor(identity:"real-gears",revision:1,bodies:bodies,joints:joints,root:id(.body,"root"),rootBase:.fixed,
             rootAuthority:.fixed,worldFrame:id(.frame,"world"),initialState:initial,representationRequirements:[],features:[],extensions:[])
         let policy=try CompilationPolicy(kinematicCapacity:KinematicCapacity(maximumBodies:8,maximumVelocities:8,maximumJacobianScalars:1000),
             jointPolicy:JointEvaluationPolicy(quaternionTolerance:tolerance,chartRankRelative:1e-10,characteristicLengthMeters:1),inertiaPolicy:inertiaPolicy,
             translationTolerance:tolerance,rotationTolerance:tolerance,maximumRecords:100,maximumIdentifierBytes:10000,maximumSparsityEntries:1000,
-            maximumDependencyEntries:1000,maximumExtensionRecords:8,maximumDiagnostics:8,extensionBudget:NumericalBudget(scalarStorage:100,arithmeticOperations:1000,iterations:10),target:.nativeCPU)
+            maximumDependencyEntries:1000,maximumExtensionRecords:8,maximumDiagnostics:8,extensionBudget:NumericalBudget(scalarStorage:100,arithmeticOperations:1000,iterations:10),target:FoundationVerification.compilerVerificationTarget)
         return try ReferenceMechanicalCompiler(extensions:NoMechanicalExtensions()).compile(descriptor,policy:policy)
     }
     static func layout() throws -> ConstraintCoordinateLayout {

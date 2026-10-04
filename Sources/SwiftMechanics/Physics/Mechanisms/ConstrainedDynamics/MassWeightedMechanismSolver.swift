@@ -103,52 +103,95 @@ public struct MassWeightedMechanismSolver: ConstrainedMechanismSolving {
                 reaction[i]=try MechanismArithmetic.finite(reaction[i]+sample.rows[row*n+i]*multipliers[row]/s[i])
             }
         }
-        return try accept(system,sample:sample,base:base,values:values,drive:drive,multipliers:multipliers,reaction:reaction,
-            rank:rank,impulse:impulse,policy:policy,work:&work,dynamicsWork:&dynamicsWork)
+        let acceptance=MechanismAcceptanceContext(system:system,sample:sample,base:base,values:values,drive:drive,
+            multipliers:multipliers,reaction:reaction,rank:rank,impulse:impulse,policy:policy)
+        return try accept(acceptance,work:&work,dynamicsWork:&dynamicsWork)
     }
     @inline(never)
-    private func accept(_ system:RigidDynamicsSystem,sample:VelocityConstraintSample,base:[Double],values:[Double],drive:[Double],
-                        multipliers:[Double],reaction:[Double],rank:ConstraintRankEvidence,impulse:Bool,policy:MechanismSolvePolicy,
-                        work:inout NumericalWork,dynamicsWork:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
-        let n=system.velocityCount,t=sample.layout.timeScale,e=policy.dynamics.energyScale,s=sample.layout.scales
-        var rowResidual=0.0,physicalResidual=0.0,original=[Double](repeating:0,count:n),energy=0.0
-        for row in sample.rowIDs.indices {
-            var value=impulse ? sample.drift[row] : sample.accelerationBias[row]
-            for i in 0..<n { try MechanismArithmetic.charge(4,&work); value=try MechanismArithmetic.finite(value+sample.rows[row*n+i]*values[i]*(impulse ? t : t*t)/s[i]) }
+    private func accept(_ context:MechanismAcceptanceContext,work:inout NumericalWork,
+                        dynamicsWork:inout NumericalWork) throws(MechanismError) -> ConstrainedMotion {
+        // Preserve the original buffer allocation order; future publication provenance exists only in its final phase.
+        var original=[Double](repeating:0,count:context.count)
+        let rowResidual=try acceptOriginalRows(context,work:&work)
+        let energy=try originalPhysicalForce(context,original:&original,work:&work,dynamicsWork:&dynamicsWork)
+        let physicalResidual=try acceptOriginalMomentum(context,original:original,work:&work)
+        try MechanismArithmetic.check(context.policy)
+        return publishAcceptedMotion(context,rowResidual:rowResidual,physicalResidual:physicalResidual,energy:energy)
+    }
+    @inline(never)
+    private func acceptOriginalRows(_ context:MechanismAcceptanceContext,work:inout NumericalWork) throws(MechanismError) -> Double {
+        let n=context.count,t=context.timeScale,s=context.scales
+        var rowResidual=0.0
+        for row in context.sample.rowIDs.indices {
+            var value=context.impulse ? context.sample.drift[row] : context.sample.accelerationBias[row]
+            for i in 0..<n {
+                try MechanismArithmetic.charge(4,&work)
+                value=try MechanismArithmetic.finite(value+context.sample.rows[row*n+i]*context.values[i]*(context.impulse ? t : t*t)/s[i])
+            }
             rowResidual=max(rowResidual,abs(value))
-            guard abs(value) <= policy.originalTolerance else { throw .originalConstraint(row:sample.rowIDs[row],residual:abs(value)) }
+            guard abs(value) <= context.policy.originalTolerance else { throw .originalConstraint(row:context.sample.rowIDs[row],residual:abs(value)) }
         }
-        if impulse {
-            for i in 0..<n { for j in 0..<n {
-                try MechanismArithmetic.charge(8,&work)
-                original[i]=try MechanismArithmetic.finite(original[i]+system.massMatrix[i*n+j]*(values[j]-base[j]))
-                energy=try MechanismArithmetic.finite(energy+0.5*system.massMatrix[i*n+j]*(values[i]*values[j]-base[i]*base[j]))
-            } }
-        } else {
-            try MechanismArithmetic.charge(1,&dynamicsWork)
-            let before=dynamicsWork
-            var failure:DynamicsError?
-            do throws(DynamicsError) { try equations.originalInertialForce(system,acceleration:values,includeBias:true,into:&original,work:&dynamicsWork) } catch { failure=error }
-            guard MechanismArithmetic.preserved(before,dynamicsWork) else { dynamicsWork=before; throw .supplierLedgerReplaced }
-            if let failure { throw .dynamics(failure) }
-            guard original.count == n else { throw .invalidShape }
-        }
+        return rowResidual
+    }
+    @inline(never)
+    private func originalPhysicalForce(_ context:MechanismAcceptanceContext,original:inout [Double],
+                                       work:inout NumericalWork,dynamicsWork:inout NumericalWork) throws(MechanismError) -> Double {
+        if context.impulse { return try originalImpulseMomentum(context,original:&original,work:&work) }
+        try originalAccelerationForce(context,original:&original,dynamicsWork:&dynamicsWork)
+        return 0
+    }
+    @inline(never)
+    private func originalImpulseMomentum(_ context:MechanismAcceptanceContext,original:inout [Double],
+                                         work:inout NumericalWork) throws(MechanismError) -> Double {
+        let n=context.count
+        var energy=0.0
+        for i in 0..<n { for j in 0..<n {
+            try MechanismArithmetic.charge(8,&work)
+            original[i]=try MechanismArithmetic.finite(original[i]+context.system.massMatrix[i*n+j]*(context.values[j]-context.base[j]))
+            energy=try MechanismArithmetic.finite(energy+0.5*context.system.massMatrix[i*n+j]*(context.values[i]*context.values[j]-context.base[i]*context.base[j]))
+        } }
+        return energy
+    }
+    @inline(never)
+    private func originalAccelerationForce(_ context:MechanismAcceptanceContext,original:inout [Double],
+                                          dynamicsWork:inout NumericalWork) throws(MechanismError) {
+        try MechanismArithmetic.charge(1,&dynamicsWork)
+        let before=dynamicsWork
+        var failure:DynamicsError?
+        do throws(DynamicsError) {
+            try equations.originalInertialForce(context.system,acceleration:context.values,includeBias:true,into:&original,work:&dynamicsWork)
+        } catch { failure=error }
+        guard MechanismArithmetic.preserved(before,dynamicsWork) else { dynamicsWork=before; throw .supplierLedgerReplaced }
+        if let failure { throw .dynamics(failure) }
+        guard original.count == context.count else { throw .invalidShape }
+    }
+    @inline(never)
+    private func acceptOriginalMomentum(_ context:MechanismAcceptanceContext,original:[Double],
+                                        work:inout NumericalWork) throws(MechanismError) -> Double {
+        let n=context.count,t=context.timeScale,e=context.energyScale,s=context.scales
+        var physicalResidual=0.0
         for i in 0..<n {
             try MechanismArithmetic.charge(7,&work)
-            let expected: Double
-            if impulse { expected = reaction[i] }
+            let expected:Double
+            if context.impulse { expected=context.reaction[i] }
             else {
-                do throws(DynamicsError) { expected = drive[i] + (try system.forces.total(at:i)) + reaction[i] }
+                do throws(DynamicsError) { expected=context.drive[i]+(try context.system.forces.total(at:i))+context.reaction[i] }
                 catch { throw .dynamics(error) }
             }
-            let value=try MechanismArithmetic.finite(abs(original[i]-expected)*s[i]/(e*(impulse ? t : 1)))
+            let value=try MechanismArithmetic.finite(abs(original[i]-expected)*s[i]/(e*(context.impulse ? t : 1)))
             physicalResidual=max(physicalResidual,value)
-            guard value <= policy.originalTolerance else { throw .originalMomentum(residual:value) }
+            guard value <= context.policy.originalTolerance else { throw .originalMomentum(residual:value) }
         }
-        try MechanismArithmetic.check(policy)
-        return ConstrainedMotion(values:values,multipliers:multipliers,ids:sample.rowIDs,reaction:reaction,rank:rank,layout:sample.layout,basis:system.input.snapshot.tree.layout,frame:system.input.snapshot.tree.worldFrame,source:system.input.snapshot,velocity:system.input.velocity,
-            rowResidual:rowResidual,physicalResidual:physicalResidual,energy:impulse ? energy : nil,time:system.input.snapshot.time,
-            meaning:impulse ? .instantaneousVelocityImpulse : .accelerationForce)
+        return physicalResidual
+    }
+    @inline(never)
+    private func publishAcceptedMotion(_ context:MechanismAcceptanceContext,rowResidual:Double,
+                                       physicalResidual:Double,energy:Double) -> ConstrainedMotion {
+        ConstrainedMotion(values:context.values,multipliers:context.multipliers,ids:context.sample.rowIDs,reaction:context.reaction,rank:context.rank,
+            layout:context.sample.layout,basis:context.system.input.snapshot.tree.layout,frame:context.system.input.snapshot.tree.worldFrame,
+            source:context.system.input.snapshot,velocity:context.system.input.velocity,rowResidual:rowResidual,physicalResidual:physicalResidual,
+            energy:context.impulse ? energy : nil,time:context.system.input.snapshot.time,
+            meaning:context.impulse ? .instantaneousVelocityImpulse : .accelerationForce)
     }
     private func dynamicsCall(work:inout NumericalWork,_ call:(inout NumericalWork) throws(DynamicsError) -> DynamicsSolution) throws(MechanismError) -> DynamicsSolution {
         try MechanismArithmetic.charge(1,&work)

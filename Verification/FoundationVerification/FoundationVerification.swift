@@ -27,7 +27,7 @@ struct FoundationVerification {
             try verifyOptimization()
             try verifyGranular()
             try verifyPlanarFluids()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyRuntimeReplacement(); try verifyMechanisms(); try verifyFluids(); try verifyIntegration(); try verifyActuation(); try verifyHybrid() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { try verifyRuntime(); try verifyRuntimeReplacement(); try verifyMechanisms(); try verifyNonlinearMechanisms(); try verifySleepMechanisms(); try verifyReactionPaths(); try verifyFluids(); try verifyIntegration(); try verifyActuation(); try verifyHybrid() }
             else { throw FoundationVerificationError.unexpectedFailure }
         } catch {
             throw .unexpectedFailure

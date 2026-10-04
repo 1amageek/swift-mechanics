@@ -100,36 +100,72 @@ public final class AffineMechanismEquation: SmoothODEEquations, Sendable {
     }
     @inline(never)
     public func motion(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> ConstrainedMotion {
-        let sample=try checkedSample(time:time,point:point,work:&work,control:control)
+        let rows=try motionRows(time:time,point:point,work:&work,control:control)
+        let input=try motionInput(time:time,point:point)
+        let system=try motionAssembly(input,work:&work)
+        let result=try motionSolve(system,rows:rows,work:&work)
+        return try associateMotion(result,input:input,time:time)
+    }
+    @inline(never)
+    private func motionRows(time:Double,point:[Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) -> AffineMotionRows {
+        AffineMotionRows(try checkedSample(time:time,point:point,work:&work,control:control))
+    }
+    @inline(never)
+    private func motionInput(time:Double,point:[Double]) throws(RuntimeFailure) -> AffineMotionInput {
+        let physical=try motionPhysical(time:time,point:point)
+        let snapshot=try motionSnapshot(physical)
+        do throws(DynamicsError) { return AffineMotionInput(try RigidDynamicsInput(snapshot:snapshot.value,velocity:physical.value.v,inertias:inertias,gravity:nil)) }
+        catch { throw RuntimeFailure(.invalidState,message:"Actual compiled scalar tree state validation failed.") }
+    }
+    @inline(never)
+    private func motionPhysical(time:Double,point:[Double]) throws(RuntimeFailure) -> AffineMotionPhysical {
         let n=model.tree.layout.velocityCount
-        let state:KinematicState,snapshot:KinematicSnapshot,input:RigidDynamicsInput
-        do {
-            state=try KinematicState(revision:model.stamp.revision,time:time,q:Array(point[..<n]),v:Array(point[n...]),acceleration:[Double](repeating:0,count:n))
-            snapshot=try model.evaluate(model.makeState(state))
-            input=try RigidDynamicsInput(snapshot:snapshot,velocity:state.v,inertias:inertias,gravity:nil)
-        } catch { throw RuntimeFailure(.invalidState,message:"Actual compiled scalar tree state validation failed.") }
+        do { return AffineMotionPhysical(try KinematicState(revision:model.stamp.revision,time:time,q:Array(point[..<n]),v:Array(point[n...]),acceleration:[Double](repeating:0,count:n))) }
+        catch { throw RuntimeFailure(.invalidState,message:"Actual compiled scalar tree state validation failed.") }
+    }
+    @inline(never)
+    private func motionSnapshot(_ physical:AffineMotionPhysical) throws(RuntimeFailure) -> AffineMotionSnapshot {
+        let state=try motionCompiledState(physical)
+        do throws(CompilationFailure) { return AffineMotionSnapshot(try model.evaluate(state)) }
+        catch { throw RuntimeFailure(.invalidState,message:"Actual compiled scalar tree state validation failed.") }
+    }
+    @inline(never)
+    private func motionCompiledState(_ physical:AffineMotionPhysical) throws(RuntimeFailure) -> CompiledKinematicState {
+        do throws(CompilationFailure) { return try model.makeState(physical.value) }
+        catch { throw RuntimeFailure(.invalidState,message:"Actual compiled scalar tree state validation failed.") }
+    }
+    @inline(never)
+    private func motionAssembly(_ input:AffineMotionInput,work:inout NumericalWork) throws(RuntimeFailure) -> AffineMotionSystem {
         let reserved=try reserve(work:&work)
         var local=try localWork(work,reserved:reserved),load=try zeroLoadWork()
-        let system:RigidDynamicsSystem,assemblyBudget=local.budget
-        do throws(DynamicsError) { system=try kernel.assemble(input,admission:admission,loadWork:&load,work:&local) }
-        catch {
-            try validLocal(local,budget:assemblyBudget);try absorb(local,into:&work,reserved:reserved)
-            throw RuntimeFailure(.invalidState,message:"Rigid mass assembly failed; no retry is qualified.",failedSupplierWorkUnavailable:MechanismError.dynamics(error).failedSupplierWorkUnavailable)
-        }
-        try validLocal(local,budget:assemblyBudget);try absorb(local,into:&work,reserved:reserved)
-        local=try localWork(work,reserved:reserved)
-        var dynamics=try localWork(work,reserved:reserved),rank=try localWork(work,reserved:reserved),linear=try localWork(work,reserved:reserved)
+        let budget=local.budget
+        var output:AffineMotionSystem?,failure:DynamicsError?
+        do throws(DynamicsError) { output=AffineMotionSystem(try kernel.assemble(input.value,admission:admission,loadWork:&load,work:&local),reserved:reserved) }
+        catch { failure=error }
+        try validLocal(local,budget:budget);try absorb(local,into:&work,reserved:reserved)
+        if let failure { throw RuntimeFailure(.invalidState,message:"Rigid mass assembly failed; no retry is qualified.",failedSupplierWorkUnavailable:MechanismError.dynamics(failure).failedSupplierWorkUnavailable) }
+        guard let output else { throw RuntimeFailure(.invalidState,message:"Rigid mass assembly has no result.") };return output
+    }
+    @inline(never)
+    private func motionSolve(_ system:AffineMotionSystem,rows:AffineMotionRows,work:inout NumericalWork) throws(RuntimeFailure) -> ConstrainedMotion {
+        let reserved=system.reserved
+        var local=try localWork(work,reserved:reserved),dynamics=try localWork(work,reserved:reserved),rank=try localWork(work,reserved:reserved),linear=try localWork(work,reserved:reserved)
         let budgets=[local.budget,dynamics.budget,rank.budget,linear.budget]
         var result:ConstrainedMotion?,failure:MechanismError?
-        do throws(MechanismError) { result=try solver.acceleration(system,sample:sample,drive:drive,policy:policy,
+        do throws(MechanismError) { result=try solver.acceleration(system.value,sample:rows.value,drive:drive,policy:policy,
             work:&local,dynamicsWork:&dynamics,rankWork:&rank,linearWork:&linear) } catch { failure=error }
         for (ledger,budget) in zip([local,dynamics,rank,linear],budgets) { try validLocal(ledger,budget:budget);try absorb(ledger,into:&work,reserved:reserved) }
         if let failure {
             throw RuntimeFailure(failure.failedSupplierWorkUnavailable ? .invalidOwnerAccess : .invalidState,
                 message:failure.failedSupplierWorkUnavailable ? "Mechanism supplier work is unavailable; integration stops without retry." : "Original constrained acceleration failed.",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable)
         }
-        guard let result,result.values.count == n,result.values.allSatisfy({$0.isFinite}),result.time == time,
-              result.basis == model.tree.layout,result.sourceVelocity == state.v else {
+        guard let result else { throw RuntimeFailure(.invalidState,message:"Constrained acceleration has no result.") };return result
+    }
+    @inline(never)
+    private func associateMotion(_ result:ConstrainedMotion,input:AffineMotionInput,time:Double) throws(RuntimeFailure) -> ConstrainedMotion {
+        let n=model.tree.layout.velocityCount
+        guard result.values.count == n,result.values.allSatisfy({$0.isFinite}),result.time == time,
+              result.basis == model.tree.layout,result.sourceVelocity == input.value.velocity else {
             throw RuntimeFailure(.invalidState,message:"Constrained motion source/output shape differs from actual model stage.")
         }
         return result

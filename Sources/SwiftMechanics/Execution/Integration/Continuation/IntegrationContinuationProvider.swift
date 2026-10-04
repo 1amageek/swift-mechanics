@@ -37,6 +37,13 @@ public struct IntegrationContinuationProvider: RuntimeContributorHandling, Senda
         try equations.read(physical, into: &point)
         return try record(IntegrationHistory(time: physical.time, point: point, nextStep: policy.initialStep, steps: 0, error: nil))
     }
+    /// Encodes a proposed endpoint after validating every configured history invariant.
+    /// Physical consistency and Runtime publication remain the caller's responsibility.
+    public func record(acceptedTime: Double, point: [Double], nextStep: Double,
+                       acceptedSteps: UInt64, normalizedError: Double?) throws(RuntimeFailure) -> RuntimeContributorState {
+        try record(IntegrationHistory(time: acceptedTime, point: point, nextStep: nextStep,
+                                      steps: acceptedSteps, error: normalizedError))
+    }
     public func record(_ history: IntegrationHistory) throws(RuntimeFailure) -> RuntimeContributorState {
         try valid(history)
         var data = IntegrationPayload(bytes: signature); data.bytes.reserveCapacity(schema.maximumBytes)
