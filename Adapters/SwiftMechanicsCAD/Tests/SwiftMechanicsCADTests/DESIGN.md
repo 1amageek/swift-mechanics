@@ -1,7 +1,7 @@
 # SwiftMechanicsCAD tests
 
 ## Purpose and Scope
-Parent [companion package](../../DESIGN.md). Verify the selected [GeometryAdmission](../../Sources/SwiftMechanicsCAD/GeometryAdmission/DESIGN.md) public responsibility; no children.
+Parent [companion package](../../DESIGN.md). Verify the selected [GeometryAdmission](../../Sources/SwiftMechanicsCAD/GeometryAdmission/DESIGN.md) public responsibility; child [GearBindings verification](GearBindings/DESIGN.md) owns the distinct source-to-shaft motion/load proof.
 
 ## Responsibilities and Boundaries
 Use original public CAD constructors/evaluator and independent primitive/placement oracles. Do not import adapter or CAD internals, fabricate admission tokens, or infer inertia from missing geometric moments. Tests own no shared resources or cache.
@@ -10,6 +10,7 @@ Use original public CAD constructors/evaluator and independent primitive/placeme
 | Design | Relationship | Contract used | Summary | Caution |
 |---|---|---|---|---|
 | [GeometryAdmission](../../Sources/SwiftMechanicsCAD/GeometryAdmission/DESIGN.md) | verifies | Sealed source/query authority | Owned success and refusal proof | Full IM38 remains open |
+| [GearBindings verification](GearBindings/DESIGN.md) | child | Public original gear-to-shaft association and physical motion/load | Independent AF29 owner proof | Source pin and supplied inertia stay explicit |
 | [Package](../../DESIGN.md) | parent | Exact remote pin and isolated Native graph | Actual package qualification | No profile generalization |
 
 ## Architecture

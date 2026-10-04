@@ -2,9 +2,10 @@ import CADCore
 import CADGeometry
 import CADIR
 import CADKernel
+import CADModeling
 import SwiftMechanics
 
-public final class CADGeometryAdmission: CADGeometryQuerying {
+public final class CADGeometryAdmission: CADInvoluteGearQuerying {
     public let identity: CADSourceIdentity
     public let occurrences: [CADOccurrence]
     private let admission: _CADGeometryAdmissionToken
@@ -13,6 +14,29 @@ public final class CADGeometryAdmission: CADGeometryQuerying {
         self.admission = admission
         identity = admission.identity
         occurrences = admission.occurrences
+    }
+
+    public func involuteGear(occurrenceID: String, expected: CADSourceIdentity,
+                             work: inout CADAdapterWork) throws(CADAdapterError) -> CADInvoluteGearWitness {
+        let occurrence = try checkedOccurrence(occurrenceID, expected: expected, work: &work)
+        try resultAllowed()
+        guard let node = admission.snapshot.document.designGraph.nodes[occurrence.sourceFeature],
+              case .involuteGear(let feature) = node.operation else { throw .unsupportedSource }
+        // Charge owned dimension records; original resolver work is not an adapter work guarantee.
+        try work.charge(InvoluteGearFeature.Dimension.allCases.count)
+        let dimensions = try cadCall {
+            try feature.resolvedDimensions {
+                try ParameterResolver().evaluate($0, parameters: admission.snapshot.parameters, variables: [:])
+            }
+        }
+        let origin = try cadCall { try Vector3(feature.origin.x, feature.origin.y, feature.origin.z) }
+        let worldOrigin = try cadCall { try occurrence.placement.transforming(point: origin) }
+        let axis = try cadCall { try occurrence.placement.transforming(direction: .unitZ) }
+        let zero = try cadCall { try occurrence.placement.transforming(direction: .unitX) }
+        try work.poll()
+        return CADInvoluteGearWitness(admission: _CADInvoluteGearAdmission(source: identity,
+            occurrence: occurrence, feature: feature, dimensions: dimensions, localOrigin: origin,
+            worldOrigin: worldOrigin, worldAxis: axis, worldToothZero: zero))
     }
 
     public func anchors(occurrenceID: String, expected: CADSourceIdentity,
@@ -117,5 +141,24 @@ public final class CADGeometryAdmission: CADGeometryQuerying {
 
     private func resultAllowed() throws(CADAdapterError) {
         guard admission.limits.maximumQueryResults > 0 else { throw .capacityExceeded }
+    }
+}
+
+// Only the original retained geometry owner in this file can issue gear evidence.
+struct _CADInvoluteGearAdmission: Sendable {
+    let source: CADSourceIdentity
+    let occurrence: CADOccurrence
+    let feature: InvoluteGearFeature
+    let dimensions: [InvoluteGearFeature.Dimension: Double]
+    let localOrigin: Vector3
+    let worldOrigin: Vector3
+    let worldAxis: Vector3
+    let worldToothZero: Vector3
+    fileprivate init(source: CADSourceIdentity, occurrence: CADOccurrence, feature: InvoluteGearFeature,
+                     dimensions: [InvoluteGearFeature.Dimension: Double], localOrigin: Vector3,
+                     worldOrigin: Vector3, worldAxis: Vector3, worldToothZero: Vector3) {
+        self.source = source; self.occurrence = occurrence; self.feature = feature
+        self.dimensions = dimensions; self.localOrigin = localOrigin; self.worldOrigin = worldOrigin
+        self.worldAxis = worldAxis; self.worldToothZero = worldToothZero
     }
 }
