@@ -23,6 +23,7 @@ struct FoundationVerification {
             stage = "verifyCollision"; try verifyCollision()
             stage = "verifyDynamics"; try verifyDynamics()
             stage = "verifyObservations"; try verifyObservations()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyConstrainedNormalImpact"; try verifyConstrainedNormalImpact() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPlanarPhysicalLower"; try verifyPlanarPhysicalLower() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPrescribedBaseLower"; try verifyPrescribedBaseLower(); stage = "verifyPlanarReactionLower"; try verifyPlanarReactionLower() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyClosedLoopReactions"; try verifyClosedLoopReactions() }
@@ -61,6 +62,7 @@ struct FoundationVerification {
             stage = "verifyContactDerivatives"; try verifyContactDerivatives()
             stage = "verifyOptimization"; try verifyOptimization()
             stage = "verifyNonlinearOptimization"; try verifyNonlinearOptimization()
+            stage = "verifyPhysicalParameterIdentification"; try verifyPhysicalParameterIdentification()
             stage = "verifyGranular"; try verifyGranular()
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyGranularRuntime"; try verifyGranularRuntime() }
             stage = "verifyPlanarFluids"; try verifyPlanarFluids()

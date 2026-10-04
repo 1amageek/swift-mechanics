@@ -666,7 +666,17 @@ New production owners and public context backing are immutable Sendable; work is
 
 ## AF30 independent physical input builders
 
-Machine_foundation exclusively owns ParameterIdentificationProbeModel.swift, which constructs only the already qualified public compiler/joint/inertia model: one fixed-base spatial Y-prismatic dynamic body, nominal mass1, known per-mass unit diagonal inertia, zero COM and no gravity/extensions. It consumes no unfinished identification operation and produces no fabricated estimate. Root later supplies actual states and measured efforts through the qualified source API. The independent two-sample oracle a1/v1/f2.5 and a1/v-2/f1 at sigma1 recovers m2/d0.5, information matrix [[2,-1],[-1,5]] and inverse1/9[[5,1],[1,2]] under the child-declared force-noise/exact-kinematics assumptions. Root owns assertions, schema and all registration; producer Native handoff precedes dependent public execution. New pending caller files stay excluded from shared builds.
+Machine_foundation exclusively owns ParameterIdentificationProbeModel.swift and ParameterIdentificationProbeContext.swift. The model constructs the already qualified public compiler/joint/inertia input: one fixed-base spatial Y-prismatic dynamic body, nominal mass1, known per-mass unit diagonal inertia, zero COM and no gravity/extensions. The context consumes the stable [identification public contract](../../Sources/SwiftMechanics/Analysis/Optimization/ParameterIdentification/DESIGN.md), supplies actual states and measured efforts, and calls the real identifier without manufacturing an estimate. The independent two-sample oracle a1/v1/f2.5 and a1/v-2/f1 at sigma1 recovers m2/d0.5, information matrix [[2,-1],[-1,5]] and inverse1/9[[5,1],[1,2]] under the child-declared force-noise/exact-kinematics assumptions. A correlated a2v/f4.5v problem must refuse identification. Root owns assertions, schema and all registration; producer Native handoff precedes dependent public execution. After frozen Native handoff, root registered the six public caller/context/assertion files in the canonical target. The original throwing CollisionSnapshot initializer is propagated with try; the input geometry and expected oracles are unchanged.
+
+Reaction_paths exclusively owns ConstrainedImpactProbeModel.swift and ConstrainedImpactProbeContext.swift. These construct a genuine fixed-root spatial two-Z-rotor/Y-striker model through the public compiler, with Izz2 for each rotor and striker mass2, actual analytic sphere collision at lever x1, q[0,0,.5], v[0,0,-1] and time.25. They consume the stable [constrained impulse public contract](../../Sources/SwiftMechanics/Execution/Hybrid/ConstrainedNormalImpulse/DESIGN.md), original stationary gear row[1,1,0] and original contact row[-1,0,1]. They invoke real preparation/solve with unchanged source state and original bounded ledgers. Root independently asserts e1 impulse8/3, v[-2/3,2/3,1/3], energy1; e0 impulse4/3, v[-1/3,1/3,-1/3], energy1/3 and loss2/3. The old free-impulse-then-projection result fails rebound and energy. Caller contexts own only immutable inputs and operation-local state; supplier ownership and production contracts remain with their child owners.
+
+Root's ConstrainedImpactVerification.swift additionally substitutes a genuine original rigid assembly from another same-stamp q. Actual preparation must refuse sourceMismatch after the original assembly, retain known numerical/load work and keep source q/v/time unchanged. This executes the private operation-local receipt's synchronized failure write/read across all declared profiles; it neither fabricates a mass matrix nor changes a production supplier. The receipt remains unreachable to external asynchronous work and uses the same Mutex storage/access on each target. ParameterIdentificationVerification.swift independently compares original force rows, information/covariance, interior bounds and exact correlated null-direction refusal; production residual fields alone never serve as the oracle.
+
+```text
+Stable child public contracts -> disjoint public input/context writers
+Frozen child Native behavior + frozen contexts -> root assertions and registration
+Registered immutable composition -> original Native/WASM/Embedded execution
+```
 
 ## AF30 observation public composition contract
 
@@ -679,3 +689,34 @@ Frozen36 owner files match the independent48cf8df copy; production digestd3a463a
 Root registered the frozen producer, its test target and actual original public callers while excluding all three unfinished new source scopes. All new observation and inherited public witnesses executed and exited0 on Native, ordinary WASM and Embedded. Corrected setup times were3.54s/6.09s/20.20s; ordinary/Embedded runtime8.80s/5.04s. Native strict signature verification exited0. The initial shared caller error was an untyped policy factory inside a typed observation catch; moving that factory before the typed block preserves all inputs/physics and changes no production code. Exact commands/results are `.build/af30-observations-*-corrected-build.{log,json}` and adjacent runtime logs/results. Native runtime is `.build/af30-observations-native-runtime.log`.
 
 Immediate every-write diagnostic copies of both unchanged raw WASM artifacts passed all new/inherited witnesses at the original131072-byte boundary. Ordinary initial2003888/lower1872816/38528 guarded writes; Embedded343696/212624/23291. Guard runtime6.61s/3.74s, both exit0; evidence `.build/af30-observations-stack`. These profiles preserve fixed6.4.0/matching SDKs, EmbeddedUnicode, original equations/tolerances and stack. New production state is immutable Sendable with exclusive call-local work; no conditional synchronization, unchecked isolation or target fallback appears. Native13 tests qualify their actual case domain; public profiles qualify only their executed mounted/encoder/IMU/wrench/stale/supplier paths, not full bearing decomposition, scheduling or WASI multithreading. Full210 and remaining primary domains persist.
+
+## AF30 canonical composition qualification
+
+The root manifests register the qualified identification and constrained-impact production children, their two dedicated test targets, and the complete public verification executable. The optional Native CAD manifest registers GearReinitialization production and tests while retaining the original clean CAD pin. Parent contracts remain indexed by their existing child designs; this record owns only cross-child public composition evidence.
+
+| Proof boundary | Confirmed evidence | Remaining gap |
+|---|---|---|
+| Canonical Native snapshot | Exact Swift6.4.0,50 standalone test runs/938 declarations passed; complete public executable passed after strict signature verification | None in the selected domain:27 impact cases and complete public executable rechecked after the correction |
+| Optional CAD | Exact current-root adapter/core, clean295a pin;22 tests/3 suites passed once | None in this Native-only execution path |
+| Ordinary/Embedded public | Both original SDK builds and actual complete raw executables passed; both131072-byte guards passed after the measured six-case error-carrier correction | None in the selected domain |
+
+Native source freeze covered2043 Swift/manifest files and stayed identical during its successful build/tests/public run. CAD retained its initial inventory; its sole difference was the root's public-only throwing-initializer correction, absent from the CAD compiled graph. Logs/commands/times/hashes are retained in `.build/af30-canonical-native-proof.json` and `.build/af30-canonical-cad-proof.json`. Initial public compile and original-profile runtime failures remain recorded. Unchanged Native/CAD path evidence is reused; this record does not claim that a Native pass proves a WASM/Embedded path or the complete210 requirements.
+
+```text
+Frozen production contracts -> canonical Native938 + optional Native CAD22
+Registered physical public callers -> ordinary/Embedded original raw execution
+Original raw execution -> immediate original131072-byte stack-boundary proof
+Concrete profile failure -> child-owned correction -> affected behavioral recheck
+```
+
+Final qualification retained the exact release toolchain/SDK pair, physical operators, tolerances, caller budgets and original131072-byte stack. The six rich failure cases became immutable indirect enum payloads; all typed failures, original supplier work and identical Mutex receipt semantics survived actual source-refusal execution on Native, ordinary and Embedded. No other production file changed after the original full938/CAD22 proof. The CAD execution path does not consume ConstrainedNormalImpulse, so its unchanged behavioral proof remains valid.
+
+| Final causal proof | Setup seconds | Behavior seconds | Actual result |
+|---|---:|---:|---|
+| Native changed impact owner |25.549|12.779|18 definitions/27 cases passed; full signed public runtime also passed in4.114s |
+| Ordinary WASM public |11.595|7.010|Complete raw public executable passed |
+| Embedded WASM public, EmbeddedUnicode |57.484|3.693|Complete raw public executable passed |
+| Ordinary immediate stack guard |0.171|6.465|131072 bytes, initial2023456/lower1892384,39184 guarded writes; passed |
+| Embedded immediate stack guard |0.173|3.661|131072 bytes, initial346992/lower215920,23957 guarded writes; passed |
+
+The actual frame reductions confirm the failure mechanism: ordinary/Embedded preflight93,200/103,568→29,008/29,600 bytes; prepareImpact24,304/26,208→11,664/11,776 bytes; ordinary guarded assembly24,064→624 bytes and Embedded outer/inner26,848/26,768→1,648/1,568 bytes. Initial compile/runtime/guard RED evidence is preserved alongside the final GREEN, rather than overwritten. `.build/af30-qualified-integrated-proof.json` owns exact source/artifact hashes,2043-file start/end equality, SDKs, commands/elapsed/exit and references to the independent/canonical proofs. Complete210, broad OP009/contact/reinitialization domains and accepted Sleep/Hybrid publication remain open in PROGRESS and their own contracts.

@@ -19,7 +19,7 @@ let package = Package(
             .product(name: "CADIR", package: "swift-cad"),
             .product(name: "CADModeling", package: "swift-cad"),
             .product(name: "CADKernel", package: "swift-cad"),
-        ], exclude: ["DESIGN.md", "GeometryAdmission/DESIGN.md", "GearBindings/DESIGN.md", "GearReinitialization"]),
+        ], exclude: ["DESIGN.md", "GeometryAdmission/DESIGN.md", "GearBindings/DESIGN.md", "GearReinitialization/DESIGN.md"]),
         .testTarget(name: "SwiftMechanicsCADTests", dependencies: [
             "SwiftMechanicsCAD",
             .product(name: "SwiftMechanics", package: "swift-mechanics"),
@@ -29,6 +29,6 @@ let package = Package(
             .product(name: "CADIR", package: "swift-cad"),
             .product(name: "CADModeling", package: "swift-cad"),
             .product(name: "CADKernel", package: "swift-cad"),
-        ], exclude: ["DESIGN.md", "GearBindings/DESIGN.md", "GearReinitialization"]),
+        ], exclude: ["DESIGN.md", "GearBindings/DESIGN.md", "GearReinitialization/DESIGN.md"]),
     ]
 )

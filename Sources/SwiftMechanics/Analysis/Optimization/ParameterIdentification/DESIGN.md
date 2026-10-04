@@ -1,7 +1,7 @@
 # Physical affine mass and damping identification
 
 ## Purpose and Scope
-Parent: [Optimization](../DESIGN.md). Children: none. Own AF30 / the selected OP-009 physical identification operation: positive mass and passive linear dashpot coefficient of one fixed-base spatial prismatic body from force observations with supplied exact kinematics. Design preceded Swift declarations. Selected Native behavior is qualified by the dedicated 26-test proof; canonical and original WASM/Embedded profile qualification remains pending under the [parent evidence authority](../DESIGN.md). Full OP-009 responsibility remains assigned beyond this explicit domain.
+Parent: [Optimization](../DESIGN.md). Children: none. Own AF30 / the selected OP-009 physical identification operation: positive mass and passive linear dashpot coefficient of one fixed-base spatial prismatic body from force observations with supplied exact kinematics. Design preceded Swift declarations. Selected Native behavior is qualified by the dedicated 26-test proof; canonical and original WASM/Embedded profile qualification passed under root public-composition evidence authority. Full OP-009 responsibility remains assigned beyond this explicit domain.
 
 ## Responsibilities and Boundaries
 Consume real tree/dynamics/load/derivative operations, solve the resulting bounded two-parameter convex problem and independently accept the original physical residual objective and parameter KKT. Publish parameter bounds, physical estimates, residuals, objective, numerical identifiability directions and explicitly scoped uncertainty assumptions. Neither a supplied regression matrix nor a scalar finite-difference wrapper is the production mechanical model.
@@ -56,3 +56,5 @@ Each mutable inout supplier invocation uses a captured, primed remaining-budget 
 
 ## Verification and Change Impact
 The dedicated test contract owns independent analytic mass/damping/weighted-noise, correlation/null-direction, SI scaling, rotation, bound/KKT, original-recomputation and failed supplier/work evidence. Actual forward dynamics generates synthetic kinematic accelerations; original Newton-Euler and passive load calls are exercised by estimation. Finite differences are optional independent directional oracles only. Production cannot accept a manufactured design matrix. Changes to physical source parameterization, unit/observation association or supplier work authority require rechecking this child and its estimator consumers. The executed dedicated Native tests qualify only this selected physical/noise domain. Canonical/profile evidence and full OP-009 status remain the parent authority.
+
+Selected canonical/profile composition evidence is owned by [FoundationVerification](../../../../../Verification/FoundationVerification/DESIGN.md#af30-canonical-composition-qualification). Its exact tested physical domains do not extend this child’s admitted API scope.
