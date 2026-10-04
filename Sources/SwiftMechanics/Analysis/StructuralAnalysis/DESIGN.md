@@ -41,3 +41,5 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## AF28 nonproportional-spectrum dispatch
 
 scalar_boundary exclusively owns the new GeneralDampedSpectrum child and dedicated tests, with the new Numerics/ComplexSpectrum prerequisite under the same owner. Existing Pencils/PhysicalModels/HarmonicResponse/Buckling and all suppliers stay read-only. Actual general spectral and original quadratic-pencil contracts precede declarations; no existing unsupported branch is silently redirected. Root alone owns this index, registration/public evidence/progress and commits. See [dispatch](../../../../IMPLEMENTATION_PLAN.md#af28-independent-frontier-dispatch).
+
+Selected AF28 Native/ordinary-WASM/Embedded-WASM public behavior is qualified through the unchanged core profile. Exact integrated execution and remaining domain limits belong to [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af28-integrated-selected-qualification); child contracts remain the API authority.

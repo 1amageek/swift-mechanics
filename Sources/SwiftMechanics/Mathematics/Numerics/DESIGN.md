@@ -59,3 +59,5 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## AF28 complex-spectrum prerequisite
 
 scalar_boundary exclusively owns the new ComplexSpectrum child and dedicated tests for the nonproportional structural-spectrum consumer. Existing Numerics and scalar/math suppliers are read-only. Bounded actual algorithms, original residual acceptance and typed failure are prerequisites for the upper consumer; no foreign numerical engine or widened original stack supplies support. Root owns this index/registration/public evidence/progress and commits. See [dispatch](../../../../IMPLEMENTATION_PLAN.md#af28-independent-frontier-dispatch).
+
+Selected AF28 Native/ordinary-WASM/Embedded-WASM public behavior is qualified through the unchanged core profile. Exact integrated execution and remaining domain limits belong to [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af28-integrated-selected-qualification); child contracts remain the API authority.

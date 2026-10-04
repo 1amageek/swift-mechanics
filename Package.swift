@@ -32,6 +32,7 @@ let package = Package(
                     "Analysis/Optimization/ProblemContracts/DESIGN.md",
                     "Analysis/StructuralAnalysis/Buckling/DESIGN.md",
                     "Analysis/StructuralAnalysis/DESIGN.md",
+                    "Analysis/StructuralAnalysis/GeneralDampedSpectrum/DESIGN.md",
                     "Analysis/StructuralAnalysis/HarmonicResponse/DESIGN.md",
                     "Analysis/StructuralAnalysis/Pencils/DESIGN.md",
                     "Analysis/StructuralAnalysis/PhysicalModels/DESIGN.md",
@@ -69,6 +70,7 @@ let package = Package(
                     "Mathematics/Nonlinear/DESIGN.md",
                     "Mathematics/Nonlinear/NonlinearSolve/DESIGN.md",
                     "Mathematics/Numerics/DESIGN.md",
+                    "Mathematics/Numerics/ComplexSpectrum/DESIGN.md",
                     "Mathematics/Numerics/LinearAlgebra/DESIGN.md",
                     "Mathematics/Numerics/Reduction/DESIGN.md",
                     "Mathematics/Numerics/Scaling/DESIGN.md",
@@ -167,6 +169,7 @@ let package = Package(
                     "Physics/Mechanisms/TopologyContinuation/DESIGN.md",
                     "Physics/Transmissions/CompliantPorts/DESIGN.md",
                     "Physics/Transmissions/DESIGN.md",
+                    "Physics/Transmissions/ToothContacts/DESIGN.md",
                     "Physics/Transmissions/IdealNetworks/DESIGN.md",
                     "Physics/Transmissions/PortBindings/DESIGN.md",
                 ],
@@ -215,6 +218,9 @@ let package = Package(
         .testTarget(name: "MechanicsGranularRuntimeTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsExchangeTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "SwiftMechanicsMachineTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsComplexSpectrumTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsDampedSpectrumTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsToothContactTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
     ],
     swiftLanguageModes: [.v6]
 )

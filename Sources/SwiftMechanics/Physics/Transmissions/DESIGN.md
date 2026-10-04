@@ -39,3 +39,5 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## AF28 tooth-contact dispatch
 
 nonlinear_mechanisms exclusively owns the new ToothContacts child and dedicated tests under IM47. It consumes externally supplied validated geometry/proxy records and qualified collision/contact/dynamics contracts and immutable accepted-value continuation, independently of the unfinished CAD adapter. Actual tooth forces and physical evolution, model fidelity/provenance and refinement precede qualification; an ideal coupling is not tooth-resolved authority. Existing children and suppliers stay read-only. Root owns this index/shared graph/public evidence/progress/commits. See [dispatch](../../../../IMPLEMENTATION_PLAN.md#af28-independent-frontier-dispatch).
+
+Selected AF28 Native/ordinary-WASM/Embedded-WASM public behavior is qualified through the unchanged core profile. Exact integrated execution and remaining domain limits belong to [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af28-integrated-selected-qualification); child contracts remain the API authority.
