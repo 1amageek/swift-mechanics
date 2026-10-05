@@ -472,3 +472,99 @@ Public API verification consumers are prepared alongside disjoint source impleme
 Progress reporting distinguishes implementation, behavioral qualification and integration per function, with the concrete prerequisite or owner wait stated. Sleep begins after actual StationaryIslandDynamics lower handoff, and event evolution begins after actual mixed-sleep handoff; other ready independent functions continue and integrate immediately. Sensor/control shared-world composition remains a separate unfinished requirement; two privately owned sessions do not establish one atomic world.
 
 The AF31Independent group includes disjoint public consumer leaves .30..33 and ready per-function root integration leaves .20..25. Their mutable production/probe directories do not overlap. The common registrar is a single root owner: its shared manifest/entrypoint mutations and profile-build phases are serialized, never parallelized with another registration or an evolving registered source. Other owners run immutable private overlays, so root registration cannot change their proof snapshots. This preserves safe shared-source ownership while allowing the first finished feature to integrate during the remaining independent implementations.
+
+## AF32 implementation-first dispatch
+
+The current user instruction prioritizes independent source implementation and defers tests and verification. The integration owner retains the sole Package.swift, parent design index and PROGRESS.md responsibilities. Every worker writes only its new child directory against existing qualified suppliers; new AF32 children are not suppliers to other workers. Source handoff records implementation availability, never behavioral qualification. All new children remain excluded from the canonical target until the later verification/registration phase. The existing210 requirements and final integration obligations remain unchanged.
+
+| Progress ID | Owned child | Requirement/domain | Supplier handoff | Later obligations |
+|---|---|---|---|---|
+| IM.AF32.1 | [Execution/Integration/ImplicitMethods](Sources/SwiftMechanics/Execution/Integration/ImplicitMethods/DESIGN.md) | TI-003 implicit integration | Existing qualified IM04/08/09; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+| IM.AF32.2 | [Physics/Flexible/Shells](Sources/SwiftMechanics/Physics/Flexible/Shells/DESIGN.md) | FX-003 flat Mindlin plate/shell | Existing qualified IM02/03/18; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+| IM.AF32.3 | [Physics/Granular/FiniteMassBoundaries](Sources/SwiftMechanics/Physics/Granular/FiniteMassBoundaries/DESIGN.md) | EX-004 finite-mass spheres | Existing qualified IM08/21/24 and selected IM43; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+| IM.AF32.4 | [Physics/Fluids/SpatialProjection](Sources/SwiftMechanics/Physics/Fluids/SpatialProjection/DESIGN.md) | EX-005 periodic3D MAC | Existing qualified IM03/08/09 and selected IM44; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+| IM.AF32.5 | [Analysis/Derivatives/InertialParameters](Sources/SwiftMechanics/Analysis/Derivatives/InertialParameters/DESIGN.md) | OP-001/002 inertial directions | Existing qualified IM06/12/15 and selected IM30; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+| IM.AF32.6 | [Physics/Loads/PulleyWrapping](Sources/SwiftMechanics/Physics/Loads/PulleyWrapping/DESIGN.md) | FO cable routing and TR pulley domains | Existing qualified IM06/11; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+| IM.AF32.7 | [Execution/Control/LinearQuadratic](Sources/SwiftMechanics/Execution/Control/LinearQuadratic/DESIGN.md) | CO-003 discrete LQR | Existing qualified IM03/04/08/17; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+| IM.AF32.8 | [Execution/Control/LinearEstimation](Sources/SwiftMechanics/Execution/Control/LinearEstimation/DESIGN.md) | CO-006 linear estimation | Existing qualified IM03/08; child design states exact consumed contracts | Source review, behavioral tests, original profiles, coherent commit and incremental registration |
+
+Each child owns its equations, admitted domain, failures and bounded storage/work contract. Parent documents link to child authority. Broader unsupported domains remain explicit requirements rather than hidden successful fallbacks. Source-only workers do not edit tests, verification executables, shared suppliers, shared registries or Git state. Final integration remains IM48.
+
+
+## AF33 independent implementation-first dispatch
+
+The continued user instruction prioritizes source implementation and defers new builds/tests/profile qualification. These selected-domain kernels consume the qualified supplier handoffs listed below, rather than assuming complete unqualified IM33/IM34/IM19 feature families. AF32 source is not a supplier. Each child owns its new design before implementation; root alone owns manifests, parent indexes, progress, eventual registration and Git. Full210 and behavioral completion obligations remain unchanged.
+
+| Progress ID | Owned child | Requirements | Qualified prerequisites | Handoff |
+|---|---|---|---|---|
+| IM.AF33.1 | [Analysis/Planning/PoseIK](Sources/SwiftMechanics/Analysis/Planning/PoseIK/DESIGN.md) | KI-004;OP-005 | IM.IM04,IM.IM06,IM.IM12,IM.IM30.1 | Source/design only; qualification and commit deferred |
+| IM.AF33.2 | [Analysis/Planning/DifferentialIK](Sources/SwiftMechanics/Analysis/Planning/DifferentialIK/DESIGN.md) | KI-005 | IM.IM03,IM.IM06,IM.IM12,IM.IM32.1 | Source/design only; qualification and commit deferred |
+| IM.AF33.3 | [Analysis/Planning/CollisionPaths](Sources/SwiftMechanics/Analysis/Planning/CollisionPaths/DESIGN.md) | OP-007 | IM.IM02,IM.IM10 | Source/design only; qualification and commit deferred |
+| IM.AF33.4 | [Execution/Control/Predictive](Sources/SwiftMechanics/Execution/Control/Predictive/DESIGN.md) | CO-004 | IM.IM03,IM.IM32.1,IM.AF31.23 | Source/design only; qualification and commit deferred |
+| IM.AF33.5 | [Physics/Flexible/Hexahedra](Sources/SwiftMechanics/Physics/Flexible/Hexahedra/DESIGN.md) | FX-004;FX-006;FX-007 | IM.IM02,IM.IM03,IM.IM18,IM.IM19 | Source/design only; qualification and commit deferred |
+| IM.AF33.6 | [Physics/Flexible/DiscreteCables](Sources/SwiftMechanics/Physics/Flexible/DiscreteCables/DESIGN.md) | FX-001;FX-006;FX-007 | IM.IM02,IM.IM03,IM.IM18 | Source/design only; qualification and commit deferred |
+| IM.AF33.7 | [Physics/Constraints/RollingRelations](Sources/SwiftMechanics/Physics/Constraints/RollingRelations/DESIGN.md) | CN-002 | IM.IM06,IM.IM07,IM.IM12 | Source/design only; qualification and commit deferred |
+| IM.AF33.8 | [Physics/Flexible/ModalReduction](Sources/SwiftMechanics/Physics/Flexible/ModalReduction/DESIGN.md) | FX-011 | IM.IM03,IM.IM19,IM.IM28 | Source/design only; qualification and commit deferred |
+
+Per-feature AF32/AF33 leaves retain ownership of later behavioral qualification, review, coherent commit and root-controlled incremental registration. Their final `.9` item owns only cumulative interactions after those leaves close; it is not a prerequisite for a feature's own verification or registration. The current source-first instruction defers these phases without making an unverified source handoff complete.
+
+## AF34 continuous implementation dispatch
+
+The user explicitly instructed continuous implementation without stopping at source-cohort handoffs. Independent ready selected domains are implemented using qualified existing suppliers while new verification remains deferred. No unverified AF32/33/34 child is a supplier. Source-written status never completes a coding leaf. Root controls manifests/progress/Git and dispatches additional ready work when an owner frees up; each new responsibility is recorded before edits. AF34.1 exclusively owns its required existing Machines context and parent contract amendments; other producers stay frozen.
+
+| Progress ID | Owned child | Requirements | Qualified prerequisites | Handoff |
+|---|---|---|---|---|
+| IM.AF34.1 | [Modeling/Machines/StructuralAuthoring](Sources/SwiftMechanics/Modeling/Machines/StructuralAuthoring/DESIGN.md) | MD/JT/KI authoring | AR01,IM.IM02,IM.IM06,IM.IM07 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.2 | [Exchange/XML](Sources/SwiftMechanics/Exchange/XML/DESIGN.md) | IO-003..006 input prerequisite | IM.IM01,IM.IM35 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.3 | [Analysis/Planning/TrajectoryOptimization](Sources/SwiftMechanics/Analysis/Planning/TrajectoryOptimization/DESIGN.md) | OP-006 | IM.IM03,IM.IM04,IM.IM11,IM.IM15,IM.IM32.2 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.4 | [Analysis/Planning/TimeParameterization](Sources/SwiftMechanics/Analysis/Planning/TimeParameterization/DESIGN.md) | OP-008 | IM.IM03,IM.IM06,IM.IM15 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.5 | [Execution/Control/TaskSpace](Sources/SwiftMechanics/Execution/Control/TaskSpace/DESIGN.md) | CO-005 | IM.IM03,IM.IM06,IM.IM12,IM.IM15 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.6 | [Physics/Flexible/Attachments](Sources/SwiftMechanics/Physics/Flexible/Attachments/DESIGN.md) | FX-008 | IM.IM06,IM.IM19,IM.IM23.2 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.7 | [Physics/Vehicles/TireLaws](Sources/SwiftMechanics/Physics/Vehicles/TireLaws/DESIGN.md) | EX-002 | IM.IM01,IM.IM02,IM.IM11,IM.IM20 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.8 | [Physics/Collision/ConvexQueries](Sources/SwiftMechanics/Physics/Collision/ConvexQueries/DESIGN.md) | CL-001;CL-004 | IM.IM01,IM.IM02,IM.IM10 | Source/design first; later qualification and coherent commit required |
+
+AF34.10 is the independent root-owned IO-007 result archive/export implementation at Exchange/ResultExport, consuming qualified Core/Compiler/Runtime/Exchange and AF30 observation records. It shares no mutable source with workers and remains excluded/unqualified until later behavioral evidence. Its source-only progress joins AF34.9 only for eventual cumulative integration.
+
+## AF35 continuous independent source dispatch
+
+User instruction continues implementation and defers new tests. Root records the sibling work before source changes; each owner reads actual qualified supplier implementations and fixes the child contract first. No AF32/33/34 unqualified child is a supplier. Source-only status never closes a requirement. Root owns shared configuration/indexes/progress/Git.
+
+| ID | Exclusive new source owner | Responsibility | Qualified prerequisites |
+|---|---|---|---|
+| IM.AF35.1 | [TriangleMeshes](Sources/SwiftMechanics/Physics/Collision/TriangleMeshes/DESIGN.md) | Bounded triangle-mesh proximity, ray and translating-sphere sweep with original feature/source/refit admission | IM.IM01,IM.IM02,IM.IM10 |
+| IM.AF35.2 | [FieldOutputs](Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/DESIGN.md) | Tet4 physical stress/strain/displacement/internal-force/energy queries with actual constitutive point and location/measure/projection metadata | IM.IM01,IM.IM03,IM.IM18,IM.IM19 |
+| IM.AF35.3 | [ArticulatedDynamics](Sources/SwiftMechanics/Physics/Dynamics/ArticulatedDynamics/DESIGN.md) | Recursive articulated-body rigid dynamics using actual tree/inertia/load contracts and original body residuals | IM.IM03,IM.IM06,IM.IM15 |
+| IM.AF35.4 | [TerrainLaws](Sources/SwiftMechanics/Physics/Vehicles/TerrainLaws/DESIGN.md) | Calibrated deformable-terrain sinkage/shear histories and explicit original force/work/energy diagnostics | IM.IM01,IM.IM02,IM.IM11,IM.IM20 |
+| IM.AF35.5 | [GeometryParameters](Sources/SwiftMechanics/Analysis/Derivatives/GeometryParameters/DESIGN.md) | Analytic joint-placement/axis geometry parameter tangents with original kinematic replay/provenance | IM.IM02,IM.IM06,IM.IM30.1 |
+
+IM.AF35.6 is the root-owned independent [ExternalCommands](Sources/SwiftMechanics/Execution/Control/ExternalCommands/DESIGN.md) source owner. It consumes qualified IM01/07/14 and AF31.23 public actuator/control binding contracts, preserves source timestamps/declared delay/order/interpolation and produces actual DriveCommand input without Runtime admission or silent stale-command reuse.
+
+IM.AF35.7 owns independent [NonlinearEstimation](Sources/SwiftMechanics/Execution/Control/NonlinearEstimation/DESIGN.md) source using qualified IM03/06/15/25/30.1, actual nonlinear physical propagation/model tangents and covariance/timing failure semantics; no unqualified AF32 filter dependency.
+
+IM.AF35.8 owns only the frozen XML prerequisite qualification in an isolated exact-source package, necessary to begin actual foreign-format consumers. Existing independent AF35 siblings keep implementing. Fixed release/matching SDK Native/ordinary/Embedded, original bounded stack before raw execution, independent behavioral and failure fixtures remain supplier requirements. Root retains canonical registration/Git; per-source qualification can finish without a cohort gate.
+
+IM.AF35.10 owns independent [Refinement](Sources/SwiftMechanics/Physics/Flexible/Refinement/DESIGN.md) using qualified Core/Model/Numerics/Mesh/Tet4, retaining topology/material/boundary/source and original force/moment/virtual-work under conforming Tet4 refinement. Root owns shared files and Git.
+
+AF34.1 expanded StructuralAuthoring depends additionally on qualified IM11/13/14 and IM16.15 selected physical loaded affine evolution, not complete IM16. AF35.7 actual observation producer is qualified AF30, alongside IM11/06/15/30.1; incomplete whole IM25 is not a supplier gate.
+
+IM.AF35.11 owns [SpatialBeams](Sources/SwiftMechanics/Physics/Flexible/SpatialBeams/DESIGN.md): Actual spatial Euler-Bernoulli/Timoshenko beam axial/bending/shear/torsion operators and mass/damping/field outputs. Qualified prerequisites IM.IM01,IM.IM02,IM.IM03,IM.IM18,IM.IM19; immutable suppliers and root shared-file ownership retained.
+
+IM.AF35.12 owns [FrictionalImpulse](Sources/SwiftMechanics/Execution/Hybrid/FrictionalImpulse/DESIGN.md): Physical Coulomb sticking/sliding point impulses and velocity jumps using original kinematics/mass and restitution/energy. Qualified prerequisites IM.IM03,IM.IM06,IM.IM10,IM.IM15,IM.IM20,IM.IM24; immutable suppliers and root shared-file ownership retained.
+
+IM.AF35.13 owns [LinearPrograms](Sources/SwiftMechanics/Analysis/Optimization/LinearPrograms/DESIGN.md): General LP phase-I/II simplex with original feasibility/duality/Farkas/recession certificate and bounded degeneracy termination. Qualified prerequisites IM.IM03; immutable suppliers and root shared-file ownership retained.
+
+IM.AF35.14 owns [CoSimulation](Sources/SwiftMechanics/Execution/CoSimulation/DESIGN.md): Explicit-clock rollback-capable physical co-simulation and power/synchronization acceptance from actual qualified participant contracts. Qualified prerequisites IM.IM08,IM.IM09,IM.IM15,IM.AF31.23; immutable suppliers and root shared-file ownership retained.
+
+IM.AF35.15 owns [ParticleFlows](Sources/SwiftMechanics/Physics/Fluids/ParticleFlows/DESIGN.md): Weakly compressible SPH particle fluid with real density/pressure/viscosity, prescribed boundary reactions and original momentum/energy/stability. Qualified prerequisites IM.IM01,IM.IM02,IM.IM03,IM.IM08,IM.IM09; immutable suppliers and root shared-file ownership retained.
+
+AF35.14 actual physical effort input is ControlSampleInput.Demand.servo(DriveCommand), not a mutable plant disturbance. It consumes qualified AF30 source-bound encoder issuance in addition to AF31.23. Coordinator owns both generated sessions, macro-boundary publication and bounded rollback; Runtime remains one-owner commit authority and rollback failure preserves actual prefixes and poisons coordinator health.
+
+IM.AF35.16 independently owns [URDF](Sources/SwiftMechanics/Exchange/URDF/DESIGN.md), consuming the frozen actually qualified XML handoff AF35.8 plus qualified Core/Model/Joints/Compiler/Transmissions/Actuation/native exchange public contracts. XML canonical registration/commit proceeds independently under AF34.2 and is not a cohort barrier. NonlinearEstimation direct qualified edges are IM02/03/06/11/15/AF30/30.1.
+
+IM.AF35.17 owns optional companion [ResultAssociations](Adapters/SwiftMechanicsCAD/Sources/SwiftMechanicsCAD/ResultAssociations/DESIGN.md), consuming qualified IM02/06/07/08/38.1 and AF30 original accepted-state/physical observation/opaque CAD geometry contracts. Existing clean pinned public CAD authority remains frozen; source-only consumer does not infer CAD field/mesh/mass capabilities. Root owns adapter manifest/index/Git.
+
+AF35.18 owns exact private aggregate Native compilation and routing of actual failures to component owners, without admitting unqualified sources as behavioral suppliers. AF35.19/20/21 own independent SDF/MJCF/OpenUSD selected semantic sources under IM37/IO-004..006. SDF/MJCF use the individually qualified XML supplier from commit873adc9; new format sources are not suppliers before behavioral qualification. Root owns all shared registrations/progress/Git; current compiler repairs retain priority and exact source ownership.
+
+AF35.23 owns [JointStops](Sources/SwiftMechanics/Physics/Constraints/JointStops/DESIGN.md) as the selected scalar bound/impact contributor for joint-limit requirements: original source-bound coordinate/rate and actual mass inverse/restitution/energy, separated from Runtime event enforcement and constrained/simultaneous impacts. It consumes only qualified base producers; unqualified formats remain consumers of no new supplier.
+
+AF35.26 owns Collision/Heightfields (CL-002/008/010); AF35.27 owns Vehicles/WheeledAssemblies (EX-001); AF35.28 owns Exchange/AssetResolution (IO-008); AF35.29 owns ContactPatches/Hydroelastic (CT-008). The prerequisite graph in PROGRESS is authoritative. Each owner first traces actual qualified producers and fixes its child contract, then implements without changing shared suppliers. Unqualified earlier children are unavailable suppliers. Root indexes completed child contracts and integrates frozen sources independently; no cohort handoff stops ongoing work.
