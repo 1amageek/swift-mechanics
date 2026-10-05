@@ -35,3 +35,6 @@ Children retain typed original failures and cumulative known work. Caller-owned 
 
 ## Verification and Change Impact
 [MechanicsControlTests](../../../../Tests/MechanicsControlTests/DESIGN.md) owns real plant, clock, energy, rejection and replay tests. Root owns registration and original-profile public composition. Child contract changes require checking sibling assumptions and the Execution parent. DESIGN existence is not behavioral qualification.
+
+### Registered external scalar commands
+Child [ExternalCommands](ExternalCommands/DESIGN.md) owns the qualified selected timestamped scalar scheduling/drive service. [Qualification](../../../../Verification/ExternalCommandsQualification/DESIGN.md) owns Native, ordinary/Embedded and canonical evidence; Runtime acceptance, transport, vector channels and coupled evolution remain separate obligations.

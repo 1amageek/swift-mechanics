@@ -268,3 +268,5 @@ AF26's selected implementation frontier is indexed by the [exclusive prerequisit
 [MJCFQualification](Verification/MJCFQualification/DESIGN.md) owns selected semantic adapter and exact-profile registration evidence.
 
 [JointStopsQualification](Verification/JointStopsQualification/DESIGN.md) owns selected scalar stop impulse Native/ordinary/Embedded and canonical registration evidence; automatic Runtime enforcement remains a separate authority.
+
+[ExternalCommandsQualification](Verification/ExternalCommandsQualification/DESIGN.md) owns selected scalar scheduling/drive Native, ordinary/Embedded and canonical registration evidence; full CO-008 and coupled evolution remain separate obligations.
