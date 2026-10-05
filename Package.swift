@@ -13,6 +13,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Execution/Control/TaskSpace/DESIGN.md",
                     "Exchange/URDF/DESIGN.md",
                     "Physics/Loads/AffineRigidGravity/DESIGN.md",
                     "Execution/Control/ExternalCommands/DESIGN.md",
@@ -315,6 +316,8 @@ let package = Package(
         .testTarget(name: "MechanicsComplexSpectrumTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsDampedSpectrumTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsToothContactTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsTaskSpaceTests", dependencies: ["SwiftMechanics"], path: "Verification/TaskSpaceQualification",
+                    exclude: ["DESIGN.md", "TaskSpaceQualification.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )

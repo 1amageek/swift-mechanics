@@ -38,3 +38,7 @@ Children retain typed original failures and cumulative known work. Caller-owned 
 
 ### Registered external scalar commands
 Child [ExternalCommands](ExternalCommands/DESIGN.md) owns the qualified selected timestamped scalar scheduling/drive service. [Qualification](../../../../Verification/ExternalCommandsQualification/DESIGN.md) owns Native, ordinary/Embedded and canonical evidence; Runtime acceptance, transport, vector channels and coupled evolution remain separate obligations.
+
+## Selected task-space control
+
+[TaskSpace](TaskSpace/DESIGN.md) owns tentative fixed-root Euclidean point acceleration and body-origin wrench control. Its child contract records selected Native qualification and explicit unsupported-domain refusals. Accepted Runtime publication, constrained force allocation and original portable execution remain separate obligations.
