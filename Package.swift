@@ -14,6 +14,8 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Analysis/Planning/TimeParameterization/DESIGN.md",
+                    "Analysis/Planning/DESIGN.md",
                     "Physics/Constraints/RollingRelations/DESIGN.md",
                     "Physics/Vehicles/TireLaws/DESIGN.md",
                     "Physics/Vehicles/DESIGN.md",
@@ -250,6 +252,8 @@ let package = Package(
         .testTarget(name: "MechanicsParameterIdentificationTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsConstrainedImpactTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsObservationsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsTimeParameterizationTests", dependencies: ["SwiftMechanics"], path: "Verification/TimeParameterizationQualification",
+                    exclude: ["DESIGN.md", "TimeParameterizationQualification.swift"]),
         .testTarget(name: "MechanicsSixTransmissionTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsSixHyperelasticTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsThreeConstitutiveTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
