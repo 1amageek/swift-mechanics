@@ -2,7 +2,7 @@
 
 ## Purpose and Scope
 
-Parent/tested production contract: [SensorPipeline](../../Sources/SwiftMechanics/Analysis/Observations/SensorPipeline/DESIGN.md). Children: none. Own fine-grained behavioral evidence for the selected SE-005..008 and sensor RT-003/006 path. Root owns registration, full integration and original Native/WASM/Embedded public execution. This design fixes proof obligations; no tests or behavior are qualified yet.
+Parent/tested production contract: [SensorPipeline](../../Sources/SwiftMechanics/Analysis/Observations/SensorPipeline/DESIGN.md). Children: none. Own fine-grained behavioral evidence for the selected SE-005..008 and sensor RT-003/006 path. Root owns registration, full integration and original Native/WASM/Embedded public execution. The selected Native domain is qualified with the exact Swift 6.4.0 release compiler: 27 initially passing declarations plus two finding-only passing rechecks across six suites. Cross-profile qualification remains root-owned.
 
 ## Responsibilities and Boundaries
 
@@ -60,4 +60,6 @@ Every test command has a watchdog. Producer Native tests qualify local behavior 
 
 ## Verification and Change Impact
 
-One scoped review and concrete finding-only rechecks converge this snapshot. No test declarations, build or execution exist at this design handoff. Raw provider/schema, checkpoint authority, pipeline state/lifecycle or interpolation changes reopen only their affected evidence. Root owns all manifest/index/PROGRESS/commit and integrated public artifacts.
+One scoped review and concrete finding-only rechecks converge this snapshot. The selected snapshot contains 29 test declarations across six suites, including actual classical RK4 and adaptive rejected-trial execution, full cold replay and Native shutdown races. The inherited observe test requires an immutable accepted-prefix query that leaves the active trial valid; sensor readBatch uses its separate mutation exclusion. Statistical evidence retains 512 fixed-seed samples with an explicit 4 MiB caller validation scratch envelope; this is a caller capacity, not a physical or statistical tolerance change. Raw provider/schema, checkpoint authority, pipeline state/lifecycle or interpolation changes reopen only their affected evidence. Root owns all manifest/index/PROGRESS/commit and integrated public artifacts.
+
+The final Native evidence combines the first actual 29-declaration run (27 declarations green) with the two finding-only rechecks after the separately qualified original Runtime observer-exit correction. No unchanged test was rerun. The corrected isolated build completed with exit 0 in 130.605 seconds; the filtered test command completed with exit 0 in 20.652 seconds (two tests/two suites, actual test duration 3.930 seconds). Both use the original watchdogs (1200-second setup, 240-second behavior), four workers and the original compiler. The statistical contributor encoded 336,389 bytes, requiring 2,691,112 bytes under the declared eight-times payload reservation, within the explicit 4,194,304-byte caller scratch envelope. The scratch change does not change samples, physics or tolerances. Owned shared/private sources matched at execution start and end. These results qualify this selected Native path only; root owns actual WASM/Embedded execution and original stack proof.
