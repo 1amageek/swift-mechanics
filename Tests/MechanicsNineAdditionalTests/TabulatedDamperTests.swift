@@ -53,7 +53,7 @@ import SwiftMechanics
         #expect(throws: LoadError.invalidInput) { try evaluate(.nan) }
         #expect(throws: LoadError.nonFiniteResult) {
             try TabulatedDamperLaw(coordinateKind: .translation, rates: [0,1e-308,1], restoringEfforts: [0,1e308,1e308], maximumKnots: 3, work: &work)
-            
+
         }
     }
     @Test func boundedConstructionAndQueryPreserveLaw() throws {
