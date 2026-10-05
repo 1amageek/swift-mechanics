@@ -1,4 +1,3 @@
 # Progress
-
-- [x] CONSTITUTIVE StandardLinearSolid, BurgersCreep and compressible NeoHookean implemented and reviewed; canonical Native build/link and16 public tests in3 concurrent suites passed, exact20-source inventory frozen; Runtime/element/WASM/Embedded/minimum-platform/performance/full210 remain unqualified `depends:none` `parallel:none`
-- [x] CONSTITUTIVE.Integration Source43a3abb merged into codex/specification as42b42dfa; canonical registration, exact20 source/test hashes, unchanged17 supplier files and merge/index checks passed; pending edits and210 requirement plan retained `depends:CONSTITUTIVE` `parallel:none`
+- [x] H Six selected invariant hyperelastic laws implemented and reviewed; 44 canonical Native public cases in seven concurrent suites plus nine retained Materials cases passed. Existing HyperelasticResponding, original energies, analytic tangents, locking/calibration failures and immutable ownership verified. Native-only; element/Runtime/portable/minimum-platform/performance and full210 remain open. Source commit is the corresponding commit containing this record. `depends:none` `parallel:none`
+- [ ] H.Int Merge frozen source into main while preserving every pending edit and the main full210 plan; check registered target, exact hashes, supplier compatibility and commit ancestry. `depends:H` `parallel:none`

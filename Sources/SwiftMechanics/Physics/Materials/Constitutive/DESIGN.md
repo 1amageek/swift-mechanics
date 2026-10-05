@@ -32,3 +32,6 @@ Invalid parameters, out-of-domain strain/J, overflow and singular core operation
 
 ## Verification and Change Impact
 [Tests](../../../../../Tests/MechanicsMaterialsTests) use exact tensor contraction and simple stretch/shear kinematics, reject inversion/nonfinite/overflow, and exercise objectivity and stress directional derivatives through real laws. Fixture matrix/strain absolute tolerance 1e-12 plus relative 1e-10; stress directional tolerance 1e-3 Pa plus relative 1e-6 with central step 1e-6. Changes recheck elastic/plastic consumers and future IM19 pairing; Native evidence does not establish WASM/Embedded runtime.
+
+### Additive public response mapping
+Public `response(secondPiolaStress:energyDensity:)` and `directionalResponse(deformationDirection:secondPiolaStress:secondPiolaDirection:)` let admitted finite material providers use this owner without internal access. Response requires finite nonnegative energy; tensor/matrix arithmetic preserves typed failures. Existing internal mappings and clients are unchanged. [InvariantHyperelasticity](../InvariantHyperelasticity/DESIGN.md) consumes these factories; its public factory tests and existing Materials behavioral tests own additive contract/regression proof.
