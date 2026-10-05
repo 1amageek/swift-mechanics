@@ -52,7 +52,8 @@ internal final class HeldPrismaticControlEquation: SmoothODEEquations, Sendable 
         try ControlArithmetic.charge(128+codec.schema.maximumBytes,work:&work,policy:policy)
         do { try control.beginWorkBlock(units:1);try state.work.reserve(scalars:32,bytes:policy.maximumPayloadBytes) } catch let e as ActuationError { throw ControlFailure(.actuation(e),phase:"prepare") } catch let e as RuntimeFailure { throw ControlFailure(.runtime(e),phase:"prepare") } catch { throw ControlFailure(.invalidSupplierOutput,phase:"prepare") }
         let sample=try preparationSample(trial:&trial,state:&state,work:&work)
-        let driven=try evaluateDrive(sample,state:&state,work:&work)
+        let system=try preparationSystem(sample,work:&work)
+        let driven=try evaluateDrive(sample,system:system,state:&state,work:&work)
         let prepared=try prepareEvidence(driven,work:&work)
         try stagePrepared(prepared,trial:&trial,state:&state)
     }
@@ -73,8 +74,12 @@ internal final class HeldPrismaticControlEquation: SmoothODEEquations, Sendable 
         return ControlPreparationSample(input:input,old:old,feedback:feedback,tick:saved.tick,q:q,v:v,start:start,end:end,dt:dt)
     }
     @inline(never)
-    private func evaluateDrive(_ sample:ControlPreparationSample,state:inout ControlEquationState,work:inout NumericalWork) throws(ControlFailure) -> ControlDrivenSample {
-        let system=try ControlRigidSampling.system(plant:plant,time:sample.start,point:[sample.q,sample.v],policy:policy,equations:equations,work:&work)
+    private func preparationSystem(_ sample:ControlPreparationSample,work:inout NumericalWork) throws(ControlFailure) -> ControlRigidSystemSample {
+        ControlRigidSystemSample(try ControlRigidSampling.system(plant:plant,time:sample.start,point:[sample.q,sample.v],policy:policy,equations:equations,work:&work))
+    }
+    @inline(never)
+    private func evaluateDrive(_ sample:ControlPreparationSample,system sampleSystem:ControlRigidSystemSample,state:inout ControlEquationState,work:inout NumericalWork) throws(ControlFailure) -> ControlDrivenSample {
+        let system=sampleSystem.system
         let command=try desiredCommand(sample.input,feedback:sample.feedback,system:system,work:&work)
         let response=try drive(command,old:sample.old,q:sample.q,v:sample.v,dt:sample.dt,state:&state,work:&work)
         guard response.state.binding == sample.old.binding,response.state.time == sample.end,response.state.mode == sample.old.mode,sample.old.sequence < UInt64.max,

@@ -6,23 +6,36 @@ internal enum ControlRigidSampling {
         guard point.count == 2,point.allSatisfy({$0.isFinite}),time.isFinite,
               abs(point[0]) <= policy.maximumPositionMeters,abs(point[1]) <= policy.maximumRateMetersPerSecond else { throw ControlFailure(.invalidInput,phase:"plant-stage") }
         do { try work.requireStorage(512) } catch { throw ControlFailure(.numerical(error),phase:"plant-stage") }
-        let state:KinematicState,snapshot:KinematicSnapshot
-        do { state=try KinematicState(revision:plant.model.stamp.revision,time:time,q:[point[0]],v:[point[1]],acceleration:[0]);snapshot=try plant.model.evaluate(plant.model.makeState(state)) }
-        catch { throw ControlFailure(.invalidInput,phase:"compiled-stage") }
-        let input:RigidDynamicsInput
-        do { input=try RigidDynamicsInput(snapshot:snapshot,velocity:[point[1]],inertias:plant.inertias,gravity:nil) }
+        let sample=try rigidInput(plant:plant,time:time,point:point)
+        return try assembledSystem(sample,plant:plant,time:time,policy:policy,equations:equations,work:&work)
+    }
+    @inline(never)
+    private static func kinematicSnapshot(plant:PrismaticControlPlant,time:Double,point:[Double]) throws(ControlFailure) -> KinematicSnapshot {
+        do {
+            let state=try KinematicState(revision:plant.model.stamp.revision,time:time,q:[point[0]],v:[point[1]],acceleration:[0])
+            return try plant.model.evaluate(plant.model.makeState(state))
+        } catch { throw ControlFailure(.invalidInput,phase:"compiled-stage") }
+    }
+    @inline(never)
+    private static func rigidInput(plant:PrismaticControlPlant,time:Double,point:[Double]) throws(ControlFailure) -> ControlRigidInputSample {
+        let snapshot=try kinematicSnapshot(plant:plant,time:time,point:point)
+        do { return ControlRigidInputSample(try RigidDynamicsInput(snapshot:snapshot,velocity:[point[1]],inertias:plant.inertias,gravity:nil)) }
         catch { throw ControlFailure(.dynamics(error),phase:"plant-input") }
+    }
+    @inline(never)
+    private static func assembledSystem(_ sample:ControlRigidInputSample,plant:PrismaticControlPlant,time:Double,policy:ControlPolicy,
+                                        equations:any RigidEquationComputing,work:inout NumericalWork) throws(ControlFailure) -> RigidDynamicsSystem {
         var local=try nested(work,reserved:512),load:LoadWork
         do { load=LoadWork(budget:try LoadBudget(maximumWork:1,maximumScalars:0,isCancelled:policy.isCancelled));try load.charge(1) } catch { throw ControlFailure(.dynamics(.loads(error)),phase:"plant-input") }
         let before=local,loadBefore=load
         var result:RigidDynamicsSystem?,failure:DynamicsError?
-        do { result=try equations.assemble(input,admission:policy.admission,loadWork:&load,work:&local) } catch { failure=error }
+        do { result=try equations.assemble(sample.input,admission:policy.admission,loadWork:&load,work:&local) } catch { failure=error }
         let loadValid=load.budget.maximumWork == loadBefore.budget.maximumWork && load.budget.maximumScalars == loadBefore.budget.maximumScalars && load.consumed >= loadBefore.consumed && load.peakScalars >= loadBefore.peakScalars
         try reconcile(local,before:before,work:&work,reserved:512,auxiliaryValid:loadValid)
         if let failure { throw ControlFailure(.dynamics(failure),phase:"assembly",failedSupplierWorkUnavailable:failure.failedSupplierWorkUnavailable) }
         guard let result,result.scalarStorage >= 0,result.scalarStorage <= work.budget.scalarStorage-512,result.velocityCount == 1,result.massMatrix.count == 1,result.inertialBias.count == 1,
               ControlArithmetic.agrees(result.massMatrix[0],plant.movingMass,policy.agreement),ControlArithmetic.agrees(result.inertialBias[0],0,policy.agreement),
-              result.input.velocity == input.velocity,result.input.inertias == input.inertias,result.input.snapshot.time == time else { throw ControlFailure(.invalidSupplierOutput,phase:"assembly") }
+              result.input.velocity == sample.input.velocity,result.input.inertias == sample.input.inertias,result.input.snapshot.time == time else { throw ControlFailure(.invalidSupplierOutput,phase:"assembly") }
         try ControlArithmetic.check(policy)
         return result
     }
