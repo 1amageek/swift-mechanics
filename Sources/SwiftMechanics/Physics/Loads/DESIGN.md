@@ -53,3 +53,12 @@ Five independent selected laws consume the qualified public core/load contracts.
 
 ### Additional Dahl law
 Child [Dahl](DahlFriction/DESIGN.md) owns its selected service contract and independent verification. Existing evolution and parent qualification are retained.
+
+### Nine-service additive children
+- [ExponentialSpring](ExponentialSpring/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [FiniteExtensionSpring](FiniteExtensionSpring/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [TabulatedSpring](TabulatedSpring/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [PowerLawDamper](PowerLawDamper/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [RegularizedYieldDamper](RegularizedYieldDamper/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [StribeckFriction](StribeckFriction/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [TabulatedDamper](TabulatedDamper/DESIGN.md): selected independent constitutive service; qualification belongs to child.
