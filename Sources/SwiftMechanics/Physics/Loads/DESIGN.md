@@ -62,3 +62,6 @@ Child [Dahl](DahlFriction/DESIGN.md) owns its selected service contract and inde
 - [RegularizedYieldDamper](RegularizedYieldDamper/DESIGN.md): selected independent constitutive service; qualification belongs to child.
 - [StribeckFriction](StribeckFriction/DESIGN.md): selected independent constitutive service; qualification belongs to child.
 - [TabulatedDamper](TabulatedDamper/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+
+### Continuum affine rigid gravity
+Child [AffineRigidGravity](AffineRigidGravity/DESIGN.md) owns the selected complete supplied inertia/kinematics continuum resultant and static explicit-wrench bridge. Its independent qualification owner records executed Native/ordinary/Embedded and canonical evidence; existing kernel gravity admission and Runtime authority are unchanged.
