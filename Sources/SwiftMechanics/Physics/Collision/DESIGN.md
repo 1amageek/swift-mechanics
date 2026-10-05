@@ -36,3 +36,5 @@ Native Swift 6.4.0 release passed 14 tests in four suites covering admitted anal
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+| [ConvexQueries](ConvexQueries/DESIGN.md) | child | Convex support-map weighted witnesses | Selected exact-source Native/WASM/Embedded and canonical qualification; proof domain owned by child |

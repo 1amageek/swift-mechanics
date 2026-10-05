@@ -521,7 +521,7 @@ The user explicitly instructed continuous implementation without stopping at sou
 | IM.AF34.5 | [Execution/Control/TaskSpace](Sources/SwiftMechanics/Execution/Control/TaskSpace/DESIGN.md) | CO-005 | IM.IM03,IM.IM06,IM.IM12,IM.IM15 | Source/design first; later qualification and coherent commit required |
 | IM.AF34.6 | [Physics/Flexible/Attachments](Sources/SwiftMechanics/Physics/Flexible/Attachments/DESIGN.md) | FX-008 | IM.IM06,IM.IM19,IM.IM23.2 | Source/design first; later qualification and coherent commit required |
 | IM.AF34.7 | [Physics/Vehicles/TireLaws](Sources/SwiftMechanics/Physics/Vehicles/TireLaws/DESIGN.md) | EX-002 | IM.IM01,IM.IM02,IM.IM11,IM.IM20 | Source/design first; later qualification and coherent commit required |
-| IM.AF34.8 | [Physics/Collision/ConvexQueries](Sources/SwiftMechanics/Physics/Collision/ConvexQueries/DESIGN.md) | CL-001;CL-004 | IM.IM01,IM.IM02,IM.IM10 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.8 | [Physics/Collision/ConvexQueries](Sources/SwiftMechanics/Physics/Collision/ConvexQueries/DESIGN.md) | CL-001;CL-004 | IM.IM01,IM.IM02,IM.IM10 | Selected17 registered; Native10, ordinary/Embedded nine guarded/raw witnesses and canonical49 pass; full CL scope remains open |
 
 AF34.10 is the independent root-owned IO-007 result archive/export implementation at Exchange/ResultExport, consuming qualified Core/Compiler/Runtime/Exchange and AF30 observation records. It shares no mutable source with workers and remains excluded/unqualified until later behavioral evidence. Its source-only progress joins AF34.9 only for eventual cumulative integration.
 
