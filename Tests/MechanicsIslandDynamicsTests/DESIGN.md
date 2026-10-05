@@ -41,3 +41,5 @@ All test runs use root-assigned watchdog/resource slots and exact Swift6.4.0 pro
 ## Verification and Change Impact
 
 The component owner runs the assigned immutable-copy Native proof; root owns registration and original Native/WASM/Embedded plus 128 KiB integration. This design declares required behavioral evidence, not obtained results. Failed physical/source/work oracles block upper composition. Lower source changes renew affected tests once stable; upper omission/event/history/RNG tests belong to their own owner.
+
+The assigned independent Native proof passed 15 definitions in two suites, 37 concrete parameter executions. The first physical RED exposed only one-ULP analytic comparisons and an incorrectly ordered descendant fixture; corrected tests use the unchanged original tolerance and genuine public tree mapping. A separate two-definition/three-case RED proved nested original cancellation and Constraint unknown-work loss; the owner helper correction passed the final target. No supplier implementation, tolerance, deployment, stack, manifest or compiler profile was changed. Root retains original-profile and upper integration qualification.

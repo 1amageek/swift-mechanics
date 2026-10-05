@@ -72,3 +72,15 @@ For B source bodies, n scalar coordinates, m rows and I islands: I<=n; branch gr
 ## Verification and Change Impact
 
 The dedicated tests must prove genuinely compiled mass2 Z-rotor A/B with gear row [1,1,0] and independent mass2 Y-striker C, actual source layout including non-tree descriptor order, source columns/mass/force correspondence, A/B rest with moving C, genuine row-free C motion and genuine constrained awake A/B. Independent whole-vs-island original physical outputs, changed mass/drive/anchor/row/policy refusal, non-direct graph refusal, incomplete coordinate/row mapping, rank/capacity/cancel and every supplier reset/failure prefix falsify the contract. Upper omission/wake/Runtime/global history is not qualified by these tests. Changes to this authority invalidate direct IslandSleep consumer assumptions and ConstrainedSleep event acceptance; frozen supplier internals are not modified.
+
+### AF31 Lower Native Qualification
+
+The isolated immutable 625f759 baseline plus this child and its dedicated tests passed exact Swift 6.4.0 Native build-tests (1200-second watchdog, jobs 4) and separate skip-build behavior (240-second watchdog): 15 test definitions, two suites, 37 concrete parameter executions. Actual mixed rest, original whole-vs-island force/acceleration/energy, fresh canonical association, malformed source/domain/rank/capacity refusal, four constrained ledgers, load/numerical/evaluation/forward resets, original nested cancellation and unavailable failure work were exercised. Evidence is `.build/af31-independent-islands/native-final-setup.log`, `native-final-behavior.log` and the owned SHA inventory. The comprehensive owned review and finding-limited original-error recheck are complete; production equations and supplier contracts were unchanged by that correction. Original-profile WASM/Embedded and accepted upper sleep/contact/history execution remain root-owned pending integration, not certified by Native lower proof.
+
+| Logical storage | Native | WASM | Embedded | Access and lifetime |
+|---|---|---|---|---|
+| Program/island/evidence | Immutable Sendable references | Same source | Same source | Internal issuance; read-only arrays and retained models; release with last owner |
+| Numerical/load/compiler receipt | Operation-local value, exclusive inout | Same source | Same source | Synchronous supplier invocation, checked merge; no shared current state |
+| Injected test call counter | Mutex<Int> | Same source | Same source | Read/write only withLock; supplier call outside lock |
+
+Production contains no target conditionals, unchecked Sendable, unsafe shared storage or global mutable cache. Native compilation checks the common declarations; original-profile compilation/link/runtime remain separate root evidence.
