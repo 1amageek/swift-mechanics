@@ -47,3 +47,7 @@ The selected public-service probe in [FoundationVerification](../../../../Verifi
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
 
 | [Attachments](Attachments/DESIGN.md) | child | Source-issued rigid/material point interface | Selected repaired exact-source Native/WASM/Embedded qualification; child owns proof domains |
+
+## Selected Hex8 solid
+
+[Hexahedra](Hexahedra/DESIGN.md) owns the selected objective, full-integration eight-node solid and its reference/state/energy/force/tangent/mass/damping contracts. Its child design records exact Native qualification and pending portable obligations; accepted evolution, mesh convergence and locking behavior remain separately unqualified.
