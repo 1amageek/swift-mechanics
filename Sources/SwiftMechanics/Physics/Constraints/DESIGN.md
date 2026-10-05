@@ -13,6 +13,7 @@ The implementation owner owns child component directories under Sources/SwiftMec
 | [CoordinateEquations](CoordinateEquations/DESIGN.md) | child | Scaled polynomial g/J/time terms and knife-edge rows | Actual input/evaluation owner | Qualified selected domain |
 | [AssemblyProjection](AssemblyProjection/DESIGN.md) | child | Local KKT assembly and weighted speed projection | Actual residual/rank owner | Qualified selected domain |
 | [ScalarJointPorts](ScalarJointPorts/DESIGN.md) | child | Scalar passive/limit laws | Actual power/domain owner | Qualified selected domain |
+| [JointStops](JointStops/DESIGN.md) | child | Source-bound scalar stop impulse evaluation | Selected Native and original ordinary/Embedded public paths qualified | Automatic Runtime enforcement and constrained simultaneous impact remain separate |
 | [GeometricRelations](GeometricRelations/DESIGN.md) | child | Original frame/point/axis holonomic geometry | AF22 nonpolynomial relation owner | Selected AF22/AF23 behavior qualified; broader geometry domains remain open |
 | [ManifoldProjection](ManifoldProjection/DESIGN.md) | child | Bounded tangent-metric local assembly and manifold retraction | AF22 configuration correction owner | Actual original geometry acceptance qualified for selected AF22/AF23 paths |
 | [MechanicsNonlinear](../../Mathematics/Nonlinear/DESIGN.md) | depends on | original-residual nonlinear solves | Verified initial producer handoff | Consume only documented admitted domains; report missing producer contracts |

@@ -266,3 +266,5 @@ AF26's selected implementation frontier is indexed by the [exclusive prerequisit
 [LinearProgramsQualification](Verification/LinearProgramsQualification/DESIGN.md) owns independent selected LP certificates and target evidence.
 
 [MJCFQualification](Verification/MJCFQualification/DESIGN.md) owns selected semantic adapter and exact-profile registration evidence.
+
+[JointStopsQualification](Verification/JointStopsQualification/DESIGN.md) owns selected scalar stop impulse Native/ordinary/Embedded and canonical registration evidence; automatic Runtime enforcement remains a separate authority.
