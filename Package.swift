@@ -5,6 +5,7 @@ let package = Package(
     name: "swift-mechanics",
     platforms: [.macOS(.v13)],
     products: [
+        .executable(name: "mechanics-particle-flows-verification", targets: ["ParticleFlowsPublicVerification"]),
         .executable(name: "mechanics-structural-authoring-verification", targets: ["StructuralAuthoringPublicVerification"]),
         .executable(name: "mechanics-tire-laws-verification", targets: ["TireLawsPublicVerification"]),
         .executable(name: "mechanics-vehicle-laws-verification", targets: ["VehicleLawsPublicVerification"]),
@@ -16,6 +17,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Physics/Fluids/ParticleFlows/DESIGN.md",
                     "Physics/Vehicles/TerrainLaws/DESIGN.md",
                     "Analysis/Derivatives/GeometryParameters/DESIGN.md",
                     "Physics/Flexible/FieldOutputs/DESIGN.md",
@@ -245,6 +247,9 @@ let package = Package(
                     "Physics/Actuation/HydraulicElements/DESIGN.md",
                 ],
                 linkerSettings: [.linkedLibrary("swiftUnicodeDataTables", .when(platforms: [.wasi], traits: ["EmbeddedUnicode"]))]),
+        .target(name: "ParticleFlowsQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/ParticleFlowsQualification", exclude: ["DESIGN.md", "ParticleFlowsQualification.swift", "ParticleFlowsQualificationTests.swift"]),
+        .executableTarget(name: "ParticleFlowsPublicVerification", dependencies: ["ParticleFlowsQualificationSupport"], path: "Verification/ParticleFlowsQualification", exclude: ["DESIGN.md", "ParticleFlowsQualificationError.swift", "ParticleFlowsQualificationFixture.swift", "ParticleFlowsQualificationCases.swift", "ParticleFlowsQualificationTests.swift"]),
+        .testTarget(name: "MechanicsParticleFlowsTests", dependencies: ["ParticleFlowsQualificationSupport"], path: "Verification/ParticleFlowsQualification", exclude: ["DESIGN.md", "ParticleFlowsQualification.swift", "ParticleFlowsQualificationError.swift", "ParticleFlowsQualificationFixture.swift", "ParticleFlowsQualificationCases.swift"]),
         .executableTarget(name: "CoreVerification", dependencies: ["SwiftMechanics"], path: "Verification/CoreVerification", exclude: ["DESIGN.md"]),
         .executableTarget(name: "FoundationVerification", dependencies: ["SwiftMechanics"], path: "Verification/FoundationVerification",
                           exclude: ["DESIGN.md", "IslandSleepProbeContext.swift", "IslandSleepVerification.swift", "ConstrainedSleepProbeContext.swift", "ConstrainedSleepVerification.swift"]),

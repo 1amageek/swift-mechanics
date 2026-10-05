@@ -584,3 +584,6 @@ IM.AF35.6 selected scalar service qualification and registration is complete; [E
 IM.AF35.32 selected continuum affine rigid-gravity service is qualified and registered; [AffineRigidGravityQualification](Verification/AffineRigidGravityQualification/DESIGN.md#executed-selected-registration) owns exact three-profile and canonical evidence. Full FL-001/DN-002, time-varying gradient and Runtime integration remain open.
 
 IM.AF35.16 selected URDF18 is independently qualified and registered; [URDFQualification](Verification/URDFQualification/DESIGN.md#executed-selected-registration) owns Native, ordinary/Embedded and canonical evidence. Full IO004/foreign-law/asset/Runtime closure remains with the original requirement owners.
+
+
+IM.AF35.15: [ParticleFlows](Sources/SwiftMechanics/Physics/Fluids/ParticleFlows/DESIGN.md) and original fixture5 are registered after fresh actual2032 Native8/public7 (receiptffda73383b221d8498221f9830022318788159b30b5e06c9dd986c3a43978b38). Hydraulic13 is retained; physics, original624+29 work and failure/cancellation witnesses are unchanged. Portable and general fluid domains remain open.
