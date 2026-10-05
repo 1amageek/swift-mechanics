@@ -543,7 +543,7 @@ IM.AF35.7 owns independent [NonlinearEstimation](Sources/SwiftMechanics/Executio
 
 IM.AF35.8 owns only the frozen XML prerequisite qualification in an isolated exact-source package, necessary to begin actual foreign-format consumers. Existing independent AF35 siblings keep implementing. Fixed release/matching SDK Native/ordinary/Embedded, original bounded stack before raw execution, independent behavioral and failure fixtures remain supplier requirements. Root retains canonical registration/Git; per-source qualification can finish without a cohort gate.
 
-IM.AF35.10 owns independent [Refinement](Sources/SwiftMechanics/Physics/Flexible/Refinement/DESIGN.md) using qualified Core/Model/Numerics/Mesh/Tet4, retaining topology/material/boundary/source and original force/moment/virtual-work under conforming Tet4 refinement. Root owns shared files and Git.
+IM.AF35.10 owns independent [Refinement](Sources/SwiftMechanics/Physics/Flexible/Refinement/DESIGN.md) using qualified Core/Model/Numerics/Mesh/Tet4, retaining topology/material/boundary/source and original force/moment/virtual-work under conforming Tet4 refinement. Root owns shared files and Git. The unchanged selected20/fixture8 pass actualfull1944 production13 with originalfixture15 Native7/public6; Native registration is separate from fixed portable obligations.
 
 AF34.1 expanded StructuralAuthoring depends additionally on qualified IM11/13/14 and IM16.15 selected physical loaded affine evolution, not complete IM16. AF35.7 actual observation producer is qualified AF30, alongside IM11/06/15/30.1; incomplete whole IM25 is not a supplier gate.
 

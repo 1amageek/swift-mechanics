@@ -172,6 +172,7 @@ let package = Package(
                     "Physics/Dynamics/RigidEquations/DESIGN.md",
                     "Physics/Flexible/Beams/DESIGN.md",
                     "Physics/Flexible/DESIGN.md",
+                    "Physics/Flexible/Refinement/DESIGN.md",
                     "Physics/Flexible/Attachments/DESIGN.md",
                     "Physics/Flexible/Hexahedra/DESIGN.md",
                     "Physics/Flexible/Mesh/DESIGN.md",

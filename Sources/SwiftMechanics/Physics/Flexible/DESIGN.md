@@ -1,7 +1,7 @@
 # Flexible component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../../../SPEC.md) owns acceptance and [plan](../../../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md), [Beams](Beams/DESIGN.md). Beams records its AF14 selected behavioral/profile qualification; existing Tet4 qualification is unchanged.
+Parent: [responsibility owner](../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../../../SPEC.md) owns acceptance and [plan](../../../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [Refinement](Refinement/DESIGN.md), [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md), [Beams](Beams/DESIGN.md). Beams records its AF14 selected behavioral/profile qualification; existing Tet4 qualification is unchanged.
 
 ## Responsibilities and Boundaries
 Consume physical units/geometry, identified model values, numerical equations and verified constitutive laws. Own element interpolation/quadrature/formulation, rest/current geometry, nodal DOF and material/boundary/source association. Materials owns stress/strain law meaning; rigid attachment/evolution, contact, modes/analysis and CAD mesh derivation are separate consumers. A matrix declaration or isolated mesh is not a flexible simulation.
@@ -17,6 +17,8 @@ Consume physical units/geometry, identified model values, numerical equations an
 | [Numerics](../../Mathematics/Numerics/DESIGN.md) | depends on | Matrix layout, work budgets and original-residual acceptance | Numerical values/solve | Generic operators are not element implementations |
 | [Materials](../Materials/DESIGN.md) | depends on | Actual stress/strain/tangent/history domain | Constitutive authority | Additive Green-J2 is not multiplicative plasticity |
 | [Core](../../Mathematics/Core/DESIGN.md) | depends on | SI/framed vectors and tensors | Geometry algebra | Finite rotation/frame semantics remain explicit |
+
+| [Refinement](Refinement/DESIGN.md) | child | Certified conforming Tet4 subdivision and physical transfer | Native1944 qualified; fixed portable and broader refinement domains remain open |
 
 ## Architecture
 ```text
