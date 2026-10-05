@@ -57,3 +57,6 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 
 ### Additional Maxwell law
 Child: [Maxwell](MaxwellRelaxation/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
+
+### Additional Thermal law
+Child [Thermal](Thermoelasticity/DESIGN.md) owns its selected service contract and independent verification. Existing evolution and parent qualification are retained.
