@@ -12,7 +12,7 @@ let package = Package(
     traits: [.trait(name: "EmbeddedUnicode", description: "Link matching Embedded Swift SDK Unicode data tables.")],
     targets: [
         .target(name: "SwiftMechanics",
-                exclude: [
+                exclude: ["Analysis/Derivatives/TreeTangents/Planar",
                     "Analysis/Observations/ContactRangeObservations/DESIGN.md",
                     "Analysis/Observations/SensorPipeline/DESIGN.md",
                     "Execution/Control/Continuation/DESIGN.md",
