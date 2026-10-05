@@ -45,3 +45,5 @@ The selected public-service probe in [FoundationVerification](../../../../Verifi
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+| [Attachments](Attachments/DESIGN.md) | child | Source-issued rigid/material point interface | Selected repaired exact-source Native/WASM/Embedded qualification; child owns proof domains |
