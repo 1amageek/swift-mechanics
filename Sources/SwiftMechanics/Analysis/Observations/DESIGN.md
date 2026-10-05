@@ -1,7 +1,7 @@
 # Observations component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). IM25 owns SE-001..003. The stopped AF18 source handoff remains unregistered. AF30 resumes it on the qualified48cf8df supplier baseline. No live model_records writer exists; root transfers exclusive ObservationRecords, KinematicObservations, InertialObservations and WrenchObservations child/source/test ownership to reaction_paths. The existing selected13 physical cases and original contracts remain obligations, with the concrete successful-supplier association counterexamples closed before registration. Root owns this index, graph/probes/scripts/progress, producer changes and commits. Children are indexed only after their contracts exist.
+Parent: [responsibility owner](../DESIGN.md). IM25 owns SE-001..004; IM26 owns the separately indexed sensor scheduling/pipeline contract. The old AF18 handoff was resumed and qualified by AF30 on48cf8df; selected canonical Native/WASM/Embedded public composition is recorded in FoundationVerification. AF31 extends the remaining observation/sensor responsibilities on qualified625f759. No live model_records writer exists; root transfers exclusive ObservationRecords, KinematicObservations, InertialObservations and WrenchObservations child/source/test ownership to reaction_paths. The existing selected13 physical cases and original contracts remain obligations, with the concrete successful-supplier association counterexamples closed before registration. Root owns this index, graph/probes/scripts/progress, producer changes and commits. Children are indexed only after their contracts exist.
 
 | Child | Owned contract |
 |---|---|
@@ -9,6 +9,8 @@ Parent: [responsibility owner](../DESIGN.md). IM25 owns SE-001..003. The stopped
 | [KinematicObservations](KinematicObservations/DESIGN.md) | Mounted geometric motion and identified joint chart encoders |
 | [InertialObservations](InertialObservations/DESIGN.md) | Gyro and sensor-origin specific force |
 | [WrenchObservations](WrenchObservations/DESIGN.md) | Identified physical wrench and limited axial reaction |
+| [ContactRangeObservations](ContactRangeObservations/DESIGN.md) | Source-bound pose-derived raw range, sampled trigger and original current-law tactile observation; no Runtime publication claim |
+| [SensorPipeline](SensorPipeline/DESIGN.md) | IM26 accepted-time observation scheduling, processing and delivery continuation through a privately bound original Runtime session |
 
 ## Responsibilities and Boundaries
 Own framed/time-bound mechanical observation meanings, mounting and exact force-versus-impulse distinctions. Read actual immutable compiled/kinematic/mechanical outputs; do not infer unreported reactions. Sensor scheduling, noise, buffering and shutdown belong to IM26. Producer implementations and frozen Mechanisms remain read-only; other workers' changes must be preserved.
@@ -36,7 +38,7 @@ Physical wrench shift/rotation uses its declared reference point, mounting, sign
 Public operations are protocol requirements with typed failures; immutable Sendable observations and exclusive caller budgets. Lower contracts fix exact owner/input/result/oracle before source declarations. Full SE-001..003 remains open outside admitted domains.
 
 ## State, Ownership, and Lifecycle
-Stateless call-local computation and immutable returned records. Same storage/isolation/Sendable on Native/WASM/Embedded. No retained mutable sensor stream, hidden cache or asynchronous callback lifetime. Scheduling and contributor histories remain IM26-owned.
+Raw observation children use stateless call-local computation and immutable returned records. The separately owned IM26 SensorPipeline child defines contributor-only observation histories and its bounded lifecycle leases. Same storage/isolation/Sendable on Native/WASM/Embedded. Runtime remains the only accepted-state owner; the pipeline introduces no physical state or queue mirror outside Runtime.
 
 ## Failure, Concurrency, and Constraints
 Checked metadata/layout/work/storage envelopes before traversal/allocation; stale revision/time/frame/mount/acceleration, unavailable decomposition, units/temporal mismatch, nonfinite supplier output, resource/cancellation and known/unknown supplier work remain explicit. Producer changes require root coordination.
@@ -52,3 +54,5 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 The source owner closes two concrete original-path counterexamples: an injected FrameMotionComposing returning a stationary identity for a moving offset sensor, and an injected KinematicObserving retaining source/header IDs while changing the mounting offset. Original source/mount pose, linear/angular velocity and acceleration must match before IMU/wrench publication. Child contracts own exact association, typed refusal and additional bounded work before source declarations. Existing suppliers, sensor schedules, noise and general bearing decomposition stay outside this responsibility. Root freezes and registers the actual source/tests before selected Native and original WASM/Embedded public qualification.
 
 AF30 frozen source/test Native and original selected public Native/ordinary-WASM/Embedded qualification passed; [canonical evidence](../../../../Verification/FoundationVerification/DESIGN.md#af30-selected-observation-qualification) owns exact execution and131072-byte guard results. This admission does not certify the unavailable bearing port or IM26 schedules.
+
+AF31 reaction_paths exclusively owns ContactRangeObservations and its dedicated tests. Actual compiled model/state and body-local recipes issue its original-source scene; original geometry/current law remains the physical authority. Scheduler/noise/buffering belongs to the separately designed IM26 child, and Runtime solely commits accepted state. Root owns all shared registration and public/profile qualification.

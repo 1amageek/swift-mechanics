@@ -1,10 +1,10 @@
 # Analysis
 
 ## Purpose and Scope
-Read-only physical queries, sensitivities, equilibrium and optimization certificates. Parent: [SwiftMechanics](../DESIGN.md). Children: [Equilibrium](Equilibrium/DESIGN.md), [StructuralAnalysis](StructuralAnalysis/DESIGN.md), [Derivatives](Derivatives/DESIGN.md), [Observations](Observations/DESIGN.md), [Optimization](Optimization/DESIGN.md).
+Physical queries, sensitivities, equilibrium and optimization certificates, and observation delivery continuation. Parent: [SwiftMechanics](../DESIGN.md). Children: [Equilibrium](Equilibrium/DESIGN.md), [StructuralAnalysis](StructuralAnalysis/DESIGN.md), [Derivatives](Derivatives/DESIGN.md), [Observations](Observations/DESIGN.md), [Optimization](Optimization/DESIGN.md).
 
 ## Responsibilities and Boundaries
-Read-only physical queries, sensitivities, equilibrium and optimization certificates. Child contracts own each operation and failure domain. Consumers depend on published protocols and admitted immutable records. Internal visibility is not permission to bypass validation.
+Physical query algorithms read immutable admitted mechanics. Observation delivery may stage its own declared continuation through the original Runtime trial protocol; Execution Runtime remains the sole physical and accepted-state commit authority. Child contracts own each operation and failure domain. Consumers depend on published protocols and admitted immutable records. Internal visibility is not permission to bypass validation.
 
 ## Related Designs
 | Design | Relationship | Contract used | Cautions |

@@ -720,3 +720,35 @@ Final qualification retained the exact release toolchain/SDK pair, physical oper
 | Embedded immediate stack guard |0.173|3.661|131072 bytes, initial346992/lower215920,23957 guarded writes; passed |
 
 The actual frame reductions confirm the failure mechanism: ordinary/Embedded preflight93,200/103,568→29,008/29,600 bytes; prepareImpact24,304/26,208→11,664/11,776 bytes; ordinary guarded assembly24,064→624 bytes and Embedded outer/inner26,848/26,768→1,648/1,568 bytes. Initial compile/runtime/guard RED evidence is preserved alongside the final GREEN, rather than overwritten. `.build/af30-qualified-integrated-proof.json` owns exact source/artifact hashes,2043-file start/end equality, SDKs, commands/elapsed/exit and references to the independent/canonical proofs. Complete210, broad OP009/contact/reinitialization domains and accepted Sleep/Hybrid publication remain open in PROGRESS and their own contracts.
+
+
+## AF31 incremental public API consumers
+
+Root owns shared entrypoints, graph/manifest edits, original-profile execution and all integration commits. Four disjoint public consumers are prepared alongside implementation; their assertions and original input builders are separate new files and use only public SwiftMechanics contracts, without @testable or private issuer bypasses. Their physical oracles are independent of the production algorithm. No unfinished probe enters a build. Each consumer freezes with its own producer and is registered immediately after its actual behavior qualification.
+
+| Exclusive owner | New executable-composition source files | Public path and independent oracle |
+|---|---|---|
+| scalar_boundary | IslandDynamicsProbeModel.swift, IslandDynamicsProbeContext.swift, IslandDynamicsVerification.swift | Genuine compiled independent gear/striker islands, original acceleration/mass/rows, mixed rest and changed-source refusal |
+| nonlinear_mechanisms | ContactRangeProbeModel.swift, ContactRangeProbeContext.swift, ContactRangeVerification.swift | True pose-derived range/trigger/current-law tactile, mounted force/power/history and foreign-source refusal |
+| admission_authority | SensorPipelineProbeModel.swift, SensorPipelineProbeContext.swift, SensorPipelineVerification.swift | Private actual Runtime owner, accepted sample/delay/noise/queue, rollback and cold replay |
+| material_kernels | ControlProbeModel.swift, ControlProbeContext.swift, ControlVerification.swift | Actual original RK4/servo, held mechanical work, exact interval and full continuation replay |
+
+New source files belong to this executable composition root. Existing contexts/assertions, producer sources/tests, DESIGN parents, PROGRESS, manifests and other writers' files remain read-only. Rich public verification phases must retain lifetime and typed failure meaning on the exact original Native/WASM/Embedded profiles and131072-byte stack. Feature-specific profile runs may precede final accumulated composition; unchanged earlier evidence is reused. The selected feature verification method is run only when root adds the corresponding entrypoint call after source freeze.
+
+Shared registration and public profile builds are root-serialized, even while independent source/probe writers continue in AF31Independent. Each build captures only frozen registered source; in-progress directories and unregistered public probes stay excluded. No two root registration/profile mutation phases overlap or read an evolving registered consumer.
+
+
+## AF31 incremental contact and range qualification
+
+[ContactRangeObservations](../../Sources/SwiftMechanics/Analysis/Observations/ContactRangeObservations/DESIGN.md) owns the selected raw domain and explicit unsupported cases; [its test owner](../../Tests/MechanicsContactRangeObservationTests/DESIGN.md) owns the original15 Native declarations/4 suites. That frozen function and its three independently prepared public consumer files are registered individually. Other AF31 production/probe paths remain excluded; sleep/control/sensor completion did not gate this integration.
+
+| Actual proof | Result and causal scope |
+|---|---|
+| Independent Native |15 declarations/4 suites passed after one fixture-only hit-target correction; production unchanged |
+| Canonical signed Native public | Build218.990s, strict signature verification and actual public runtime20.806s passed; real new range/trigger/tactile/source-refusal witness printed |
+| Original ordinary WASM public | Build167.713s, raw runtime61.240s, immediate131072-byte guard runtime34.537s passed |
+| Original Embedded WASM public | Build296.300s, raw runtime21.937s, immediate131072-byte guard runtime23.081s passed with EmbeddedUnicode |
+
+Canonical registered production1432 Swift files and the shared public entrypoint are byte-equivalent to the isolated original-profile625f759 snapshot plus this function. Private profiles use the exact Swift6.4.0 release/matching SDKs and original stack; ordinary guard2034032/1902960 with39647 checked writes, Embedded348832/217760 with24453 checked writes. Successful original source/geometry/current-law outputs, force/power/history, transformed mounting, trigger cycle and foreign-source refusals were actually executed. Earlier unchanged AF30 supplier/938-test evidence remains valid and is reused; a final accumulated interaction proof remains required after other functions integrate.
+
+The root's failed registration text substitution and accidental dependent Native setup were stopped after71.338s and explicitly excluded from qualification. Correct registration preceded the successful canonical run. Exact commands, exits, times, source/artifact hashes and this invalid attempt are retained in `.build/af31-incremental-public/raw-qualified-integration.json` and its referenced proof files. Full210 and unsupported sensing/pressure/general geometry domains remain open.

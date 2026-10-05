@@ -1,7 +1,7 @@
 # Execution
 
 ## Purpose and Scope
-Trial ownership, cancellation, time integration and atomic accepted-state publication. Parent: [SwiftMechanics](../DESIGN.md). Children: [Runtime](Runtime/DESIGN.md), [Integration](Integration/DESIGN.md), [Hybrid](Hybrid/DESIGN.md).
+Trial ownership, cancellation, time integration, sampled control and atomic accepted-state publication. Parent: [SwiftMechanics](../DESIGN.md). Children: [Runtime](Runtime/DESIGN.md), [Integration](Integration/DESIGN.md), [Hybrid](Hybrid/DESIGN.md), [Control](Control/DESIGN.md).
 
 ## Responsibilities and Boundaries
 Trial ownership, cancellation, time integration and atomic accepted-state publication. Child contracts own each operation and failure domain. Consumers depend on published protocols and admitted immutable records. Internal visibility is not permission to bypass validation.
@@ -13,6 +13,7 @@ Trial ownership, cancellation, time integration and atomic accepted-state public
 | [Runtime](Runtime/DESIGN.md) | child | Its documented assumption/guarantee | Preserve documented capability limits |
 | [Integration](Integration/DESIGN.md) | child | Its documented assumption/guarantee | Preserve documented capability limits |
 | [Hybrid](Hybrid/DESIGN.md) | child | Its documented assumption/guarantee | Preserve documented capability limits |
+| [Control](Control/DESIGN.md) | child | Sampled physical control through original Runtime and Integration | Runtime alone commits; selected initial plant and clock domains remain explicit |
 
 ## Architecture
 ```mermaid
