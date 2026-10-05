@@ -13,7 +13,7 @@ Own actual Runtime/Integration fixtures, independent physical/counter/RNG/receip
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
 | [Package](../../DESIGN.md) | parent | Test ownership | Root registration | No isolated cache until assigned |
-| [Island Sleep](../../Sources/SwiftMechanics/Physics/Mechanisms/IslandSleepContinuation/DESIGN.md) | depends on | Planned step/query/wake/checkpoint operations | Sole invariant owner | Actual lower proof required |
+| [Island Sleep](../../Sources/SwiftMechanics/Physics/Mechanisms/IslandSleepContinuation/DESIGN.md) | depends on | Actual step/query/wake/checkpoint operations | Sole invariant owner | Actual lower proof required |
 | [Island Dynamics Tests](../MechanicsIslandDynamicsTests/DESIGN.md) | coordinates with | Qualified physical fixture assumptions | Independent lower evidence | No duplicated private authority |
 | [Constrained Sleep Tests](../MechanicsConstrainedSleepEvolutionTests/DESIGN.md) | coordinates with | Accepted constrained contact endpoint | Upper proves root/event law | No hardcoded impact time |
 
@@ -45,3 +45,9 @@ Use finite explicit Runtime/Integration/lower/query/record budgets and root-assi
 ## Verification and Change Impact
 
 Root owns Native affected target and original Native/WASM/Embedded raw plus unchanged 128 KiB guard. This DESIGN is a proof contract, not a result. Changes to lower stationary authority invalidate only corresponding upper assumptions; event catalog/root/impact tests remain owned separately. No broader load, topology or contact-stack completion claim follows.
+
+Native qualification is performed by this child owner in the assigned immutable private source copy and sole affected test target. Root owns canonical and original-profile integration.
+
+### Owned Native evidence
+
+The assigned private source/caches executed this target alone: 13 definitions / 24 expanded cases / 3 suites passed, exit zero, 0.261 seconds. Successful setup took 9.90 seconds. Lower 37 cases were not repeated. Physical tests include balanced gear drives with actual moving C acceleration and the separate zero-drive e0/e1 contact domain; all actual lower suppliers remain unchanged. Logs and complete copy/digest inventory are `.build/af31-independent-islands/upper-native-setup-5.log`, `upper-native-behavior-1.log` and `upper-final-proof.json` at the package root. Root owns canonical/native/public/profile integration; the standalone proof does not complete the future directed event-root owner.

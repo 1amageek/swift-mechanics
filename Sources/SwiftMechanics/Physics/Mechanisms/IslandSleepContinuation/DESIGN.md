@@ -70,3 +70,36 @@ Counts, coordinate/row/island products, identities/signatures, record bytes, sch
 ## Verification and Change Impact
 
 Dedicated tests prove source A/B asleep while C moves, accepted dwell/cold force proof, actual omitted supplier calls and lower work reduction against all-awake evolution, operation-local certificate reentry/eviction independence, actual post-impulse gear wake and genuine ensuing acceleration/motion, exact history S+1/RNG, full registry cold restart and fresh byte replay. Reject altered inertia/program/policy, mixed metadata without actual proof, nonzero sleeping v/a, private-counter import, stale whole source, malformed/missing/capacity/cancel/reset work and failed participant/trial. Event-root/law proof is owned by ConstrainedSleepEvolution tests. Existing constructors/tests remain frozen; full RB007 and general topology/load/contact formulations remain open.
+
+### Qualified AF31 lower and fixed additive API
+
+The issued StationaryIslandProgram and StationaryIslandComputing contracts are qualified by source commit 7e80040. The owner initializer is `init(identity:program:dynamics:policy:integration:operationPolicy:participant:)`; participant defaults to nil. `IslandSleepOperationPolicy` declares maximumSupplierInvocations, maximumQueries, maximumQuerySteps and maximumRecordBytes. `IslandSleepWork` receives physical StationaryIslandWork and contributorEncoding NumericalWork; receipts preserve both exact known prefixes, bounded invocation/query counters and unavailable suffix state. The step result contains the actual IntegrationAdvanceResult and work. The query also receives the actual RuntimeConfiguration and returns its original source, actual accepted endpoint and private accepted-step diagnostic count.
+
+Equation numerical receipts mirror the actual lower local numerical work also absorbed by Integration: these are overlapping scopes, never additive totals. LoadWork remains distinct. Each lower call is admitted by a nonzero numerical/load quantum, stable budget/count/scratch checks and invocation K. The callback executes outside common Mutex receipt storage. A busy receipt refuses overlapping/reentrant use instead of duplicating a mutable ledger. Known work is absorbed on both outcomes; reset restores known prefix and marks the unknown suffix. Contributor encoding has a separate ledger because SmoothODE.write has no numerical argument.
+
+Cold admission derives numerical/load limits from the remaining RuntimeValidationBudget, counts every real lower invocation, and charges decoding, actual numerical operations/iterations, actual load work and bounded scalar scratch in RuntimeValidationEvidence. The public report-bearing handler returns those cold receipts. Warm immutable rest certificates may skip repeated physical proof only after source/local-q/law association; an operation keeps its own immutable certificates so later memo eviction changes cost only. Awake acceleration always receives genuine force admission. The initial record admits actual caller q/v/a/time rather than requiring the model descriptor's initial acceleration.
+
+Query bootstrap uses awake sequence-zero records at the original physical source, then the real codec/Runtime restart restores the complete original checkpoint before any advance. Participant endpoint construction must accept this private bootstrap; full source association is independently validated before the bootstrap. Private sequence counters are diagnostic and never copied into an outer event publication.
+
+### Scoped implementation review findings
+
+The owned review found that adaptive `advance` may reject, accept a shorter step, then continue to the requested time. A query adapter therefore captures the actual private Runtime snapshot on each preparation, checks its complete records/q/v/a/time against the real trial, and retains that source/history/proofs in an immutable per-trial reference context. Normal step adapters keep their single original source. This preserves original Integration algorithms, actual rejected trials and global private history without weakening generic trajectory validation.
+
+The review also bound the optional participant's single schema at construction before signature allocation, included its category/version/byte cap in canonical authority, and charged its source-association evidence into the distinct encoding ledger. No callback runs under the receipt Mutex. Exact source/model comparison consumes public descriptor/policy/layout plus original scalar bit identity, rather than assuming a compiled model is a reference type.
+
+| Shared logical state | Native / WASM / Embedded storage | Read / mutation | Lifetime |
+|---|---|---|---|
+| Rest memo | same Mutex of immutable certificates | read/store through withLock | immutable owner |
+| Per-trial preparation | same Mutex of immutable source/history/proof context | capture/read/store; callbacks outside lock | equation operation |
+| Numerical/load/encoding receipt | same Mutex of value ledger + busy flag | bounded checkout/finalization; callbacks outside lock | operation |
+| Cold receipt | same Mutex of optional value report | read/store through withLock | checkpoint invocation |
+
+The original-profile compile/link/runtime and stack proof remain root-owned and pending; Native evidence qualifies only this owned test target.
+
+Native compilation against unchanged macOS13 deployment exposed missing availability on new internal Mutex owners. The cache/execution/cold receipt types now carry the same macOS15/iOS18/tvOS18/watchOS11 contract as Runtime; storage/isolation and deployment flags remain unchanged.
+
+The bounded-work recheck reserves owned stage q/v/a and mapped acceleration storage before allocation, and subtracts their live 4n scalars from each nested physical supplier budget. The same reservation is added when absorbing the actual known lower prefix, in both equation and physical receipts. Per-trial proof-reference storage and endpoint encoding are bounded before materialization. This changes no mechanical law, tolerance or profile stack setting.
+
+### IM.AF31.10 Native qualification
+
+The immutable private 625f759 baseline with qualified 7e80040 island source and the separately qualified Runtime observation correction built with exact Swift 6.4.0 and unchanged production flags. `build --build-tests -j 4` passed in 9.90 seconds under a 1200-second watchdog; the sole `MechanicsIslandSleepTests` behavior run passed 13 definitions / 24 expanded cases / 3 suites in 0.261 seconds under a separate 240-second watchdog. This verifies actual mixed omission and reduced Integration work, force-consistent moving C, fresh cold restart/replay, adaptive rejected-trial association, immutable proof reentry, original AF30 retained-row wake and source/work/cancel refusal. Setup/compiler findings were limited to availability and equivalent expression/typed-throws fixes; original suppliers were unchanged. Canonical Native and original WASM/Embedded qualification remain separate root-owned evidence.
