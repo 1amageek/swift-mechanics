@@ -514,7 +514,7 @@ The user explicitly instructed continuous implementation without stopping at sou
 
 | Progress ID | Owned child | Requirements | Qualified prerequisites | Handoff |
 |---|---|---|---|---|
-| IM.AF34.1 | [Modeling/Machines/StructuralAuthoring](Sources/SwiftMechanics/Modeling/Machines/StructuralAuthoring/DESIGN.md) | MD/JT/KI authoring | AR01,IM.IM02,IM.IM06,IM.IM07 | Source/design first; later qualification and coherent commit required |
+| IM.AF34.1 | [Modeling/Machines/StructuralAuthoring](Sources/SwiftMechanics/Modeling/Machines/StructuralAuthoring/DESIGN.md) | MD/JT/KI authoring | AR01,IM.IM02,IM.IM06,IM.IM07 | Full1910 Native22/public7 and selected1608 ordinary/Embedded original131072 guard/raw7 qualified; stable erased builder-pair with explicit TupleMachine retained; broader structural catalog remains open |
 | IM.AF34.2 | [Exchange/XML](Sources/SwiftMechanics/Exchange/XML/DESIGN.md) | IO-003..006 input prerequisite | IM.IM01,IM.IM35 | Source/design first; later qualification and coherent commit required |
 | IM.AF34.3 | [Analysis/Planning/TrajectoryOptimization](Sources/SwiftMechanics/Analysis/Planning/TrajectoryOptimization/DESIGN.md) | OP-006 | IM.IM03,IM.IM04,IM.IM11,IM.IM15,IM.IM32.2 | Source/design first; later qualification and coherent commit required |
 | IM.AF34.4 | [Analysis/Planning/TimeParameterization](Sources/SwiftMechanics/Analysis/Planning/TimeParameterization/DESIGN.md) | OP-008 | IM.IM03,IM.IM06,IM.IM15 | Native8/public7 on full1872 registered composition; calibrated prismatic retiming Native sprint, fixed portable and broader OP-008 remain open |

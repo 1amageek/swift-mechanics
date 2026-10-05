@@ -5,6 +5,7 @@ let package = Package(
     name: "swift-mechanics",
     platforms: [.macOS(.v13)],
     products: [
+        .executable(name: "mechanics-structural-authoring-verification", targets: ["StructuralAuthoringPublicVerification"]),
         .executable(name: "mechanics-tire-laws-verification", targets: ["TireLawsPublicVerification"]),
         .library(name: "SwiftMechanics", targets: ["SwiftMechanics"]),
         .executable(name: "mechanics-core-verification", targets: ["CoreVerification"]),
@@ -14,6 +15,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Modeling/Machines/StructuralAuthoring/DESIGN.md",
                     "Analysis/Planning/TimeParameterization/DESIGN.md",
                     "Analysis/Planning/DESIGN.md",
                     "Physics/Constraints/RollingRelations/DESIGN.md",
@@ -326,6 +328,12 @@ let package = Package(
         .testTarget(name: "MechanicsNonlinearOptimizationTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsGranularRuntimeTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsExchangeTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .target(name: "StructuralAuthoringQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/StructuralAuthoringQualification",
+                    exclude: ["DESIGN.md", "StructuralAuthoringQualification.swift", "StructuralAuthoringQualificationTests.swift"], sources: ["StructuralAuthoringQualificationCases.swift", "StructuralAuthoringQualificationError.swift", "StructuralAuthoringQualificationFixtures.swift", "StructuralAuthoringQualificationMotion.swift"]),
+        .executableTarget(name: "StructuralAuthoringPublicVerification", dependencies: ["SwiftMechanics", "StructuralAuthoringQualificationSupport"], path: "Verification/StructuralAuthoringQualification",
+                    exclude: ["DESIGN.md", "StructuralAuthoringQualificationCases.swift", "StructuralAuthoringQualificationError.swift", "StructuralAuthoringQualificationFixtures.swift", "StructuralAuthoringQualificationMotion.swift", "StructuralAuthoringQualificationTests.swift"], sources: ["StructuralAuthoringQualification.swift"]),
+        .testTarget(name: "MechanicsStructuralAuthoringTests", dependencies: ["SwiftMechanics", "StructuralAuthoringQualificationSupport"], path: "Verification/StructuralAuthoringQualification",
+                    exclude: ["DESIGN.md", "StructuralAuthoringQualification.swift", "StructuralAuthoringQualificationCases.swift", "StructuralAuthoringQualificationError.swift", "StructuralAuthoringQualificationFixtures.swift", "StructuralAuthoringQualificationMotion.swift"], sources: ["StructuralAuthoringQualificationTests.swift"]),
         .testTarget(name: "SwiftMechanicsMachineTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsComplexSpectrumTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsDampedSpectrumTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
