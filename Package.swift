@@ -190,7 +190,7 @@ let package = Package(
                 linkerSettings: [.linkedLibrary("swiftUnicodeDataTables", .when(platforms: [.wasi], traits: ["EmbeddedUnicode"]))]),
         .executableTarget(name: "CoreVerification", dependencies: ["SwiftMechanics"], path: "Verification/CoreVerification", exclude: ["DESIGN.md"]),
         .executableTarget(name: "FoundationVerification", dependencies: ["SwiftMechanics"], path: "Verification/FoundationVerification",
-                          exclude: ["DESIGN.md", "IslandDynamicsProbeModel.swift", "IslandDynamicsProbeContext.swift", "IslandDynamicsVerification.swift",
+                          exclude: ["DESIGN.md", "IslandSleepProbeContext.swift", "IslandSleepVerification.swift", "ConstrainedSleepProbeContext.swift", "ConstrainedSleepVerification.swift", "IslandDynamicsProbeModel.swift", "IslandDynamicsProbeContext.swift", "IslandDynamicsVerification.swift",
                                     "SensorPipelineProbeModel.swift", "SensorPipelineProbeContext.swift", "SensorPipelineVerification.swift",
                                     "ControlProbeModel.swift", "ControlProbeContext.swift", "ControlVerification.swift"]),
         .testTarget(name: "MechanicsContactRangeObservationTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),

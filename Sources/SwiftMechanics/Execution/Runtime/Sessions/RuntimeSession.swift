@@ -75,7 +75,7 @@ public final class RuntimeSession<Checkpoints: RuntimeCheckpointHandling>: Runti
             let release = !value.releaseIssued; value.releaseIssued = true
             return RuntimeReleaseAction(status: .closed, release: release, source: value.activeSource, retiredWorkspace: retired)
         }
-        return RuntimeReleaseAction(status: value.closed ? .closed : .draining, release: false, source: value.activeSource, retiredWorkspace: nil)
+        return RuntimeReleaseAction(status: value.closed ? .closed : .draining, release: false, source: value.closing ? value.activeSource : nil, retiredWorkspace: nil)
     }
     private func apply(_ action: RuntimeReleaseAction) {
         action.source?.cancel()

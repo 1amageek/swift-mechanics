@@ -62,7 +62,41 @@ extension FoundationVerification {
         }
         try require(first.shutdownStatus() == .closed && lifecycle.releaseCount == 1)
         try require(first.shutdown() == .closed && lifecycle.releaseCount == 1 && first.snapshot() == preserved)
+        try verifyActiveRuntimeObservation(second)
         _ = second.shutdown()
+    }
+    @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
+    @inline(never)
+    private static func verifyActiveRuntimeObservation(_ session: any RuntimeSessionOperating) throws {
+        for observationFails in [false, true] {
+            let prefix = session.snapshot()
+            _ = try session.performTrial { (trial: inout RuntimeTrial, control: inout RuntimeStepControl) throws(RuntimeFailure) in
+                try control.beginWorkBlock(units: 1)
+                try trial.setPosition(trial.position(at: 0) + 0.25, at: 0)
+                try trial.setTime(trial.timeSeconds + 0.25)
+                do throws(RuntimeFailure) {
+                    try session.observe { (accepted: RuntimeAcceptedState) throws(RuntimeFailure) in
+                        guard accepted == prefix else {
+                            throw RuntimeFailure(.invalidState, message: "Active observation changed the accepted prefix.")
+                        }
+                        if observationFails {
+                            throw RuntimeFailure(.invalidInput, message: "Deliberate public observation failure.")
+                        }
+                    }
+                    guard !observationFails else {
+                        throw RuntimeFailure(.invalidState, message: "Throwing observation returned success.")
+                    }
+                } catch {
+                    guard observationFails, error.code == .invalidInput, error.lastAccepted == prefix else { throw error }
+                }
+                try control.beginWorkBlock(units: 1)
+                return .accept
+            }
+            let accepted = session.snapshot().checkpoint
+            try require(accepted.acceptedSteps == prefix.checkpoint.acceptedSteps + 1)
+            try require(accepted.random == prefix.checkpoint.random)
+            try require(accepted.physical.time == prefix.checkpoint.physical.time + 0.25)
+        }
     }
     @available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *)
     private static func advanceRuntime(_ session: any RuntimeSessionOperating) throws(RuntimeFailure) -> RuntimeTrialOutcome {
