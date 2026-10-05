@@ -61,3 +61,6 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 Root registers the frozen PlanarContinuation child and MechanicsFluidsRuntimeTests after one original-path review. The confirmed missing supplier-ledger guard is repaired against the child contract before qualification. [Foundation verification](../../../../Verification/FoundationVerification/DESIGN.md#af21-planar-runtime-qualification-contract) owns selected-profile evidence. Existing channel and projection contracts are unchanged; full EX-005 remains open.
 
 [AF21 selected qualification](../../../../Verification/FoundationVerification/DESIGN.md#af21-selected-original-profile-qualification) closes this static-carrier continuation handoff. Full EX-005 and IM44 remain open.
+
+### Additional AddedInertia law
+Child [AddedInertia](SphereAddedInertia/DESIGN.md) owns its selected service contract and independent verification. Existing evolution and parent qualification are retained.

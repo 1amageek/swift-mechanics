@@ -50,3 +50,6 @@ Five independent selected laws consume the qualified public core/load contracts.
 - [AerodynamicPolars](AerodynamicPolars/DESIGN.md): FL-005; SL03.
 - [FollowerPressure](FollowerPressure/DESIGN.md): FL-004; SL04.
 - [HarmonicGravity](HarmonicGravity/DESIGN.md): FL-001;FL-008; SL05.
+
+### Additional Dahl law
+Child [Dahl](DahlFriction/DESIGN.md) owns its selected service contract and independent verification. Existing evolution and parent qualification are retained.
