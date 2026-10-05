@@ -587,3 +587,6 @@ IM.AF35.16 selected URDF18 is independently qualified and registered; [URDFQuali
 
 
 IM.AF35.15: [ParticleFlows](Sources/SwiftMechanics/Physics/Fluids/ParticleFlows/DESIGN.md) and original fixture5 are registered after fresh actual2032 Native8/public7 (receiptffda73383b221d8498221f9830022318788159b30b5e06c9dd986c3a43978b38). Hydraulic13 is retained; physics, original624+29 work and failure/cancellation witnesses are unchanged. Portable and general fluid domains remain open.
+
+
+IM.AF32.4: [SpatialProjection](Sources/SwiftMechanics/Physics/Fluids/SpatialProjection/DESIGN.md) is registered after original Native8/public7 on full2034 (Terrain and Hydraulic retained). Its matrix-free pressure work/cancellation checks and exact65*N+2 supplier /374*N+45 projection costs are verified. Pure state operations retain separate Runtime and portable obligations.
