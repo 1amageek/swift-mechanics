@@ -14,6 +14,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Physics/Constraints/RollingRelations/DESIGN.md",
                     "Physics/Vehicles/TireLaws/DESIGN.md",
                     "Physics/Vehicles/DESIGN.md",
                     "Execution/Control/TaskSpace/DESIGN.md",
@@ -327,6 +328,8 @@ let package = Package(
         .testTarget(name: "MechanicsToothContactTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsTaskSpaceTests", dependencies: ["SwiftMechanics"], path: "Verification/TaskSpaceQualification",
                     exclude: ["DESIGN.md", "TaskSpaceQualification.swift"]),
+        .testTarget(name: "MechanicsRollingRelationsTests", dependencies: ["SwiftMechanics"], path: "Verification/RollingRelationsQualification",
+                    exclude: ["DESIGN.md", "RollingRelationsQualification.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )
