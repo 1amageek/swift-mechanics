@@ -13,7 +13,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
-                    "Physics/Loads/SphereHydrostatics/DESIGN.md",
+                    "Analysis/Optimization/LinearPrograms/DESIGN.md",                    "Physics/Loads/SphereHydrostatics/DESIGN.md",
                     "Physics/Loads/DirectionalHydrodynamics/DESIGN.md",
                     "Physics/Loads/AerodynamicPolars/DESIGN.md",
                     "Physics/Loads/FollowerPressure/DESIGN.md",
@@ -209,6 +209,8 @@ let package = Package(
         .testTarget(name: "MechanicsConstrainedImpactTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsObservationsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsEnvironmentalLoadsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsLinearProgramsTests", dependencies: ["SwiftMechanics"], path: "Verification/LinearProgramsQualification",
+                    exclude: ["DESIGN.md", "LinearProgramsQualification.swift"]),
         .testTarget(name: "MechanicsXMLTests", dependencies: ["SwiftMechanics"], path: "Verification/XMLQualification",
                     exclude: ["DESIGN.md", "XMLQualification.swift"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
