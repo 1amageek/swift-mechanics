@@ -539,6 +539,8 @@ FieldOutputs16 plus unchanged fixture8 now pass actualfull1960 production13/fixt
 | IM.AF35.4 | [TerrainLaws](Sources/SwiftMechanics/Physics/Vehicles/TerrainLaws/DESIGN.md) | Calibrated deformable-terrain sinkage/shear histories and explicit original force/work/energy diagnostics | IM.IM01,IM.IM02,IM.IM11,IM.IM20 |
 | IM.AF35.5 | [GeometryParameters](Sources/SwiftMechanics/Analysis/Derivatives/GeometryParameters/DESIGN.md) | Analytic joint-placement/axis geometry parameter tangents with original kinematic replay/provenance | IM.IM02,IM.IM06,IM.IM30.1 |
 
+GeometryParameters23 plus unchanged fixture7 now pass actualfull1983 Native9/public8. Receipt d15384a6a0090e11a64f8c75078b855b061068c1d3c4cf737f2d1c8f82a0ff9b binds actual full source/module/object/link and original physical/cancellation witnesses. Producer/public mac13, actual NativeTesting14 and guardedMutex15 are distinct; portable and full derivative obligations remain open.
+
 IM.AF35.6 is the root-owned independent [ExternalCommands](Sources/SwiftMechanics/Execution/Control/ExternalCommands/DESIGN.md) source owner. It consumes qualified IM01/07/14 and AF31.23 public actuator/control binding contracts, preserves source timestamps/declared delay/order/interpolation and produces actual DriveCommand input without Runtime admission or silent stale-command reuse.
 
 IM.AF35.7 owns independent [NonlinearEstimation](Sources/SwiftMechanics/Execution/Control/NonlinearEstimation/DESIGN.md) source using qualified IM03/06/15/25/30.1, actual nonlinear physical propagation/model tangents and covariance/timing failure semantics; no unqualified AF32 filter dependency.

@@ -30,6 +30,7 @@ The assigned owner traces producer implementations and fixes each required physi
 
 | Child | Owned public contract |
 |---|---|
+| [GeometryParameters](GeometryParameters/DESIGN.md) | Selected analytic placement/root/axis products; full1983 Native9/public8 qualified, portable and broader derivative domains remain open |
 | [ScalarCalculus](ScalarCalculus/DESIGN.md) | Checked exact directional scalar algebra and failure/work policies |
 | [TreeTangents](TreeTangents/DESIGN.md) | Actual spatial motion/Jacobian/chart products |
 | [ConstraintProducts](ConstraintProducts/DESIGN.md) | Scaled physical quadratic-constraint products |
