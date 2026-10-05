@@ -69,3 +69,6 @@ Child [Thermal](Thermoelasticity/DESIGN.md) owns its selected service contract a
 - [StandardLinearSolid](StandardLinearSolid/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
 - [BurgersCreep](BurgersCreep/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
 - [NeoHookean](NeoHookean/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
+
+### Additional invariant potentials
+Child: [InvariantHyperelasticity](InvariantHyperelasticity/DESIGN.md). Six selected immutable potential implementations share the existing HyperelasticResponding public interface and the additive Constitutive public mapping; calibration, tangent and profile proof belong to the child.
