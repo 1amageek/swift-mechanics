@@ -1,3 +1,3 @@
 # Progress
-- [x] N Six selected nonlinear ideal maps with analytic derivatives, acceleration, conjugate power, explicit failures and existing affine adapter; reviewed and canonical Native49 tests in7 parallel suites passed; source commit 5f78969. `depends:none` `parallel:none`
-- [x] N.Int Main merge 437df4c preserves main pending files and full210 plan; 22 source/test Swift hashes and23 unchanged supplier hashes match; actual package target registration and source ancestry confirmed with no staged changes. Contact/Runtime, portable, minimum-platform and performance remain unqualified. `depends:N` `parallel:none`
+- [x] H Six independent selected hydraulic services implemented/reviewed; canonical Native41 behavioral tests in seven concurrent suites passed, including original cylinder energy and actual mechanical port coupling;21 Swift files frozen and23 suppliers unchanged. Source commit owns this item. `depends:none` `parallel:none`
+- [ ] H.Int Commit and merge frozen six-element slice preserving main pending files/full210 plan; verify source/supplier hashes, registration and ancestry. `depends:H` `parallel:none`
