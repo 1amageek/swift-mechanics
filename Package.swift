@@ -15,6 +15,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Physics/Flexible/FieldOutputs/DESIGN.md",
                     "Physics/Dynamics/ArticulatedDynamics/DESIGN.md",
                     "Modeling/Machines/StructuralAuthoring/DESIGN.md",
                     "Analysis/Planning/TimeParameterization/DESIGN.md",
