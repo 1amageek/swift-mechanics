@@ -264,3 +264,5 @@ AF26's selected implementation frontier is indexed by the [exclusive prerequisit
 [SourceCompilation](Verification/SourceCompilation/DESIGN.md) owns frozen-source Native and exact SDK compiler/link evidence for the implementation frontier. It does not register or qualify physical features; production owners retain those obligations.
 
 [LinearProgramsQualification](Verification/LinearProgramsQualification/DESIGN.md) owns independent selected LP certificates and target evidence.
+
+[MJCFQualification](Verification/MJCFQualification/DESIGN.md) owns selected semantic adapter and exact-profile registration evidence.

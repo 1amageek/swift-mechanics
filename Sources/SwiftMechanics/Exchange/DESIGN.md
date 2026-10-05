@@ -42,3 +42,7 @@ Remaining eventual owner scope: external file/network I/O, physical opaque-asset
 ## Qualified XML Child
 
 [XML](XML/DESIGN.md) owns bounded restricted markup syntax. [XMLQualification](../../../Verification/XMLQualification/DESIGN.md) owns independent original records/bytes, typed malformed/unsupported/budget/cancellation/consumed-work fixtures, canonical Native9 tests and exact-source ordinary/Embedded guard-first public execution. Foreign semantic adapters remain separate responsibilities.
+
+## Qualified MJCF Child
+
+[MJCF](MJCF/DESIGN.md) owns selected MuJoCo 3.3.7 format semantics through qualified XML and mechanics suppliers. [MJCFQualification](../../../Verification/MJCFQualification/DESIGN.md) owns the exact selected Native eight cases, seven synchronous ordinary/Embedded public cases with original 131072-byte guarded execution, and registered Native composition. Full format support and numerical MuJoCo equivalence remain separate obligations.
