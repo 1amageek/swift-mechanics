@@ -23,7 +23,7 @@ struct FoundationVerification {
             stage = "verifyCollision"; try verifyCollision()
             stage = "verifyDynamics"; try verifyDynamics()
             stage = "verifyObservations"; try verifyObservations()
-            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyContactRangeObservations"; try verifyContactRangeObservations() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyContactRangeObservations"; try verifyContactRangeObservations(); stage = "verifyIslandDynamics"; try verifyIslandDynamics() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyConstrainedNormalImpact"; try verifyConstrainedNormalImpact() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPlanarPhysicalLower"; try verifyPlanarPhysicalLower() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPrescribedBaseLower"; try verifyPrescribedBaseLower(); stage = "verifyPlanarReactionLower"; try verifyPlanarReactionLower() }
