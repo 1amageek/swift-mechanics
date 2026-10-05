@@ -578,3 +578,5 @@ IM.AF35.32 owns [AffineRigidGravity](Sources/SwiftMechanics/Physics/Loads/Affine
 IM.AF35.6 selected scalar service qualification and registration is complete; [ExternalCommandsQualification](Verification/ExternalCommandsQualification/DESIGN.md) owns its three-profile and canonical evidence. Remaining vector/transport/coupled/full CO-008 obligations stay in the original target.
 
 IM.AF35.32 selected continuum affine rigid-gravity service is qualified and registered; [AffineRigidGravityQualification](Verification/AffineRigidGravityQualification/DESIGN.md#executed-selected-registration) owns exact three-profile and canonical evidence. Full FL-001/DN-002, time-varying gradient and Runtime integration remain open.
+
+IM.AF35.16 selected URDF18 is independently qualified and registered; [URDFQualification](Verification/URDFQualification/DESIGN.md#executed-selected-registration) owns Native, ordinary/Embedded and canonical evidence. Full IO004/foreign-law/asset/Runtime closure remains with the original requirement owners.

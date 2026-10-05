@@ -13,6 +13,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Exchange/URDF/DESIGN.md",
                     "Physics/Loads/AffineRigidGravity/DESIGN.md",
                     "Execution/Control/ExternalCommands/DESIGN.md",
                     "Analysis/Optimization/LinearPrograms/DESIGN.md",                    "Physics/Loads/SphereHydrostatics/DESIGN.md",
@@ -243,6 +244,8 @@ let package = Package(
         .testTarget(name: "MechanicsEnvironmentalLoadsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsLinearProgramsTests", dependencies: ["SwiftMechanics"], path: "Verification/LinearProgramsQualification",
                     exclude: ["DESIGN.md", "LinearProgramsQualification.swift"]),
+        .testTarget(name: "MechanicsURDFTests", dependencies: ["SwiftMechanics"], path: "Verification/URDFQualification",
+                    exclude: ["DESIGN.md", "URDFQualification.swift"]),
         .testTarget(name: "MechanicsAffineRigidGravityTests", dependencies: ["SwiftMechanics"], path: "Verification/AffineRigidGravityQualification",
                     exclude: ["DESIGN.md", "AffineRigidGravityQualification.swift"]),
         .testTarget(name: "MechanicsExternalCommandsTests", dependencies: ["SwiftMechanics"], path: "Verification/ExternalCommandsQualification",

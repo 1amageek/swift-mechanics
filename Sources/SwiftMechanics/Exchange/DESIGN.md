@@ -46,3 +46,7 @@ Remaining eventual owner scope: external file/network I/O, physical opaque-asset
 ## Qualified MJCF Child
 
 [MJCF](MJCF/DESIGN.md) owns selected MuJoCo 3.3.7 format semantics through qualified XML and mechanics suppliers. [MJCFQualification](../../../Verification/MJCFQualification/DESIGN.md) owns the exact selected Native eight cases, seven synchronous ordinary/Embedded public cases with original 131072-byte guarded execution, and registered Native composition. Full format support and numerical MuJoCo equivalence remain separate obligations.
+
+## Qualified URDF Child
+
+[URDF](URDF/DESIGN.md) owns selected fixed/continuous semantic import and original-record export through qualified XML and mechanics contracts. [URDFQualification](../../../Verification/URDFQualification/DESIGN.md#executed-selected-registration) owns independent Native8, same seven ordinary/Embedded original131072 guarded/raw witnesses and canonical39-case evidence. Full format, limits/mimic/transmissions, assets and Runtime-state exchange remain separate obligations.
