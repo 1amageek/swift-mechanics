@@ -96,6 +96,22 @@ The review also bound the optional participant's single schema at construction b
 
 The original-profile compile/link/runtime and stack proof remain root-owned and pending; Native evidence qualifies only this owned test target.
 
+### Original-profile preparation lifetime correction
+
+The original 131072-byte guards reached actual rest certification while retaining the completed equation preparation validation frame. Ordinary WASM measured 15424 bytes for `IslandSleepMechanismEquation.prepare` and 2752 bytes for `prepareProofs`; Embedded measured 16800 and 2928 bytes respectively. The observed ordinary trace allocated 147376 bytes and the Embedded trace allocated 134848 bytes before reaching the original lower physics path. These measurements are failure evidence, not successful qualification.
+
+Preparation uses two sequential noninline phases. Capture validates the exact full accepted source, private query sequence, contributor registry, physical scalar bits and sleep history, then returns one immutable `IslandSleepPreparationSource`. Capture's value temporaries end before rest certification begins. Proof preparation consumes that same reference and returns immutable certificates together with the captured authority; it does not recapture source, waive validation or use shared memo as operation authority. `IslandSleepPreparation` retains this source context and the original proof array until the equation operation releases it. The existing common Mutex still owns the prepared reference and callbacks remain outside its lock.
+
+```text
+real trial + accepted session snapshot
+  -> capture and validate full source/history -> immutable source reference
+  -> capture frame returns
+  -> original bounded certifyRest calls -> immutable operation preparation
+  -> same derivative/write and actual Runtime acceptance
+```
+
+The original budgets, work quanta, solver calls, equations, cancellation, source identity and rollback remain unchanged. Existing mixed omission, rejected-trial association, reentry, restart, wake and failure tests own behavioral regression; root owns renewed original-profile guard/raw execution. No stack reservation or acceptance tolerance is increased.
+
 Native compilation against unchanged macOS13 deployment exposed missing availability on new internal Mutex owners. The cache/execution/cold receipt types now carry the same macOS15/iOS18/tvOS18/watchOS11 contract as Runtime; storage/isolation and deployment flags remain unchanged.
 
 The bounded-work recheck reserves owned stage q/v/a and mapped acceleration storage before allocation, and subtracts their live 4n scalars from each nested physical supplier budget. The same reservation is added when absorbing the actual known lower prefix, in both equation and physical receipts. Per-trial proof-reference storage and endpoint encoding are bounded before materialization. This changes no mechanical law, tolerance or profile stack setting.

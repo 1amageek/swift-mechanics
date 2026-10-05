@@ -24,6 +24,12 @@ internal final class IslandSleepMechanismEquation: SmoothODEEquations,Sendable {
     @inline(never)
     func prepare(trial:inout RuntimeTrial,work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
         try control.beginWorkBlock(units:1);try owner.check()
+        let context=try capturePreparationSource(trial:&trial,control:control)
+        let value=try prepareProofs(context:context,work:&work)
+        prepared.withLock { $0=value }
+    }
+    @inline(never)
+    private func capturePreparationSource(trial:inout RuntimeTrial,control:RuntimeStepControl) throws(RuntimeFailure) -> IslandSleepPreparationSource {
         let source=currentSession?.snapshot() ?? self.source
         if let initial=queryInitialSequence {
             guard source.checkpoint.acceptedSteps >= initial,source.checkpoint.acceptedSteps-initial < UInt64(owner.operationPolicy.maximumQuerySteps) else { throw RuntimeFailure(.capacityExceeded,message:"Actual private accepted-step capacity exhausted before supplier.") }
@@ -34,17 +40,16 @@ internal final class IslandSleepMechanismEquation: SmoothODEEquations,Sendable {
         for i in history.position.indices { try control.beginWorkBlock(units:1);guard try trial.position(at:i).bitPattern == history.position[i].bitPattern,try trial.velocity(at:i).bitPattern == history.velocity[i].bitPattern else { throw RuntimeFailure(.invalidOwnerAccess,message:"Mixed preparation source q/v changed.") } }
         for record in source.checkpoint.contributors { guard try trial.contributor(record.id) == record else { throw RuntimeFailure(.invalidOwnerAccess,message:"Actual preparation full source registry differs.") } }
         for i in history.velocity.indices { guard try trial.acceleration(at:i).bitPattern == source.checkpoint.physical.acceleration[i].bitPattern else { throw RuntimeFailure(.invalidOwnerAccess,message:"Actual preparation source acceleration differs.") } }
-        let value=try prepareProofs(source:source,history:history,work:&work)
-        prepared.withLock { $0=value }
+        return IslandSleepPreparationSource(source:source,history:history)
     }
     @inline(never)
-    private func prepareProofs(source:RuntimeAcceptedState,history:IslandSleepHistory,work:inout NumericalWork) throws(RuntimeFailure) -> IslandSleepPreparation {
+    private func prepareProofs(context:IslandSleepPreparationSource,work:inout NumericalWork) throws(RuntimeFailure) -> IslandSleepPreparation {
         try execution.reserveOwned(owner.program.islands.count,integration:&work)
         var proofs:[StationaryIslandRestCertificate?]=[];proofs.reserveCapacity(owner.program.islands.count)
         for j in owner.program.islands.indices {
-            let proof=try owner.proof(index:j,physical:source.checkpoint.physical,execution:execution,work:&work)
-            guard !history.asleep[j] || proof != nil else { throw RuntimeFailure(.invalidContributor,message:"Mixed sleeping source lacks actual rest proof.") };proofs.append(proof)
-        };return IslandSleepPreparation(source:source,history:history,proofs:proofs)
+            let proof=try owner.proof(index:j,physical:context.source.checkpoint.physical,execution:execution,work:&work)
+            guard !context.history.asleep[j] || proof != nil else { throw RuntimeFailure(.invalidContributor,message:"Mixed sleeping source lacks actual rest proof.") };proofs.append(proof)
+        };return IslandSleepPreparation(context:context,proofs:proofs)
     }
     @inline(never)
     func derivative(time:Double,point:[Double],into output:inout [Double],work:inout NumericalWork,control:RuntimeStepControl) throws(RuntimeFailure) {
