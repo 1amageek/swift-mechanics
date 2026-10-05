@@ -549,7 +549,7 @@ AF34.1 expanded StructuralAuthoring depends additionally on qualified IM11/13/14
 
 IM.AF35.11 owns [SpatialBeams](Sources/SwiftMechanics/Physics/Flexible/SpatialBeams/DESIGN.md): Actual spatial Euler-Bernoulli/Timoshenko beam axial/bending/shear/torsion operators and mass/damping/field outputs. Qualified prerequisites IM.IM01,IM.IM02,IM.IM03,IM.IM18,IM.IM19; immutable suppliers and root shared-file ownership retained.
 
-IM.AF35.12 owns [FrictionalImpulse](Sources/SwiftMechanics/Execution/Hybrid/FrictionalImpulse/DESIGN.md): Physical Coulomb sticking/sliding point impulses and velocity jumps using original kinematics/mass and restitution/energy. Qualified prerequisites IM.IM03,IM.IM06,IM.IM10,IM.IM15,IM.IM20,IM.IM24; immutable suppliers and root shared-file ownership retained.
+IM.AF35.12 owns [FrictionalImpulse](Sources/SwiftMechanics/Execution/Hybrid/FrictionalImpulse/DESIGN.md): Physical Coulomb sticking/sliding point impulses and velocity jumps using original kinematics/mass and restitution/energy. Qualified prerequisites IM.IM03,IM.IM06,IM.IM10,IM.IM15,IM.IM20,IM.IM24; immutable suppliers and root shared-file ownership retained. Native source/registration is a separate coherent sprint, qualified by canonical1774 Native7 and final public6. Original ordinary/Embedded guard-first execution remains a separate uncompleted obligation; no broad DY-006/CT-012 closure is claimed.
 
 IM.AF35.13 owns [LinearPrograms](Sources/SwiftMechanics/Analysis/Optimization/LinearPrograms/DESIGN.md): General LP phase-I/II simplex with original feasibility/duality/Farkas/recession certificate and bounded degeneracy termination. Qualified prerequisites IM.IM03; immutable suppliers and root shared-file ownership retained.
 
