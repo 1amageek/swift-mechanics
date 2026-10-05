@@ -731,7 +731,7 @@ Root owns shared entrypoints, graph/manifest edits, original-profile execution a
 | scalar_boundary | IslandDynamicsProbeModel.swift, IslandDynamicsProbeContext.swift, IslandDynamicsVerification.swift | Genuine compiled independent gear/striker islands, original acceleration/mass/rows, mixed rest and changed-source refusal |
 | nonlinear_mechanisms | ContactRangeProbeModel.swift, ContactRangeProbeContext.swift, ContactRangeVerification.swift | True pose-derived range/trigger/current-law tactile, mounted force/power/history and foreign-source refusal |
 | admission_authority | SensorPipelineProbeModel.swift, SensorPipelineProbeContext.swift, SensorPipelineVerification.swift | Private actual Runtime owner, accepted sample/delay/noise/queue, rollback and cold replay |
-| material_kernels | ControlProbeModel.swift, ControlProbeContext.swift, ControlVerification.swift | Actual original RK4/servo, held mechanical work, exact interval and full continuation replay |
+| material_kernels | ControlProbeModel.swift, ControlProbeContext.swift, ControlVerification.swift, ControlProbeStepRecord.swift | Actual original RK4/servo, held mechanical work, exact interval and full continuation replay |
 | scalar_boundary | IslandSleepProbeContext.swift, IslandSleepVerification.swift | Qualified original island model; genuine sleeping AB/awake C supplier omission, complete checkpoint and cold replay |
 | nonlinear_mechanisms | ConstrainedSleepProbeContext.swift, ConstrainedSleepVerification.swift | Original directed sphere contact/root, simultaneous retained-row impulse and connected wake in one Runtime publication |
 
@@ -789,3 +789,29 @@ The first actual execution refused the fourth accepted step with the original196
 | embedded | Build178.881s; raw15.283s/exit0, guard-build0.555s/exit0, guard-runtime23.592s/exit0 |
 
 Both original131072-byte stack guards passed. The public executable actually traversed accepted sensor sampling/noise/delay/queue/replay/refusal/lease shutdown and inherited Runtime active-trial normal/throwing observations. Every currently registered production Swift source and the shared entrypoint match the immutable profile copy; excluded in-progress Control/mixed Sleep/Hybrid source is outside this qualification. Exact hashes/commands/exits/scopes are `.build/af31-incremental-public/sensor-qualified-registration.json` and referenced build/runtime proofs. This qualifies selected synchronous encoder/IMU behavior, not generic event/wrench/range adapters, migration, async streams, WASI multithreading or full210.
+
+## AF31 control continuation caller lifetime
+
+The original ordinary-WASM immediate 131072-byte stack guard measured a 142128-byte continuation step trace after qualified Control admission validation was separated. The public continuation caller retained a 37984-byte frame containing five complete step-result and checkpoint comparison temporaries. Control production and its 19 qualified physical/replay/refusal tests retain their existing contracts.
+
+The caller owns a bounded immutable `ControlProbeStepRecord` per each of the original five actual step calls. Each record holds the original complete `ControlStepResult`, retains existing immutable backing, and is released when this synchronous verification returns or throws. Input capture, actual step, and result comparison execute in sequential noninline phases so observation/comparison value temporaries end before entering the original integrator. Records use the same immutable Sendable definition on Native, ordinary WASM and Embedded. No mutable accepted mirror, replacement equation, changed work reservation, omitted comparison or altered checkpoint is introduced.
+
+| Owner | Assumption and guarantee | Evidence |
+|---|---|---|
+| Control producer | Existing actual Runtime/Integration association, physical result and failure contracts | Unchanged source53 plus qualified 19 Native cases |
+| Public caller | Original first/cold results, exact next endpoint, restart, full replay/checkpoint equality and truncated-checkpoint accepted-prefix refusal | Full public Native execution and original guard-first WASM/Embedded execution |
+
+The fourth consumer source is verification-only and stays excluded from the canonical public executable until per-function registration. Any concrete guard failure is retained and blocks original-profile qualification.
+
+
+### AF31 incremental control qualification
+
+Canonical registration exposes the qualified Control child and its dedicated `MechanicsControlTests` target, plus the four real public consumers. Latest Native producer19 cases/4suites pass3.206s; strict signed full public Native build52.548s/runtime4.755s passes with42 actual source/object/link associations. Exact source53, public4 and all1660 executed registered Swift paths agree with canonical files; shared entry differs only by the qualified sampled-control stage, now copied exactly.
+
+| Original profile | Build | Immediate131072-byte guard | Raw |
+|---|---:|---:|---:|
+| Ordinary WASM |74.896s|14.868s, exit0|19.159s, exit0|
+| Embedded WASM with EmbeddedUnicode |90.589s|6.881s, exit0|5.476s, exit0|
+
+Each guard ran before raw. All original completion assertions, fixed Swift6.4.0/matching SDKs, source/object/link maps and before/after source/artifact hashes are retained in `.build/af31-incremental-public/control-caller-{native-proof,wasm-execution-receipt,embedded-execution-receipt}.json`. Private original raw and guarded artifacts are preserved. Earlier ENOSPC and actual guard RED receipts remain distinct from successful evidence. Control registration does not wait for mixed/constrained sleep, and does not claim full feedback/control or the complete210 requirements. Task-level accumulated interaction verification remains IM.AF31.5.
+

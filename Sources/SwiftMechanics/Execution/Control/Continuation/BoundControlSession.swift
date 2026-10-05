@@ -47,22 +47,36 @@ internal final class BoundControlSession: ControlSessionOperating, Sendable {
     func step(input:ControlSampleInput) throws(ControlFailure) -> ControlStepResult {
         try begin();defer { end() }
         try ControlArithmetic.check(policy)
+        let request=try intervalRequest(input)
+        let advanced=try advanceInterval(request)
+        return try publishInterval(advanced)
+    }
+    @inline(never)
+    private func intervalRequest(_ input:ControlSampleInput) throws(ControlFailure) -> ControlIntervalRequest {
         let previous=try capturedObservation()
         guard previous.controller.tick == input.tick,previous.accepted.checkpoint.physical.time == input.sampleTickTime else { throw ControlFailure(.staleSample,phase:"session-sample") }
         let requested=try clock.end(after:input.tick)
         let equation=HeldPrismaticControlEquation(descriptor:descriptor,plant:plant,controller:controller,clock:clock,policy:policy,codec:provider.codec,
             actuatorCodec:provider.actuator.codec,input:input,drives:drives,equations:equations,dynamics:dynamics)
+        return ControlIntervalRequest(input:input,equation:equation,requested:requested)
+    }
+    @inline(never)
+    private func advanceInterval(_ request:ControlIntervalRequest) throws(ControlFailure) -> ControlIntervalAdvance {
         let result:IntegrationAdvanceResult
-        do { result=try integrator.advance(session,model:plant.model,equations:equation,continuation:provider.integration,to:requested) }
+        do { result=try integrator.advance(session,model:plant.model,equations:request.equation,continuation:provider.integration,to:request.requested) }
         catch {
-            if let failure=equation.retainedFailure { throw failure }
+            if let failure=request.equation.retainedFailure { throw failure }
             throw ControlFailure(.integration(error),phase:"integration",failedSupplierWorkUnavailable:error.work.failedSupplierWorkUnavailable)
         }
         guard result.reachedRequestedTime,result.acceptedSteps == 1,result.rejectedTrials == 0 else { throw ControlFailure(.originalEvidenceRejected,phase:"integration-endpoint") }
+        return ControlIntervalAdvance(request:request,result:result)
+    }
+    @inline(never)
+    private func publishInterval(_ advanced:ControlIntervalAdvance) throws(ControlFailure) -> ControlStepResult {
         let observed=try capturedObservation()
-        guard observed.accepted == result.accepted,observed.controller.tick == input.tick+1,
-              observed.controller.issued,!observed.controller.pending,observed.controller.sampleTickTime == input.sampleTickTime else { throw ControlFailure(.originalEvidenceRejected,phase:"publication") }
-        return ControlStepResult(observation:observed,integration:result,actuationWork:equation.actuationWork)
+        guard observed.accepted == advanced.result.accepted,observed.controller.tick == advanced.request.input.tick+1,
+              observed.controller.issued,!observed.controller.pending,observed.controller.sampleTickTime == advanced.request.input.sampleTickTime else { throw ControlFailure(.originalEvidenceRejected,phase:"publication") }
+        return ControlStepResult(observation:observed,integration:advanced.result,actuationWork:advanced.request.equation.actuationWork)
     }
     func observe(_ body:@Sendable (ControlObservation) throws(ControlFailure) -> Void) throws(ControlFailure) {
         try begin();defer { end() }

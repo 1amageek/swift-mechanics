@@ -75,7 +75,7 @@ internal enum ControlRigidSampling {
               ControlArithmetic.agrees(energy.kineticEnergy,0.5*plant.movingMass*system.input.velocity[0]*system.input.velocity[0],policy.agreement),
               ControlArithmetic.agrees(energy.kineticEnergyRate,force*system.input.velocity[0],policy.agreement),
               energy.potentialEnergy == 0,energy.dissipatedPower == 0 else { throw ControlFailure(.originalEvidenceRejected,phase:"physical-evidence") }
-        return ControlMechanicalSample(system:system,acceleration:acceleration,kineticEnergy:energy.kineticEnergy,forceResidual:original[0]-force)
+        return ControlMechanicalSample(acceleration:acceleration,kineticEnergy:energy.kineticEnergy,forceResidual:original[0]-force)
     }
     static func nested(_ work:NumericalWork,reserved:Int) throws(ControlFailure) -> NumericalWork {
         do { var local=NumericalWork(budget:try work.remainingBudget(reservedStorage:reserved));try local.chargeOperations(1);return local }

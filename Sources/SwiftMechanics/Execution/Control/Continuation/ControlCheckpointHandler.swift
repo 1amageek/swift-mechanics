@@ -7,6 +7,11 @@ internal struct ControlCheckpointHandler: RuntimeCheckpointHandling, Sendable {
     let policy:ControlPolicy
     @inline(never)
     func admit(_ checkpoint:RuntimeCheckpoint,model:CompiledMechanicalModel,configuration:RuntimeConfiguration,cancellation:RuntimeCancellationSource?) throws(RuntimeFailure) -> RuntimeAcceptedState {
+        try validateAssociation(checkpoint,configuration:configuration,cancellation:cancellation)
+        return try ReferenceRuntimeCheckpointHandler(contributors:provider,revisions:ReferenceModelRevisionUpdater()).admit(checkpoint,model:model,configuration:configuration,cancellation:cancellation)
+    }
+    @inline(never)
+    private func validateAssociation(_ checkpoint:RuntimeCheckpoint,configuration:RuntimeConfiguration,cancellation:RuntimeCancellationSource?) throws(RuntimeFailure) {
         try cancellation?.check()
         guard !policy.isCancelled(),!Task.isCancelled else { throw RuntimeFailure(.cancelled,message:"Control admission cancelled.") }
         guard checkpoint.contributors.count == 3,checkpoint.physical.q.count == 1,checkpoint.physical.v.count == 1,checkpoint.physical.acceleration.count == 1 else { throw RuntimeFailure(.invalidContributor,message:"Control checkpoint shape differs.") }
@@ -51,7 +56,6 @@ internal struct ControlCheckpointHandler: RuntimeCheckpointHandling, Sendable {
                   ControlArithmetic.agrees(history.endpointKineticEnergy-history.initialKineticEnergy,history.actuatorIntervalWork+history.disturbanceIntervalWork,policy.agreement),
                   abs(history.heldEffort) <= controller.servo.effortLimit else { throw RuntimeFailure(.invalidContributor,message:"Controller original work evidence is incompatible.") }
         } else { guard history.tick == 0 else { throw RuntimeFailure(.invalidContributor,message:"Unissued history tick differs.") } }
-        return try ReferenceRuntimeCheckpointHandler(contributors:provider,revisions:ReferenceModelRevisionUpdater()).admit(checkpoint,model:model,configuration:configuration,cancellation:cancellation)
     }
     func migrate(_ checkpoint:RuntimeCheckpoint,from source:CompiledMechanicalModel,to target:CompiledMechanicalModel,using transition:ModelTransition,configuration:RuntimeConfiguration) throws(RuntimeFailure) -> RuntimeCheckpoint {
         // FIXME(INCOMPLETE_IMPLEMENTATION): This callable handler owns the whole controller/plant migration boundary.

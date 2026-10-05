@@ -147,27 +147,35 @@ internal final class HeldPrismaticControlEquation: SmoothODEEquations, Sendable 
         do throws(ControlFailure) {
             do { try control.beginWorkBlock(units:1) } catch { throw ControlFailure(.runtime(error),phase:"stage") }
             guard let history=local.history,history.pending,time >= history.sampleTickTime,time <= history.intervalEnd,output.count == 2 else { throw ControlFailure(.invalidInput,phase:"stage") }
-            let sample=try stage(time:time,point:point,history:history,work:&work)
+            let system=try stageSystem(time:time,point:point,work:&work)
+            let sample=try stageEvidence(system,history:history,work:&work)
             output[0]=point[1];output[1]=sample.acceleration
-            if time == history.intervalEnd {
-                let displacement=point[0]-history.sampledPosition,aw=history.heldEffort*displacement,dw=plant.disturbanceNewtons*displacement
-                guard abs(point[1]) <= controller.servo.speedLimit,
-                      ControlArithmetic.agrees(sample.kineticEnergy-history.initialKineticEnergy,aw+dw,policy.agreement) else { throw ControlFailure(.originalEvidenceRejected,phase:"endpoint-energy") }
-                local.endpoint=point;local.endpointDerivative=output
-                local.history=ControlHistory(tick:history.tick,issued:true,pending:true,sourceTime:history.sourceTime,sampleTickTime:history.sampleTickTime,intervalEnd:history.intervalEnd,
-                    sampledPosition:history.sampledPosition,sampledRate:history.sampledRate,requestedEffort:history.requestedEffort,heldEffort:history.heldEffort,
-                    nominalSampledWork:history.nominalSampledWork,actuatorIntervalWork:aw,disturbanceIntervalWork:dw,initialKineticEnergy:history.initialKineticEnergy,
-                    endpointKineticEnergy:sample.kineticEnergy,forceResidual:sample.forceResidual,endpointPosition:point[0],endpointRate:point[1],clipped:history.clipped)
-            }
+            try captureEndpoint(sample,time:time,point:point,output:output,history:history,state:&local)
             try ControlArithmetic.check(policy)
         } catch { let failure=error.retaining(numerical:work,actuation:local.work);local.failure=failure;throw ControlArithmetic.runtime(failure) }
     }
     @inline(never)
-    private func stage(time:Double,point:[Double],history:ControlHistory,work:inout NumericalWork) throws(ControlFailure) -> ControlMechanicalSample {
-        let system=try ControlRigidSampling.system(plant:plant,time:time,point:point,policy:policy,equations:equations,work:&work)
+    private func stageSystem(time:Double,point:[Double],work:inout NumericalWork) throws(ControlFailure) -> ControlRigidSystemSample {
+        ControlRigidSystemSample(try ControlRigidSampling.system(plant:plant,time:time,point:point,policy:policy,equations:equations,work:&work))
+    }
+    @inline(never)
+    private func stageEvidence(_ sample:ControlRigidSystemSample,history:ControlHistory,work:inout NumericalWork) throws(ControlFailure) -> ControlMechanicalSample {
         let total=history.heldEffort+plant.disturbanceNewtons
-        let solution=try ControlRigidSampling.solve(system,drive:total,inverseAcceleration:nil,plant:plant,dynamics:dynamics,policy:policy,work:&work)
-        return try ControlRigidSampling.evidence(system,acceleration:solution.acceleration[0],force:total,plant:plant,equations:equations,policy:policy,work:&work)
+        let solution=try ControlRigidSampling.solve(sample.system,drive:total,inverseAcceleration:nil,plant:plant,dynamics:dynamics,policy:policy,work:&work)
+        return try ControlRigidSampling.evidence(sample.system,acceleration:solution.acceleration[0],force:total,plant:plant,equations:equations,policy:policy,work:&work)
+    }
+    @inline(never)
+    private func captureEndpoint(_ sample:ControlMechanicalSample,time:Double,point:[Double],output:[Double],history:ControlHistory,state:inout ControlEquationState) throws(ControlFailure) {
+        if time == history.intervalEnd {
+            let displacement=point[0]-history.sampledPosition,aw=history.heldEffort*displacement,dw=plant.disturbanceNewtons*displacement
+            guard abs(point[1]) <= controller.servo.speedLimit,
+                  ControlArithmetic.agrees(sample.kineticEnergy-history.initialKineticEnergy,aw+dw,policy.agreement) else { throw ControlFailure(.originalEvidenceRejected,phase:"endpoint-energy") }
+            state.endpoint=point;state.endpointDerivative=output
+            state.history=ControlHistory(tick:history.tick,issued:true,pending:true,sourceTime:history.sourceTime,sampleTickTime:history.sampleTickTime,intervalEnd:history.intervalEnd,
+                sampledPosition:history.sampledPosition,sampledRate:history.sampledRate,requestedEffort:history.requestedEffort,heldEffort:history.heldEffort,
+                nominalSampledWork:history.nominalSampledWork,actuatorIntervalWork:aw,disturbanceIntervalWork:dw,initialKineticEnergy:history.initialKineticEnergy,
+                endpointKineticEnergy:sample.kineticEnergy,forceResidual:sample.forceResidual,endpointPosition:point[0],endpointRate:point[1],clipped:history.clipped)
+        }
     }
     @inline(never)
     func write(point:[Double],derivative:[Double],time:Double,trial:inout RuntimeTrial) throws(RuntimeFailure) {
