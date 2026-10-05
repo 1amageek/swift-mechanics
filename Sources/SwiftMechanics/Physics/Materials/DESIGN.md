@@ -60,3 +60,7 @@ Child: [Maxwell](MaxwellRelaxation/DESIGN.md). Contract and qualification belong
 
 ### Additional Thermal law
 Child [Thermal](Thermoelasticity/DESIGN.md) owns its selected service contract and independent verification. Existing evolution and parent qualification are retained.
+
+### Nine-service additive children
+- [KelvinVoigt](KelvinVoigt/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [OrthotropicElasticity](OrthotropicElasticity/DESIGN.md): selected independent constitutive service; qualification belongs to child.
