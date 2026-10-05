@@ -50,3 +50,6 @@ Child: [Gas](PolytropicGas/DESIGN.md). Contract and qualification belong to that
 
 ### Additional Motor law
 Child: [Motor](ExactMotor/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
+
+### Additional hydraulic circuit elements
+Child: [HydraulicElements](HydraulicElements/DESIGN.md). Owns six selected lumped fluid circuit/linearized double-chamber services with original pressure-flow/storage/loss contracts. Existing Runtime and accepted evolution scope remains unchanged; exact qualification belongs to the child.
