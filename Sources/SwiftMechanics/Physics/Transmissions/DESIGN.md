@@ -48,3 +48,6 @@ nonlinear_mechanisms owns the additive material surface and necessary shared pha
 
 ### Additional Capstan law
 Child: [Capstan](CapstanFriction/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
+
+### Additional nonlinear scalar maps
+Child: [NonlinearKinematics](NonlinearKinematics/DESIGN.md). Owns six selected ideal geometry/profile maps, analytic derivative/acceleration and power services and the public instantaneous affine actuator adapter. Existing network/compiler/Runtime/contact fidelity and qualification remain unchanged; child owns its exact behavioral evidence.
