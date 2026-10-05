@@ -41,3 +41,12 @@ The selected public probe separately compiled, linked and executed with exit0 on
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+### Additional Liquid law
+Child: [Liquid](SealedLiquid/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
+
+### Additional Gas law
+Child: [Gas](PolytropicGas/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
+
+### Additional Motor law
+Child: [Motor](ExactMotor/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.

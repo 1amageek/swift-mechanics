@@ -45,3 +45,6 @@ Selected AF28 Native/ordinary-WASM/Embedded-WASM public behavior is qualified th
 ## AF29 material tooth-contact dispatch
 
 nonlinear_mechanisms owns the additive material surface and necessary shared phase extraction within ToothContacts. The child's full original normal/friction/cohesive/rolling/spinning contract and independent physical proof are fixed before source. Qualified ContactLaws Sampling is a required implementation prerequisite. Broader model admission grants no legacy-operation capability: legacy initial/step/advance retain exact normal-only admission, including zero-step advance and both composition initializers; richer laws receive typed refusal before supplier work. Root owns prerequisite qualification, registration, public/profile composition and commits. Other children and lower suppliers remain read-only to this owner.
+
+### Additional Capstan law
+Child: [Capstan](CapstanFriction/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.

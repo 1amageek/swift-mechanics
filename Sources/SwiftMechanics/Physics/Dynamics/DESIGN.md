@@ -54,3 +54,6 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## AF25 original coordinate power composition
 
 [RigidEquations](RigidEquations/DESIGN.md) owns additive original physical coordinate partition evidence consumed by [NonlinearEvolution](../Mechanisms/NonlinearEvolution/DESIGN.md). Full-column MechanicalEnergy virtual power and genuine prescribed-anchor drift power retain their existing meanings. The child publishes known/dynamic coordinate, root-actuation, geometric-reaction, drive and known-load powers from the original full source; the parent introduces no alternative energy or force algorithm. Selected original-profile qualification belongs [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af25-upper-public-composition-contract); prospective interfaces alone are not evidence.
+
+### Additional Gyro law
+Child: [Gyro](GyroscopicRotors/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
