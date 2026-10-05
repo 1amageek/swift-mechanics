@@ -12,7 +12,13 @@ let package = Package(
     traits: [.trait(name: "EmbeddedUnicode", description: "Link matching Embedded Swift SDK Unicode data tables.")],
     targets: [
         .target(name: "SwiftMechanics",
-                exclude: ["Exchange/XML/DESIGN.md", "Analysis/Derivatives/TreeTangents/Planar",
+                exclude: [
+                    "Physics/Loads/SphereHydrostatics/DESIGN.md",
+                    "Physics/Loads/DirectionalHydrodynamics/DESIGN.md",
+                    "Physics/Loads/AerodynamicPolars/DESIGN.md",
+                    "Physics/Loads/FollowerPressure/DESIGN.md",
+                    "Physics/Loads/HarmonicGravity/DESIGN.md",
+                    "Exchange/XML/DESIGN.md", "Analysis/Derivatives/TreeTangents/Planar",
                     "Analysis/Observations/ContactRangeObservations/DESIGN.md",
                     "Analysis/Observations/SensorPipeline/DESIGN.md",
                     "Execution/Control/Continuation/DESIGN.md",
@@ -202,6 +208,7 @@ let package = Package(
         .testTarget(name: "MechanicsParameterIdentificationTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsConstrainedImpactTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsObservationsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsEnvironmentalLoadsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsXMLTests", dependencies: ["SwiftMechanics"], path: "Verification/XMLQualification",
                     exclude: ["DESIGN.md", "XMLQualification.swift"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),

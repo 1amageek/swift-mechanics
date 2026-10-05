@@ -40,3 +40,13 @@ Native Swift 6.4.0 release passed 12 tests in four suites through actual public 
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## Side-task environmental loads
+
+Five independent selected laws consume the qualified public core/load contracts. Their domain and proof owners are the following child designs:
+
+- [SphereHydrostatics](SphereHydrostatics/DESIGN.md): FL-005; SL01.
+- [DirectionalHydrodynamics](DirectionalHydrodynamics/DESIGN.md): FL-005; SL02.
+- [AerodynamicPolars](AerodynamicPolars/DESIGN.md): FL-005; SL03.
+- [FollowerPressure](FollowerPressure/DESIGN.md): FL-004; SL04.
+- [HarmonicGravity](HarmonicGravity/DESIGN.md): FL-001;FL-008; SL05.
