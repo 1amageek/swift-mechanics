@@ -12,7 +12,7 @@ let package = Package(
     traits: [.trait(name: "EmbeddedUnicode", description: "Link matching Embedded Swift SDK Unicode data tables.")],
     targets: [
         .target(name: "SwiftMechanics",
-                exclude: ["Analysis/Derivatives/TreeTangents/Planar",
+                exclude: ["Exchange/XML/DESIGN.md", "Analysis/Derivatives/TreeTangents/Planar",
                     "Analysis/Observations/ContactRangeObservations/DESIGN.md",
                     "Analysis/Observations/SensorPipeline/DESIGN.md",
                     "Execution/Control/Continuation/DESIGN.md",
@@ -202,6 +202,8 @@ let package = Package(
         .testTarget(name: "MechanicsParameterIdentificationTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsConstrainedImpactTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsObservationsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
+        .testTarget(name: "MechanicsXMLTests", dependencies: ["SwiftMechanics"], path: "Verification/XMLQualification",
+                    exclude: ["DESIGN.md", "XMLQualification.swift"]),
         .testTarget(name: "MechanicsCoreTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsModelTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsMaterialsTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
