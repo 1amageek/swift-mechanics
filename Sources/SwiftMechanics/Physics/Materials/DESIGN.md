@@ -64,3 +64,8 @@ Child [Thermal](Thermoelasticity/DESIGN.md) owns its selected service contract a
 ### Nine-service additive children
 - [KelvinVoigt](KelvinVoigt/DESIGN.md): selected independent constitutive service; qualification belongs to child.
 - [OrthotropicElasticity](OrthotropicElasticity/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+
+### Additional relaxation, creep and finite-elasticity children
+- [StandardLinearSolid](StandardLinearSolid/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
+- [BurgersCreep](BurgersCreep/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
+- [NeoHookean](NeoHookean/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
