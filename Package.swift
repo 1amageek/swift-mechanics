@@ -5,6 +5,7 @@ let package = Package(
     name: "swift-mechanics",
     platforms: [.macOS(.v13)],
     products: [
+        .executable(name: "mechanics-tire-laws-verification", targets: ["TireLawsPublicVerification"]),
         .library(name: "SwiftMechanics", targets: ["SwiftMechanics"]),
         .executable(name: "mechanics-core-verification", targets: ["CoreVerification"]),
         .executable(name: "mechanics-foundation-verification", targets: ["FoundationVerification"]),
@@ -13,6 +14,8 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Physics/Vehicles/TireLaws/DESIGN.md",
+                    "Physics/Vehicles/DESIGN.md",
                     "Execution/Control/TaskSpace/DESIGN.md",
                     "Exchange/URDF/DESIGN.md",
                     "Physics/Loads/AffineRigidGravity/DESIGN.md",
@@ -233,6 +236,12 @@ let package = Package(
         .executableTarget(name: "CoreVerification", dependencies: ["SwiftMechanics"], path: "Verification/CoreVerification", exclude: ["DESIGN.md"]),
         .executableTarget(name: "FoundationVerification", dependencies: ["SwiftMechanics"], path: "Verification/FoundationVerification",
                           exclude: ["DESIGN.md", "IslandSleepProbeContext.swift", "IslandSleepVerification.swift", "ConstrainedSleepProbeContext.swift", "ConstrainedSleepVerification.swift"]),
+        .target(name: "TireLawsQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/TireLawsQualification",
+                exclude: ["DESIGN.md", "TireLawsQualificationRunner.swift", "TireLawsQualificationTests.swift"], sources: ["TireLawsQualificationCases.swift", "TireLawsQualificationFixtures.swift", "TireLawsQualificationError.swift", "TireLawsQualificationNativeCases.swift"]),
+        .executableTarget(name: "TireLawsPublicVerification", dependencies: ["TireLawsQualificationSupport"], path: "Verification/TireLawsQualification",
+                exclude: ["DESIGN.md", "TireLawsQualificationCases.swift", "TireLawsQualificationError.swift", "TireLawsQualificationFixtures.swift", "TireLawsQualificationNativeCases.swift", "TireLawsQualificationTests.swift"], sources: ["TireLawsQualificationRunner.swift"]),
+        .testTarget(name: "MechanicsTireLawsTests", dependencies: ["TireLawsQualificationSupport"], path: "Verification/TireLawsQualification",
+                exclude: ["DESIGN.md", "TireLawsQualificationCases.swift", "TireLawsQualificationError.swift", "TireLawsQualificationFixtures.swift", "TireLawsQualificationNativeCases.swift", "TireLawsQualificationRunner.swift"], sources: ["TireLawsQualificationTests.swift"]),
         .testTarget(name: "MechanicsControlTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsSensorPipelineTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),
         .testTarget(name: "MechanicsContactRangeObservationTests", dependencies: ["SwiftMechanics"], exclude: ["DESIGN.md"]),

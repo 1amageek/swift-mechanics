@@ -44,3 +44,7 @@ Invalid values, exhausted capacity, cancellation, incompatible model identity an
 
 ## Verification and Change Impact
 Responsibility-specific Tests targets own child behavior. Package verification runs the actual public path on each declared fixed toolchain/SDK profile. Recheck affected upper consumers after a lower contract changes. Migration requires consolidated Native behavioral tests and matching WASM/Embedded execution; compile success alone is not qualification.
+
+## Selected Vehicle Law Composition
+
+[Vehicles](Vehicles/DESIGN.md) owns selected calibrated vehicle constitutive laws. Its TireLaws child is registered after complete1841-source Native behavioral verification; original WASM/Embedded qualification and complete vehicle assembly requirements remain open. Accepted-state dynamics authority stays with its existing owners.
