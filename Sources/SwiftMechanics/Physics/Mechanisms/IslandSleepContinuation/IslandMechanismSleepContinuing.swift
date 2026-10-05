@@ -10,5 +10,6 @@ public protocol IslandMechanismSleepContinuing: RuntimeContributorHandling {
     func history(_ record:RuntimeContributorState) throws(RuntimeFailure) -> IslandSleepHistory
     func step(_ session:any RuntimeSessionOperating,work:inout IslandSleepWork) throws(IslandSleepFailure) -> IslandSleepAdvanceResult
     func query(from source:RuntimeAcceptedState,configuration:RuntimeConfiguration,to time:Double,work:inout IslandSleepWork,cancellation:RuntimeCancellationSource?) throws(IslandSleepFailure) -> IslandSleepTrajectoryEndpoint
+    func prepareSmoothEndpoint(source:RuntimeAcceptedState,endpoint:IslandSleepTrajectoryEndpoint,work:inout IslandSleepWork) throws(IslandSleepFailure) -> PreparedIslandSmoothEndpoint
     func prepareImpactWake(source:RuntimeAcceptedState,endpoint:IslandSleepTrajectoryEndpoint,impact:ConstrainedNormalImpulseResult,work:inout IslandSleepWork) throws(IslandSleepFailure) -> PreparedIslandImpactWake
 }

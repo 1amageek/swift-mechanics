@@ -51,3 +51,7 @@ Native qualification is performed by this child owner in the assigned immutable 
 ### Owned Native evidence
 
 The assigned private source/caches executed this target alone: 13 definitions / 24 expanded cases / 3 suites passed, exit zero, 0.261 seconds. Successful setup took 9.90 seconds. Lower 37 cases were not repeated. Physical tests include balanced gear drives with actual moving C acceleration and the separate zero-drive e0/e1 contact domain; all actual lower suppliers remain unchanged. Logs and complete copy/digest inventory are `.build/af31-independent-islands/upper-native-setup-5.log`, `upper-native-behavior-1.log` and `upper-final-proof.json` at the package root. Root owns canonical/native/public/profile integration; the standalone proof does not complete the future directed event-root owner.
+
+### IM.AF31.12 Additive smooth association proof
+
+Focused tests query a real force-consistent mixed trajectory, retain its actual sleep flags/rest onset and Integration nextStep/error, and produce original S+1 rather than its deliberately different private S. Actual Runtime publication and fresh cold byte replay validate the candidate. Foreign owner and stale complete source are refused, and contributor-encoding capacity retains the accepted checkpoint/RNG and known work. Existing step/query/impact evidence is reused unchanged.
