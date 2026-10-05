@@ -51,6 +51,13 @@ internal final class HeldPrismaticControlEquation: SmoothODEEquations, Sendable 
     private func prepareCandidate(trial:inout RuntimeTrial,work:inout NumericalWork,control:RuntimeStepControl,state:inout ControlEquationState) throws(ControlFailure) {
         try ControlArithmetic.charge(128+codec.schema.maximumBytes,work:&work,policy:policy)
         do { try control.beginWorkBlock(units:1);try state.work.reserve(scalars:32,bytes:policy.maximumPayloadBytes) } catch let e as ActuationError { throw ControlFailure(.actuation(e),phase:"prepare") } catch let e as RuntimeFailure { throw ControlFailure(.runtime(e),phase:"prepare") } catch { throw ControlFailure(.invalidSupplierOutput,phase:"prepare") }
+        let sample=try preparationSample(trial:&trial,state:&state,work:&work)
+        let driven=try evaluateDrive(sample,state:&state,work:&work)
+        let prepared=try prepareEvidence(driven,work:&work)
+        try stagePrepared(prepared,trial:&trial,state:&state)
+    }
+    @inline(never)
+    private func preparationSample(trial:inout RuntimeTrial,state:inout ControlEquationState,work:inout NumericalWork) throws(ControlFailure) -> ControlPreparationSample {
         guard let input,state.history == nil else { throw ControlFailure(.invalidInput,phase:"prepare") }
         let saved:ControlHistory,old:ActuatorState,q:Double,v:Double
         do {
@@ -63,23 +70,35 @@ internal final class HeldPrismaticControlEquation: SmoothODEEquations, Sendable 
               old.mode == controller.mode,policy.integration.initialStep >= dt,policy.integration.minimumStep <= dt else { throw ControlFailure(.staleSample,phase:"sample") }
         let feedback=try ReferenceControlPortAdapter().prepare(encoder:input.encoder,port:plant.port,policy:policy,work:&work)
         guard feedback.sourceTime == start,feedback.position == q,feedback.rate == v else { throw ControlFailure(.staleSample,phase:"sample") }
-        let system=try ControlRigidSampling.system(plant:plant,time:start,point:[q,v],policy:policy,equations:equations,work:&work)
-        let command=try desiredCommand(input,feedback:feedback,system:system,work:&work)
-        let response=try drive(command,old:old,q:q,v:v,dt:dt,state:&state,work:&work)
-        guard response.state.binding == old.binding,response.state.time == end,response.state.mode == old.mode,old.sequence < UInt64.max,
-              response.state.sequence == old.sequence+1,abs(response.appliedEffort) <= controller.servo.effortLimit,
-              ControlArithmetic.agrees(response.power,response.appliedEffort*v,policy.agreement),
-              ControlArithmetic.agrees(response.energy.mechanicalWork,response.appliedEffort*v*dt,policy.agreement) else { throw ControlFailure(.invalidSupplierOutput,phase:"drive") }
-        let total=response.appliedEffort+plant.disturbanceNewtons
-        let solution=try ControlRigidSampling.solve(system,drive:total,inverseAcceleration:nil,plant:plant,dynamics:dynamics,policy:policy,work:&work)
-        let initial=try ControlRigidSampling.evidence(system,acceleration:solution.acceleration[0],force:total,plant:plant,equations:equations,policy:policy,work:&work)
-        let history=ControlHistory(tick:saved.tick+1,issued:true,pending:true,sourceTime:start,sampleTickTime:start,intervalEnd:end,
-            sampledPosition:q,sampledRate:v,requestedEffort:response.requestedEffort,heldEffort:response.appliedEffort,nominalSampledWork:response.energy.mechanicalWork,
+        return ControlPreparationSample(input:input,old:old,feedback:feedback,tick:saved.tick,q:q,v:v,start:start,end:end,dt:dt)
+    }
+    @inline(never)
+    private func evaluateDrive(_ sample:ControlPreparationSample,state:inout ControlEquationState,work:inout NumericalWork) throws(ControlFailure) -> ControlDrivenSample {
+        let system=try ControlRigidSampling.system(plant:plant,time:sample.start,point:[sample.q,sample.v],policy:policy,equations:equations,work:&work)
+        let command=try desiredCommand(sample.input,feedback:sample.feedback,system:system,work:&work)
+        let response=try drive(command,old:sample.old,q:sample.q,v:sample.v,dt:sample.dt,state:&state,work:&work)
+        guard response.state.binding == sample.old.binding,response.state.time == sample.end,response.state.mode == sample.old.mode,sample.old.sequence < UInt64.max,
+              response.state.sequence == sample.old.sequence+1,abs(response.appliedEffort) <= controller.servo.effortLimit,
+              ControlArithmetic.agrees(response.power,response.appliedEffort*sample.v,policy.agreement),
+              ControlArithmetic.agrees(response.energy.mechanicalWork,response.appliedEffort*sample.v*sample.dt,policy.agreement) else { throw ControlFailure(.invalidSupplierOutput,phase:"drive") }
+        return ControlDrivenSample(sample:sample,system:system,response:response)
+    }
+    @inline(never)
+    private func prepareEvidence(_ driven:ControlDrivenSample,work:inout NumericalWork) throws(ControlFailure) -> ControlPreparedSample {
+        let total=driven.response.appliedEffort+plant.disturbanceNewtons
+        let solution=try ControlRigidSampling.solve(driven.system,drive:total,inverseAcceleration:nil,plant:plant,dynamics:dynamics,policy:policy,work:&work)
+        let initial=try ControlRigidSampling.evidence(driven.system,acceleration:solution.acceleration[0],force:total,plant:plant,equations:equations,policy:policy,work:&work)
+        let history=ControlHistory(tick:driven.sample.tick+1,issued:true,pending:true,sourceTime:driven.sample.start,sampleTickTime:driven.sample.start,intervalEnd:driven.sample.end,
+            sampledPosition:driven.sample.q,sampledRate:driven.sample.v,requestedEffort:driven.response.requestedEffort,heldEffort:driven.response.appliedEffort,nominalSampledWork:driven.response.energy.mechanicalWork,
             actuatorIntervalWork:0,disturbanceIntervalWork:0,initialKineticEnergy:initial.kineticEnergy,endpointKineticEnergy:0,forceResidual:initial.forceResidual,
-            endpointPosition:q,endpointRate:v,clipped:response.clipped)
-        do { try trial.replaceContributor(actuatorCodec.encode(response.state,work:&state.work));try trial.replaceContributor(codec.record(history)) }
+            endpointPosition:driven.sample.q,endpointRate:driven.sample.v,clipped:driven.response.clipped)
+        return ControlPreparedSample(response:driven.response,history:history)
+    }
+    @inline(never)
+    private func stagePrepared(_ prepared:ControlPreparedSample,trial:inout RuntimeTrial,state:inout ControlEquationState) throws(ControlFailure) {
+        do { try trial.replaceContributor(actuatorCodec.encode(prepared.response.state,work:&state.work));try trial.replaceContributor(codec.record(prepared.history)) }
         catch let e as ActuationError { throw ControlFailure(.actuation(e),phase:"stage") } catch let e as RuntimeFailure { throw ControlFailure(.runtime(e),phase:"stage") } catch { throw ControlFailure(.invalidSupplierOutput,phase:"stage") }
-        state.response=response;state.history=history
+        state.response=prepared.response;state.history=prepared.history
     }
     @inline(never)
     private func desiredCommand(_ input:ControlSampleInput,feedback:ScalarControlFeedback,system:RigidDynamicsSystem,work:inout NumericalWork) throws(ControlFailure) -> DriveCommand {
