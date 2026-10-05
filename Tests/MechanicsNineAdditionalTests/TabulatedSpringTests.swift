@@ -55,7 +55,7 @@ import SwiftMechanics
         #expect(throws: LoadError.invalidInput) { try evaluate(.nan) }
         #expect(throws: LoadError.nonFiniteResult) {
             try TabulatedSpringLaw(coordinateKind: .translation, restCoordinate: 0, maximumRate: 5, displacements: [0,1e-308,1], restoringEfforts: [0,1e308,1e308], maximumKnots: 3, work: &work)
-            
+
         }
     }
     @Test func boundedConstructionAndQueryPreserveLaw() throws {

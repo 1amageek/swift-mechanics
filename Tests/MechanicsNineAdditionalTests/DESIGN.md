@@ -36,3 +36,6 @@ python3 Scripts/run_with_timeout.py 300 <swift-6.4.0-RELEASE>/usr/bin/swift buil
 python3 Scripts/run_with_timeout.py 60 <swift-6.4.0-RELEASE>/usr/bin/swift test --build-path .build/six-native --skip-build --test-product MechanicsNineAdditionalTests --disable-xctest --enable-swift-testing -j 2
 ```
 Compilation initially rejected test-only missing nested `try`; corrected. One bounded review found the original negative near-zero table effort cancellation; both evaluators now interpolate outward from the endpoint nearest zero. The finding-only recheck and final 50 tests pass. No further source changes or target capability claims follow this evidence.
+
+### Post-qualification formatting equivalence
+The two tabulated test files had trailing spaces on blank lines removed after their final successful run. Every line is otherwise identical, with unchanged line counts; `.build/nine-evidence/whitespace-equivalence.json` binds tested and cleaned hashes. `source-freeze-tested.json` preserves actual compiled/tested source hashes; `source-freeze.json` binds the final working inventory. Production Swift is unchanged. The original behavioral evidence remains valid; no repeated build/test is claimed for formatting alone.
