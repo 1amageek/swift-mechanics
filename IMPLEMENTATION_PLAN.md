@@ -533,7 +533,7 @@ User instruction continues implementation and defers new tests. Root records the
 |---|---|---|---|
 | IM.AF35.1 | [TriangleMeshes](Sources/SwiftMechanics/Physics/Collision/TriangleMeshes/DESIGN.md) | Bounded triangle-mesh proximity, ray and translating-sphere sweep with original feature/source/refit admission | IM.IM01,IM.IM02,IM.IM10 |
 | IM.AF35.2 | [FieldOutputs](Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/DESIGN.md) | Tet4 physical stress/strain/displacement/internal-force/energy queries with actual constitutive point and location/measure/projection metadata | IM.IM01,IM.IM03,IM.IM18,IM.IM19 |
-| IM.AF35.3 | [ArticulatedDynamics](Sources/SwiftMechanics/Physics/Dynamics/ArticulatedDynamics/DESIGN.md) | Recursive articulated-body rigid dynamics using actual tree/inertia/load contracts and original body residuals | IM.IM03,IM.IM06,IM.IM15 |
+| IM.AF35.3 | [ArticulatedDynamics](Sources/SwiftMechanics/Physics/Dynamics/ArticulatedDynamics/DESIGN.md) | Recursive articulated-body rigid dynamics using actual tree/inertia/load contracts and original body residuals | Native8/public8 on actualfull1924 registered composition; selected 6x6 recurrence Native sprint, portable and broader articulated domains remain open |
 | IM.AF35.4 | [TerrainLaws](Sources/SwiftMechanics/Physics/Vehicles/TerrainLaws/DESIGN.md) | Calibrated deformable-terrain sinkage/shear histories and explicit original force/work/energy diagnostics | IM.IM01,IM.IM02,IM.IM11,IM.IM20 |
 | IM.AF35.5 | [GeometryParameters](Sources/SwiftMechanics/Analysis/Derivatives/GeometryParameters/DESIGN.md) | Analytic joint-placement/axis geometry parameter tangents with original kinematic replay/provenance | IM.IM02,IM.IM06,IM.IM30.1 |
 

@@ -1,7 +1,7 @@
 # Dynamics component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). Own IM15 rigid equation terms, forward/inverse/mixed solves and physical energy/wrench accounting. The initial producer must publish a verified admitted tree domain before broader DY family closure. Children: [RigidEquations](RigidEquations/DESIGN.md), [DenseDynamics](DenseDynamics/DESIGN.md). [SPEC](../../../../SPEC.md) owns requirements and [plan](../../../../IMPLEMENTATION_PLAN.md) owns the prerequisite graph.
+Parent: [responsibility owner](../DESIGN.md). Own IM15 rigid equation terms, forward/inverse/mixed solves and physical energy/wrench accounting. The initial producer must publish a verified admitted tree domain before broader DY family closure. Children: [ArticulatedDynamics](ArticulatedDynamics/DESIGN.md), [RigidEquations](RigidEquations/DESIGN.md), [DenseDynamics](DenseDynamics/DESIGN.md). [SPEC](../../../../SPEC.md) owns requirements and [plan](../../../../IMPLEMENTATION_PLAN.md) owns the prerequisite graph.
 
 ## Responsibilities and Boundaries
 Consume public tree motion/Jacobian and complete inertia records; own mass/bias/force equation meaning and independent residual acceptance. Constraint/contact response, accepted-time evolution, collision, actuation and model compilation remain consumers or independent owners. Generic numerical tree elimination is not an articulated-body dynamics implementation.
@@ -16,6 +16,8 @@ Consume public tree motion/Jacobian and complete inertia records; own mass/bias/
 | [Joints](../../Modeling/Joints/DESIGN.md) | depends on | q/v/vdot convention, framed body/point Jacobians and prescribed bias | Actual tree motion | Geometric linear velocity differs from origin spatial linear velocity |
 | [Loads](../Loads/DESIGN.md) | depends on | Framed JT loads and power partition | Mechanical external work | Potential/impulse/force semantics remain distinct |
 | [Model](../../Modeling/Model/DESIGN.md) | depends on | Complete physical mass/COM/inertia records | Actual inertial meaning | Display geometry never supplies missing mass |
+
+| [ArticulatedDynamics](ArticulatedDynamics/DESIGN.md) | child | Original Newton-Euler and inverse-mass acceptance | Selected Native1924 recurrence qualified; portable profiles and broader articulated domains remain open |
 
 ## Architecture
 ```text

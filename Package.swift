@@ -15,6 +15,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Physics/Dynamics/ArticulatedDynamics/DESIGN.md",
                     "Modeling/Machines/StructuralAuthoring/DESIGN.md",
                     "Analysis/Planning/TimeParameterization/DESIGN.md",
                     "Analysis/Planning/DESIGN.md",
@@ -342,6 +343,12 @@ let package = Package(
                     exclude: ["DESIGN.md", "TaskSpaceQualification.swift"]),
         .testTarget(name: "MechanicsRollingRelationsTests", dependencies: ["SwiftMechanics"], path: "Verification/RollingRelationsQualification",
                     exclude: ["DESIGN.md", "RollingRelationsQualification.swift"]),
+        .target(name: "ArticulatedDynamicsQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/ArticulatedDynamicsQualification",
+                exclude: ["DESIGN.md", "ArticulatedDynamicsQualificationRunner.swift", "ArticulatedDynamicsQualificationTests.swift"], sources: ["ArticulatedDynamicsQualificationCases.swift", "ArticulatedDynamicsQualificationError.swift", "ArticulatedDynamicsQualificationFixtures.swift", "ArticulatedDynamicsQualificationNativeCases.swift"]),
+        .executableTarget(name: "ArticulatedDynamicsPublicVerification", dependencies: ["ArticulatedDynamicsQualificationSupport"], path: "Verification/ArticulatedDynamicsQualification",
+                exclude: ["DESIGN.md", "ArticulatedDynamicsQualificationCases.swift", "ArticulatedDynamicsQualificationError.swift", "ArticulatedDynamicsQualificationFixtures.swift", "ArticulatedDynamicsQualificationNativeCases.swift", "ArticulatedDynamicsQualificationTests.swift"], sources: ["ArticulatedDynamicsQualificationRunner.swift"]),
+        .testTarget(name: "MechanicsArticulatedDynamicsTests", dependencies: ["ArticulatedDynamicsQualificationSupport"], path: "Verification/ArticulatedDynamicsQualification",
+                exclude: ["DESIGN.md", "ArticulatedDynamicsQualificationCases.swift", "ArticulatedDynamicsQualificationError.swift", "ArticulatedDynamicsQualificationFixtures.swift", "ArticulatedDynamicsQualificationNativeCases.swift", "ArticulatedDynamicsQualificationRunner.swift"], sources: ["ArticulatedDynamicsQualificationTests.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )
