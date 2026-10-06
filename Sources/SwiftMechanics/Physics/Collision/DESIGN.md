@@ -9,6 +9,7 @@ Own framed geometry queries and declared shape/motion/representation domains. Co
 ## Related Designs
 | Design | Relationship | Contract used | Summary | Cautions |
 |---|---|---|---|---|
+| [Heightfields](Heightfields/DESIGN.md) | child | Identified triangulated grid and outward coplanar endpoint certificate | Original Native8/public7 on frozen2270 | Dynamic/non-sphere/signed queries and portable remain open |
 | [TriangleMeshes](TriangleMeshes/DESIGN.md) | child | Identified feature/BVH/refit closest/ray/sphere-CCD | Original Native8/public7 on frozen2270 | General signed volume, tangency, rotating CCD and portable remain open |
 | [CompoundQueries](CompoundQueries/DESIGN.md) | child | Identified analytic child proxy, transform, filter and bounded aggregation | Selected Native8/public7 on frozen2270 | Custom-filter failure accounting, union surfaces, manifolds and portable remain open |
 | [Responsibility owner](../DESIGN.md) | parent | Scope and prerequisite DAG | Single-writer registration/integration | Full closure remains IM48 |
