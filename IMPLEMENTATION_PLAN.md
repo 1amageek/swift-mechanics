@@ -608,3 +608,6 @@ Selected NonlinearEstimation Native registration consumes the repaired matching2
 
 
 AF37.2 registers SpatialBeams25 with original physical assembly/response/field, seven Native tests and six public witnesses on frozen2270. Fixture-only availability and typed-error admission repairs preserve source, physical oracles, tolerances and work. The child qualification owns exact selected evidence; portable and wider FX domains remain open.
+
+
+AF37.5 registers Hydroelastic17 and final eight fixtures after seven Native tests/six public cases on frozen2270. Original caller-calibrated Tet4 pressure, clipping, nodal/wrench/virtual-power and work oracles remain unchanged. Only fixture availability admission changed. Full continuum pressure/evolution, whole-mesh discovery and portable qualification remain open.
