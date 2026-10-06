@@ -1,7 +1,7 @@
 # TreeTangents
 
 ## Purpose and Scope
-Parent: [module](../DESIGN.md). Children: none. Own first directional products through the actual spatial rigid tree motion and geometric Jacobian. Initial implementation admission; profile qualification pending.
+Parent: [module](../DESIGN.md). Children: [Planar](Planar/DESIGN.md). Own first directional products through the actual spatial rigid tree motion and geometric Jacobian. Initial implementation admission; profile qualification pending.
 
 ## Responsibilities and Boundaries
 Differentiate fixed and spatial floating roots, ordered revolute/prismatic/screw factors, universal/cylindrical/planar/custom ordered factors, and spherical/six-DOF charts. Own pose, quaternion-storage coordinate-rate direction, actual velocity/acceleration, geometric columns, prescribed drift and zero-generalized-acceleration bias directions. Root reference pose and fixed anchor poses are immutable for this initial domain. Prescribed anchor samples require explicit pose/velocity/acceleration directional input; no missing derivative is replaced with zero. No evolution, topology sensitivity, rank transition or quaternion logarithm derivative.
@@ -31,7 +31,7 @@ Check capacities and all finite directions; prescribed sample count cannot excee
 Caller-exclusive workspace retains body frames/column records. Fixed-size local factors have at most six columns; reused scratch. Immutable output owns copies at publication; both workspace and output initialized scalar slots are charged. The admission bound is 400*B+48*B*N+1440 scalar slots: supplier body/frame/joint snapshots and coordinate rates, both directional frame/column owners, body result/bias records, and six-factor scratch. Previously retained initialized workspace records are added to preflight storage before mutation/allocation. This is a conservative logical scalar bound, not allocator byte capacity/rounding or retained unused Array capacity. No view escapes a borrow, no unsafe storage.
 
 ## Failure, Concurrency, and Constraints
-Planar body domain, unsupported chart/domain, stale revision, shape/metadata/nonfinite/cancellation/resource and primal mismatch fail typed. The tree constructor owns topology validity. Numerical and supplier-invocation budgets are separate; no claim about unreported supplier arithmetic.
+The spatial provider rejects planar body domain; the [Planar](Planar/DESIGN.md) child owns a separate provider. Unsupported chart/domain, stale revision, shape/metadata/nonfinite/cancellation/resource and primal mismatch fail typed. The tree constructor owns topology validity. Numerical and supplier-invocation budgets are separate; no claim about unreported supplier arithmetic.
 
 ## Verification and Change Impact
 Independent central pose/velocity differences only in tests; exact two-link Jacobian and nonzero-a bias, quaternion body/world convention, screw products, prescribed drift, rejection/budget evidence. Changes recheck MechanicalSensitivities and module composition.

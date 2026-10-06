@@ -54,3 +54,21 @@ Ownership review: immutable Sendable values and operation-local workspace. Numer
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+### Additional Maxwell law
+Child: [Maxwell](MaxwellRelaxation/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
+
+### Additional Thermal law
+Child [Thermal](Thermoelasticity/DESIGN.md) owns its selected service contract and independent verification. Existing evolution and parent qualification are retained.
+
+### Nine-service additive children
+- [KelvinVoigt](KelvinVoigt/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+- [OrthotropicElasticity](OrthotropicElasticity/DESIGN.md): selected independent constitutive service; qualification belongs to child.
+
+### Additional relaxation, creep and finite-elasticity children
+- [StandardLinearSolid](StandardLinearSolid/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
+- [BurgersCreep](BurgersCreep/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
+- [NeoHookean](NeoHookean/DESIGN.md): selected public constitutive service; behavior and qualification owned by child.
+
+### Additional invariant potentials
+Child: [InvariantHyperelasticity](InvariantHyperelasticity/DESIGN.md). Six selected immutable potential implementations share the existing HyperelasticResponding public interface and the additive Constitutive public mapping; calibration, tangent and profile proof belong to the child.

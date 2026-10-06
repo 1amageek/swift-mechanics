@@ -27,6 +27,11 @@ internal struct TopologyPayload {
         guard offset <= bytes.count-8 else { throw .invalidInput };try charge(8)
         var result:UInt64=0;for i in 0..<8 { result |= UInt64(bytes[offset+i]) << (8*i) };offset+=8;return result
     }
+    mutating func put(_ value:[UInt8]) throws(TopologyReleaseFailure) {
+        try put(UInt64(value.count))
+        guard value.count <= policy.maximumBytes-bytes.count else { throw .capacityExceeded }
+        try charge(value.count);bytes.append(contentsOf:value)
+    }
     mutating func text() throws(TopologyReleaseFailure) -> String {
         let n=try get();guard n <= UInt64(Int.max),n <= UInt64(bytes.count-offset) else { throw .invalidInput }
         let count=Int(n);let (next,overflow)=metadata.addingReportingOverflow(count)

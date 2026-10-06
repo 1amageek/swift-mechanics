@@ -32,8 +32,20 @@ public final class TopologyHistoryContributor: RuntimeContributorHandling, Senda
     }
     public func appending(source:RuntimeAcceptedState,target:ReconciledSubtreeRelease,observation:TopologyReleaseObservation,
                           ruleID:UInt64) throws(TopologyReleaseFailure) -> TopologyHistoryContributor {
+        try appending(source:source,released:target.release,observation:observation,ruleID:ruleID)
+    }
+    /// Appends the same original event using genuine retained-row acceleration authority.
+    public func appending(source:RuntimeAcceptedState,target:NonlinearReconciledSubtreeRelease,observation:TopologyReleaseObservation,
+                          ruleID:UInt64) throws(TopologyReleaseFailure) -> TopologyHistoryContributor {
+        guard target.physical.revision == target.release.target.stamp.revision,
+              target.physical.time.bitPattern == target.release.incomingPhysical.time.bitPattern,
+              sameBits(target.physical.q,target.release.incomingPhysical.q),sameBits(target.physical.v,target.release.incomingPhysical.v) else { throw .staleSource }
+        return try appending(source:source,released:target.release,observation:observation,ruleID:ruleID)
+    }
+    private func sameBits(_ a:[Double],_ b:[Double]) -> Bool { a.count == b.count && zip(a,b).allSatisfy {$0.bitPattern == $1.bitPattern} }
+    private func appending(source:RuntimeAcceptedState,released release:SubtreeRelease,observation:TopologyReleaseObservation,
+                           ruleID:UInt64) throws(TopologyReleaseFailure) -> TopologyHistoryContributor {
         guard !Task.isCancelled else { throw .cancelled }
-        let release=target.release
         guard source.physical == release.source,source.checkpoint.physical == release.source.state,
               source.checkpoint.model == model.stamp,release.sourceModel.descriptor == model.descriptor,
               source.checkpoint.contributors.contains(record),observation.release === release,

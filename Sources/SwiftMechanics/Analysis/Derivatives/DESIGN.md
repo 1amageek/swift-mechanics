@@ -30,12 +30,21 @@ The assigned owner traces producer implementations and fixes each required physi
 
 | Child | Owned public contract |
 |---|---|
+| [GeometryParameters](GeometryParameters/DESIGN.md) | Selected analytic placement/root/axis products; full1983 Native9/public8 qualified, portable and broader derivative domains remain open |
 | [ScalarCalculus](ScalarCalculus/DESIGN.md) | Checked exact directional scalar algebra and failure/work policies |
 | [TreeTangents](TreeTangents/DESIGN.md) | Actual spatial motion/Jacobian/chart products |
 | [ConstraintProducts](ConstraintProducts/DESIGN.md) | Scaled physical quadratic-constraint products |
 | [MechanicalSensitivities](MechanicalSensitivities/DESIGN.md) | Mass/bias/force and implicit acceleration products |
+| [ContactProducts](ContactProducts/DESIGN.md) | AF27 selected constitutive/impact fixed-branch products and refusal boundaries; selected canonical Native/WASM/Embedded qualification passed; [evidence](../../../../Verification/FoundationVerification/DESIGN.md#af27-integrated-selected-qualification) |
 
 Root reviewed actual primal tree/dynamics, differentiated physical products, original equation acceptance and failure budgets. Twenty-two Native tests pass after rejecting callback ledger reset and correcting independent fixture expectations for stationary hinge origins and cumulative nested solver iterations. Required public pendulum mass/gravity/implicit product and complete drive Jacobian plus unavailable scalar domain compiled, linked and exited 0 on original Native/ordinary-WASM/Embedded WASM profiles. All production state is immutable or exclusive call-local; no target-conditioned synchronization or conformance. These selected paths do not qualify missing planar/geometric-parameter/rank-transition/contact derivative domains.
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF27 contact derivative dispatch
+
+nonlinear_mechanisms exclusively owns the new ContactProducts child and Tests/MechanicsContactDerivativeTests. Read qualified contact/impact primal paths before defining selected derivative semantics; fixed-active validity and nonsmooth refusal are part of the contract. Existing children and all producers remain read-only. Root owns this index, registration, public composition and commits. See [AF27 dispatch](../../../../IMPLEMENTATION_PLAN.md#af27-independent-source-and-verification-dispatch).
+
+
+Child [InertialParameters](InertialParameters/DESIGN.md) owns source-bound ten-coordinate rigid inertial products. Selected Native9/public8 passed the immutable2124 composition; custom force derivatives, broader domains and portable execution retain explicit separate obligations.

@@ -13,6 +13,25 @@ public struct MachineDefinitionContext: Sendable {
     private var identifierBytes = 0
     private static var reservedPrefix: String { "!machine:" }
 
+    // AF34 structural drafts are call-local and use existing record types only.
+    // Source-written state is not behavioral qualification of this added path.
+    internal var structuralEnabled = false
+    internal var structuralJointPolicy: JointEvaluationPolicy?
+    internal var structuralBody: EntityID?
+    internal var structuralBodyToWorld: RigidTransform?
+    internal var structuralPlacement = RigidTransform.identity
+    internal var structuralChildToWorld: RigidTransform?
+    internal var structuralChild: EntityID?
+    internal var structuralChildCount = 0
+    internal var structuralRegisteredBodyCount = 0
+    internal var structuralCoordinates: [EntityID: BaseCoordinates] = [:]
+    internal var structuralAccelerations: [EntityID: [Double]] = [:]
+    internal private(set) var structuralPendingJoints: Set<EntityID> = []
+    internal var structuralGearDrafts: [(id: EntityID, rowID: UInt64, first: EntityID, second: EntityID,
+        firstTeeth: UInt32, secondTeeth: UInt32, phase: Double, phaseScale: Double, internalMesh: Bool)] = []
+    internal var structuralPassiveDrafts: [(id: EntityID, termID: UInt64, joint: EntityID, law: PolynomialSpringDamper)] = []
+    internal var structuralMotorDrafts: [(id: EntityID, joint: EntityID, torqueNm: Double)] = []
+
     public init(policy: MachineDefinitionPolicy) { self.policy = policy }
 
     public mutating func lower<Content: Machine>(_ content: Content) throws(MachineDefinitionFailure) {
@@ -91,6 +110,46 @@ public struct MachineDefinitionContext: Sendable {
             bytes += id.key.utf8.count
         }
         identities.formUnion(pending); identifierBytes = bytes
+    }
+
+    // FIXME(INCOMPLETE_IMPLEMENTATION): The AF34 structural path reserves actual joint and
+    // anchor identities before child callbacks. This added source-only admission path and
+    // its unchanged legacy callers require original behavioral regression qualification.
+    internal mutating func reserveStructuralJoint(id: EntityID, parentFrame: EntityID,
+        childFrame: EntityID, parent: EntityID
+    ) throws(MachineDefinitionFailure) -> (id: EntityID, parentFrame: EntityID, childFrame: EntityID) {
+        guard structuralEnabled else {
+            throw .compilation(.one(.unsupportedCapability, .input,
+                message: "Structural identity reservation requires the structural facade."))
+        }
+        let absolute = try local(id), parentAnchor = try local(parentFrame), childAnchor = try local(childFrame)
+        try admit([absolute, parentAnchor, childAnchor], references: [parent])
+        structuralPendingJoints.insert(absolute)
+        return (absolute, parentAnchor, childAnchor)
+    }
+
+    internal mutating func finishStructuralJoint(_ joint: MechanicalJoint) throws(MachineDefinitionFailure) {
+        let record = joint.record
+        guard structuralPendingJoints.contains(record.id), identities.contains(record.parentAnchor.frame),
+              identities.contains(record.childAnchor.frame) else {
+            throw .compilation(.one(.invalidInput, .input, records: [record.id],
+                message: "Structural joint was not reserved by its lowering owner."))
+        }
+        try admit([], references: [record.childBody])
+        joints.append(joint)
+        structuralPendingJoints.remove(record.id)
+    }
+
+    internal mutating func reserveStructuralPhysics(_ id: EntityID,
+        references: [EntityID]
+    ) throws(MachineDefinitionFailure) -> EntityID {
+        guard structuralEnabled else {
+            throw .compilation(.one(.unsupportedCapability, .input, records: [id],
+                message: "Physical machine declarations require structural-system compilation."))
+        }
+        let absolute = try local(id)
+        try admit([absolute], references: references)
+        return absolute
     }
 
     public mutating func append(_ body: MechanicalBody) throws(MachineDefinitionFailure) {

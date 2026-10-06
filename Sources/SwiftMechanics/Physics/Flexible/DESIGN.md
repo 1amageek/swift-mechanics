@@ -1,7 +1,7 @@
 # Flexible component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../../../SPEC.md) owns acceptance and [plan](../../../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md), [Beams](Beams/DESIGN.md). Beams records its AF14 selected behavioral/profile qualification; existing Tet4 qualification is unchanged.
+Parent: [responsibility owner](../DESIGN.md). Own IM19 nodal/discretization layout, actual element mass/internal force/tangent, mesh validation and reduced interfaces. Full requirement ownership FX-001..004, FX-007, FX-011..012 remains IM19 after accurately declared initial handoff. [SPEC](../../../../SPEC.md) owns acceptance and [plan](../../../../IMPLEMENTATION_PLAN.md) owns prerequisite edges. Children: [FieldOutputs](FieldOutputs/DESIGN.md), [Refinement](Refinement/DESIGN.md), [Mesh](Mesh/DESIGN.md), [Tetrahedra](Tetrahedra/DESIGN.md), [Beams](Beams/DESIGN.md). Beams records its AF14 selected behavioral/profile qualification; existing Tet4 qualification is unchanged.
 
 ## Responsibilities and Boundaries
 Consume physical units/geometry, identified model values, numerical equations and verified constitutive laws. Own element interpolation/quadrature/formulation, rest/current geometry, nodal DOF and material/boundary/source association. Materials owns stress/strain law meaning; rigid attachment/evolution, contact, modes/analysis and CAD mesh derivation are separate consumers. A matrix declaration or isolated mesh is not a flexible simulation.
@@ -9,6 +9,7 @@ Consume physical units/geometry, identified model values, numerical equations an
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
+| [ModalReduction](ModalReduction/DESIGN.md) | child | Mass-orthogonal reduced state and explicit-work physical Tet4 stress output | Selected Native7/public6 at frozen2124 | Legacy unchargeable stress signature refuses; portable and broader modal domains remain open |
 | [Mesh](Mesh/DESIGN.md) | child | Identified reference cell validation and assignments | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
 | [Tetrahedra](Tetrahedra/DESIGN.md) | child | Actual total-Lagrangian tetrahedral assembly and nodal outputs | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
 | [Beams](Beams/DESIGN.md) | child | Identified Hermite element mass/elastic/geometric stiffness | AF14 additional exclusive material_kernels ownership | No qualified analysis until element behavior passes |
@@ -17,6 +18,9 @@ Consume physical units/geometry, identified model values, numerical equations an
 | [Numerics](../../Mathematics/Numerics/DESIGN.md) | depends on | Matrix layout, work budgets and original-residual acceptance | Numerical values/solve | Generic operators are not element implementations |
 | [Materials](../Materials/DESIGN.md) | depends on | Actual stress/strain/tangent/history domain | Constitutive authority | Additive Green-J2 is not multiplicative plasticity |
 | [Core](../../Mathematics/Core/DESIGN.md) | depends on | SI/framed vectors and tensors | Geometry algebra | Finite rotation/frame semantics remain explicit |
+
+| [FieldOutputs](FieldOutputs/DESIGN.md) | child | Physical Tet4 field evaluation and assembler diagnostics | Native1960 qualified; fixture owner records selected domains | Portable and finite-strain objectivity remain open |
+| [Refinement](Refinement/DESIGN.md) | child | Certified conforming Tet4 subdivision and physical transfer | Native1944 qualified; fixed portable and broader refinement domains remain open |
 
 ## Architecture
 ```text
@@ -45,3 +49,24 @@ The selected public-service probe in [FoundationVerification](../../../../Verifi
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+| [Attachments](Attachments/DESIGN.md) | child | Source-issued rigid/material point interface | Selected repaired exact-source Native/WASM/Embedded qualification; child owns proof domains |
+
+## Selected Hex8 solid
+
+[Hexahedra](Hexahedra/DESIGN.md) owns the selected objective, full-integration eight-node solid and its reference/state/energy/force/tangent/mass/damping contracts. Its child design records exact Native qualification and pending portable obligations; accepted evolution, mesh convergence and locking behavior remain separately unqualified.
+
+
+## Selected spatial beam service
+
+Child [SpatialBeams](SpatialBeams/DESIGN.md) owns identified linear12DOF Euler-Bernoulli/Timoshenko assembly, response and section fields. Its qualification owner records Native7/six public cases on frozen2270. Finite rotation, resolved transverse/torsional stress and global evolution remain explicit unsupported domains; portable is unqualified.
+
+
+## Selected Shells Native composition
+
+Child [Shells](Shells/DESIGN.md) owns flat-q4 mindlin/mitc4 mechanics. Its original Native7/public6 behavioral evidence is qualified against fresh immutable2387, with original source/physical/work acceptance and typed failures preserved. The child and qualification owner retain exact evidence and remaining portable/domain obligations.
+
+
+## Selected DiscreteCables Native composition
+
+Child [DiscreteCables](DiscreteCables/DESIGN.md) owns discrete cable force, tangent and evolution. Its original Native10/public9 behavioral evidence is qualified against fresh immutable2387, with original source/physical/work acceptance and typed failures preserved. The child and qualification owner retain exact evidence and remaining portable/domain obligations.

@@ -1,0 +1,31 @@
+{
+  "originHash" : "cd9fe564e2620d319180f1a3e76ceede749cb41c811f532ee11cfa0ad4c819c2",
+  "pins" : [
+    {
+      "identity" : "swift-cad",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/1amageek/swift-CAD.git",
+      "state" : {
+        "revision" : "295a724cdf0219c904007c2735f2b99ef08200ca"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections",
+      "state" : {
+        "revision" : "fea17c02d767f46b23070fdfdacc28a03a39232a",
+        "version" : "1.5.1"
+      }
+    },
+    {
+      "identity" : "swift-openusd",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/1amageek/swift-OpenUSD.git",
+      "state" : {
+        "revision" : "2c943c75ef9c0c32974663b13441a0972bec7d3e"
+      }
+    }
+  ],
+  "version" : 3
+}

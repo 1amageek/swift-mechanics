@@ -3,8 +3,8 @@ public enum MachineBuilder {
     public static func buildExpression<Content: Machine>(_ content: Content) -> Content { content }
     public static func buildBlock() -> EmptyMachine { EmptyMachine() }
     public static func buildPartialBlock<Content: Machine>(first: Content) -> Content { first }
-    public static func buildPartialBlock<First: Machine, Second: Machine>(accumulated: First, next: Second) -> TupleMachine<First, Second> {
-        TupleMachine(accumulated, next)
+    public static func buildPartialBlock<First: Machine, Second: Machine>(accumulated: First, next: Second) -> ErasedPairMachine {
+        ErasedPairMachine(accumulated, next)
     }
     public static func buildOptional<Content: Machine>(_ content: Content?) -> OptionalMachine<Content> { OptionalMachine(content) }
     public static func buildEither<First: Machine, Second: Machine>(first: First) -> ConditionalMachine<First, Second> { .first(first) }

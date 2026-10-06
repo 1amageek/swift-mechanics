@@ -1,7 +1,7 @@
 # Transmissions component
 
 ## Purpose and Scope
-Parent: [responsibility owner](../DESIGN.md). IM13 owns TR-001..011 in [SPEC](../../../../SPEC.md). It owns identified ideal and constitutive transmission coordinate/effort ports, fidelity, phase, ratio and continuation. Children: [PortBindings](PortBindings/DESIGN.md), [IdealNetworks](IdealNetworks/DESIGN.md), [CompliantPorts](CompliantPorts/DESIGN.md). The initial source is frozen after coherent review and the failure-ledger finding correction. The initial admitted ports have thirteen Native behavioral cases and selected Native/ordinary-WASM/Embedded-WASM public execution with exit 0. Full requirement ownership remains; broader transmission laws and coupled mechanism execution are unqualified.
+Parent: [responsibility owner](../DESIGN.md). IM13 owns TR-001..011 in [SPEC](../../../../SPEC.md). It owns identified ideal and constitutive transmission coordinate/effort ports, fidelity, phase, ratio and continuation. Children: [PortBindings](PortBindings/DESIGN.md), [IdealNetworks](IdealNetworks/DESIGN.md), [CompliantPorts](CompliantPorts/DESIGN.md), [ToothContacts](ToothContacts/DESIGN.md). The initial source is frozen after coherent review and the failure-ledger finding correction. The initial admitted ports have thirteen Native behavioral cases and selected Native/ordinary-WASM/Embedded-WASM public execution with exit 0. Full requirement ownership remains; broader transmission laws and coupled mechanism execution are unqualified.
 
 ## Responsibilities and Boundaries
 The implementation owner owns child directories under Sources/SwiftMechanics/Physics/Transmissions and Tests/MechanicsTransmissionsTests. Root owns this index, Package.swift, public composition probes, progress and commits. Each supported transmission publishes its coordinate equation and conjugate efforts through actual supplied constraint/layout contracts. Tooth geometry/contact is IM47; accepted constrained evolution and dynamic bearing reactions are IM16. No ideal ratio implies a resolved tooth or self-locking model.
@@ -12,6 +12,7 @@ The implementation owner owns child directories under Sources/SwiftMechanics/Phy
 | [Responsibility owner](../DESIGN.md) | parent | Dispatch and composition authority | Disjoint ownership | Whole requirement closure remains IM48 |
 | [Constraints](../Constraints/DESIGN.md) | depends on | Identified dimensionless coordinate equations, rank, projection and scalar ports | Verified initial stateless producer | General geometry, mixed charts and dynamic reactions are unavailable |
 | [Nonlinear](../../Mathematics/Nonlinear/DESIGN.md) | depends on | Failed-work evidence of the actual assembly supplier | Preserves unavailable-work semantics | Direct import is required for exact Embedded specialization |
+| [ToothContacts](ToothContacts/DESIGN.md) | child | Resolved compliant proxy evolution | IM47 owns genuine tooth forces and accepted history | External source fidelity and independent refinement are required; general Runtime codec remains separate |
 
 ## Architecture
 ```text
@@ -34,3 +35,19 @@ Tests/MechanicsTransmissionsTests owns analytic signed external/internal 20:40 r
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+## AF28 tooth-contact dispatch
+
+nonlinear_mechanisms exclusively owns the new ToothContacts child and dedicated tests under IM47. It consumes externally supplied validated geometry/proxy records and qualified collision/contact/dynamics contracts and immutable accepted-value continuation, independently of the unfinished CAD adapter. Actual tooth forces and physical evolution, model fidelity/provenance and refinement precede qualification; an ideal coupling is not tooth-resolved authority. Existing children and suppliers stay read-only. Root owns this index/shared graph/public evidence/progress/commits. See [dispatch](../../../../IMPLEMENTATION_PLAN.md#af28-independent-frontier-dispatch).
+
+Selected AF28 Native/ordinary-WASM/Embedded-WASM public behavior is qualified through the unchanged core profile. Exact integrated execution and remaining domain limits belong to [FoundationVerification](../../../../Verification/FoundationVerification/DESIGN.md#af28-integrated-selected-qualification); child contracts remain the API authority.
+
+## AF29 material tooth-contact dispatch
+
+nonlinear_mechanisms owns the additive material surface and necessary shared phase extraction within ToothContacts. The child's full original normal/friction/cohesive/rolling/spinning contract and independent physical proof are fixed before source. Qualified ContactLaws Sampling is a required implementation prerequisite. Broader model admission grants no legacy-operation capability: legacy initial/step/advance retain exact normal-only admission, including zero-step advance and both composition initializers; richer laws receive typed refusal before supplier work. Root owns prerequisite qualification, registration, public/profile composition and commits. Other children and lower suppliers remain read-only to this owner.
+
+### Additional Capstan law
+Child: [Capstan](CapstanFriction/DESIGN.md). Contract and qualification belong to that child; existing Runtime/evolution scope is unchanged.
+
+### Additional nonlinear scalar maps
+Child: [NonlinearKinematics](NonlinearKinematics/DESIGN.md). Owns six selected ideal geometry/profile maps, analytic derivative/acceleration and power services and the public instantaneous affine actuator adapter. Existing network/compiler/Runtime/contact fidelity and qualification remain unchanged; child owns its exact behavioral evidence.

@@ -44,7 +44,7 @@ public struct TangentManifoldAssembler: ManifoldConstraintProjecting, Sendable {
             guard iteration < policy.maximumIterations else { throw .iterationLimit }
             guard evidence.rank.rank > 0 else { throw .zeroRank }
             try ManifoldArithmetic.numeric { () throws(NumericalError) -> Void in try work.advanceIteration() }
-            let delta=try iterationCorrection(evidence,policy:policy,reserve:reserve,work:&work,activeStart:system.prescribedRoot?.knownCoordinates.count ?? 0)
+            let delta=try iterationCorrection(evidence,policy:policy,reserve:reserve,work:&work,activeStart:system.rootBinding?.knownCoordinates.count ?? 0)
             var length=0.0
             for i in 0..<n { try ManifoldArithmetic.charge(3,&work);length+=policy.constraints.diagonalMetric[i]*delta[i]*delta[i] }
             path=try ManifoldArithmetic.finite(path+length.squareRoot())
@@ -152,7 +152,7 @@ public struct TangentManifoldAssembler: ManifoldConstraintProjecting, Sendable {
     @inline(never)
     private func activeRank(_ sample:VelocityConstraintSample,system:GeometricConstraintSystem,policy:ManifoldProjectionPolicy,
                             reserve:Int,work:inout NumericalWork) throws(GeometricConstraintError) -> ActiveCoordinateRankEvidence? {
-        guard let root=system.prescribedRoot else { return nil }
+        guard let root=system.rootBinding else { return nil }
         guard case .active(let operation)=ranker else { throw .unsupportedDomain }
         var local=try seed(reserve,work:&work);let before=local
         var result:ActiveCoordinateRankEvidence?,failure:ConstraintError?

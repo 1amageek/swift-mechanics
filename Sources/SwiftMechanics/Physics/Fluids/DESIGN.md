@@ -38,6 +38,8 @@ The ChannelDiscretization, ViscousEvolution and Continuation source/test snapsho
 | [Continuation](Continuation/DESIGN.md) | Accepted/rejected channel and Runtime contributor | Native and selected profile qualified |
 | [PlanarProjection](PlanarProjection/DESIGN.md) | Independent multidimensional velocity/pressure evolution | Selected AF17 profiles qualified |
 | [PlanarContinuation](PlanarContinuation/DESIGN.md) | Exact field checkpoint and required Runtime association | Selected AF21 profiles qualified |
+| [ParticleFlows](ParticleFlows/DESIGN.md) | Weakly compressible Wendland/Tait/Morris midpoint with prescribed ghosts | Selected Native8/public7 at actual2032; free surface, dynamic rigid coupling and portable remain open |
+| [SpatialProjection](SpatialProjection/DESIGN.md) | Periodic three-dimensional Newtonian MAC projection and explicit evolution | Selected Native8/public7 at actual2034; Runtime association and portable remain open |
 
 Root reviewed the complete channel solve/original residual/time/codec/Runtime paths and preserved numerical unknown-work evidence in the Runtime bridge. Seventeen channel/continuation Native tests pass, including that real exhausted-solver regression. Public hydrostatic/Couette/backward-Euler, accept/reject/checkpoint replay and failed supplier prefix paths compiled, linked and exited 0 on original Native/ordinary-WASM/Embedded WASM with swift-6.4.0-RELEASE/matching SDKs. Embedded required direct Joints imports for physical carrier properties; this visibility correction does not change physics/isolation. At the AF16 channel handoff, PlanarProjection was excluded from registration. Root now registers its frozen AF17 source for qualification; no multidimensional/FSI/free-surface/compressibility qualification is inferred from registration.
 
@@ -61,3 +63,6 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 Root registers the frozen PlanarContinuation child and MechanicsFluidsRuntimeTests after one original-path review. The confirmed missing supplier-ledger guard is repaired against the child contract before qualification. [Foundation verification](../../../../Verification/FoundationVerification/DESIGN.md#af21-planar-runtime-qualification-contract) owns selected-profile evidence. Existing channel and projection contracts are unchanged; full EX-005 remains open.
 
 [AF21 selected qualification](../../../../Verification/FoundationVerification/DESIGN.md#af21-selected-original-profile-qualification) closes this static-carrier continuation handoff. Full EX-005 and IM44 remain open.
+
+### Additional AddedInertia law
+Child [AddedInertia](SphereAddedInertia/DESIGN.md) owns its selected service contract and independent verification. Existing evolution and parent qualification are retained.

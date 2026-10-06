@@ -24,6 +24,19 @@ public struct FiniteStrainKinematics: Sendable {
         return try .symmetricPart(product)
     }
 
+    /// Maps admitted material stress to finite spatial stresses per reference-volume energy.
+    public func response(secondPiolaStress: SymmetricTensor, energyDensity: Double) throws(MaterialError) -> FiniteStressResponse {
+        guard energyDensity.isFinite, energyDensity >= 0 else { throw .invalidParameter(name: "finiteStressEnergy") }
+        return try stressResponse(secondPiola: secondPiolaStress, energyDensity: energyDensity)
+    }
+
+    /// Includes the original deformation and volume derivatives in the stress push-forward.
+    public func directionalResponse(deformationDirection: Matrix3, secondPiolaStress: SymmetricTensor,
+                                    secondPiolaDirection: SymmetricTensor) throws(MaterialError) -> FiniteStressDirectionalResponse {
+        try stressDirection(deformationDirection: deformationDirection, secondPiola: secondPiolaStress,
+                            secondPiolaDirection: secondPiolaDirection)
+    }
+
     internal func stressResponse(secondPiola: SymmetricTensor, energyDensity: Double) throws(MaterialError) -> FiniteStressResponse {
         let stress = try secondPiola.matrix()
         let firstPiola = try materialCore { () throws(CoreError) in try deformationGradient.multiplied(by: stress) }

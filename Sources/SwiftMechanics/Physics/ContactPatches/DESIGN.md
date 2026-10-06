@@ -36,3 +36,8 @@ Tests/MechanicsContactPatchesTests owns actual admitted representation pairing, 
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+
+## Selected affine hydroelastic query
+
+Child [Hydroelastic](Hydroelastic/DESIGN.md) owns caller-calibrated current Tet4 pressure-plane/equal-pressure clipping, consistent nodal loads and original wrench/virtual-power acceptance. Its qualification owner records Native7/public6 on frozen2270. This selected cell-pair service supplies no equilibrated pressure field, whole-mesh discovery or accepted flexible evolution; portable remains unqualified.

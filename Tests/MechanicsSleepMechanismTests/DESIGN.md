@@ -60,4 +60,17 @@ Release A through the actual subtree producer at the real accepted sleep time/gl
 | Real awake execution | Target uses NonlinearMechanismEquation and ProjectedNonlinearMechanismEvolution with positive actual supplier work and analytical nonzero B/C motion |
 | Failure work | Cancel/capacity/ledger reset during preparation/real physical proof preserves complete accepted source, known prefix and unavailable evidence without retry |
 
-Fixtures own immutable models and local ledgers. Shared cancellation/receipts use identical Mutex on every target. Planned owned files are SleepTopologyFixtures.swift and SleepTopologyRetirementTests.swift plus dedicated controlled supplier/cancellation fixtures if needed. The fixture and real source-bound target consume the qualified lower test paths QuadraticColdFixture.swift, QuadraticColdTests.swift and QuadraticColdFailureTests.swift as API/behavior references, not copied private algorithms. Lower qualification56a57ba already exists; these new upper tests and source remain planned. Root executes the frozen registered/integrated profiles; the next production assignment determines isolated owner verification. No upper behavior qualification follows from this DESIGN handoff.
+Fixtures own immutable models and local ledgers. Shared cancellation/receipts use identical Mutex on every target. Owned files are SleepTopologyFixtures.swift and SleepTopologyRetirementTests.swift plus dedicated controlled supplier/cancellation fixtures if needed. The fixture and real source-bound target consume the qualified lower test paths QuadraticColdFixture.swift, QuadraticColdTests.swift and QuadraticColdFailureTests.swift as API/behavior references, not copied private algorithms. Lower qualification56a57ba already exists; the additive source and dedicated cases now execute against that immutable lower baseline. Root executes the frozen registered/integrated profiles; independent Native owner verification is recorded below; the frozen contract heading retains its original handoff anchor.
+
+### AF26 dedicated production cases
+
+| Test owner | Behavioral invariant |
+|---|---|
+| SleepTopologyRetirementTests | Actual balanced mass/drive equilibrium, accepted dwell omission, exact mapped row/effort retirement, invalid disposition refusal |
+| SleepTopologyRetirementTests.completeSourceRejectsSequenceTimeAndExactPositionHistoryMismatch | Full source cold admission rejects global sequence, time and signed-zero physical/history differences without RNG publication |
+| SleepTopologyRetirementTests.injectedContextCannotWaiveOriginalAwakeSourceProof | Arbitrary outer success cannot waive original sleep authority; zero capacity avoids callback |
+| SleepTopologyRetirementTests.newRetirementSignatureBindsChangedSameIdentityMassAndPolicy | New source-law signature distinguishes actual same-stamp physical/policy changes |
+
+SleepTopologyFixtures constructs the independent three-slider mechanics through public compiler/dynamics/integration APIs. It constructs no producer tokens or Runtime controls. Test contexts own sessions through shutdown; no shared mutable fixture exists. The only invocation counter is protected by the same Mutex storage and entry points on every profile. Independent setup and actual runtime evidence are recorded by the task owner after freeze.
+
+Native source retirement and old sleep behavior passed 26 test definitions in 9 suites in the independent lower-baseline copy. Consolidated invocation/count/digest evidence is owned once by [the Topology test evidence](../MechanicsTopologyReleaseTests/DESIGN.md#af26-independent-native-evidence). Original profile integration remains pending.

@@ -1,9 +1,9 @@
 internal enum GeometricMetadata {
     static func encode(model:CompiledMechanicalModel,layout:ConstraintCoordinateLayout,relations:[GeometricRelation],minimum:[Double],maximum:[Double],
                        minimumTime:Double,maximumTime:Double,limit:Int,work:inout NumericalWork,prescribedMotion:PrescribedMotionProgram? = nil,
-                       prescribedRoot:PrescribedRootBinding? = nil) throws(GeometricConstraintError) -> String {
+                       prescribedRoot:PrescribedRootBinding? = nil,trajectory:PrescribedTrajectoryProgram? = nil,trajectoryRoot:PrescribedTrajectoryRootBinding? = nil) throws(GeometricConstraintError) -> String {
         // First pass bounds encoded bytes. No identifier or string buffer is allocated before the bound passes.
-        let prefix=prescribedRoot != nil ? "body-frame-prescribed-root-v5" : (model.tree.bodies.first?.dimension == .planar ? "body-frame-planar-holonomic-v4" : (prescribedMotion == nil ? "body-frame-holonomic-v2" : "body-frame-holonomic-v3"))
+        let prefix=(trajectory != nil || trajectoryRoot != nil) ? "body-frame-trajectory-v6" : prescribedRoot != nil ? "body-frame-prescribed-root-v5" : (model.tree.bodies.first?.dimension == .planar ? "body-frame-planar-holonomic-v4" : (prescribedMotion == nil ? "body-frame-holonomic-v2" : "body-frame-holonomic-v3"))
         var count=max(24,prefix.utf8.count)
         func walk(_ emit:(UInt64)->Void,_ identifier:(String)->Void) {
             func vector(_ v:Vector3) { emit(v.x.bitPattern);emit(v.y.bitPattern);emit(v.z.bitPattern) }
@@ -19,11 +19,18 @@ internal enum GeometricMetadata {
                 for value in root.rowIDs { emit(value) }
                 for body in model.descriptor.bodies { id(body.id);switch body.mode { case .static:emit(0);case .dynamic:emit(1);case .prescribedKinematic:emit(2) } }
             }
+            if let root=trajectoryRoot {
+                identifier(root.program.metadata);emit(UInt64(root.knownCoordinates.count))
+                for value in root.knownCoordinates { emit(UInt64(value)) };for value in root.dynamicCoordinates { emit(UInt64(value)) }
+                for value in root.rowIDs { emit(value) }
+                for body in model.descriptor.bodies { id(body.id);switch body.mode { case .static:emit(0);case .dynamic:emit(1);case .prescribedKinematic:emit(2) } }
+            }
+            if let program=trajectory { identifier(program.metadata);for body in model.descriptor.bodies { id(body.id);switch body.mode { case .static:emit(0);case .dynamic:emit(1);case .prescribedKinematic:emit(2) } } }
             if let program=prescribedMotion { identifier(program.metadata);for body in model.descriptor.bodies { id(body.id);switch body.mode { case .static:emit(0);case .dynamic:emit(1);case .prescribedKinematic:emit(2) } } }
             for body in model.tree.bodies { id(body.id);id(body.frame);pose(body.referencePose) }
             for joint in model.tree.joints {
                 id(joint.id);id(joint.parentBody);id(joint.childBody);id(joint.parentAnchor.frame);id(joint.childAnchor.frame)
-                if prescribedMotion != nil || prescribedRoot != nil {
+                if prescribedMotion != nil || prescribedRoot != nil || trajectory != nil || trajectoryRoot != nil {
                     for anchor in [joint.parentAnchor,joint.childAnchor] { switch anchor.placement { case .fixed:emit(0);case .prescribed:emit(1) } }
                     if let descriptor=model.descriptor.joints.first(where:{$0.record.id == joint.id}) { switch descriptor.authority { case .fixed:emit(0);case .dynamicState:emit(1);case .prescribedMotion:emit(2) } }
                 }

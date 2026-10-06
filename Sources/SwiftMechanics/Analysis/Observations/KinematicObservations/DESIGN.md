@@ -22,6 +22,7 @@ validated source + mounting -> required frame composer -> framed motion; identif
 
 ## Contracts and Invariants
 Fixed sensor-to-body mounting composes actual FrameMotion with a stationary relative transform. Returned velocity/acceleration are geometric derivatives at the sensor origin in world axes, not a world-origin spatial field. Encoder position/rate/velocity/acceleration arrays retain distinct q/v counts and explicit per-entry dimensions and convention; only published joint manifolds with an identified chart are admitted.
+AF30's injected FrameMotionComposing port admits exact reference-equivalent successes only. The opaque call is preceded by its irreversible declared quantum; after successful return and cancellation checks, the original FrameMotionComposer is called for the same body motion and fixed relative mounting under an additional accounted quantum. Full pose translation, geometric velocity and geometric acceleration compare exactly; orientation compares original rotation matrices so quaternion sign does not manufacture a mismatch. Successful but unrelated or merely approximate supplier motion fails `invalidSupplierEvidence`. The observer publishes the canonical accepted meaning without changing equations, units, source or mounting. Original composition is verification, not a silent fallback after supplier failure.
 [ObservationRecords](../ObservationRecords/DESIGN.md#contracts-and-invariants) owns the shared SI, exact-time, temporal, required-service and failure contract. This child adds only the quantity meanings above.
 
 ## State, Ownership, and Lifecycle
@@ -32,3 +33,4 @@ Source/result ownership and all-target Sendable are defined by [ObservationRecor
 
 ## Verification and Change Impact
 Independent analytic sensor-offset pose/velocity/acceleration, prismatic encoder dimensions, quaternion 7/6 position/rate separation, lowered current policy, cancellation and over-capacity mounting before a failing composer. [Test owner](../../../../../Tests/MechanicsObservationsTests/DESIGN.md) owns execution. Shared evidence/profile limits are in [ObservationRecords](../ObservationRecords/DESIGN.md#verification-and-change-impact). Changed quantity semantics require these affected oracles and consumers to be requalified.
+The existing source-failure case also exercises a successful stationary-identity composer on the independently known rotating/offset fixture and expects typed refusal with known work preserved. This closes a concrete source-association counterexample; no encoder or sensor domain is added.

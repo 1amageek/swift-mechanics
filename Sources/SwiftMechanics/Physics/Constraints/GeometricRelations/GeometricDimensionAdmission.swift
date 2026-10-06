@@ -1,14 +1,14 @@
 internal enum GeometricDimensionAdmission {
     static func validate(_ model: CompiledMechanicalModel, relations: [GeometricRelation], program: PrescribedMotionProgram?,
-                         prescribedBase:PrescribedBaseMotionProgram? = nil) throws(GeometricConstraintError) {
+                         prescribedBase:PrescribedBaseMotionProgram? = nil,trajectory:PrescribedTrajectoryProgram? = nil,baseTrajectory:PrescribedBaseTrajectoryProgram? = nil) throws(GeometricConstraintError) {
         let tree = model.tree
         if tree.bodies.allSatisfy({ $0.dimension == .spatial }) { return }
         // FIXME(INCOMPLETE_IMPLEMENTATION): Dynamic planar floating roots without prescribed motion still lack a qualified geometry/evolution contract. Production geometric admission rejects that domain; it requires original manifold, force, and replay proof before success.
-        guard tree.bodies.allSatisfy({ $0.dimension == .planar }), program == nil,
+        guard tree.bodies.allSatisfy({ $0.dimension == .planar }), program == nil,trajectory == nil,
               (tree.rootBase == .fixed && model.descriptor.rootAuthority == .fixed) ||
-              (tree.rootBase == .planarFloating && model.descriptor.rootAuthority == .prescribedMotion && prescribedBase != nil) else { throw .unsupportedDomain }
+              (tree.rootBase == .planarFloating && model.descriptor.rootAuthority == .prescribedMotion && (prescribedBase != nil || baseTrajectory != nil)) else { throw .unsupportedDomain }
         for relation in relations {
-            guard (relation.kind != .alignedAxes || prescribedBase != nil), relation.first.point.z == 0, relation.second.point.z == 0,
+            guard (relation.kind != .alignedAxes || (prescribedBase != nil || baseTrajectory != nil)), relation.first.point.z == 0, relation.second.point.z == 0,
                   relation.target.value.z == 0, relation.target.rate.z == 0, relation.target.second.z == 0 else { throw .unsupportedDomain }
             if relation.kind == .alignedAxes { guard relation.first.axis.z == 0,relation.second.axis.z == 0 else { throw .unsupportedDomain } }
         }

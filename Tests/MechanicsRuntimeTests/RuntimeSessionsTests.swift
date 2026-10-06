@@ -103,4 +103,44 @@ import Synchronization
         }
         #expect(releases.withLock { $0 } == 2)
     }
+    @Test(.timeLimit(.minutes(1))) func ordinaryObservationExitPreservesActiveTrialCancellationSource() throws {
+        guard #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) else {
+            Issue.record("Runtime requires the declared Synchronization OS baseline.")
+            return
+        }
+        for observationFails in [false, true] {
+            let releases = Mutex(0)
+            let session = try RuntimeFixtures.session(onRelease: { releases.withLock { $0 += 1 } })
+            let prefix = session.snapshot()
+            let outcome = try session.performTrial { (trial: inout RuntimeTrial, control: inout RuntimeStepControl) throws(RuntimeFailure) in
+                try control.beginWorkBlock(units: 1)
+                try trial.setPosition(0.5, at: 0)
+                try trial.setTime(0.25)
+                do throws(RuntimeFailure) {
+                    try session.observe { (accepted: RuntimeAcceptedState) throws(RuntimeFailure) in
+                        #expect(accepted == prefix)
+                        #expect(session.snapshot() == prefix)
+                        if observationFails {
+                            throw RuntimeFailure(.invalidInput, message: "Deliberate observation failure.")
+                        }
+                    }
+                    #expect(!observationFails)
+                } catch {
+                    #expect(observationFails && error.code == .invalidInput)
+                    #expect(error.lastAccepted == prefix)
+                }
+                #expect(session.shutdownStatus() == nil && releases.withLock { $0 } == 0)
+                try control.beginWorkBlock(units: 1)
+                return .accept
+            }
+            #expect(outcome.decision == .accept && outcome.admittedWorkUnits == 2)
+            #expect(outcome.accepted == session.snapshot())
+            #expect(outcome.accepted.checkpoint.acceptedSteps == 1)
+            #expect(outcome.accepted.physical.state.q == [0.5])
+            #expect(outcome.accepted.physical.state.time == 0.25)
+            #expect(outcome.accepted.checkpoint.random == prefix.checkpoint.random)
+            #expect(outcome.accepted.checkpoint.contributors == prefix.checkpoint.contributors)
+            #expect(session.shutdown() == .closed && releases.withLock { $0 } == 1)
+        }
+    }
 }

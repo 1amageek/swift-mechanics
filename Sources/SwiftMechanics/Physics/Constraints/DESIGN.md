@@ -13,6 +13,7 @@ The implementation owner owns child component directories under Sources/SwiftMec
 | [CoordinateEquations](CoordinateEquations/DESIGN.md) | child | Scaled polynomial g/J/time terms and knife-edge rows | Actual input/evaluation owner | Qualified selected domain |
 | [AssemblyProjection](AssemblyProjection/DESIGN.md) | child | Local KKT assembly and weighted speed projection | Actual residual/rank owner | Qualified selected domain |
 | [ScalarJointPorts](ScalarJointPorts/DESIGN.md) | child | Scalar passive/limit laws | Actual power/domain owner | Qualified selected domain |
+| [JointStops](JointStops/DESIGN.md) | child | Source-bound scalar stop impulse evaluation | Selected Native and original ordinary/Embedded public paths qualified | Automatic Runtime enforcement and constrained simultaneous impact remain separate |
 | [GeometricRelations](GeometricRelations/DESIGN.md) | child | Original frame/point/axis holonomic geometry | AF22 nonpolynomial relation owner | Selected AF22/AF23 behavior qualified; broader geometry domains remain open |
 | [ManifoldProjection](ManifoldProjection/DESIGN.md) | child | Bounded tangent-metric local assembly and manifold retraction | AF22 configuration correction owner | Actual original geometry acceptance qualified for selected AF22/AF23 paths |
 | [MechanicsNonlinear](../../Mathematics/Nonlinear/DESIGN.md) | depends on | original-residual nonlinear solves | Verified initial producer handoff | Consume only documented admitted domains; report missing producer contracts |
@@ -74,3 +75,14 @@ AF22 selected lower qualification is owned by [FoundationVerification](../../../
 
 
 AF25 selected prescribed-root geometry and D-only projection now compose the frozen lower contracts. GeometricRelations and ManifoldProjection own their original-row, source-binding and lifetime guarantees. Their changed contracts and inherited paths have [final integrated behavior evidence](../../../../Verification/FoundationVerification/DESIGN.md#af25-upper-integrated-qualification); broader domains remain child-declared refusals.
+
+
+## AF26 trajectory consumer ownership
+
+[GeometricRelations](GeometricRelations/DESIGN.md#af26-source-tagged-trajectory-binding-contract) and [ManifoldProjection](ManifoldProjection/DESIGN.md) consume the actually qualified lower trajectory ports and preserve original quadratic behavior. Child designs own new source-tagged frame/chart/law binding and D-only projection. [Upper parallel ownership](../../../../IMPLEMENTATION_PLAN.md#af26-upper-exclusive-implementation-and-independent-verification) assigns their exclusive writer and downstream nonlinear consumer; the frozen handoff is not upper behavioral evidence. Selected lower interaction is [qualified separately](../../../../Verification/FoundationVerification/DESIGN.md#af26-support-lifetime-correction-profile-evidence). Full constraint/trajectory domains remain open.
+
+Selected AF26 trajectory geometry/manifold and nonlinear composition have [actual integrated evidence](../../../../Verification/FoundationVerification/DESIGN.md#af26-upper-integrated-selected-qualification). That selected qualification retains child-declared unsupported seams/domains and does not close the full constraint/trajectory requirement set.
+
+## Selected Rolling Row Composition
+
+[RollingRelations](RollingRelations/DESIGN.md) owns source-bound rolling disk/plane contact geometry, physical velocity covectors and transported acceleration bias. Its child links Native row/rank/work/failure evidence. This row-construction contract does not provide a rolling constraint solver, projection or coupled evolution; original portable qualification remains independent.

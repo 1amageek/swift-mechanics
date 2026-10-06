@@ -38,3 +38,25 @@ Supported-record semantic round-trip and actual recompilation; malformed, duplic
 Actual local proof: sixteen Native behavioral tests/three suites. Supported scope: SMNX v1 bounded strict UTF8 finite current Compiler records, exact SI/provenance/opaque assets, explicit unit-component correction, actual required extension recompilation and valid q-v/joint modes, malformed/duplicate/missing/stale/domain/budget/cancel rejection. Root's selected public-protocol composition separately compiled/linked and actually exited 0 on Native and both exact Swift 6.4.0 release SDK IDs swift-6.4.0-RELEASE_wasm and swift-6.4.0-RELEASE_wasm-embedded. Embedded retained the existing EmbeddedUnicode trait; Node.js 24.19.0 WASI Preview1 ran both artifacts. Commands used project timeout guards. Root composite probe records its actual analytic/failure path in [FoundationVerification](../../../Verification/FoundationVerification/DESIGN.md); Native host is macOS27, not minimum macOS13 qualification. No parallel WASI/browser/iOS/Linux proof follows.
 
 Remaining eventual owner scope: external file/network I/O, physical opaque-asset validation, foreign formats and producer-unsupported model families. The initial handoff permits documented consumer composition and preserves full SPEC requirement ownership; it does not close whole-target IM48.
+
+## Qualified XML Child
+
+[XML](XML/DESIGN.md) owns bounded restricted markup syntax. [XMLQualification](../../../Verification/XMLQualification/DESIGN.md) owns independent original records/bytes, typed malformed/unsupported/budget/cancellation/consumed-work fixtures, canonical Native9 tests and exact-source ordinary/Embedded guard-first public execution. Foreign semantic adapters remain separate responsibilities.
+
+## Qualified MJCF Child
+
+[MJCF](MJCF/DESIGN.md) owns selected MuJoCo 3.3.7 format semantics through qualified XML and mechanics suppliers. [MJCFQualification](../../../Verification/MJCFQualification/DESIGN.md) owns the exact selected Native eight cases, seven synchronous ordinary/Embedded public cases with original 131072-byte guarded execution, and registered Native composition. Full format support and numerical MuJoCo equivalence remain separate obligations.
+
+## Qualified URDF Child
+
+[URDF](URDF/DESIGN.md) owns selected fixed/continuous semantic import and original-record export through qualified XML and mechanics contracts. [URDFQualification](../../../Verification/URDFQualification/DESIGN.md#executed-selected-registration) owns independent Native8, same seven ordinary/Embedded original131072 guarded/raw witnesses and canonical39-case evidence. Full format, limits/mimic/transmissions, assets and Runtime-state exchange remain separate obligations.
+
+
+## Selected SDFormat service
+
+Child [SDF](SDF/DESIGN.md) owns the selected1.12 import, original-snapshot export, separate initial-pose/dynamic-attachment graphs and qualified compiler/frame/gravity composition. Native7/public6 on frozen2270 is recorded by its qualification owner. Original supplied mass/inertia and caller asset authority remain mandatory; broader format semantics and portable are unqualified.
+
+
+## Selected asset closure service
+
+Child [AssetResolution](AssetResolution/DESIGN.md) owns immutable provider lookup, original byte/provenance validation and bounded transactional dependency closure. Native8/public7 on frozen2270 is recorded by its qualification owner. Physical geometry interpretation, external I/O providers and portable qualification remain separate obligations.

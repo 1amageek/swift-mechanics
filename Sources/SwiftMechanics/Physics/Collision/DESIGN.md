@@ -9,6 +9,9 @@ Own framed geometry queries and declared shape/motion/representation domains. Co
 ## Related Designs
 | Design | Relationship | Contract used | Summary | Cautions |
 |---|---|---|---|---|
+| [Heightfields](Heightfields/DESIGN.md) | child | Identified triangulated grid and outward coplanar endpoint certificate | Original Native8/public7 on frozen2270 | Dynamic/non-sphere/signed queries and portable remain open |
+| [TriangleMeshes](TriangleMeshes/DESIGN.md) | child | Identified feature/BVH/refit closest/ray/sphere-CCD | Original Native8/public7 on frozen2270 | General signed volume, tangency, rotating CCD and portable remain open |
+| [CompoundQueries](CompoundQueries/DESIGN.md) | child | Identified analytic child proxy, transform, filter and bounded aggregation | Selected Native8/public7 on frozen2270 | Custom-filter failure accounting, union surfaces, manifolds and portable remain open |
 | [Responsibility owner](../DESIGN.md) | parent | Scope and prerequisite DAG | Single-writer registration/integration | Full closure remains IM48 |
 | [Core](../../Mathematics/Core/DESIGN.md) | depends on | Finite vectors/transforms, explicit SI | Geometry algebra | Degenerate normals fail or have explicit deterministic convention |
 | [Model](../../Modeling/Model/DESIGN.md) | depends on | IDs/revisions/representations/provenance | Immutable geometric identity | Display and inertia never silently substitute collision geometry |
@@ -36,3 +39,5 @@ Native Swift 6.4.0 release passed 14 tests in four suites covering admitted anal
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+| [ConvexQueries](ConvexQueries/DESIGN.md) | child | Convex support-map weighted witnesses | Selected exact-source Native/WASM/Embedded and canonical qualification; proof domain owned by child |

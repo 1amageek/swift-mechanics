@@ -79,8 +79,14 @@ public struct ProjectedNonlinearMechanismEvolution: ProjectedMechanismEvolving, 
         try context.equations.read(trial,into:&workspace.start)
         guard workspace.start == history.acceptedPoint else { throw RuntimeFailure(.invalidContributor,message:"Projected history does not match physical chart.") }
         try context.equations.validateInitial(time:history.acceptedTime,point:workspace.start,work:&workspace.work,control:control)
-        let t=history.acceptedTime,h=min(context.retry ?? history.nextStep,context.target-t),end=h == context.target-t ? context.target : t+h
+        let t=history.acceptedTime
+        var h=min(context.retry ?? history.nextStep,context.target-t),end=h == context.target-t ? context.target : t+h
         guard h.isFinite,h > 0,end.isFinite,end > t,end <= context.target else { throw RuntimeFailure(.invalidInput,message:"Projected step cannot advance time.") }
+        if let boundary=try context.equations.nextBoundary(after:t,through:end,work:&workspace.work,control:control) {
+            guard boundary.isFinite,boundary > t,boundary <= end else { throw RuntimeFailure(.invalidState,message:"Projected smooth boundary source differs.") }
+            end=boundary;h=end-t
+            guard h.isFinite,h > 0 else { throw RuntimeFailure(.invalidInput,message:"Projected boundary cannot advance time.") }
+        }
         return NonlinearEvolutionInterval(time:t,step:h,end:end,acceptedSteps:history.acceptedSteps)
     }
     @inline(never)

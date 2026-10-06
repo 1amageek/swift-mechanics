@@ -1,7 +1,7 @@
 # Execution
 
 ## Purpose and Scope
-Trial ownership, cancellation, time integration and atomic accepted-state publication. Parent: [SwiftMechanics](../DESIGN.md). Children: [Runtime](Runtime/DESIGN.md), [Integration](Integration/DESIGN.md), [Hybrid](Hybrid/DESIGN.md).
+Trial ownership, cancellation, time integration, sampled control and atomic accepted-state publication. Parent: [SwiftMechanics](../DESIGN.md). Children: [Runtime](Runtime/DESIGN.md), [Integration](Integration/DESIGN.md), [Hybrid](Hybrid/DESIGN.md), [Control](Control/DESIGN.md).
 
 ## Responsibilities and Boundaries
 Trial ownership, cancellation, time integration and atomic accepted-state publication. Child contracts own each operation and failure domain. Consumers depend on published protocols and admitted immutable records. Internal visibility is not permission to bypass validation.
@@ -13,6 +13,7 @@ Trial ownership, cancellation, time integration and atomic accepted-state public
 | [Runtime](Runtime/DESIGN.md) | child | Its documented assumption/guarantee | Preserve documented capability limits |
 | [Integration](Integration/DESIGN.md) | child | Its documented assumption/guarantee | Preserve documented capability limits |
 | [Hybrid](Hybrid/DESIGN.md) | child | Its documented assumption/guarantee | Preserve documented capability limits |
+| [Control](Control/DESIGN.md) | child | Sampled physical control through original Runtime and Integration | Runtime alone commits; selected initial plant and clock domains remain explicit |
 
 ## Architecture
 ```mermaid
@@ -32,3 +33,8 @@ Invalid values, exhausted capacity, cancellation, incompatible model identity an
 
 ## Verification and Change Impact
 Responsibility-specific Tests targets own child behavior. Package verification runs the actual public path on each declared fixed toolchain/SDK profile. Recheck affected upper consumers after a lower contract changes. Migration requires consolidated Native behavioral tests and matching WASM/Embedded execution; compile success alone is not qualification.
+
+
+## Selected checkpointed mechanical co-simulation
+
+Child [CoSimulation](CoSimulation/DESIGN.md) owns exclusive equal-clock two-prismatic held-effort coupling, complete contributor checkpoint/restart, bounded failure prefixes and common Mutex state. Original Native10/public9 succeeds against the matched phase-lifetime repair producer; qualified source and evidence remain in the child design. General concurrent shutdown, total stack bounds, external engines and portable qualification remain open.

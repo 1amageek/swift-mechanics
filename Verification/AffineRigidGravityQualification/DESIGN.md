@@ -1,0 +1,102 @@
+# AffineRigidGravityQualification
+
+## Purpose and Scope
+Parent registration: [task/package root](../../DESIGN.md). Children: none. Own independent behavioral witnesses for the proposed [AffineRigidGravity](../../Sources/SwiftMechanics/Physics/Loads/AffineRigidGravity/DESIGN.md) law. Source preparation alone is not qualification. Root owns target registration and producer/resource slots; no build/test starts during preparation.
+
+## Responsibilities and Boundaries
+Construct real compiled mechanical models through qualified public APIs, supplied complete mass properties from independently integrated point distributions, actual compiled snapshots, original field/load services and original RigidEquationKernel. No mocked geometry, gravity, Jacobian or equation supplier substitutes for these paths. The fixture does not certify Runtime acceptance, integration, general temporal gradients or arbitrary inertia catalogs.
+
+## Related Designs
+| Design | Relationship | Contract Used | Cautions |
+|---|---|---|---|
+| [AffineRigidGravity](../../Sources/SwiftMechanics/Physics/Loads/AffineRigidGravity/DESIGN.md) | used by | Public evaluation/static bridge and diagnostics | New eight sources are absent from the old2363 producer |
+| [CompilationRecords](../../Sources/SwiftMechanics/Modeling/Compiler/CompilationRecords/DESIGN.md) | depends on | Compiled model/state evaluation | Original frame/chart/time validation |
+| [RigidEquations](../../Sources/SwiftMechanics/Physics/Dynamics/RigidEquations/DESIGN.md) | depends on | Actual JT/applied/actual/prescribed/virtual power | No kernel replacement or gravity-gradient admission claim |
+
+## Architecture
+```text
+six paired nonorthogonal mass points -> direct COM/inertia integral -> actual compiled body
+                                      |                                 |
+                                      v                                 v
+point force/moment/potential/power oracle                   original snapshot -> new law
+                                      |                                 |
+                                      +---------- compare --------------+
+                                                         |
+                              original static BodyWrench -> original kernel JT/power
+```
+
+## Contracts and Invariants
+The independent oracle loops over every physical point and evaluates `fi=mi*(a+G*xi)`, `Ui=-mi*(a dot xi+xi dot Gxi/2)`, torque `(xi-reference) cross fi`, and actual velocity power `fi dot vi`. It never calls the new law or its Q/commutator formula. Complete original inertia is separately integrated as the sum of `mi*((ri dot ri)Id-ri ri^T)`. Paired nonorthogonal radii produce an offset COM and a nonzero offdiagonal tensor with positive three-dimensional moments. All source forces retain their original body/world/time and SI meanings.
+
+| Shared case / test | Falsifiable independent evidence |
+|---|---|
+| continuumPointIntegral | Offdiagonal tensor, actual resultant/COM torque/body-origin torque and full potential against point sums |
+| properRotationCovariance | Rotate actual body pose/world velocities and declare the correspondingly rotated field; vector/tensor covariance and scalar power/potential |
+| potentialFiniteDifferences | Three translations, three active world rotations about body origin, and explicit uniform-field time derivative against central differences |
+| independentInstantaneousPower | Direct point velocities and explicit point-potential rate match actual/total rates and both origin/COM work residuals |
+| originalKernelPrescribedPower | Real compiled scalar hinge with original prescribed anchor angular/linear drift; point-force JT sums and original applied/actual/prescribed/virtual power plus energy completeness |
+| sourceAndDomainRefusals | Exact time/revision, wrong field/inertia frames, nonzero Gdot, dynamic bridge and duplicate gravity ownership typed failure |
+| exactWorkCapacityCancellation | Exact cumulative logical cost/peak, one-less work/storage/metadata bounds, pre-cancel and final publication cancel retaining consumed prefix |
+| originalSupplierAndMomentRefusals | Actual original gravity arithmetic overflow and supplied indefinite second moment, with typed original causes and retained work |
+
+Scalar/vector comparisons use fixed fixture tolerance 2e-9*max(1,abs(expected)); finite differences use h=1e-5 and tolerance 2e-7*max(1,abs(expected)). These verification tolerances remain unchanged after execution starts. Production power tolerance is independently fixed at absolute1e-9W/relative1e-10. A covariance field is explicitly declared symmetric by copying one triangle of its rotated tensor; the bounded floating-point change is recorded by comparing original rotated entries within the same fixture tolerance, never by changing production input after failure.
+
+## Runtime Flows
+Support cases are called by eight Swift Testing declarations and the same eight synchronous standalone public witnesses. The target-specific CompilerTarget selection is limited to original Native/ordinaryWASI/EmbeddedWASI capability declarations. No synchronization/storage or conformance branches occur. Source hashes must bind actual production8, frozen baseline producer, fixture6 and linked module/objects before a behavioral success is reported. Selected Native setup/test/public execution and later profiles require root slots and timeouts; compile alone cannot close any case.
+
+## State, Ownership, and Lifecycle
+Model, points and oracle outputs are immutable owned values. Operation ledgers remain exclusively local. A test-only Sendable cancellation counter uses the same `Mutex<Int>` on every target; no unchecked or raw-state branch exists. Tests share no files/static mutable resources. Each runtime invocation owns fresh fixture state.
+
+| State | Native / WASM / Embedded storage | Isolation | Read/mutation entry | Release |
+|---|---|---|---|---|
+| Cancellation call count | let Mutex<Int> | Mutex.withLock | isCancelled | Immutable owner lifetime |
+| Fixture/model/points | Immutable value/backing | No shared mutation | Public original APIs | Caller lifetime |
+| Work ledgers | Local inout value | Exclusive operation | Original charge/reserve | Call scope |
+
+## Failure, Concurrency, and Constraints
+Typed assertion and unexpected-success/failure distinguish verification failures from original production failures. No try?, fallback, weakened tolerance, fake successful supplier or silent default is used. Fixtures bound model bodies2/velocity6 and compilation capacities explicitly. Meaningful budget assertions count original metadata bytes plus the fixed admitted law/supplier costs; late cancellation targets the final publication checkpoint and preserves actual completed work. Physical allocation/stack performance is unmeasured during source preparation.
+
+## Verification and Change Impact
+The preparation review checks original public API paths, independent oracle construction and fixed case mapping once. Actual compiler failures and concrete behavioral findings permit causal owned source/fixture repairs; root owns shared manifests, Package, PROGRESS and Git. The original producer old2363 does not include these eight source files: a new exact producer or fixture-specific composition is required before linkage. No new producer/build/test is executed here without root's prepared resource slot. Exact source and fixture hashes plus first-failure ledger and profile/guard/runtime receipts belong under `.build/af35-affine-rigid-gravity-qualification` when execution is authorized.
+
+### Released narrow Native consumer contract
+Root released one narrow slot after authoring's five exact emitted frontend jobs passed: the complete2361 real SwiftMechanics module plus only the new8 primary jobs. This is distinguished from a successful full driver rebuild. Execution waits for the frozen source/object/metadata depot and per-file bindings. The consumer reads those original2361 objects directly, links one private SwiftMechanics dylib once, and uses that same library for focused eight tests and eight public cases. It does not duplicate the original object depot, build a new full physics target or alter suppliers.
+
+The pinned Swift6.4.0 release compiler and producer's matching MacOS27 SDK/arm64 profile are retained. The producer's deployment target remains macOS13. The fixture consumer explicitly requires macOS15 for its common Synchronization.Mutex counter; this is a documented consumer capability boundary, not a changed production requirement. SwiftPM's native backend is used only for the six fixtures, with actual compiler jobs4 and its deprecation warning retained. Each link/build/test/public/inspection command has its own timeout. A persistent watcher samples at most every1s, admits only with free>576MiB, and aborts when allocated consumer growth exceeds128MiB or free reaches576MiB. Sources, original objects and completed evidence survive failure. No behavioral or profile success follows from the frontend-job GREEN alone.
+
+### First actual Native finding
+The first fixture-only link/build passed; eight-test execution passed six cases and failed the two prescribed-hinge consumers with the original compiler's `inconsistentInitialPose`. The initial body reference pose had incorrectly been declared identity despite the original prescribed anchor and nonzero hinge angle. The sole causal fixture correction declares that reference pose using the qualified public anchor-pose/hinge-pose composition. Original sampling state, point mass distribution, hinge/anchor velocities, all oracles/tolerances and the eight production files remain unchanged. The first log/receipt/failure ledger are preserved; a fixture-only incremental rebuild and the two affected tests are the finding-limited retest, followed by the planned eight public cases. Six unaffected test results retain their evidence.
+
+### Executed selected Native evidence
+The [final Native receipt](../../.build/af35-affine-rigid-gravity-qualification/consumer/native-final-receipt.json) binds the frozen2361 producer, original objects/three metadata, unchanged production8, corrected fixtures6, command logs, library and both consumer binaries. Original2361 objects were read directly and linked once; no object copies or producer rewrites occurred. Link passed in0.510s; fixture-only initial build passed in6.245s and the causal fixture incremental rebuild in1.424s. Actual emitted consumer drivers use jobs4, macOS15 and the exact MacOS27 SDK. The original module/dylib retains macOS13. SwiftPM's native-backend deprecation warning is retained.
+
+Eight test declarations have selected evidence: six unaffected cases passed on the first run; the sole geometry correction's two affected tests passed the finding-limited retest in0.437s. All eight standalone shared public cases then passed against the final same dylib in0.293s. No final all-eight test-suite rerun is claimed. First failing fixture bytes/binaries/log/receipt remain preserved. Fixed numerical oracles/tolerances were unchanged. This qualifies the selected Native mechanical paths and refusals; portable profiles and canonical registration remain root-owned and unverified here.
+
+Artifact load commands name the same private SwiftMechanics library and both consumer rpaths name its exact directory; input-binding receipts preserve the same library hash before/after tests/public execution. Library and standalone ad-hoc signature inspections passed. An additional strict codesign inspection of the Mach-O inside SwiftPM's minimal xctest container failed with `code has no resources but signature indicates they must be present`; the container has no resource seal/Info.plist. This ancillary signing observation is preserved and is not a mechanical or release-signing success claim. No signing mutation or extra behavioral retry was introduced for it.
+
+The persistent1s watcher kept all observed consumer storage below128MiB and global free above576MiB. Command deadlines were120s link/public,900s build,60s tests and30s metadata inspection. Timing is operational qualification provenance, not a performance benchmark. The same immutable production records and local LoadWork are compiled/executed; test-only cancellation state retains its common Mutex<Int>. No portable synchronization semantics or Runtime acceptance are inferred.
+
+### Prepared selected portable graph
+The next private graph is the complete registered committed4d16dfd baseline1562 plus unchanged AffineRigidGravity8, for1570 production Swift files. Original baseline exclusions remain intact; only the new law's DESIGN is additionally excluded. All six corrected Native fixture files are copied byte-for-byte, retaining the exact initial prescribed body pose, eight independent synchronous cases, fixed oracles/tolerances and common Mutex<Int>. The public executable imports the same support target; the eight-test wrapper is retained as its own test target. No test-framework dependency enters the WASI public executable.
+
+Per-file comparison with the actual Native2361 depot finds1561 baseline files identical and one difference in MachineDefinitionContext: Native's source contains additional structural facade state/methods. The selected fixture directly constructs MechanicalDescriptor and calls MechanicalModelCompiling's ReferenceMechanicalCompiler implementation. That original compiler canonicalizes/validates the descriptor, creates the original tree/snapshot and compiles structure; it never constructs or calls MachineDefinitionContext. MachineDefinition is a separate upstream descriptor-lowering caller. The selected graph retains the qualified baseline version of that unrelated facade. This is a declared1570 composition, not full2361 profile equivalence or qualification of structural machine lowering.
+
+Preparation artifacts live under [profiles](../../.build/af35-affine-rigid-gravity-qualification/profiles). The preparation receipt binds copied source bytes, exact baseline/exclusions, Native-final constructor bytes, fixture six and this branch distinction. Pinned Swift6.4.0 release and the matching ordinary/Embedded WASI SDK identifiers are fixed separately. Execution is pending root's lease: no compiler, decoder, runtime or archive is run by preparation.
+
+The prepared runner uses the root ExternalCommands refined storage watcher (2560MiB admission,2048MiB local nonreserve,512MiB recovery reserve and256MiB early reaction;2s polling, observation itself<=5s). This is an explicitly unmeasured transient envelope informed by adjacent completed profiles, not a measured peak. Each phase has a watchdog:1200s build,600s full LLVM decode,120s instrumentation and240s each guarded/raw runtime. Actual emitted driver jobs4 and whole-module frontend threads4 must be captured, with exact1570 source filelist; both profiles use WMO. Native-backend warnings are retained. Complete LLVM global.set counts must equal inserted guards, retaining original131072-byte stack reservation. All eight original Native public success lines must be observed in guarded execution before raw runtime may start. Ordinary must pass before Embedded. Source/hash/SDK/helper checks precede execution and artifact/objects/commands/first-failure receipts bind each completed phase; no failure retry or fallback is built into the runner.
+
+Native evidence remains six retained unaffected tests plus two finding-limited corrected tests and all eight final public witnesses. Portable behavior, synchronization backend semantics, global gravity integration and Runtime acceptance remain unverified. Preparation does not broaden that evidence.
+
+### Explicit cancellation fixture availability
+After both original frozen portable profiles completed guarded/raw eight-case execution, a bounded typecheck of the original counter against macOS13 reproduced the pinned Synchronization interface contract: Mutex, its initializer and withLock require macOS15. The production law's eight sources and other seven cases are unaffected. The causal fixture correction declares macOS15 availability on the counter class, the sole exactWorkCapacityCancellation case using it, and the corresponding Swift Testing method. The framework package/deployment baseline remains macOS13; the existing standalone Native consumer explicitly targets macOS15. Availability '*' preserves the same WASI counter and case, with no storage, Sendable or isolation branch.
+
+The original portable receipts and fixture83969e37 freeze retain authority only for those original bytes. They are preserved unchanged. The three annotated fixture files require a new post-availability freeze, private copied package and separate attempt receipts before matching portable evidence can be claimed. That continuation uses the original completed profile caches incrementally, preserves production1570 and all numerical inputs/oracles/tolerances, and waits for root's exclusive resource lease. A bounded original macOS13 co-located fixture typecheck verifies the availability boundary. A current-host fixture-only rebuild and the same eight standalone witnesses verify the annotated source against the unchanged Native2361 module/library; compile alone is not substituted for those witnesses. Root owns canonical1712 registration and its actual eight test execution.
+
+### Executed selected registration
+The final fixture boundary explicitly marks the Mutex counter, its sole case and sole test macOS15-or-newer. The production module retains macOS13. The exact pinned interface requires macOS15 for Mutex; the old unannotated counter reproduced that availability failure, and the annotated co-located fixtures typechecked at macOS13. The same Sendable counter and Mutex.withLock implementation are used on every target. No raw-state or platform synchronization substitution was introduced.
+
+The [canonical Native receipt](../../.build/af35-affine-rigid-gravity-qualification/canonical-native-receipt.json) SHA36ab01600152bb6ade2eeb34379ab9d26dac3dd438a2bb84193fe31a2cca04dd records original-cache incremental build7.090s and actual31 tests in4 suites1.016s: all eight final annotated cases plus seven ExternalCommands, eight JointStops and eight MJCF regressions. [Actual source/object/link bindings](../../.build/af35-affine-rigid-gravity-qualification/canonical-source-object-link-bindings.json) SHAbf884f3b1bddd5c87b553ffbb41f6f1d38a5822a07b023b469e3208d7afb3b89 bind all1712 production and five co-located fixture/test sources to the linked test binary. This is selected canonical composition, not qualification of excluded source work.
+
+The original successful portable receipts/raw artifacts/fixture copies were preserved before a separate [post-availability attempt](../../.build/af35-affine-rigid-gravity-qualification/profiles/post-availability). The new sourcefreeze SHAe254f65f95dbb56b778ab702638b3f16e80dfe16132fefaa160562882ddcdbd3 binds unchanged1570 production and final six fixtures. Ordinary [receipt](../../.build/af35-affine-rigid-gravity-qualification/profiles/post-availability/wasm-receipt.json) SHA1262e06aeb7d219efc9d6555f75940152442e3da68cbd8cbc2581f8de8b2dae0 and Embedded [receipt](../../.build/af35-affine-rigid-gravity-qualification/profiles/post-availability/embedded-receipt.json) SHA16c79e165c182304dd0b8b914ee9e64c3c13df5d9956ca25a014e30df7599b97 each record all eight guarded witnesses before all eight raw witnesses. Actual raw hashes changed, so each new artifact received one full LLVM decode; all38360/2435 stack writes equal inserted guards, preserving the original131072 bytes. Exact release6.4.0 and matching separate SDKs, emitted jobs4/WMOthreads4, actual fixture/object/link and producer metadata bindings are retained. The original private manifest is restored after each attempt.
+
+The incremental compiler cache delta is bounded separately at128MiB; full profile outputs keep the original2048MiB nonreserve/512MiB recovery/256MiB reaction envelope with2s sampling. Actual build/decoded/guard/raw watchdogs remain1200/600/240/240s. Allocator peaks and concurrent multi-thread execution are not inferred from this synchronous WASI evidence. Earlier first fixture and setup failures remain failures with their original records; their causal corrections did not change production8, numeric oracles or tolerances. Global Runtime energy acceptance, nonzero gradient-time derivative and full FL-001/DN-002 remain unqualified.

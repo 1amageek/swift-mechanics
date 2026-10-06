@@ -46,3 +46,8 @@ A supplier cannot replace/reset its authoritative numerical ledger: the real pre
 
 ### Consolidation contract
 This directory is a component inside the SwiftMechanics module, not a separate SwiftPM target. Its existing public behavior and exact-profile evidence remain its contract authority. Cross-component access uses the documented contracts; internal visibility alone does not grant admission or publication authority. Source relocation requires integrated behavioral requalification.
+
+
+## Selected ImplicitMethods Native composition
+
+Child [ImplicitMethods](ImplicitMethods/DESIGN.md) owns implicit linear and nonlinear integration. Its original Native8/public7 behavioral evidence is qualified against fresh immutable2387, with original source/physical/work acceptance and typed failures preserved. The child and qualification owner retain exact evidence and remaining portable/domain obligations.

@@ -22,6 +22,11 @@ struct FoundationVerification {
             stage = "verifyMachines"; try verifyMachines()
             stage = "verifyCollision"; try verifyCollision()
             stage = "verifyDynamics"; try verifyDynamics()
+            stage = "verifyObservations"; try verifyObservations()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifySensorPipeline"; try verifySensorPipeline() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifySampledControl"; try verifySampledControl() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyContactRangeObservations"; try verifyContactRangeObservations(); stage = "verifyIslandDynamics"; try verifyIslandDynamics() }
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyConstrainedNormalImpact"; try verifyConstrainedNormalImpact() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPlanarPhysicalLower"; try verifyPlanarPhysicalLower() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyPrescribedBaseLower"; try verifyPrescribedBaseLower(); stage = "verifyPlanarReactionLower"; try verifyPlanarReactionLower() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyClosedLoopReactions"; try verifyClosedLoopReactions() }
@@ -32,9 +37,12 @@ struct FoundationVerification {
                 stage = "verifyTrajectoryLower"; try verifyTrajectoryLower()
                 stage = "verifyPrescribedRootSupports"; try verifyPrescribedRootSupports()
                 stage = "verifyQuadraticColdAuthority"; try verifyQuadraticColdAuthority()
+                stage = "verifyTrajectoryEvolution"; try verifyTrajectoryEvolution()
+                stage = "verifySleepTopology"; try verifySleepTopology()
             }
             stage = "verifyFlexible"; try verifyFlexible()
             stage = "verifyContactLaws"; try verifyContactLaws()
+            stage = "verifyContactCurrentSamples"; try verifyContactCurrentSamples()
             stage = "verifyMaterialSites"; try verifyMaterialSites()
             stage = "verifyContactResponse"; try verifyContactResponse()
             stage = "verifyExchange"; try verifyExchange()
@@ -45,13 +53,21 @@ struct FoundationVerification {
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyMovingBaseEvolution"; try verifyMovingBaseEvolution() }
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyLoadedSleepMechanisms"; try verifyLoadedSleepMechanisms() }
             stage = "verifyTransmissions"; try verifyTransmissions()
+            stage = "verifyToothContactEvolution"; try verifyToothContactEvolution()
+            stage = "verifyMaterialToothContacts"; try verifyMaterialToothContacts()
             stage = "verifyEquilibrium"; try verifyEquilibrium()
             stage = "verifyContactPatches"; try verifyContactPatches()
             stage = "verifyDeformingContact"; try verifyDeformingContact()
             stage = "verifyStructuralAnalysis"; try verifyStructuralAnalysis()
+            stage = "verifyGeneralDampedSpectrum"; try verifyGeneralDampedSpectrum()
+            stage = "verifyNonlinearStability"; try verifyNonlinearStability()
             stage = "verifyDerivatives"; try verifyDerivatives()
+            stage = "verifyContactDerivatives"; try verifyContactDerivatives()
             stage = "verifyOptimization"; try verifyOptimization()
+            stage = "verifyNonlinearOptimization"; try verifyNonlinearOptimization()
+            stage = "verifyPhysicalParameterIdentification"; try verifyPhysicalParameterIdentification()
             stage = "verifyGranular"; try verifyGranular()
+            if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyGranularRuntime"; try verifyGranularRuntime() }
             stage = "verifyPlanarFluids"; try verifyPlanarFluids()
             if #available(macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, *) { stage = "verifyRuntime"; try verifyRuntime(); stage = "verifyMovingAnchorRuntime"; try verifyMovingAnchorRuntime(); stage = "verifyRuntimeReplacement"; try verifyRuntimeReplacement(); stage = "verifyMechanisms"; try verifyMechanisms(); stage = "verifyNonlinearMechanisms"; try verifyNonlinearMechanisms(); stage = "verifySleepMechanisms"; try verifySleepMechanisms(); stage = "verifyReactionPaths"; try verifyReactionPaths(); stage = "verifyTopologyContinuation"; try verifyTopologyContinuation(); stage = "verifyFluids"; try verifyFluids(); stage = "verifyPlanarRuntime"; try verifyPlanarRuntime(); stage = "verifyIntegration"; try verifyIntegration(); stage = "verifyActuation"; try verifyActuation(); stage = "verifyHybrid"; try verifyHybrid() }
             else { throw FoundationVerificationError.unexpectedFailure }
