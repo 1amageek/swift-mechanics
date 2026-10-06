@@ -6,6 +6,7 @@ let package = Package(
     platforms: [.macOS(.v13)],
     products: [
         .executable(name: "mechanics-linear-quadratic-verification", targets: ["LinearQuadraticPublicVerification"]),
+        .executable(name: "mechanics-shells-verification", targets: ["ShellsPublicVerification"]),
         .executable(name: "mechanics-spatial-beams-verification", targets: ["SpatialBeamsPublicVerification"]),
         .executable(name: "mechanics-hydroelastic-verification", targets: ["HydroelasticPublicVerification"]),
         .executable(name: "mechanics-compound-queries-verification", targets: ["CompoundQueriesPublicVerification"]),
@@ -29,6 +30,9 @@ let package = Package(
     ],
     traits: [.trait(name: "EmbeddedUnicode", description: "Link matching Embedded Swift SDK Unicode data tables.")],
     targets: [
+        .target(name: "ShellsQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/ShellsQualification", exclude: ["DESIGN.md", "ShellsQualification.swift", "ShellsQualificationTests.swift"], sources: ["ShellsCancellationCounter.swift", "ShellsQualificationCase.swift", "ShellsQualificationCases.swift", "ShellsQualificationError.swift", "ShellsQualificationFixtures.swift", "ShellsQualifying.swift"]),
+        .executableTarget(name: "ShellsPublicVerification", dependencies: ["ShellsQualificationSupport"], path: "Verification/ShellsQualification", exclude: ["DESIGN.md", "ShellsCancellationCounter.swift", "ShellsQualificationCase.swift", "ShellsQualificationCases.swift", "ShellsQualificationError.swift", "ShellsQualificationFixtures.swift", "ShellsQualificationTests.swift", "ShellsQualifying.swift"], sources: ["ShellsQualification.swift"]),
+        .testTarget(name: "MechanicsShellsTests", dependencies: ["ShellsQualificationSupport"], path: "Verification/ShellsQualification", exclude: ["DESIGN.md", "ShellsCancellationCounter.swift", "ShellsQualification.swift", "ShellsQualificationCase.swift", "ShellsQualificationCases.swift", "ShellsQualificationError.swift", "ShellsQualificationFixtures.swift", "ShellsQualifying.swift"], sources: ["ShellsQualificationTests.swift"]),
         .target(name: "CompoundQueriesQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/CompoundQueriesQualification",
                     exclude: ["DESIGN.md", "CompoundQueriesQualification.swift", "CompoundQueriesQualificationTests.swift"], sources: ["CompoundQueriesQualificationCases.swift", "CompoundQueriesQualificationError.swift", "CompoundQueriesQualificationFixture.swift", "CompoundQueriesQualificationUnexpectedFilter.swift"]),
         .executableTarget(name: "CompoundQueriesPublicVerification", dependencies: ["CompoundQueriesQualificationSupport"], path: "Verification/CompoundQueriesQualification",
@@ -50,6 +54,7 @@ let package = Package(
                     exclude: ["DESIGN.md", "InertialParametersQualificationCancellation.swift", "InertialParametersQualificationCases.swift", "InertialParametersQualificationError.swift", "InertialParametersQualificationFixture.swift", "InertialParametersQualificationOracle.swift", "InertialParametersQualification.swift"], sources: ["InertialParametersQualificationTests.swift"]),
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Physics/Flexible/Shells/DESIGN.md",
                     "Physics/Flexible/SpatialBeams/DESIGN.md",
                     "Physics/Collision/CompoundQueries/DESIGN.md",
                     "Physics/Collision/TriangleMeshes/DESIGN.md",

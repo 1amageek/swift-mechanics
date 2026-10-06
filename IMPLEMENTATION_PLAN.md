@@ -632,3 +632,6 @@ AF37.3 registers CoSimulation18 and fixture8 after original Native10/public9 on 
 
 
 AF38.6 registers LinearQuadratic17/finalfixture10 after original nine Native/eight public plus exact caller-cost boundary Native10/public9 on immutable2387. Exact represented pair comparison rejects the demonstrated indefinite subnormal/large costs, preserving equal entries and charging a bounded128 operations per pair before work. Physical/tolerance/original-equation and failure/cancellation oracles remain unchanged; receiptb39c83576e6c68bd2d7634ce72dd14f7d46b0007c3c779db4fabb175997bbdd2. Portable and general exact higher-dimensional PSD remain open.
+
+
+AF38.1 registers Flat-Q4 Mindlin/MITC4 mechanics after original Native7/public6 on fresh2387. Production laws and original physical/tolerance/work/refusal oracles preserved; causal fixture admission/calibration repairs retain independent intended inputs and historical failures where present. Receipt9868347a36f3f57babc89e312ed19fd3eb6193d53b91056fb4c455aad00f1801. Portable and broader domains remain independently open.

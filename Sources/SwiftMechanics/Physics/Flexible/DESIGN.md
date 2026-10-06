@@ -60,3 +60,8 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## Selected spatial beam service
 
 Child [SpatialBeams](SpatialBeams/DESIGN.md) owns identified linear12DOF Euler-Bernoulli/Timoshenko assembly, response and section fields. Its qualification owner records Native7/six public cases on frozen2270. Finite rotation, resolved transverse/torsional stress and global evolution remain explicit unsupported domains; portable is unqualified.
+
+
+## Selected Shells Native composition
+
+Child [Shells](Shells/DESIGN.md) owns flat-q4 mindlin/mitc4 mechanics. Its original Native7/public6 behavioral evidence is qualified against fresh immutable2387, with original source/physical/work acceptance and typed failures preserved. The child and qualification owner retain exact evidence and remaining portable/domain obligations.
