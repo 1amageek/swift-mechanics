@@ -65,3 +65,8 @@ Child [SpatialBeams](SpatialBeams/DESIGN.md) owns identified linear12DOF Euler-B
 ## Selected Shells Native composition
 
 Child [Shells](Shells/DESIGN.md) owns flat-q4 mindlin/mitc4 mechanics. Its original Native7/public6 behavioral evidence is qualified against fresh immutable2387, with original source/physical/work acceptance and typed failures preserved. The child and qualification owner retain exact evidence and remaining portable/domain obligations.
+
+
+## Selected DiscreteCables Native composition
+
+Child [DiscreteCables](DiscreteCables/DESIGN.md) owns discrete cable force, tangent and evolution. Its original Native10/public9 behavioral evidence is qualified against fresh immutable2387, with original source/physical/work acceptance and typed failures preserved. The child and qualification owner retain exact evidence and remaining portable/domain obligations.

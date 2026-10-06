@@ -635,3 +635,6 @@ AF38.6 registers LinearQuadratic17/finalfixture10 after original nine Native/eig
 
 
 AF38.1 registers Flat-Q4 Mindlin/MITC4 mechanics after original Native7/public6 on fresh2387. Production laws and original physical/tolerance/work/refusal oracles preserved; causal fixture admission/calibration repairs retain independent intended inputs and historical failures where present. Receipt9868347a36f3f57babc89e312ed19fd3eb6193d53b91056fb4c455aad00f1801. Portable and broader domains remain independently open.
+
+
+AF38.2 registers Discrete cable force, tangent and evolution after original Native10/public9 on fresh2387. Production laws and original physical/tolerance/work/refusal oracles preserved; causal fixture admission/calibration repairs retain independent intended inputs and historical failures where present. Receiptfb99c04c35b6333440c10ac1baa2f618d933def70deaffdf06cd8a719a9ff358. Portable and broader domains remain independently open.
