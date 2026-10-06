@@ -599,3 +599,6 @@ IM.AF32.5: [InertialParameters](Sources/SwiftMechanics/Analysis/Derivatives/Iner
 
 
 IM.AF32.8: [LinearEstimation](Sources/SwiftMechanics/Execution/Control/LinearEstimation/DESIGN.md) is registered after original8 Native tests and seven public groups plus Task cancellation on immutable2124. Final Support/Public13 and Testing14 boundaries match the root package; original447-byte continuation, clock/source/work and Joseph oracles are unchanged. Portable and accepted Runtime association remain open.
+
+
+IM.AF33.1: [PoseIK](Sources/SwiftMechanics/Analysis/Planning/PoseIK/DESIGN.md) is registered after original8 Native tests/seven public cases on immutable2124. Actual compiled-tree task residuals, J/H differences, original loops, rank, bounds, work and cancellation are preserved. Fixture type signatures now match real supplier errors. Collision products, chart/branch extensions and portable execution remain open.

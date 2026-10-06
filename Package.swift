@@ -41,6 +41,7 @@ let package = Package(
                     "Physics/Dynamics/ArticulatedDynamics/DESIGN.md",
                     "Modeling/Machines/StructuralAuthoring/DESIGN.md",
                     "Analysis/Planning/TimeParameterization/DESIGN.md",
+                    "Analysis/Planning/PoseIK/DESIGN.md",
                     "Analysis/Planning/DESIGN.md",
                     "Physics/Constraints/RollingRelations/DESIGN.md",
                     "Physics/Vehicles/TireLaws/DESIGN.md",
@@ -396,6 +397,8 @@ let package = Package(
                 exclude: ["DESIGN.md", "ArticulatedDynamicsQualificationCases.swift", "ArticulatedDynamicsQualificationError.swift", "ArticulatedDynamicsQualificationFixtures.swift", "ArticulatedDynamicsQualificationNativeCases.swift", "ArticulatedDynamicsQualificationRunner.swift"], sources: ["ArticulatedDynamicsQualificationTests.swift"]),
         .testTarget(name: "MechanicsGeometryParametersTests", dependencies: ["SwiftMechanics"], path: "Verification/GeometryParametersQualification",
                     exclude: ["DESIGN.md", "GeometryParametersQualification.swift"]),
+        .testTarget(name: "MechanicsPoseIKTests", dependencies: ["SwiftMechanics"], path: "Verification/PoseIKQualification",
+                    exclude: ["DESIGN.md", "PoseIKQualification.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )

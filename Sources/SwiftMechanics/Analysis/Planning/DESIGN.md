@@ -1,14 +1,15 @@
 # Planning
 
 ## Purpose and Scope
-Parent: [Analysis](../DESIGN.md). Own physical path time parameterization. Child: [TimeParameterization](TimeParameterization/DESIGN.md).
+Parent: [Analysis](../DESIGN.md). Own selected physical planning queries and path time parameterization. Children: [TimeParameterization](TimeParameterization/DESIGN.md) and [PoseIK](PoseIK/DESIGN.md).
 
 ## Responsibilities and Boundaries
-Planning consumes admitted models and supplied paths. Dynamics owns physical operators and Runtime owns accepted simulation state. Planning cannot commit a simulation step.
+Planning consumes admitted models, supplied tasks and paths. Dynamics owns physical operators and Runtime owns accepted simulation state. Planning cannot commit a simulation step.
 
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
+| [PoseIK](PoseIK/DESIGN.md) | child | Bounded source-bound point/orientation/pose inverse kinematics | Selected Native8/public7 at frozen2124 | Fixed-root spatial Euclidean chart and acute-angle branch; collision and wider domains fail explicitly |
 | [Analysis](../DESIGN.md) | parent | Query composition | Index authority | Preserve query/state boundary |
 | [TimeParameterization](TimeParameterization/DESIGN.md) | child | Certified physical prismatic retiming | Owns selected physics, limits and replay | Native qualified; portable profiles and broader trajectory domains remain open |
 
