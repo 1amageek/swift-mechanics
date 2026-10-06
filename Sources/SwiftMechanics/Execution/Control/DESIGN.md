@@ -9,6 +9,7 @@ Compose admitted feedback, controller sampling, actual mechanical evolution and 
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
+| [LinearEstimation](LinearEstimation/DESIGN.md) | child | Source-bound fixed-clock Kalman prediction, Joseph update and continuation | Selected Native8/public7 plus Task on immutable2124 | Actual Support/Public13, Testing14; portable and accepted Runtime association remain open |
 | [Execution](../DESIGN.md) | parent | Trial ownership and publication | Responsibility placement | Preserve accepted-state authority |
 | [Ports](Ports/DESIGN.md) | child | Identified dimensioned feedback | Input admission | Raw feedback is not a session publication witness |
 | [SampledFeedback](SampledFeedback/DESIGN.md) | child | Effective interval and held controller effort | Tentative sampling | No guessed nominal-step substitution |

@@ -596,3 +596,6 @@ IM.AF33.8: [ModalReduction](Sources/SwiftMechanics/Physics/Flexible/ModalReducti
 
 
 IM.AF32.5: [InertialParameters](Sources/SwiftMechanics/Analysis/Derivatives/InertialParameters/DESIGN.md) is registered after final Native9/public8 on immutable2124, with original Newton-Euler, ten-coordinate, finite-difference, power, work and cancellation oracles. Source9 is unchanged; the final fixture explicitly guards its real Mutex availability. Portable and broader parameter identification remain open.
+
+
+IM.AF32.8: [LinearEstimation](Sources/SwiftMechanics/Execution/Control/LinearEstimation/DESIGN.md) is registered after original8 Native tests and seven public groups plus Task cancellation on immutable2124. Final Support/Public13 and Testing14 boundaries match the root package; original447-byte continuation, clock/source/work and Joseph oracles are unchanged. Portable and accepted Runtime association remain open.
