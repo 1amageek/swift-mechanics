@@ -815,3 +815,18 @@ Canonical registration exposes the qualified Control child and its dedicated `Me
 
 Each guard ran before raw. All original completion assertions, fixed Swift6.4.0/matching SDKs, source/object/link maps and before/after source/artifact hashes are retained in `.build/af31-incremental-public/control-caller-{native-proof,wasm-execution-receipt,embedded-execution-receipt}.json`. Private original raw and guarded artifacts are preserved. Earlier ENOSPC and actual guard RED receipts remain distinct from successful evidence. Control registration does not wait for mixed/constrained sleep, and does not claim full feedback/control or the complete210 requirements. Task-level accumulated interaction verification remains IM.AF31.5.
 
+
+
+## MM01 Main Integration Qualification
+
+The requested `main` merge `d6f0026` joins qualified `codex/specification` tip `8585704` with configured remote baseline `1f205b1`. An isolated checkout preserves unfinished DifferentialIK, prescribed-loop profile and other implementation work outside the merge. The actual committed package graph provides 2,361 production Swift sources and 101 test targets; the Native consumer preserves their source, exclusion and dependency boundaries with 23 supporting targets and 750 fixture sources. Its only fixture-source difference is the [Native lifecycle gate repair](../../Tests/MechanicsSensorPipelineTests/DESIGN.md#mm01-merged-main-lifecycle-gate-repair).
+
+| Evidence | Actual result and boundary |
+|---|---|
+| Fresh production compiler/linker | Swift 6.4.0 RELEASE, macOS 27 SDK; all 2,361 source/object mappings and actual linker inputs agree; 117.089 seconds |
+| Focused changed fixture | Original four SensorLifecycle tests pass; original shutdown, prefix and release assertions preserved |
+| Registered Native interaction | Original 1,573 tests in 324 suites pass after 10.868 seconds; `swift test` process exits zero |
+| Source/output binding | Full production and exact repaired fixtures match before/after execution; no production rebuild or public-executable repetition |
+| Evidence limits | Ordinary/Embedded WASM, other platforms and full 210-requirement completion remain independent open obligations |
+
+Local raw evidence is retained under `.build/mm01-main-producer` and `.build/mm01-main-tests`. The immutable producer handoff SHA-256 is `294e1111a9037b00deaf3a80f16d49d69912c5893d5d8957dee7b27ca1b3e206`; repaired runtime receipt `native-receipt-repaired.json` SHA-256 is `2ddd7c96003f0dc8941e3353f0788cced73aa5d97d0df3acf0eb49b622cb5500`. The original four-issue lifecycle RED is preserved separately. The fixed additional 2 GiB consumer budget, 4 GiB free-space minimum and 300-second command watchdogs held throughout. Strict library signature verification passes; the test bundle resource-signature limitation remains recorded separately from successful actual execution. No signature replacement or standalone test-bundle execution was used.
