@@ -617,3 +617,6 @@ AF37.7 registers CompoundQueries10 and original fixture6 after Native8/public7 o
 
 
 AF37.9 registers SDF17 and original fixture5 after Native7/public6 on frozen2270. Separate pose/attachment graphs, original transformed inertia, gravity, compiled q/v/a, loss-preserving snapshot export and explicit work/cancel/source refusals are qualified without source/oracle changes. Ordinary/Embedded and broader IO-004 remain open.
+
+
+AF37.1 registers TriangleMeshes19 and unchanged fixture5; original feature/BVH/refit closest/ray/sphere-CCD and typed source/work/cancel boundaries after original Native8/public7 on immutable2270. Source, physical/data oracles, tolerance and original ledger unchanged; all source/object/module/link bindings retained. Child qualification owns selected evidence; portable and broader domains remain open.
