@@ -55,3 +55,8 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## Selected Hex8 solid
 
 [Hexahedra](Hexahedra/DESIGN.md) owns the selected objective, full-integration eight-node solid and its reference/state/energy/force/tangent/mass/damping contracts. Its child design records exact Native qualification and pending portable obligations; accepted evolution, mesh convergence and locking behavior remain separately unqualified.
+
+
+## Selected spatial beam service
+
+Child [SpatialBeams](SpatialBeams/DESIGN.md) owns identified linear12DOF Euler-Bernoulli/Timoshenko assembly, response and section fields. Its qualification owner records Native7/six public cases on frozen2270. Finite rotation, resolved transverse/torsional stress and global evolution remain explicit unsupported domains; portable is unqualified.

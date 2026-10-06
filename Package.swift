@@ -5,6 +5,7 @@ let package = Package(
     name: "swift-mechanics",
     platforms: [.macOS(.v13)],
     products: [
+        .executable(name: "mechanics-spatial-beams-verification", targets: ["SpatialBeamsPublicVerification"]),
         .executable(name: "mechanics-particle-flows-verification", targets: ["ParticleFlowsPublicVerification"]),
         .executable(name: "mechanics-spatial-projection-verification", targets: ["SpatialProjectionPublicVerification"]),
         .executable(name: "modal-reduction-verification", targets: ["ModalReductionQualification"]),
@@ -32,6 +33,7 @@ let package = Package(
                     exclude: ["DESIGN.md", "InertialParametersQualificationCancellation.swift", "InertialParametersQualificationCases.swift", "InertialParametersQualificationError.swift", "InertialParametersQualificationFixture.swift", "InertialParametersQualificationOracle.swift", "InertialParametersQualification.swift"], sources: ["InertialParametersQualificationTests.swift"]),
         .target(name: "SwiftMechanics",
                 exclude: [
+                    "Physics/Flexible/SpatialBeams/DESIGN.md",
                     "Physics/Fluids/ParticleFlows/DESIGN.md",
                 "Physics/Flexible/ModalReduction/DESIGN.md",
                     "Analysis/Derivatives/InertialParameters/DESIGN.md",
@@ -280,6 +282,12 @@ let package = Package(
                 exclude: ["DESIGN.md", "LinearEstimationQualificationCases.swift", "LinearEstimationQualificationError.swift", "LinearEstimationQualificationFixtures.swift", "LinearEstimationQualificationNativeCases.swift", "LinearEstimationQualificationTests.swift"], sources: ["LinearEstimationQualificationRunner.swift"]),
         .testTarget(name: "MechanicsLinearEstimationTests", dependencies: ["LinearEstimationQualificationSupport"], path: "Verification/LinearEstimationQualification",
                 exclude: ["DESIGN.md", "LinearEstimationQualificationCases.swift", "LinearEstimationQualificationError.swift", "LinearEstimationQualificationFixtures.swift", "LinearEstimationQualificationNativeCases.swift", "LinearEstimationQualificationRunner.swift"], sources: ["LinearEstimationQualificationTests.swift"]),
+        .target(name: "SpatialBeamsQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/SpatialBeamsQualification",
+                exclude: ["DESIGN.md", "SpatialBeamsQualification.swift", "SpatialBeamsQualificationTests.swift"], sources: ["SpatialBeamsCancellationCounter.swift", "SpatialBeamsQualificationCase.swift", "SpatialBeamsQualificationCases.swift", "SpatialBeamsQualificationError.swift", "SpatialBeamsQualificationFixtures.swift", "SpatialBeamsQualifying.swift"]),
+        .executableTarget(name: "SpatialBeamsPublicVerification", dependencies: ["SpatialBeamsQualificationSupport"], path: "Verification/SpatialBeamsQualification",
+                exclude: ["DESIGN.md", "SpatialBeamsQualificationTests.swift", "SpatialBeamsCancellationCounter.swift", "SpatialBeamsQualificationCase.swift", "SpatialBeamsQualificationCases.swift", "SpatialBeamsQualificationError.swift", "SpatialBeamsQualificationFixtures.swift", "SpatialBeamsQualifying.swift"], sources: ["SpatialBeamsQualification.swift"]),
+        .testTarget(name: "MechanicsSpatialBeamsTests", dependencies: ["SpatialBeamsQualificationSupport"], path: "Verification/SpatialBeamsQualification",
+                exclude: ["DESIGN.md", "SpatialBeamsQualification.swift", "SpatialBeamsCancellationCounter.swift", "SpatialBeamsQualificationCase.swift", "SpatialBeamsQualificationCases.swift", "SpatialBeamsQualificationError.swift", "SpatialBeamsQualificationFixtures.swift", "SpatialBeamsQualifying.swift"], sources: ["SpatialBeamsQualificationTests.swift"]),
         .executableTarget(name: "CoreVerification", dependencies: ["SwiftMechanics"], path: "Verification/CoreVerification", exclude: ["DESIGN.md"]),
         .executableTarget(name: "FoundationVerification", dependencies: ["SwiftMechanics"], path: "Verification/FoundationVerification",
                           exclude: ["DESIGN.md", "IslandSleepProbeContext.swift", "IslandSleepVerification.swift", "ConstrainedSleepProbeContext.swift", "ConstrainedSleepVerification.swift"]),

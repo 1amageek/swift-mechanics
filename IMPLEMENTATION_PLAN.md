@@ -605,3 +605,6 @@ IM.AF33.1: [PoseIK](Sources/SwiftMechanics/Analysis/Planning/PoseIK/DESIGN.md) i
 
 
 Selected NonlinearEstimation Native registration consumes the repaired matching2124 producer. Exact binary64 product comparison rejects indefinite subnormal process covariance without changing physical equations, tolerances or the conservative admission charge. NonlinearEstimationQualification owns focused PSD and original eight tests/seven public cases; ordinary/Embedded and wider CO-006 remain open.
+
+
+AF37.2 registers SpatialBeams25 with original physical assembly/response/field, seven Native tests and six public witnesses on frozen2270. Fixture-only availability and typed-error admission repairs preserve source, physical oracles, tolerances and work. The child qualification owns exact selected evidence; portable and wider FX domains remain open.
