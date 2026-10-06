@@ -33,3 +33,8 @@ Invalid values, exhausted capacity, cancellation, incompatible model identity an
 
 ## Verification and Change Impact
 Responsibility-specific Tests targets own child behavior. Package verification runs the actual public path on each declared fixed toolchain/SDK profile. Recheck affected upper consumers after a lower contract changes. Migration requires consolidated Native behavioral tests and matching WASM/Embedded execution; compile success alone is not qualification.
+
+
+## Selected checkpointed mechanical co-simulation
+
+Child [CoSimulation](CoSimulation/DESIGN.md) owns exclusive equal-clock two-prismatic held-effort coupling, complete contributor checkpoint/restart, bounded failure prefixes and common Mutex state. Original Native10/public9 succeeds against the matched phase-lifetime repair producer; qualified source and evidence remain in the child design. General concurrent shutdown, total stack bounds, external engines and portable qualification remain open.

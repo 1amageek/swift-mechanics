@@ -626,3 +626,6 @@ AF37.4 registers Heightfields22 and unchanged fixture5; original coplanar endpoi
 
 
 AF37.6 registers AssetResolution18 and unchanged fixture5; original provider bytes/provenance/closure/order, transactional failure and exact work/cancel after original Native8/public7 on immutable2270. Source, physical/data oracles, tolerance and original ledger unchanged; all source/object/module/link bindings retained. Child qualification owns selected evidence; portable and broader domains remain open.
+
+
+AF37.3 registers CoSimulation18 and fixture8 after original Native10/public9 on fresh matched2270. A demonstrated Native SIGBUS was repaired by explicit phase/lifetime boundaries, preserving physical RK4, checkpoint authority, source, cancellation, reservations and rollback behavior. Receipt98965a7bf44b08459273ba90ee93cce289f63d32832f13b7008c29512b453700 retains the failed attempt and source/object/module/link bindings. Portable, total-stack bounds and general concurrent shutdown remain unqualified.
