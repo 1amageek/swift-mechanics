@@ -9,6 +9,7 @@ Consume physical units/geometry, identified model values, numerical equations an
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
+| [ModalReduction](ModalReduction/DESIGN.md) | child | Mass-orthogonal reduced state and explicit-work physical Tet4 stress output | Selected Native7/public6 at frozen2124 | Legacy unchargeable stress signature refuses; portable and broader modal domains remain open |
 | [Mesh](Mesh/DESIGN.md) | child | Identified reference cell validation and assignments | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
 | [Tetrahedra](Tetrahedra/DESIGN.md) | child | Actual total-Lagrangian tetrahedral assembly and nodal outputs | Independent implementation owner | Child contract is authoritative; admitted proof is recorded below |
 | [Beams](Beams/DESIGN.md) | child | Identified Hermite element mass/elastic/geometric stiffness | AF14 additional exclusive material_kernels ownership | No qualified analysis until element behavior passes |

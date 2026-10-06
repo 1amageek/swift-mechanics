@@ -7,6 +7,7 @@ let package = Package(
     products: [
         .executable(name: "mechanics-particle-flows-verification", targets: ["ParticleFlowsPublicVerification"]),
         .executable(name: "mechanics-spatial-projection-verification", targets: ["SpatialProjectionPublicVerification"]),
+        .executable(name: "modal-reduction-verification", targets: ["ModalReductionQualification"]),
         .executable(name: "mechanics-structural-authoring-verification", targets: ["StructuralAuthoringPublicVerification"]),
         .executable(name: "mechanics-tire-laws-verification", targets: ["TireLawsPublicVerification"]),
         .executable(name: "mechanics-vehicle-laws-verification", targets: ["VehicleLawsPublicVerification"]),
@@ -16,9 +17,14 @@ let package = Package(
     ],
     traits: [.trait(name: "EmbeddedUnicode", description: "Link matching Embedded Swift SDK Unicode data tables.")],
     targets: [
+        .target(name: "ModalReductionQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/ModalReductionQualification", exclude: ["DESIGN.md", "ModalReductionQualification.swift", "ModalReductionQualificationTests.swift"], sources: ["ModalReductionCancellationCounter.swift", "ModalReductionQualificationCase.swift", "ModalReductionQualificationCases.swift", "ModalReductionQualificationError.swift", "ModalReductionQualificationFixtures.swift", "ModalReductionQualifying.swift"]),
+        .executableTarget(name: "ModalReductionQualification", dependencies: ["SwiftMechanics", "ModalReductionQualificationSupport"], path: "Verification/ModalReductionQualification", exclude: ["DESIGN.md", "ModalReductionQualificationTests.swift", "ModalReductionCancellationCounter.swift", "ModalReductionQualificationCase.swift", "ModalReductionQualificationCases.swift", "ModalReductionQualificationError.swift", "ModalReductionQualificationFixtures.swift", "ModalReductionQualifying.swift"], sources: ["ModalReductionQualification.swift"]),
+        .testTarget(name: "ModalReductionQualificationTests", dependencies: ["SwiftMechanics", "ModalReductionQualificationSupport"], path: "Verification/ModalReductionQualification", exclude: ["DESIGN.md", "ModalReductionQualification.swift", "ModalReductionCancellationCounter.swift", "ModalReductionQualificationCase.swift", "ModalReductionQualificationCases.swift", "ModalReductionQualificationError.swift", "ModalReductionQualificationFixtures.swift", "ModalReductionQualifying.swift"], sources: ["ModalReductionQualificationTests.swift"]),
+
         .target(name: "SwiftMechanics",
                 exclude: [
                     "Physics/Fluids/ParticleFlows/DESIGN.md",
+                "Physics/Flexible/ModalReduction/DESIGN.md",
                     "Physics/Vehicles/TerrainLaws/DESIGN.md",
                     "Analysis/Derivatives/GeometryParameters/DESIGN.md",
                     "Physics/Flexible/FieldOutputs/DESIGN.md",

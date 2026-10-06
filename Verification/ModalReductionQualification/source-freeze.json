@@ -1,0 +1,792 @@
+{
+  "status": "source-only implementation and independent fixture preparation; no compiler/link/runtime executed",
+  "productionCount": 12,
+  "fixturesCount": 8,
+  "productionAggregateSHA256": "4908d1e667fd2e01bcac7809a02a2ee1538cb612348cc13b37c8269b21764ddd",
+  "fixtureAggregateSHA256": "5685bbce286ffe92764b1063fc87948e8135c119898961c833970262a76b9292",
+  "aggregateConvention": "sorted basename NUL contents NUL",
+  "production": [
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalFullReference.swift",
+      "sha256": "1257f24e61eb678ca5cd1823dfcfa9f1bde8d0964d6bdb8d4d037527314e9517",
+      "bytes": 408,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalFullReference.swift",
+      "originalSourceSHA256": "1257f24e61eb678ca5cd1823dfcfa9f1bde8d0964d6bdb8d4d037527314e9517",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalFullReference.o",
+      "originalObjectSHA256": "9860852d406d97a8edb43bffb4a44692f6e9f60471b746aea65fd95883e45b86",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedModel.swift",
+      "sha256": "8a5cdcc72f799fdd5b9efef390fed541d22cdb4012639748d2d8ec335f510d27",
+      "bytes": 866,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedModel.swift",
+      "originalSourceSHA256": "8a5cdcc72f799fdd5b9efef390fed541d22cdb4012639748d2d8ec335f510d27",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReducedModel.o",
+      "originalObjectSHA256": "84862748cb1a7171ffac87c3e9f52d7e1525f3a760fd3a0d45ad35a627e95b4f",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedState.swift",
+      "sha256": "85ff8f00102ab69a92c5c4a983c1893e121213a57c2210d8c8912e9a0ccc2716",
+      "bytes": 187,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedState.swift",
+      "originalSourceSHA256": "85ff8f00102ab69a92c5c4a983c1893e121213a57c2210d8c8912e9a0ccc2716",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReducedState.o",
+      "originalObjectSHA256": "b63cdbb1ad7373a4d3b50aed7e8502163f61d19c1c4f65485878365a52a7fbf9",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedStep.swift",
+      "sha256": "9eb526c0745ed0f72f8e38d5ff200bbe182c199184cd6f8839aaba5099ae0cbb",
+      "bytes": 783,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedStep.swift",
+      "originalSourceSHA256": "9eb526c0745ed0f72f8e38d5ff200bbe182c199184cd6f8839aaba5099ae0cbb",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReducedStep.o",
+      "originalObjectSHA256": "7e8c9c65becf59f7ef2e98c080f54b7244749a632a09876c47e5832ea5204d96",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducing.swift",
+      "sha256": "a86b8d4dfa74cc21ff5d266da4204b7414c59ab7a80eedc52b57f9787b47e14c",
+      "bytes": 2678,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducing.swift",
+      "originalSourceSHA256": "3ff2811bcc343a08ef5ebe3ff68f585d512778c5bfa53ab34f1474b62f6f0f20",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReducing.o",
+      "originalObjectSHA256": "135c77f39756b2893e210658383c9046cfb128eb7f415a27441ca62b6f24ae84",
+      "changedFromNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionArithmetic.swift",
+      "sha256": "f37bd4d89848d83806f6c2c8985105c35e957eab101fb927299dae221a27abba",
+      "bytes": 6376,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionArithmetic.swift",
+      "originalSourceSHA256": "f37bd4d89848d83806f6c2c8985105c35e957eab101fb927299dae221a27abba",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReductionArithmetic.o",
+      "originalObjectSHA256": "49df0d144033ebf5e4f8862a97998c234bbf8d1bc93e7f0b76d86b86f2dd2327",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionEnvelope.swift",
+      "sha256": "692c76c4dfba467fd982cf8192edf4ec7bd0a1f8a0bbd0f07ed23297afdc4b88",
+      "bytes": 1686,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionEnvelope.swift",
+      "originalSourceSHA256": "692c76c4dfba467fd982cf8192edf4ec7bd0a1f8a0bbd0f07ed23297afdc4b88",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReductionEnvelope.o",
+      "originalObjectSHA256": "ec2195594e2d8433395ad7e37e47d95212c0e2a3400a75c78f29ae181f85c150",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionError.swift",
+      "sha256": "e4aceedae7bfe7b5fb6db2525e7abc7a719556dc77d843b829719592eab3e508",
+      "bytes": 607,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionError.swift",
+      "originalSourceSHA256": "5c90ea9dbe880467f2d9ad0e18f15d60e45ff06c19a3c3531a030f7bf842554f",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReductionError.o",
+      "originalObjectSHA256": "902dcecb15d088101fe22576c6416705c21bd701aa73e766b9c2cba0d651d6d6",
+      "changedFromNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionMaps.swift",
+      "sha256": "56900ed82497a353cb99340d6febc889ee85bad90bb8abc3c58e0143e33ac13b",
+      "bytes": 1146,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionMaps.swift",
+      "originalSourceSHA256": "56900ed82497a353cb99340d6febc889ee85bad90bb8abc3c58e0143e33ac13b",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReductionMaps.o",
+      "originalObjectSHA256": "6343c0edd4e450af2f02daa5b2c788bd96c7360d97d4293ec89eeded0b26d4cd",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionPolicy.swift",
+      "sha256": "75424bdd6807460d6a11ea9a490d8f89c79a5e2ffc22fb5f3f3e9a77870de99c",
+      "bytes": 1002,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionPolicy.swift",
+      "originalSourceSHA256": "75424bdd6807460d6a11ea9a490d8f89c79a5e2ffc22fb5f3f3e9a77870de99c",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ModalReductionPolicy.o",
+      "originalObjectSHA256": "4bc809f1313370979bd53638a4c05cf3544fbece981b989cc7f8c68caa7eb51e",
+      "changedFromNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalTet4StressOutput.swift",
+      "sha256": "0c6128eb38ba15acc94b343f62c5e6812901d0dbbd08cbed040e98249de2f0c3",
+      "bytes": 541
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ReferenceModalReducer.swift",
+      "sha256": "4342570f065fed795f2a418e4050d72834b72b140da60292837b49c558240bd6",
+      "bytes": 35414,
+      "originalSourcePath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-source-compilation/Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ReferenceModalReducer.swift",
+      "originalSourceSHA256": "70fc90d3906c3f2271629af2ccf0313662e47a8295bb438519adb257ce93e73a",
+      "originalObjectPath": "/Users/1amageek/Desktop/3D/swift-mechanics/.build/af35-preservation/native2363-pass11-depot/out/Intermediates.noindex/af35-source-compilation.build/Debug/SwiftMechanics-t.build/Objects-normal/arm64/ReferenceModalReducer.o",
+      "originalObjectSHA256": "bd8952554be21b20f18d863312cff6cddbe68fece0eb6ffe5c4065557dec26c9",
+      "changedFromNative2363": true
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionCancellationCounter.swift",
+      "sha256": "09bbef8cdd22eaff604c745f661ff78cc63fd95ed5f3de3a6471bc7b4c439c88",
+      "bytes": 466
+    },
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionQualification.swift",
+      "sha256": "c6b22b0ddc7e51be32632153bc1c1564c52a173f61880ad0129beb1659aee80b",
+      "bytes": 391
+    },
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionQualificationCase.swift",
+      "sha256": "2d6754bfa9e15139f7eb0d02011531c1658b63488933103d79d9dd787a3502bc",
+      "bytes": 754
+    },
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionQualificationCases.swift",
+      "sha256": "552cf042d41aeb80e14a2b0d27716420887be0652bf9955df6af799f1a7ee8bb",
+      "bytes": 14915
+    },
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionQualificationError.swift",
+      "sha256": "02cafe6ea8e8ac71a96921cd3ef2d32d243fbd6ee1347875d8e20e60c38fafd8",
+      "bytes": 334
+    },
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionQualificationFixtures.swift",
+      "sha256": "46469c5f3cf2125c04b8ce0e3fa3fc20bde6c6b1f4f8d2e2611461e39917c79b",
+      "bytes": 10204
+    },
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionQualificationTests.swift",
+      "sha256": "4cad47678fd2b53fd4be85110932d743d6e1d7d4d8491503e5d09c27ce122e9c",
+      "bytes": 568
+    },
+    {
+      "path": "Verification/ModalReductionQualification/ModalReductionQualifying.swift",
+      "sha256": "8bce71e587cd1b1ec4105f43a07f63a7ea9e8b3e8520c2082c294a452ac28c18",
+      "bytes": 176
+    }
+  ],
+  "designs": [
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/DESIGN.md",
+      "sha256": "59d891ccc138ee1e4fdd3e757e4cdb8730dafac1ad0f51badcc4f3403d320ba7"
+    },
+    {
+      "path": "Verification/ModalReductionQualification/DESIGN.md",
+      "sha256": "5f3b8f48c7a6fbca65289b051d14d24877b59714ac5325b31e8ba969f784efb3"
+    }
+  ],
+  "qualifiedSuppliers": [
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/Pencils/JacobiSpectrum.swift",
+      "sha256": "0bf3274caaa6ea151d35ac3b6d4cb359f9d9a0dfde672a9af73e623d7008c97e",
+      "bytes": 3087,
+      "qualifiedNative1960SHA256": "0bf3274caaa6ea151d35ac3b6d4cb359f9d9a0dfde672a9af73e623d7008c97e",
+      "commit711cdb5SHA256": "0bf3274caaa6ea151d35ac3b6d4cb359f9d9a0dfde672a9af73e623d7008c97e",
+      "originalNative2363SHA256": "0bf3274caaa6ea151d35ac3b6d4cb359f9d9a0dfde672a9af73e623d7008c97e",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/Pencils/ModalAnalyzing.swift",
+      "sha256": "6d844d4c8cf20a821ba5de52fb538963809db6a10056c2bf4f8ec205eab2a6e5",
+      "bytes": 715,
+      "qualifiedNative1960SHA256": "6d844d4c8cf20a821ba5de52fb538963809db6a10056c2bf4f8ec205eab2a6e5",
+      "commit711cdb5SHA256": "6d844d4c8cf20a821ba5de52fb538963809db6a10056c2bf4f8ec205eab2a6e5",
+      "originalNative2363SHA256": "6d844d4c8cf20a821ba5de52fb538963809db6a10056c2bf4f8ec205eab2a6e5",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/Pencils/ReferenceModalAnalyzer.swift",
+      "sha256": "1a85a0ae3fe0a901c3d0017110740b564ef6d2ff2fbbf050207fc9479dd8bf7c",
+      "bytes": 10120,
+      "qualifiedNative1960SHA256": "1a85a0ae3fe0a901c3d0017110740b564ef6d2ff2fbbf050207fc9479dd8bf7c",
+      "commit711cdb5SHA256": "1a85a0ae3fe0a901c3d0017110740b564ef6d2ff2fbbf050207fc9479dd8bf7c",
+      "originalNative2363SHA256": "1a85a0ae3fe0a901c3d0017110740b564ef6d2ff2fbbf050207fc9479dd8bf7c",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/ReferenceStructuralModelBuilder.swift",
+      "sha256": "5fc111030ccfd3ebc9640863c5319d21f032290e73f450ac341ee5e8ab140775",
+      "bytes": 8832,
+      "qualifiedNative1960SHA256": "5fc111030ccfd3ebc9640863c5319d21f032290e73f450ac341ee5e8ab140775",
+      "commit711cdb5SHA256": "5fc111030ccfd3ebc9640863c5319d21f032290e73f450ac341ee5e8ab140775",
+      "originalNative2363SHA256": "5fc111030ccfd3ebc9640863c5319d21f032290e73f450ac341ee5e8ab140775",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/StructuralArithmetic.swift",
+      "sha256": "9896f948ef9c0be8b1f918a92914cae804da237235825658c44dc519418923b3",
+      "bytes": 5035,
+      "qualifiedNative1960SHA256": "9896f948ef9c0be8b1f918a92914cae804da237235825658c44dc519418923b3",
+      "commit711cdb5SHA256": "9896f948ef9c0be8b1f918a92914cae804da237235825658c44dc519418923b3",
+      "originalNative2363SHA256": "9896f948ef9c0be8b1f918a92914cae804da237235825658c44dc519418923b3",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/StructuralBinding.swift",
+      "sha256": "f01ed36a6d2725e67c44c8a9e54dfe3b1cea4a3e08763a19373d59db4a2c562a",
+      "bytes": 1679,
+      "qualifiedNative1960SHA256": "f01ed36a6d2725e67c44c8a9e54dfe3b1cea4a3e08763a19373d59db4a2c562a",
+      "commit711cdb5SHA256": "f01ed36a6d2725e67c44c8a9e54dfe3b1cea4a3e08763a19373d59db4a2c562a",
+      "originalNative2363SHA256": "f01ed36a6d2725e67c44c8a9e54dfe3b1cea4a3e08763a19373d59db4a2c562a",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/StructuralError.swift",
+      "sha256": "83eac1d3d65ae8a048e34fdb9c860b9734c31d58cec5802fe091d750c825efcf",
+      "bytes": 447,
+      "qualifiedNative1960SHA256": "83eac1d3d65ae8a048e34fdb9c860b9734c31d58cec5802fe091d750c825efcf",
+      "commit711cdb5SHA256": "83eac1d3d65ae8a048e34fdb9c860b9734c31d58cec5802fe091d750c825efcf",
+      "originalNative2363SHA256": "83eac1d3d65ae8a048e34fdb9c860b9734c31d58cec5802fe091d750c825efcf",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/StructuralModelBuilding.swift",
+      "sha256": "969dfcfbc4d1451bdb00a9543e4a3dc84bf6fb64793511a6e030617605391f33",
+      "bytes": 828,
+      "qualifiedNative1960SHA256": "969dfcfbc4d1451bdb00a9543e4a3dc84bf6fb64793511a6e030617605391f33",
+      "commit711cdb5SHA256": "969dfcfbc4d1451bdb00a9543e4a3dc84bf6fb64793511a6e030617605391f33",
+      "originalNative2363SHA256": "969dfcfbc4d1451bdb00a9543e4a3dc84bf6fb64793511a6e030617605391f33",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/StructuralPencil.swift",
+      "sha256": "b9e4690a3d253e5a4ac1414c3187351a6e720966936953b5ee0db3c8d3b7fbff",
+      "bytes": 449,
+      "qualifiedNative1960SHA256": "b9e4690a3d253e5a4ac1414c3187351a6e720966936953b5ee0db3c8d3b7fbff",
+      "commit711cdb5SHA256": "b9e4690a3d253e5a4ac1414c3187351a6e720966936953b5ee0db3c8d3b7fbff",
+      "originalNative2363SHA256": "b9e4690a3d253e5a4ac1414c3187351a6e720966936953b5ee0db3c8d3b7fbff",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/StructuralPolicy.swift",
+      "sha256": "721f2495b702b2594fdde265fca6841dbc75eedd851f413a7f0758733225336b",
+      "bytes": 1614,
+      "qualifiedNative1960SHA256": "721f2495b702b2594fdde265fca6841dbc75eedd851f413a7f0758733225336b",
+      "commit711cdb5SHA256": "721f2495b702b2594fdde265fca6841dbc75eedd851f413a7f0758733225336b",
+      "originalNative2363SHA256": "721f2495b702b2594fdde265fca6841dbc75eedd851f413a7f0758733225336b",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Analysis/StructuralAnalysis/PhysicalModels/StructuralSource.swift",
+      "sha256": "0d35e09db50f7e070ffe2291424e082850631b05f8f9cb7ebc34261e92148d5e",
+      "bytes": 121,
+      "qualifiedNative1960SHA256": "0d35e09db50f7e070ffe2291424e082850631b05f8f9cb7ebc34261e92148d5e",
+      "commit711cdb5SHA256": "0d35e09db50f7e070ffe2291424e082850631b05f8f9cb7ebc34261e92148d5e",
+      "originalNative2363SHA256": "0d35e09db50f7e070ffe2291424e082850631b05f8f9cb7ebc34261e92148d5e",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Mathematics/Core/Diagnostics/CoreError.swift",
+      "sha256": "b2faf6744d43157c68dde47d9b228854b9a2ecf9ede7bc3928dcd350e25d9626",
+      "bytes": 443,
+      "qualifiedNative1960SHA256": "b2faf6744d43157c68dde47d9b228854b9a2ecf9ede7bc3928dcd350e25d9626",
+      "commit711cdb5SHA256": "b2faf6744d43157c68dde47d9b228854b9a2ecf9ede7bc3928dcd350e25d9626",
+      "originalNative2363SHA256": "b2faf6744d43157c68dde47d9b228854b9a2ecf9ede7bc3928dcd350e25d9626",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Mathematics/Core/Geometry/Matrix3.swift",
+      "sha256": "97a67013184d546e536c6573167a4161b4084b7121e0a00db93a675e0a136d8b",
+      "bytes": 6001,
+      "qualifiedNative1960SHA256": "97a67013184d546e536c6573167a4161b4084b7121e0a00db93a675e0a136d8b",
+      "commit711cdb5SHA256": "97a67013184d546e536c6573167a4161b4084b7121e0a00db93a675e0a136d8b",
+      "originalNative2363SHA256": "97a67013184d546e536c6573167a4161b4084b7121e0a00db93a675e0a136d8b",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Mathematics/Core/Geometry/Vector3.swift",
+      "sha256": "22ac1f262ed7ced3a53b89cadf0b3152d88e00abf0e2c2ac1ae49ee85a4ddd68",
+      "bytes": 2509,
+      "qualifiedNative1960SHA256": "22ac1f262ed7ced3a53b89cadf0b3152d88e00abf0e2c2ac1ae49ee85a4ddd68",
+      "commit711cdb5SHA256": "22ac1f262ed7ced3a53b89cadf0b3152d88e00abf0e2c2ac1ae49ee85a4ddd68",
+      "originalNative2363SHA256": "22ac1f262ed7ced3a53b89cadf0b3152d88e00abf0e2c2ac1ae49ee85a4ddd68",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Mathematics/Core/Units/PhysicalDimension.swift",
+      "sha256": "1677ad73f4ed71e423e38ecf2a0c4ff4f9bbebc438055842d325da80f52bf3da",
+      "bytes": 2622,
+      "qualifiedNative1960SHA256": "1677ad73f4ed71e423e38ecf2a0c4ff4f9bbebc438055842d325da80f52bf3da",
+      "commit711cdb5SHA256": "1677ad73f4ed71e423e38ecf2a0c4ff4f9bbebc438055842d325da80f52bf3da",
+      "originalNative2363SHA256": "1677ad73f4ed71e423e38ecf2a0c4ff4f9bbebc438055842d325da80f52bf3da",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Mathematics/Numerics/LinearAlgebra/NumericalBudget.swift",
+      "sha256": "f503c7f44471a4e3b7cdfbab99081fca7120f694209554bd6984a965035a60ca",
+      "bytes": 502,
+      "qualifiedNative1960SHA256": "f503c7f44471a4e3b7cdfbab99081fca7120f694209554bd6984a965035a60ca",
+      "commit711cdb5SHA256": "f503c7f44471a4e3b7cdfbab99081fca7120f694209554bd6984a965035a60ca",
+      "originalNative2363SHA256": "f503c7f44471a4e3b7cdfbab99081fca7120f694209554bd6984a965035a60ca",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Mathematics/Numerics/LinearAlgebra/NumericalError.swift",
+      "sha256": "06f795dd9ba59acc93f0698979463e11c29aaa45d5e6481bb9b5a5cf280879f8",
+      "bytes": 1427,
+      "qualifiedNative1960SHA256": "06f795dd9ba59acc93f0698979463e11c29aaa45d5e6481bb9b5a5cf280879f8",
+      "commit711cdb5SHA256": "06f795dd9ba59acc93f0698979463e11c29aaa45d5e6481bb9b5a5cf280879f8",
+      "originalNative2363SHA256": "06f795dd9ba59acc93f0698979463e11c29aaa45d5e6481bb9b5a5cf280879f8",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Mathematics/Numerics/LinearAlgebra/NumericalWork.swift",
+      "sha256": "f60ecb34d5919320e80706cf4b0ba3e8951a608e23719540633244b56e2c9ce1",
+      "bytes": 2740,
+      "qualifiedNative1960SHA256": "f60ecb34d5919320e80706cf4b0ba3e8951a608e23719540633244b56e2c9ce1",
+      "commit711cdb5SHA256": "f60ecb34d5919320e80706cf4b0ba3e8951a608e23719540633244b56e2c9ce1",
+      "originalNative2363SHA256": "f60ecb34d5919320e80706cf4b0ba3e8951a608e23719540633244b56e2c9ce1",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Modeling/Model/Identity/EntityID.swift",
+      "sha256": "5e2180344546fee1efdec961505153e2cfa7d70e2c885450be23a1553aba4f9c",
+      "bytes": 297,
+      "qualifiedNative1960SHA256": "5e2180344546fee1efdec961505153e2cfa7d70e2c885450be23a1553aba4f9c",
+      "commit711cdb5SHA256": "5e2180344546fee1efdec961505153e2cfa7d70e2c885450be23a1553aba4f9c",
+      "originalNative2363SHA256": "5e2180344546fee1efdec961505153e2cfa7d70e2c885450be23a1553aba4f9c",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Modeling/Model/Identity/EntityKind.swift",
+      "sha256": "28812aa15e1da7c1cec060a864fd3068e31da94c993493dfbf4117b11920eb01",
+      "bytes": 130,
+      "qualifiedNative1960SHA256": "28812aa15e1da7c1cec060a864fd3068e31da94c993493dfbf4117b11920eb01",
+      "commit711cdb5SHA256": "28812aa15e1da7c1cec060a864fd3068e31da94c993493dfbf4117b11920eb01",
+      "originalNative2363SHA256": "28812aa15e1da7c1cec060a864fd3068e31da94c993493dfbf4117b11920eb01",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Modeling/Model/Identity/ModelError.swift",
+      "sha256": "ccd7a4c6bfe95fccadc5a0c4eb9a28c378549bf2e5fca4aec613f776050bb1e9",
+      "bytes": 596,
+      "qualifiedNative1960SHA256": "ccd7a4c6bfe95fccadc5a0c4eb9a28c378549bf2e5fca4aec613f776050bb1e9",
+      "commit711cdb5SHA256": "ccd7a4c6bfe95fccadc5a0c4eb9a28c378549bf2e5fca4aec613f776050bb1e9",
+      "originalNative2363SHA256": "ccd7a4c6bfe95fccadc5a0c4eb9a28c378549bf2e5fca4aec613f776050bb1e9",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Modeling/Model/Representations/SourceProvenance.swift",
+      "sha256": "3f9eeaaea41310be7b5d5dd73d15aa21679a27037a06ec90b102f72696299f5e",
+      "bytes": 328,
+      "qualifiedNative1960SHA256": "3f9eeaaea41310be7b5d5dd73d15aa21679a27037a06ec90b102f72696299f5e",
+      "commit711cdb5SHA256": "3f9eeaaea41310be7b5d5dd73d15aa21679a27037a06ec90b102f72696299f5e",
+      "originalNative2363SHA256": "3f9eeaaea41310be7b5d5dd73d15aa21679a27037a06ec90b102f72696299f5e",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/FieldAveragingPolicy.swift",
+      "sha256": "1f9d4c3675de1a5b0048936355bbb625e7843c2673cc2b076e669399bcc6715a",
+      "bytes": 476,
+      "qualifiedNative1960SHA256": "1f9d4c3675de1a5b0048936355bbb625e7843c2673cc2b076e669399bcc6715a",
+      "commit711cdb5SHA256": "1f9d4c3675de1a5b0048936355bbb625e7843c2673cc2b076e669399bcc6715a",
+      "originalNative2363SHA256": "1f9d4c3675de1a5b0048936355bbb625e7843c2673cc2b076e669399bcc6715a",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/FieldConstitutiveWork.swift",
+      "sha256": "6fdb330fc7d258b88ce6b310a3bbe6d31e80e6753f5b1761c52e81595c937420",
+      "bytes": 454,
+      "qualifiedNative1960SHA256": "6fdb330fc7d258b88ce6b310a3bbe6d31e80e6753f5b1761c52e81595c937420",
+      "commit711cdb5SHA256": "6fdb330fc7d258b88ce6b310a3bbe6d31e80e6753f5b1761c52e81595c937420",
+      "originalNative2363SHA256": "6fdb330fc7d258b88ce6b310a3bbe6d31e80e6753f5b1761c52e81595c937420",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/FieldOutputArithmetic.swift",
+      "sha256": "c1801aadf94a30b985151143864310ef8cbe9eb6b0c3f29b5284f3d4a8307600",
+      "bytes": 2955,
+      "qualifiedNative1960SHA256": "c1801aadf94a30b985151143864310ef8cbe9eb6b0c3f29b5284f3d4a8307600",
+      "commit711cdb5SHA256": "c1801aadf94a30b985151143864310ef8cbe9eb6b0c3f29b5284f3d4a8307600",
+      "originalNative2363SHA256": "c1801aadf94a30b985151143864310ef8cbe9eb6b0c3f29b5284f3d4a8307600",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/FieldOutputError.swift",
+      "sha256": "ab818fbb5f1104870cd68c57dd158626996100ddd3ba63057f4585ec5021621b",
+      "bytes": 467,
+      "qualifiedNative1960SHA256": "ab818fbb5f1104870cd68c57dd158626996100ddd3ba63057f4585ec5021621b",
+      "commit711cdb5SHA256": "ab818fbb5f1104870cd68c57dd158626996100ddd3ba63057f4585ec5021621b",
+      "originalNative2363SHA256": "ab818fbb5f1104870cd68c57dd158626996100ddd3ba63057f4585ec5021621b",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/FieldOutputPolicy.swift",
+      "sha256": "dc808bc598f0986776f237573ef064b814da6bc148367093b2e6debf6f550b38",
+      "bytes": 2900,
+      "qualifiedNative1960SHA256": "dc808bc598f0986776f237573ef064b814da6bc148367093b2e6debf6f550b38",
+      "commit711cdb5SHA256": "dc808bc598f0986776f237573ef064b814da6bc148367093b2e6debf6f550b38",
+      "originalNative2363SHA256": "dc808bc598f0986776f237573ef064b814da6bc148367093b2e6debf6f550b38",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/FieldProjection.swift",
+      "sha256": "b04012e772bf44a12a622a63fe11b5aef0092060d9a69d5ae329bddd5c7db756",
+      "bytes": 94,
+      "qualifiedNative1960SHA256": "b04012e772bf44a12a622a63fe11b5aef0092060d9a69d5ae329bddd5c7db756",
+      "commit711cdb5SHA256": "b04012e772bf44a12a622a63fe11b5aef0092060d9a69d5ae329bddd5c7db756",
+      "originalNative2363SHA256": "b04012e772bf44a12a622a63fe11b5aef0092060d9a69d5ae329bddd5c7db756",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/FieldStressMeasure.swift",
+      "sha256": "5130438c4d2f7ba6335802c4ce54565fb6b49f05145feddd13ad38c4b447a467",
+      "bytes": 110,
+      "qualifiedNative1960SHA256": "5130438c4d2f7ba6335802c4ce54565fb6b49f05145feddd13ad38c4b447a467",
+      "commit711cdb5SHA256": "5130438c4d2f7ba6335802c4ce54565fb6b49f05145feddd13ad38c4b447a467",
+      "originalNative2363SHA256": "5130438c4d2f7ba6335802c4ce54565fb6b49f05145feddd13ad38c4b447a467",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4CellField.swift",
+      "sha256": "0190301cdf8c5fae92d65e4792066eb4fd8db5972a33396136af3f2653b4ce31",
+      "bytes": 1200,
+      "qualifiedNative1960SHA256": "0190301cdf8c5fae92d65e4792066eb4fd8db5972a33396136af3f2653b4ce31",
+      "commit711cdb5SHA256": "0190301cdf8c5fae92d65e4792066eb4fd8db5972a33396136af3f2653b4ce31",
+      "originalNative2363SHA256": "0190301cdf8c5fae92d65e4792066eb4fd8db5972a33396136af3f2653b4ce31",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4FieldAssemblyDiagnostics.swift",
+      "sha256": "d6019b5d881e8b8b4df0b08de3ded89602f1a9fc9f9e0ab0a98a71fae857cc7c",
+      "bytes": 852,
+      "qualifiedNative1960SHA256": "d6019b5d881e8b8b4df0b08de3ded89602f1a9fc9f9e0ab0a98a71fae857cc7c",
+      "commit711cdb5SHA256": "d6019b5d881e8b8b4df0b08de3ded89602f1a9fc9f9e0ab0a98a71fae857cc7c",
+      "originalNative2363SHA256": "d6019b5d881e8b8b4df0b08de3ded89602f1a9fc9f9e0ab0a98a71fae857cc7c",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4FieldAverage.swift",
+      "sha256": "13691c5267de3da0fcf0a401f14e9cc585ec1b872579ba72104920166c223369",
+      "bytes": 1426,
+      "qualifiedNative1960SHA256": "13691c5267de3da0fcf0a401f14e9cc585ec1b872579ba72104920166c223369",
+      "commit711cdb5SHA256": "13691c5267de3da0fcf0a401f14e9cc585ec1b872579ba72104920166c223369",
+      "originalNative2363SHA256": "13691c5267de3da0fcf0a401f14e9cc585ec1b872579ba72104920166c223369",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4FieldComputing.swift",
+      "sha256": "59f29f17f6bd1d9bd2d3538f86751c84df9e910fdaa386899c5b0c12e9021d09",
+      "bytes": 1235,
+      "qualifiedNative1960SHA256": "59f29f17f6bd1d9bd2d3538f86751c84df9e910fdaa386899c5b0c12e9021d09",
+      "commit711cdb5SHA256": "59f29f17f6bd1d9bd2d3538f86751c84df9e910fdaa386899c5b0c12e9021d09",
+      "originalNative2363SHA256": "59f29f17f6bd1d9bd2d3538f86751c84df9e910fdaa386899c5b0c12e9021d09",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4FieldLocation.swift",
+      "sha256": "fa977adc0d87617b488898a10122a88b3986c1af493b96953c326e4155282932",
+      "bytes": 547,
+      "qualifiedNative1960SHA256": "fa977adc0d87617b488898a10122a88b3986c1af493b96953c326e4155282932",
+      "commit711cdb5SHA256": "fa977adc0d87617b488898a10122a88b3986c1af493b96953c326e4155282932",
+      "originalNative2363SHA256": "fa977adc0d87617b488898a10122a88b3986c1af493b96953c326e4155282932",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4FieldSample.swift",
+      "sha256": "d3852d8d1522348b3ba56bc68cabe7336bc6dbb4a43be4e6f3c78f94d02b9441",
+      "bytes": 1210,
+      "qualifiedNative1960SHA256": "d3852d8d1522348b3ba56bc68cabe7336bc6dbb4a43be4e6f3c78f94d02b9441",
+      "commit711cdb5SHA256": "d3852d8d1522348b3ba56bc68cabe7336bc6dbb4a43be4e6f3c78f94d02b9441",
+      "originalNative2363SHA256": "d3852d8d1522348b3ba56bc68cabe7336bc6dbb4a43be4e6f3c78f94d02b9441",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4FieldSnapshot.swift",
+      "sha256": "6ff31de33ea64a998cda8b2feec021c4630597999926415aa49b66c4ad6cdc2c",
+      "bytes": 1634,
+      "qualifiedNative1960SHA256": "6ff31de33ea64a998cda8b2feec021c4630597999926415aa49b66c4ad6cdc2c",
+      "commit711cdb5SHA256": "6ff31de33ea64a998cda8b2feec021c4630597999926415aa49b66c4ad6cdc2c",
+      "originalNative2363SHA256": "6ff31de33ea64a998cda8b2feec021c4630597999926415aa49b66c4ad6cdc2c",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/Tet4FieldSource.swift",
+      "sha256": "2855620ef7cbce702e755b830ac00180ce1826a26e3b82cacabfa7c9954a101f",
+      "bytes": 248,
+      "qualifiedNative1960SHA256": "2855620ef7cbce702e755b830ac00180ce1826a26e3b82cacabfa7c9954a101f",
+      "commit711cdb5SHA256": "2855620ef7cbce702e755b830ac00180ce1826a26e3b82cacabfa7c9954a101f",
+      "originalNative2363SHA256": "2855620ef7cbce702e755b830ac00180ce1826a26e3b82cacabfa7c9954a101f",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/FieldOutputs/TetrahedralFieldEvaluator.swift",
+      "sha256": "ea70bab7678df3fec8767247b2725a25079f7bcda6ad60dfa8fadc6d99a20e6d",
+      "bytes": 23933,
+      "qualifiedNative1960SHA256": "ea70bab7678df3fec8767247b2725a25079f7bcda6ad60dfa8fadc6d99a20e6d",
+      "commit711cdb5SHA256": "ea70bab7678df3fec8767247b2725a25079f7bcda6ad60dfa8fadc6d99a20e6d",
+      "originalNative2363SHA256": "ea70bab7678df3fec8767247b2725a25079f7bcda6ad60dfa8fadc6d99a20e6d",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/FlexibleArithmetic.swift",
+      "sha256": "897116575f011ba0d728151fb68b50c624de8f97903832001c47028cb8f4ff40",
+      "bytes": 3106,
+      "qualifiedNative1960SHA256": "897116575f011ba0d728151fb68b50c624de8f97903832001c47028cb8f4ff40",
+      "commit711cdb5SHA256": "897116575f011ba0d728151fb68b50c624de8f97903832001c47028cb8f4ff40",
+      "originalNative2363SHA256": "897116575f011ba0d728151fb68b50c624de8f97903832001c47028cb8f4ff40",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/FlexibleError.swift",
+      "sha256": "cd0c684c58140c82d5d64ca090c0ce01c587ce49de077003ae8b544f08d6a995",
+      "bytes": 395,
+      "qualifiedNative1960SHA256": "cd0c684c58140c82d5d64ca090c0ce01c587ce49de077003ae8b544f08d6a995",
+      "commit711cdb5SHA256": "cd0c684c58140c82d5d64ca090c0ce01c587ce49de077003ae8b544f08d6a995",
+      "originalNative2363SHA256": "cd0c684c58140c82d5d64ca090c0ce01c587ce49de077003ae8b544f08d6a995",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/FlexibleMaterial.swift",
+      "sha256": "6b6ba51dc29fd77d9f93f411f119352f33157d792d4494c126ca0f798afddb52",
+      "bytes": 798,
+      "qualifiedNative1960SHA256": "6b6ba51dc29fd77d9f93f411f119352f33157d792d4494c126ca0f798afddb52",
+      "commit711cdb5SHA256": "6b6ba51dc29fd77d9f93f411f119352f33157d792d4494c126ca0f798afddb52",
+      "originalNative2363SHA256": "6b6ba51dc29fd77d9f93f411f119352f33157d792d4494c126ca0f798afddb52",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/FlexibleNode.swift",
+      "sha256": "4b6ca0888d7ec2ea6aa57b18d021e1627de6ae27d056b887e4dc079ae8f0f600",
+      "bytes": 385,
+      "qualifiedNative1960SHA256": "4b6ca0888d7ec2ea6aa57b18d021e1627de6ae27d056b887e4dc079ae8f0f600",
+      "commit711cdb5SHA256": "4b6ca0888d7ec2ea6aa57b18d021e1627de6ae27d056b887e4dc079ae8f0f600",
+      "originalNative2363SHA256": "4b6ca0888d7ec2ea6aa57b18d021e1627de6ae27d056b887e4dc079ae8f0f600",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/MeshAdmission.swift",
+      "sha256": "b647c34f5aeccb030ec1f4681cf2b99fe6129a3dc0b21787b61235eafc82bbe3",
+      "bytes": 1031,
+      "qualifiedNative1960SHA256": "b647c34f5aeccb030ec1f4681cf2b99fe6129a3dc0b21787b61235eafc82bbe3",
+      "commit711cdb5SHA256": "b647c34f5aeccb030ec1f4681cf2b99fe6129a3dc0b21787b61235eafc82bbe3",
+      "originalNative2363SHA256": "b647c34f5aeccb030ec1f4681cf2b99fe6129a3dc0b21787b61235eafc82bbe3",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/ReferenceTetrahedron.swift",
+      "sha256": "cd82152de8c5529a2ab75d9fccd4c92d0b67033a9709219cee930952527481eb",
+      "bytes": 510,
+      "qualifiedNative1960SHA256": "cd82152de8c5529a2ab75d9fccd4c92d0b67033a9709219cee930952527481eb",
+      "commit711cdb5SHA256": "cd82152de8c5529a2ab75d9fccd4c92d0b67033a9709219cee930952527481eb",
+      "originalNative2363SHA256": "cd82152de8c5529a2ab75d9fccd4c92d0b67033a9709219cee930952527481eb",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/TetrahedralMesh.swift",
+      "sha256": "591ac534a95f99188e294e015fa940b6425648bc48b5f015e9cae25c703d615e",
+      "bytes": 673,
+      "qualifiedNative1960SHA256": "591ac534a95f99188e294e015fa940b6425648bc48b5f015e9cae25c703d615e",
+      "commit711cdb5SHA256": "591ac534a95f99188e294e015fa940b6425648bc48b5f015e9cae25c703d615e",
+      "originalNative2363SHA256": "591ac534a95f99188e294e015fa940b6425648bc48b5f015e9cae25c703d615e",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/TetrahedralMeshValidating.swift",
+      "sha256": "09dce5dc63765f31fefc9f925964ff7a33bb7085ae8d32a8d5d6a675c6f10285",
+      "bytes": 433,
+      "qualifiedNative1960SHA256": "09dce5dc63765f31fefc9f925964ff7a33bb7085ae8d32a8d5d6a675c6f10285",
+      "commit711cdb5SHA256": "09dce5dc63765f31fefc9f925964ff7a33bb7085ae8d32a8d5d6a675c6f10285",
+      "originalNative2363SHA256": "09dce5dc63765f31fefc9f925964ff7a33bb7085ae8d32a8d5d6a675c6f10285",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/TetrahedralMeshValidator.swift",
+      "sha256": "97f6be96c635485d77b3c4e7518757e8c6bf3bcaf74447f9848bb0eb540e02d4",
+      "bytes": 7897,
+      "qualifiedNative1960SHA256": "97f6be96c635485d77b3c4e7518757e8c6bf3bcaf74447f9848bb0eb540e02d4",
+      "commit711cdb5SHA256": "97f6be96c635485d77b3c4e7518757e8c6bf3bcaf74447f9848bb0eb540e02d4",
+      "originalNative2363SHA256": "97f6be96c635485d77b3c4e7518757e8c6bf3bcaf74447f9848bb0eb540e02d4",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/TetrahedronCell.swift",
+      "sha256": "74165a9f772518d8f69f33b3692b1df8f85048217d3bdf9f0a8988746b1592bf",
+      "bytes": 678,
+      "qualifiedNative1960SHA256": "74165a9f772518d8f69f33b3692b1df8f85048217d3bdf9f0a8988746b1592bf",
+      "commit711cdb5SHA256": "74165a9f772518d8f69f33b3692b1df8f85048217d3bdf9f0a8988746b1592bf",
+      "originalNative2363SHA256": "74165a9f772518d8f69f33b3692b1df8f85048217d3bdf9f0a8988746b1592bf",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Mesh/ValidatedTetrahedralMesh.swift",
+      "sha256": "595c46f74a406c491cbfed1651d17afcabcc99b85af17b4dd52c79bcce240176",
+      "bytes": 386,
+      "qualifiedNative1960SHA256": "595c46f74a406c491cbfed1651d17afcabcc99b85af17b4dd52c79bcce240176",
+      "commit711cdb5SHA256": "595c46f74a406c491cbfed1651d17afcabcc99b85af17b4dd52c79bcce240176",
+      "originalNative2363SHA256": "595c46f74a406c491cbfed1651d17afcabcc99b85af17b4dd52c79bcce240176",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Tetrahedra/ConstitutiveCallWork.swift",
+      "sha256": "9d4463eca7fc94d353ef615e17b4298e3e0c56c7cd6a7456049b58a5095db7a8",
+      "bytes": 459,
+      "qualifiedNative1960SHA256": "9d4463eca7fc94d353ef615e17b4298e3e0c56c7cd6a7456049b58a5095db7a8",
+      "commit711cdb5SHA256": "9d4463eca7fc94d353ef615e17b4298e3e0c56c7cd6a7456049b58a5095db7a8",
+      "originalNative2363SHA256": "9d4463eca7fc94d353ef615e17b4298e3e0c56c7cd6a7456049b58a5095db7a8",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Tetrahedra/FlexibleAssembly.swift",
+      "sha256": "96778bdb6fe69df01e183f888975cf799ac59cea7247fbed1e75bf833bbcd596",
+      "bytes": 619,
+      "qualifiedNative1960SHA256": "96778bdb6fe69df01e183f888975cf799ac59cea7247fbed1e75bf833bbcd596",
+      "commit711cdb5SHA256": "96778bdb6fe69df01e183f888975cf799ac59cea7247fbed1e75bf833bbcd596",
+      "originalNative2363SHA256": "96778bdb6fe69df01e183f888975cf799ac59cea7247fbed1e75bf833bbcd596",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Tetrahedra/FlexibleMassForm.swift",
+      "sha256": "484baf91a505d787b9dc258e0fef143f3bf70d77beacfb7cb0f6174c060fd9e9",
+      "bytes": 84,
+      "qualifiedNative1960SHA256": "484baf91a505d787b9dc258e0fef143f3bf70d77beacfb7cb0f6174c060fd9e9",
+      "commit711cdb5SHA256": "484baf91a505d787b9dc258e0fef143f3bf70d77beacfb7cb0f6174c060fd9e9",
+      "originalNative2363SHA256": "484baf91a505d787b9dc258e0fef143f3bf70d77beacfb7cb0f6174c060fd9e9",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Tetrahedra/NodalState.swift",
+      "sha256": "3741b03ee04a2e3ab7c8f812c813a6fcf81011829b1ef7f61a7bcbb03e510c52",
+      "bytes": 514,
+      "qualifiedNative1960SHA256": "3741b03ee04a2e3ab7c8f812c813a6fcf81011829b1ef7f61a7bcbb03e510c52",
+      "commit711cdb5SHA256": "3741b03ee04a2e3ab7c8f812c813a6fcf81011829b1ef7f61a7bcbb03e510c52",
+      "originalNative2363SHA256": "3741b03ee04a2e3ab7c8f812c813a6fcf81011829b1ef7f61a7bcbb03e510c52",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Tetrahedra/TetrahedralAssembling.swift",
+      "sha256": "4a7eee66eccaa474c8f12a48200e88309e6b649e992f14564a293810affa6979",
+      "bytes": 284,
+      "qualifiedNative1960SHA256": "4a7eee66eccaa474c8f12a48200e88309e6b649e992f14564a293810affa6979",
+      "commit711cdb5SHA256": "4a7eee66eccaa474c8f12a48200e88309e6b649e992f14564a293810affa6979",
+      "originalNative2363SHA256": "4a7eee66eccaa474c8f12a48200e88309e6b649e992f14564a293810affa6979",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Flexible/Tetrahedra/TotalLagrangianTetrahedra.swift",
+      "sha256": "f074a048806fc7e67825b034670187beb86d93ecfd0e38a0fcffd2b8c90c05d0",
+      "bytes": 6473,
+      "qualifiedNative1960SHA256": "f074a048806fc7e67825b034670187beb86d93ecfd0e38a0fcffd2b8c90c05d0",
+      "commit711cdb5SHA256": "f074a048806fc7e67825b034670187beb86d93ecfd0e38a0fcffd2b8c90c05d0",
+      "originalNative2363SHA256": "f074a048806fc7e67825b034670187beb86d93ecfd0e38a0fcffd2b8c90c05d0",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Constitutive/FiniteStrainKinematics.swift",
+      "sha256": "62b069b381ca14eac614d80cb713288d2400a7afc30c094b71b7ab50fc756240",
+      "bytes": 4310,
+      "qualifiedNative1960SHA256": "62b069b381ca14eac614d80cb713288d2400a7afc30c094b71b7ab50fc756240",
+      "commit711cdb5SHA256": "62b069b381ca14eac614d80cb713288d2400a7afc30c094b71b7ab50fc756240",
+      "originalNative2363SHA256": "2e2c3521ab25f1875dcdcff2bbb133305ad4d5609dc194aaf616b9c010e6eeca",
+      "matchesOriginalNative2363": false
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Constitutive/FiniteStressResponse.swift",
+      "sha256": "604d49c14c8dfd44d045549b8182d5ac3e076bb607342cd73f862b899308a627",
+      "bytes": 332,
+      "qualifiedNative1960SHA256": "604d49c14c8dfd44d045549b8182d5ac3e076bb607342cd73f862b899308a627",
+      "commit711cdb5SHA256": "604d49c14c8dfd44d045549b8182d5ac3e076bb607342cd73f862b899308a627",
+      "originalNative2363SHA256": "604d49c14c8dfd44d045549b8182d5ac3e076bb607342cd73f862b899308a627",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Constitutive/MaterialError.swift",
+      "sha256": "c8013b0d0d347f8ac07c66c46f75c6d65bd7dbde3f1e58c3d1efd325bbdcb50c",
+      "bytes": 693,
+      "qualifiedNative1960SHA256": "c8013b0d0d347f8ac07c66c46f75c6d65bd7dbde3f1e58c3d1efd325bbdcb50c",
+      "commit711cdb5SHA256": "c8013b0d0d347f8ac07c66c46f75c6d65bd7dbde3f1e58c3d1efd325bbdcb50c",
+      "originalNative2363SHA256": "c8013b0d0d347f8ac07c66c46f75c6d65bd7dbde3f1e58c3d1efd325bbdcb50c",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Constitutive/StrainDomain.swift",
+      "sha256": "e967bed9a4a478bce4cbcf0794430b6387c7d812f22c8278b9329d3d9e7b0ccb",
+      "bytes": 1007,
+      "qualifiedNative1960SHA256": "e967bed9a4a478bce4cbcf0794430b6387c7d812f22c8278b9329d3d9e7b0ccb",
+      "commit711cdb5SHA256": "e967bed9a4a478bce4cbcf0794430b6387c7d812f22c8278b9329d3d9e7b0ccb",
+      "originalNative2363SHA256": "e967bed9a4a478bce4cbcf0794430b6387c7d812f22c8278b9329d3d9e7b0ccb",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Constitutive/SymmetricTensor.swift",
+      "sha256": "b6005256c2fca8f510ba45ff64dd0005a62204b97235912be4d524022c1e3900",
+      "bytes": 3603,
+      "qualifiedNative1960SHA256": "b6005256c2fca8f510ba45ff64dd0005a62204b97235912be4d524022c1e3900",
+      "commit711cdb5SHA256": "b6005256c2fca8f510ba45ff64dd0005a62204b97235912be4d524022c1e3900",
+      "originalNative2363SHA256": "b6005256c2fca8f510ba45ff64dd0005a62204b97235912be4d524022c1e3900",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Elasticity/HyperelasticResponding.swift",
+      "sha256": "c97d8dd73c76fde8b17a275aff283d197c260cc2c376ae7e9c604ad0406f1138",
+      "bytes": 272,
+      "qualifiedNative1960SHA256": "c97d8dd73c76fde8b17a275aff283d197c260cc2c376ae7e9c604ad0406f1138",
+      "commit711cdb5SHA256": "c97d8dd73c76fde8b17a275aff283d197c260cc2c376ae7e9c604ad0406f1138",
+      "originalNative2363SHA256": "c97d8dd73c76fde8b17a275aff283d197c260cc2c376ae7e9c604ad0406f1138",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Elasticity/IsotropicElasticity.swift",
+      "sha256": "71715fa618f88e111d49d62b02fbb34f6d11f3109ed4c34803fc03687d1fd3ef",
+      "bytes": 1676,
+      "qualifiedNative1960SHA256": "71715fa618f88e111d49d62b02fbb34f6d11f3109ed4c34803fc03687d1fd3ef",
+      "commit711cdb5SHA256": "71715fa618f88e111d49d62b02fbb34f6d11f3109ed4c34803fc03687d1fd3ef",
+      "originalNative2363SHA256": "71715fa618f88e111d49d62b02fbb34f6d11f3109ed4c34803fc03687d1fd3ef",
+      "matchesOriginalNative2363": true
+    },
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Elasticity/PolynomialHyperelasticity.swift",
+      "sha256": "24dcd93f1b6e238105e0b3c444f67b333bc792dc7742752559ced8be309800be",
+      "bytes": 2296,
+      "qualifiedNative1960SHA256": "24dcd93f1b6e238105e0b3c444f67b333bc792dc7742752559ced8be309800be",
+      "commit711cdb5SHA256": "24dcd93f1b6e238105e0b3c444f67b333bc792dc7742752559ced8be309800be",
+      "originalNative2363SHA256": "24dcd93f1b6e238105e0b3c444f67b333bc792dc7742752559ced8be309800be",
+      "matchesOriginalNative2363": true
+    }
+  ],
+  "changedPrimariesFromOriginalNative2363": [
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducing.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionError.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ReferenceModalReducer.swift"
+  ],
+  "newPrimaries": [
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalTet4StressOutput.swift"
+  ],
+  "freshPrimaryRequirement": [
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalFullReference.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedModel.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedState.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducedStep.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReducing.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionArithmetic.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionEnvelope.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionError.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionMaps.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalReductionPolicy.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ModalTet4StressOutput.swift",
+    "Sources/SwiftMechanics/Physics/Flexible/ModalReduction/ReferenceModalReducer.swift"
+  ],
+  "freshWholeModuleRequired": true,
+  "originalObjectsAllowedOnlyWhenExactFrozenSourceMatches": true,
+  "oldModuleCannotConsumeNewSignature": true,
+  "qualifiedLowerEvidence": {
+    "commit": "711cdb5",
+    "sourceCount": 1960,
+    "receiptPath": ".build/af35-field-outputs-qualification/registration/canonical-native-receipt.json",
+    "receiptSHA256": "41ae493c19115f540909375d940bb834e24772c51c1bf8904033891a26ad8cf1",
+    "freezeSHA256": "66fa1e178679f733f7c0d95eab2b04b568f527e65ab8102d993062ce2eafb185"
+  },
+  "originalNative2363InventorySHA256": "ba99ba4e21c6af7c6bb6394d58a4b9808ca7dd5e17fe0eba5718bca8bb0f6441",
+  "supplierDifferencesFromOriginalNative2363": [
+    {
+      "path": "Sources/SwiftMechanics/Physics/Materials/Constitutive/FiniteStrainKinematics.swift",
+      "sha256": "62b069b381ca14eac614d80cb713288d2400a7afc30c094b71b7ab50fc756240",
+      "bytes": 4310,
+      "qualifiedNative1960SHA256": "62b069b381ca14eac614d80cb713288d2400a7afc30c094b71b7ab50fc756240",
+      "commit711cdb5SHA256": "62b069b381ca14eac614d80cb713288d2400a7afc30c094b71b7ab50fc756240",
+      "originalNative2363SHA256": "2e2c3521ab25f1875dcdcff2bbb133305ad4d5609dc194aaf616b9c010e6eeca",
+      "matchesOriginalNative2363": false
+    }
+  ],
+  "behaviorPending": true,
+  "leaseAuthorized": false
+}

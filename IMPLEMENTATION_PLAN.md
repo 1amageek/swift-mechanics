@@ -590,3 +590,6 @@ IM.AF35.15: [ParticleFlows](Sources/SwiftMechanics/Physics/Fluids/ParticleFlows/
 
 
 IM.AF32.4: [SpatialProjection](Sources/SwiftMechanics/Physics/Fluids/SpatialProjection/DESIGN.md) is registered after original Native8/public7 on full2034 (Terrain and Hydraulic retained). Its matrix-free pressure work/cancellation checks and exact65*N+2 supplier /374*N+45 projection costs are verified. Pure state operations retain separate Runtime and portable obligations.
+
+
+IM.AF33.8: [ModalReduction](Sources/SwiftMechanics/Physics/Flexible/ModalReduction/DESIGN.md) is registered after final-source Native7/public6 on the frozen2124 composition. Tet4 stress reconstructs the identified state and calls the qualified FieldOutputs evaluator with explicit binding, location and material work. Genuine legacy unsupported markers/refusal remain; portable and broader modal domains stay open.
