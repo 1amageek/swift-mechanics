@@ -9,6 +9,7 @@ Compose admitted feedback, controller sampling, actual mechanical evolution and 
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
+| [LinearQuadratic](LinearQuadratic/DESIGN.md) | child | Dimensioned bounded discrete LQR and exact caller-cost pair admission | Selected Native10/public9 on fresh2387 | Portable, general higher-dimensional exact PSD and unsaturated nonlinear plant stability remain separate |
 | [NonlinearEstimation](NonlinearEstimation/DESIGN.md) | child | Source-bound nonlinear prediction, Joseph update and exact covariance admission | Selected Native8/public7 and strict PSD proof on fresh2124 | Portable, replay and accepted Runtime association remain open |
 | [LinearEstimation](LinearEstimation/DESIGN.md) | child | Source-bound fixed-clock Kalman prediction, Joseph update and continuation | Selected Native8/public7 plus Task on immutable2124 | Actual Support/Public13, Testing14; portable and accepted Runtime association remain open |
 | [Execution](../DESIGN.md) | parent | Trial ownership and publication | Responsibility placement | Preserve accepted-state authority |

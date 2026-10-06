@@ -5,6 +5,7 @@ let package = Package(
     name: "swift-mechanics",
     platforms: [.macOS(.v13)],
     products: [
+        .executable(name: "mechanics-linear-quadratic-verification", targets: ["LinearQuadraticPublicVerification"]),
         .executable(name: "mechanics-spatial-beams-verification", targets: ["SpatialBeamsPublicVerification"]),
         .executable(name: "mechanics-hydroelastic-verification", targets: ["HydroelasticPublicVerification"]),
         .executable(name: "mechanics-compound-queries-verification", targets: ["CompoundQueriesPublicVerification"]),
@@ -85,6 +86,7 @@ let package = Package(
                     "Analysis/Observations/SensorPipeline/DESIGN.md",
                     "Execution/Control/Continuation/DESIGN.md",
                     "Execution/Control/DESIGN.md",
+                    "Execution/Control/LinearQuadratic/DESIGN.md",
                     "Execution/Control/MechanicalPlant/DESIGN.md",
                     "Execution/Control/Ports/DESIGN.md",
                     "Execution/Control/SampledFeedback/DESIGN.md",
@@ -464,6 +466,12 @@ let package = Package(
                     exclude: ["DESIGN.md", "CoSimulationQualificationCase.swift", "CoSimulationQualificationCases.swift", "CoSimulationQualificationError.swift", "CoSimulationQualificationFixtures.swift", "CoSimulationQualificationGate.swift", "CoSimulationQualifying.swift", "CoSimulationQualificationTests.swift"], sources: ["CoSimulationQualification.swift"]),
         .testTarget(name: "MechanicsCoSimulationTests", dependencies: ["SwiftMechanics", "CoSimulationQualificationSupport"], path: "Verification/CoSimulationQualification",
                     exclude: ["DESIGN.md", "CoSimulationQualificationCase.swift", "CoSimulationQualificationCases.swift", "CoSimulationQualificationError.swift", "CoSimulationQualificationFixtures.swift", "CoSimulationQualificationGate.swift", "CoSimulationQualifying.swift", "CoSimulationQualification.swift"], sources: ["CoSimulationQualificationTests.swift"]),
+        .target(name: "LinearQuadraticQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/LinearQuadraticQualification",
+                    exclude: ["DESIGN.md", "LinearQuadraticQualification.swift", "LinearQuadraticQualificationTests.swift"], sources: ["LinearQuadraticCostBoundaryQualification.swift", "LinearQuadraticQualificationCancellation.swift", "LinearQuadraticQualificationCases.swift", "LinearQuadraticQualificationError.swift", "LinearQuadraticQualificationFixture.swift", "LinearQuadraticQualificationInvalidLinear.swift", "LinearQuadraticQualificationMechanical.swift", "LinearQuadraticQualificationOracle.swift"]),
+        .executableTarget(name: "LinearQuadraticPublicVerification", dependencies: ["SwiftMechanics", "LinearQuadraticQualificationSupport"], path: "Verification/LinearQuadraticQualification",
+                    exclude: ["DESIGN.md", "LinearQuadraticCostBoundaryQualification.swift", "LinearQuadraticQualificationCancellation.swift", "LinearQuadraticQualificationCases.swift", "LinearQuadraticQualificationError.swift", "LinearQuadraticQualificationFixture.swift", "LinearQuadraticQualificationInvalidLinear.swift", "LinearQuadraticQualificationMechanical.swift", "LinearQuadraticQualificationOracle.swift", "LinearQuadraticQualificationTests.swift"], sources: ["LinearQuadraticQualification.swift"]),
+        .testTarget(name: "MechanicsLinearQuadraticTests", dependencies: ["SwiftMechanics", "LinearQuadraticQualificationSupport"], path: "Verification/LinearQuadraticQualification",
+                    exclude: ["DESIGN.md", "LinearQuadraticCostBoundaryQualification.swift", "LinearQuadraticQualification.swift", "LinearQuadraticQualificationCancellation.swift", "LinearQuadraticQualificationCases.swift", "LinearQuadraticQualificationError.swift", "LinearQuadraticQualificationFixture.swift", "LinearQuadraticQualificationInvalidLinear.swift", "LinearQuadraticQualificationMechanical.swift", "LinearQuadraticQualificationOracle.swift"], sources: ["LinearQuadraticQualificationTests.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )

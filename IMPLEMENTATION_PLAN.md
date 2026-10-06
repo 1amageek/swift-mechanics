@@ -629,3 +629,6 @@ AF37.6 registers AssetResolution18 and unchanged fixture5; original provider byt
 
 
 AF37.3 registers CoSimulation18 and fixture8 after original Native10/public9 on fresh matched2270. A demonstrated Native SIGBUS was repaired by explicit phase/lifetime boundaries, preserving physical RK4, checkpoint authority, source, cancellation, reservations and rollback behavior. Receipt98965a7bf44b08459273ba90ee93cce289f63d32832f13b7008c29512b453700 retains the failed attempt and source/object/module/link bindings. Portable, total-stack bounds and general concurrent shutdown remain unqualified.
+
+
+AF38.6 registers LinearQuadratic17/finalfixture10 after original nine Native/eight public plus exact caller-cost boundary Native10/public9 on immutable2387. Exact represented pair comparison rejects the demonstrated indefinite subnormal/large costs, preserving equal entries and charging a bounded128 operations per pair before work. Physical/tolerance/original-equation and failure/cancellation oracles remain unchanged; receiptb39c83576e6c68bd2d7634ce72dd14f7d46b0007c3c779db4fabb175997bbdd2. Portable and general exact higher-dimensional PSD remain open.
