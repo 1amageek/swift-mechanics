@@ -50,3 +50,8 @@ Remaining eventual owner scope: external file/network I/O, physical opaque-asset
 ## Qualified URDF Child
 
 [URDF](URDF/DESIGN.md) owns selected fixed/continuous semantic import and original-record export through qualified XML and mechanics contracts. [URDFQualification](../../../Verification/URDFQualification/DESIGN.md#executed-selected-registration) owns independent Native8, same seven ordinary/Embedded original131072 guarded/raw witnesses and canonical39-case evidence. Full format, limits/mimic/transmissions, assets and Runtime-state exchange remain separate obligations.
+
+
+## Selected SDFormat service
+
+Child [SDF](SDF/DESIGN.md) owns the selected1.12 import, original-snapshot export, separate initial-pose/dynamic-attachment graphs and qualified compiler/frame/gravity composition. Native7/public6 on frozen2270 is recorded by its qualification owner. Original supplied mass/inertia and caller asset authority remain mandatory; broader format semantics and portable are unqualified.

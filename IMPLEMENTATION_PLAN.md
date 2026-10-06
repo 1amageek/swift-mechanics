@@ -614,3 +614,6 @@ AF37.5 registers Hydroelastic17 and final eight fixtures after seven Native test
 
 
 AF37.7 registers CompoundQueries10 and original fixture6 after Native8/public7 on immutable2270. Identified child geometry/frame/filter/fidelity/order and exact original work/failure oracles remain unchanged. Custom-filter failure accounting retains its immediate incomplete marker and typed refusal; union surfaces, contact response and portable remain open.
+
+
+AF37.9 registers SDF17 and original fixture5 after Native7/public6 on frozen2270. Separate pose/attachment graphs, original transformed inertia, gravity, compiled q/v/a, loss-preserving snapshot export and explicit work/cancel/source refusals are qualified without source/oracle changes. Ordinary/Embedded and broader IO-004 remain open.

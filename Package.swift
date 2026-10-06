@@ -18,6 +18,7 @@ let package = Package(
         .executable(name: "mechanics-tire-laws-verification", targets: ["TireLawsPublicVerification"]),
         .executable(name: "mechanics-vehicle-laws-verification", targets: ["VehicleLawsPublicVerification"]),
         .library(name: "SwiftMechanics", targets: ["SwiftMechanics"]),
+        .executable(name: "mechanics-sdf-verification", targets: ["SDFPublicVerification"]),
         .executable(name: "mechanics-core-verification", targets: ["CoreVerification"]),
         .executable(name: "mechanics-foundation-verification", targets: ["FoundationVerification"]),
     ],
@@ -69,6 +70,7 @@ let package = Package(
                     "Physics/Loads/FollowerPressure/DESIGN.md",
                     "Physics/Loads/HarmonicGravity/DESIGN.md",
                     "Physics/Constraints/JointStops/DESIGN.md",
+                    "Exchange/SDF/DESIGN.md",
                     "Exchange/XML/DESIGN.md", "Exchange/MJCF/DESIGN.md", "Analysis/Derivatives/TreeTangents/Planar",
                     "Analysis/Observations/ContactRangeObservations/DESIGN.md",
                     "Analysis/Observations/SensorPipeline/DESIGN.md",
@@ -428,6 +430,12 @@ let package = Package(
                 exclude: ["DESIGN.md", "NonlinearEstimationQualificationCases.swift", "NonlinearEstimationQualificationError.swift", "NonlinearEstimationQualificationFixtures.swift", "NonlinearEstimationQualificationOracle.swift", "NonlinearEstimationQualificationTests.swift"], sources: ["NonlinearEstimationQualification.swift"]),
         .testTarget(name: "MechanicsNonlinearEstimationTests", dependencies: ["SwiftMechanics", "NonlinearEstimationQualificationSupport"], path: "Verification/NonlinearEstimationQualification",
                 exclude: ["DESIGN.md", "NonlinearEstimationQualification.swift", "NonlinearEstimationQualificationCases.swift", "NonlinearEstimationQualificationError.swift", "NonlinearEstimationQualificationFixtures.swift", "NonlinearEstimationQualificationOracle.swift"], sources: ["NonlinearEstimationQualificationTests.swift"]),
+        .target(name: "SDFQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/SDFQualification",
+                exclude: ["DESIGN.md", "SDFQualification.swift", "SDFQualificationTests.swift"], sources: ["SDFQualificationCases.swift", "SDFQualificationError.swift", "SDFQualificationFixtures.swift"]),
+        .executableTarget(name: "SDFPublicVerification", dependencies: ["SDFQualificationSupport"], path: "Verification/SDFQualification",
+                exclude: ["DESIGN.md", "SDFQualificationTests.swift", "SDFQualificationCases.swift", "SDFQualificationError.swift", "SDFQualificationFixtures.swift"], sources: ["SDFQualification.swift"]),
+        .testTarget(name: "MechanicsSDFTests", dependencies: ["SwiftMechanics", "SDFQualificationSupport"], path: "Verification/SDFQualification",
+                exclude: ["DESIGN.md", "SDFQualification.swift", "SDFQualificationCases.swift", "SDFQualificationError.swift", "SDFQualificationFixtures.swift"], sources: ["SDFQualificationTests.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )
