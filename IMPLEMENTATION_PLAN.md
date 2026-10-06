@@ -593,3 +593,6 @@ IM.AF32.4: [SpatialProjection](Sources/SwiftMechanics/Physics/Fluids/SpatialProj
 
 
 IM.AF33.8: [ModalReduction](Sources/SwiftMechanics/Physics/Flexible/ModalReduction/DESIGN.md) is registered after final-source Native7/public6 on the frozen2124 composition. Tet4 stress reconstructs the identified state and calls the qualified FieldOutputs evaluator with explicit binding, location and material work. Genuine legacy unsupported markers/refusal remain; portable and broader modal domains stay open.
+
+
+IM.AF32.5: [InertialParameters](Sources/SwiftMechanics/Analysis/Derivatives/InertialParameters/DESIGN.md) is registered after final Native9/public8 on immutable2124, with original Newton-Euler, ten-coordinate, finite-difference, power, work and cancellation oracles. Source9 is unchanged; the final fixture explicitly guards its real Mutex availability. Portable and broader parameter identification remain open.

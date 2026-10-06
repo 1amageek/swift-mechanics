@@ -45,3 +45,6 @@ This directory is a component inside the SwiftMechanics module, not a separate S
 ## AF27 contact derivative dispatch
 
 nonlinear_mechanisms exclusively owns the new ContactProducts child and Tests/MechanicsContactDerivativeTests. Read qualified contact/impact primal paths before defining selected derivative semantics; fixed-active validity and nonsmooth refusal are part of the contract. Existing children and all producers remain read-only. Root owns this index, registration, public composition and commits. See [AF27 dispatch](../../../../IMPLEMENTATION_PLAN.md#af27-independent-source-and-verification-dispatch).
+
+
+Child [InertialParameters](InertialParameters/DESIGN.md) owns source-bound ten-coordinate rigid inertial products. Selected Native9/public8 passed the immutable2124 composition; custom force derivatives, broader domains and portable execution retain explicit separate obligations.
