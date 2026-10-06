@@ -55,3 +55,8 @@ Remaining eventual owner scope: external file/network I/O, physical opaque-asset
 ## Selected SDFormat service
 
 Child [SDF](SDF/DESIGN.md) owns the selected1.12 import, original-snapshot export, separate initial-pose/dynamic-attachment graphs and qualified compiler/frame/gravity composition. Native7/public6 on frozen2270 is recorded by its qualification owner. Original supplied mass/inertia and caller asset authority remain mandatory; broader format semantics and portable are unqualified.
+
+
+## Selected asset closure service
+
+Child [AssetResolution](AssetResolution/DESIGN.md) owns immutable provider lookup, original byte/provenance validation and bounded transactional dependency closure. Native8/public7 on frozen2270 is recorded by its qualification owner. Physical geometry interpretation, external I/O providers and portable qualification remain separate obligations.

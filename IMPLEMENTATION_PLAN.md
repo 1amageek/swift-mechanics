@@ -623,3 +623,6 @@ AF37.1 registers TriangleMeshes19 and unchanged fixture5; original feature/BVH/r
 
 
 AF37.4 registers Heightfields22 and unchanged fixture5; original coplanar endpoint certificate, closest/ray/refit and bounded source/work/cancel after original Native8/public7 on immutable2270. Source, physical/data oracles, tolerance and original ledger unchanged; all source/object/module/link bindings retained. Child qualification owns selected evidence; portable and broader domains remain open.
+
+
+AF37.6 registers AssetResolution18 and unchanged fixture5; original provider bytes/provenance/closure/order, transactional failure and exact work/cancel after original Native8/public7 on immutable2270. Source, physical/data oracles, tolerance and original ledger unchanged; all source/object/module/link bindings retained. Child qualification owns selected evidence; portable and broader domains remain open.

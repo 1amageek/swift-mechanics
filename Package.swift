@@ -10,6 +10,7 @@ let package = Package(
         .executable(name: "mechanics-compound-queries-verification", targets: ["CompoundQueriesPublicVerification"]),
         .executable(name: "mechanics-triangle-meshes-verification", targets: ["TriangleMeshesPublicVerification"]),
         .executable(name: "mechanics-heightfields-verification", targets: ["HeightfieldsPublicVerification"]),
+        .executable(name: "mechanics-asset-resolution-verification", targets: ["AssetResolutionPublicVerification"]),
         .executable(name: "mechanics-particle-flows-verification", targets: ["ParticleFlowsPublicVerification"]),
         .executable(name: "mechanics-spatial-projection-verification", targets: ["SpatialProjectionPublicVerification"]),
         .executable(name: "modal-reduction-verification", targets: ["ModalReductionQualification"]),
@@ -50,6 +51,7 @@ let package = Package(
                     "Physics/Flexible/SpatialBeams/DESIGN.md",
                     "Physics/Collision/CompoundQueries/DESIGN.md",
                     "Physics/Collision/TriangleMeshes/DESIGN.md",
+                    "Exchange/AssetResolution/DESIGN.md",
                     "Physics/Fluids/ParticleFlows/DESIGN.md",
                 "Physics/Flexible/ModalReduction/DESIGN.md",
                     "Analysis/Derivatives/InertialParameters/DESIGN.md",
@@ -446,6 +448,12 @@ let package = Package(
                 exclude: ["DESIGN.md", "SDFQualificationTests.swift", "SDFQualificationCases.swift", "SDFQualificationError.swift", "SDFQualificationFixtures.swift"], sources: ["SDFQualification.swift"]),
         .testTarget(name: "MechanicsSDFTests", dependencies: ["SwiftMechanics", "SDFQualificationSupport"], path: "Verification/SDFQualification",
                 exclude: ["DESIGN.md", "SDFQualification.swift", "SDFQualificationCases.swift", "SDFQualificationError.swift", "SDFQualificationFixtures.swift"], sources: ["SDFQualificationTests.swift"]),
+        .target(name: "AssetResolutionQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/AssetResolutionQualification",
+                exclude: ["DESIGN.md", "AssetResolutionQualification.swift", "AssetResolutionQualificationTests.swift"], sources: ["AssetResolutionQualificationCases.swift", "AssetResolutionQualificationError.swift", "AssetResolutionQualificationFixture.swift"]),
+        .executableTarget(name: "AssetResolutionPublicVerification", dependencies: ["AssetResolutionQualificationSupport"], path: "Verification/AssetResolutionQualification",
+                exclude: ["DESIGN.md", "AssetResolutionQualificationCases.swift", "AssetResolutionQualificationError.swift", "AssetResolutionQualificationFixture.swift", "AssetResolutionQualificationTests.swift"], sources: ["AssetResolutionQualification.swift"]),
+        .testTarget(name: "MechanicsAssetResolutionTests", dependencies: ["SwiftMechanics", "AssetResolutionQualificationSupport"], path: "Verification/AssetResolutionQualification",
+                exclude: ["DESIGN.md", "AssetResolutionQualification.swift", "AssetResolutionQualificationCases.swift", "AssetResolutionQualificationError.swift", "AssetResolutionQualificationFixture.swift"], sources: ["AssetResolutionQualificationTests.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )
