@@ -1,3 +1,3 @@
 # Progress
-- [x] H Six selected hydraulic services reviewed and canonical Native41 behavioral tests in7 concurrent suites passed; original pressure/flow/storage/loss and actual mechanical port coupling confirmed. Source commit a50394e. `depends:none` `parallel:none`
-- [x] H.Int Main merge ea0b5e9 preserves pending shared files/full210 plan;21 source/test Swift hashes and23 original supplier hashes match, actual package target and ancestry verified with no staged changes. Full circuit/Runtime, cavitation/absolute thermodynamics, portable/minimum-platform/performance remain unqualified. `depends:H` `parallel:none`
+- [x] E Six selected energy transducers reviewed and canonical Native40 behavioral tests in seven concurrent suites passed; original energies/reciprocal tangents/power and actual mechanical port confirmed;19 Swift files frozen,23 suppliers unchanged. Source commit owns this item. `depends:none` `parallel:none`
+- [ ] E.Int Commit and merge frozen six-model slice preserving main pending edits/full210 plan; confirm registration, source/supplier hashes and ancestry. `depends:E` `parallel:none`
