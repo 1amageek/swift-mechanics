@@ -7,6 +7,7 @@ let package = Package(
     products: [
         .executable(name: "mechanics-spatial-beams-verification", targets: ["SpatialBeamsPublicVerification"]),
         .executable(name: "mechanics-hydroelastic-verification", targets: ["HydroelasticPublicVerification"]),
+        .executable(name: "mechanics-compound-queries-verification", targets: ["CompoundQueriesPublicVerification"]),
         .executable(name: "mechanics-particle-flows-verification", targets: ["ParticleFlowsPublicVerification"]),
         .executable(name: "mechanics-spatial-projection-verification", targets: ["SpatialProjectionPublicVerification"]),
         .executable(name: "modal-reduction-verification", targets: ["ModalReductionQualification"]),
@@ -22,6 +23,12 @@ let package = Package(
     ],
     traits: [.trait(name: "EmbeddedUnicode", description: "Link matching Embedded Swift SDK Unicode data tables.")],
     targets: [
+        .target(name: "CompoundQueriesQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/CompoundQueriesQualification",
+                    exclude: ["DESIGN.md", "CompoundQueriesQualification.swift", "CompoundQueriesQualificationTests.swift"], sources: ["CompoundQueriesQualificationCases.swift", "CompoundQueriesQualificationError.swift", "CompoundQueriesQualificationFixture.swift", "CompoundQueriesQualificationUnexpectedFilter.swift"]),
+        .executableTarget(name: "CompoundQueriesPublicVerification", dependencies: ["CompoundQueriesQualificationSupport"], path: "Verification/CompoundQueriesQualification",
+                    exclude: ["DESIGN.md", "CompoundQueriesQualificationCases.swift", "CompoundQueriesQualificationError.swift", "CompoundQueriesQualificationFixture.swift", "CompoundQueriesQualificationUnexpectedFilter.swift", "CompoundQueriesQualificationTests.swift"], sources: ["CompoundQueriesQualification.swift"]),
+        .testTarget(name: "MechanicsCompoundQueriesTests", dependencies: ["SwiftMechanics", "CompoundQueriesQualificationSupport"], path: "Verification/CompoundQueriesQualification",
+                    exclude: ["DESIGN.md", "CompoundQueriesQualificationCases.swift", "CompoundQueriesQualificationError.swift", "CompoundQueriesQualificationFixture.swift", "CompoundQueriesQualificationUnexpectedFilter.swift", "CompoundQueriesQualification.swift"], sources: ["CompoundQueriesQualificationTests.swift"]),
         .target(name: "ModalReductionQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/ModalReductionQualification", exclude: ["DESIGN.md", "ModalReductionQualification.swift", "ModalReductionQualificationTests.swift"], sources: ["ModalReductionCancellationCounter.swift", "ModalReductionQualificationCase.swift", "ModalReductionQualificationCases.swift", "ModalReductionQualificationError.swift", "ModalReductionQualificationFixtures.swift", "ModalReductionQualifying.swift"]),
         .executableTarget(name: "ModalReductionQualification", dependencies: ["SwiftMechanics", "ModalReductionQualificationSupport"], path: "Verification/ModalReductionQualification", exclude: ["DESIGN.md", "ModalReductionQualificationTests.swift", "ModalReductionCancellationCounter.swift", "ModalReductionQualificationCase.swift", "ModalReductionQualificationCases.swift", "ModalReductionQualificationError.swift", "ModalReductionQualificationFixtures.swift", "ModalReductionQualifying.swift"], sources: ["ModalReductionQualification.swift"]),
         .testTarget(name: "ModalReductionQualificationTests", dependencies: ["SwiftMechanics", "ModalReductionQualificationSupport"], path: "Verification/ModalReductionQualification", exclude: ["DESIGN.md", "ModalReductionQualification.swift", "ModalReductionCancellationCounter.swift", "ModalReductionQualificationCase.swift", "ModalReductionQualificationCases.swift", "ModalReductionQualificationError.swift", "ModalReductionQualificationFixtures.swift", "ModalReductionQualifying.swift"], sources: ["ModalReductionQualificationTests.swift"]),
@@ -35,6 +42,7 @@ let package = Package(
         .target(name: "SwiftMechanics",
                 exclude: [
                     "Physics/Flexible/SpatialBeams/DESIGN.md",
+                    "Physics/Collision/CompoundQueries/DESIGN.md",
                     "Physics/Fluids/ParticleFlows/DESIGN.md",
                 "Physics/Flexible/ModalReduction/DESIGN.md",
                     "Analysis/Derivatives/InertialParameters/DESIGN.md",

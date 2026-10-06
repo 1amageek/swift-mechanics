@@ -611,3 +611,6 @@ AF37.2 registers SpatialBeams25 with original physical assembly/response/field, 
 
 
 AF37.5 registers Hydroelastic17 and final eight fixtures after seven Native tests/six public cases on frozen2270. Original caller-calibrated Tet4 pressure, clipping, nodal/wrench/virtual-power and work oracles remain unchanged. Only fixture availability admission changed. Full continuum pressure/evolution, whole-mesh discovery and portable qualification remain open.
+
+
+AF37.7 registers CompoundQueries10 and original fixture6 after Native8/public7 on immutable2270. Identified child geometry/frame/filter/fidelity/order and exact original work/failure oracles remain unchanged. Custom-filter failure accounting retains its immediate incomplete marker and typed refusal; union surfaces, contact response and portable remain open.
