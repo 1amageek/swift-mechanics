@@ -641,3 +641,6 @@ AF38.2 registers Discrete cable force, tangent and evolution after original Nati
 
 
 AF38.3 registers Implicit linear and nonlinear integration after original Native8/public7 on fresh2387. Production laws and original physical/tolerance/work/refusal oracles preserved; causal fixture admission/calibration repairs retain independent intended inputs and historical failures where present. Receipt9f2a92e7d04ec64895f4da3dc26f63dfdbb40ef42d6bfc960bc22dbaf8647af8. Portable and broader domains remain independently open.
+
+
+AF38.5 registers Selected six-body wheeled assemblies after original Native8/public7 on fresh2387. Production laws and original physical/tolerance/work/refusal oracles preserved; causal fixture admission/calibration repairs retain independent intended inputs and historical failures where present. Receipt41345b0816a1e81eeeac5996e46b0d7ea7f231ef14cbeb65bcbe1023ea8129f4. Portable and broader domains remain independently open.

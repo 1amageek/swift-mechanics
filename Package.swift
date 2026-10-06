@@ -9,6 +9,8 @@ let package = Package(
         .executable(name: "mechanics-shells-verification", targets: ["ShellsPublicVerification"]),
         .executable(name: "mechanics-discrete-cables-verification", targets: ["DiscreteCablesPublicVerification"]),
         .executable(name: "mechanics-implicit-methods-verification", targets: ["ImplicitMethodsPublicVerification"]),
+        .executable(name: "mechanics-wheeled-assemblies-verification", targets: ["WheeledAssembliesPublicVerification"]),
+
         .executable(name: "mechanics-spatial-beams-verification", targets: ["SpatialBeamsPublicVerification"]),
         .executable(name: "mechanics-hydroelastic-verification", targets: ["HydroelasticPublicVerification"]),
         .executable(name: "mechanics-compound-queries-verification", targets: ["CompoundQueriesPublicVerification"]),
@@ -47,6 +49,10 @@ let package = Package(
                     exclude: ["DESIGN.md", "ImplicitMethodsQualificationCases.swift", "ImplicitMethodsQualificationError.swift", "ImplicitMethodsQualificationFixtures.swift", "ImplicitMethodsQualificationOracle.swift", "ImplicitMethodsQualificationTests.swift", "ImplicitQualificationContributors.swift", "ImplicitQualificationFault.swift", "ImplicitQualificationODE.swift", "ImplicitQualificationPhysics.swift", "ImplicitQualificationStructural.swift"], sources: ["ImplicitMethodsQualification.swift"]),
         .testTarget(name: "MechanicsImplicitMethodsTests", dependencies: ["SwiftMechanics", "ImplicitMethodsQualificationSupport"], path: "Verification/ImplicitMethodsQualification",
                     exclude: ["DESIGN.md", "ImplicitMethodsQualification.swift", "ImplicitMethodsQualificationCases.swift", "ImplicitMethodsQualificationError.swift", "ImplicitMethodsQualificationFixtures.swift", "ImplicitMethodsQualificationOracle.swift", "ImplicitQualificationContributors.swift", "ImplicitQualificationFault.swift", "ImplicitQualificationODE.swift", "ImplicitQualificationPhysics.swift", "ImplicitQualificationStructural.swift"], sources: ["ImplicitMethodsQualificationTests.swift"]),
+        .target(name: "WheeledAssembliesQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/WheeledAssembliesQualification", exclude: ["DESIGN.md", "WheeledAssembliesQualificationRunner.swift", "WheeledAssembliesQualificationTests.swift"], sources: ["WheeledAssembliesQualificationCases.swift", "WheeledAssembliesQualificationError.swift", "WheeledAssembliesQualificationFixture.swift", "WheeledAssembliesQualificationNativeCases.swift", "WheeledAssembliesQualificationUnavailableDynamics.swift"]),
+        .executableTarget(name: "WheeledAssembliesPublicVerification", dependencies: ["WheeledAssembliesQualificationSupport"], path: "Verification/WheeledAssembliesQualification", exclude: ["DESIGN.md", "WheeledAssembliesQualificationTests.swift", "WheeledAssembliesQualificationCases.swift", "WheeledAssembliesQualificationError.swift", "WheeledAssembliesQualificationFixture.swift", "WheeledAssembliesQualificationNativeCases.swift", "WheeledAssembliesQualificationUnavailableDynamics.swift"], sources: ["WheeledAssembliesQualificationRunner.swift"]),
+        .testTarget(name: "MechanicsWheeledAssembliesTests", dependencies: ["SwiftMechanics", "WheeledAssembliesQualificationSupport"], path: "Verification/WheeledAssembliesQualification", exclude: ["DESIGN.md", "WheeledAssembliesQualificationRunner.swift", "WheeledAssembliesQualificationCases.swift", "WheeledAssembliesQualificationError.swift", "WheeledAssembliesQualificationFixture.swift", "WheeledAssembliesQualificationNativeCases.swift", "WheeledAssembliesQualificationUnavailableDynamics.swift"], sources: ["WheeledAssembliesQualificationTests.swift"]),
+
         .target(name: "CompoundQueriesQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/CompoundQueriesQualification",
                     exclude: ["DESIGN.md", "CompoundQueriesQualification.swift", "CompoundQueriesQualificationTests.swift"], sources: ["CompoundQueriesQualificationCases.swift", "CompoundQueriesQualificationError.swift", "CompoundQueriesQualificationFixture.swift", "CompoundQueriesQualificationUnexpectedFilter.swift"]),
         .executableTarget(name: "CompoundQueriesPublicVerification", dependencies: ["CompoundQueriesQualificationSupport"], path: "Verification/CompoundQueriesQualification",
@@ -91,6 +97,7 @@ let package = Package(
                     "Physics/Constraints/RollingRelations/DESIGN.md",
                     "Physics/Vehicles/TireLaws/DESIGN.md",
                     "Physics/Vehicles/DESIGN.md",
+                    "Physics/Vehicles/WheeledAssemblies/DESIGN.md",
                     "Execution/Control/TaskSpace/DESIGN.md",
                     "Exchange/URDF/DESIGN.md",
                     "Physics/Loads/AffineRigidGravity/DESIGN.md",

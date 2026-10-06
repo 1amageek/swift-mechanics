@@ -35,3 +35,8 @@ Invalid physical inputs, missing calibration, outside-domain conditions, stale s
 
 ## Verification and Change Impact
 Law-specific independent curve/energy/frame/failure evidence belongs to the child and is linked there. Vehicle assemblies, coupling and actual target profiles have separate proofs and cannot be inferred from law source availability. Changes to force/calibration contracts invalidate directly dependent assemblies.
+
+
+## Selected WheeledAssemblies Native composition
+
+Child [WheeledAssemblies](WheeledAssemblies/DESIGN.md) owns selected six-body wheeled assemblies. Its original Native8/public7 behavioral evidence is qualified against fresh immutable2387, with original source/physical/work acceptance and typed failures preserved. The child and qualification owner retain exact evidence and remaining portable/domain obligations.
