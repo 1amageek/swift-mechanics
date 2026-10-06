@@ -53,3 +53,6 @@ Child: [Motor](ExactMotor/DESIGN.md). Contract and qualification belong to that 
 
 ### Additional hydraulic circuit elements
 Child: [HydraulicElements](HydraulicElements/DESIGN.md). Owns six selected lumped fluid circuit/linearized double-chamber services with original pressure-flow/storage/loss contracts. Existing Runtime and accepted evolution scope remains unchanged; exact qualification belongs to the child.
+
+### Additional energy transducers
+Child: [EnergyTransducers](EnergyTransducers/DESIGN.md). Owns six selected canonical flux/charge constitutive laws, reciprocal tangent and original field/storage/mechanical/loss powers. Existing electrical integration, Runtime and accepted mechanism scope is unchanged.
