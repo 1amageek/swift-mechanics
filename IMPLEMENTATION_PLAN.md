@@ -602,3 +602,6 @@ IM.AF32.8: [LinearEstimation](Sources/SwiftMechanics/Execution/Control/LinearEst
 
 
 IM.AF33.1: [PoseIK](Sources/SwiftMechanics/Analysis/Planning/PoseIK/DESIGN.md) is registered after original8 Native tests/seven public cases on immutable2124. Actual compiled-tree task residuals, J/H differences, original loops, rank, bounds, work and cancellation are preserved. Fixture type signatures now match real supplier errors. Collision products, chart/branch extensions and portable execution remain open.
+
+
+Selected NonlinearEstimation Native registration consumes the repaired matching2124 producer. Exact binary64 product comparison rejects indefinite subnormal process covariance without changing physical equations, tolerances or the conservative admission charge. NonlinearEstimationQualification owns focused PSD and original eight tests/seven public cases; ordinary/Embedded and wider CO-006 remain open.

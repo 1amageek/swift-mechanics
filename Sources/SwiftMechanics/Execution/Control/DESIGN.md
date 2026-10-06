@@ -9,6 +9,7 @@ Compose admitted feedback, controller sampling, actual mechanical evolution and 
 ## Related Designs
 | Design | Relationship | Contract Used | Summary | Cautions |
 |---|---|---|---|---|
+| [NonlinearEstimation](NonlinearEstimation/DESIGN.md) | child | Source-bound nonlinear prediction, Joseph update and exact covariance admission | Selected Native8/public7 and strict PSD proof on fresh2124 | Portable, replay and accepted Runtime association remain open |
 | [LinearEstimation](LinearEstimation/DESIGN.md) | child | Source-bound fixed-clock Kalman prediction, Joseph update and continuation | Selected Native8/public7 plus Task on immutable2124 | Actual Support/Public13, Testing14; portable and accepted Runtime association remain open |
 | [Execution](../DESIGN.md) | parent | Trial ownership and publication | Responsibility placement | Preserve accepted-state authority |
 | [Ports](Ports/DESIGN.md) | child | Identified dimensioned feedback | Input admission | Raw feedback is not a session publication witness |

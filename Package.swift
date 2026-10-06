@@ -10,6 +10,7 @@ let package = Package(
         .executable(name: "modal-reduction-verification", targets: ["ModalReductionQualification"]),
         .executable(name: "mechanics-inertial-parameters-verification", targets: ["InertialParametersPublicVerification"]),
         .executable(name: "mechanics-linear-estimation-verification", targets: ["LinearEstimationPublicVerification"]),
+        .executable(name: "mechanics-nonlinear-estimation-verification", targets: ["NonlinearEstimationPublicVerification"]),
         .executable(name: "mechanics-structural-authoring-verification", targets: ["StructuralAuthoringPublicVerification"]),
         .executable(name: "mechanics-tire-laws-verification", targets: ["TireLawsPublicVerification"]),
         .executable(name: "mechanics-vehicle-laws-verification", targets: ["VehicleLawsPublicVerification"]),
@@ -35,6 +36,7 @@ let package = Package(
                 "Physics/Flexible/ModalReduction/DESIGN.md",
                     "Analysis/Derivatives/InertialParameters/DESIGN.md",
                     "Execution/Control/LinearEstimation/DESIGN.md",
+                    "Execution/Control/NonlinearEstimation/DESIGN.md",
                     "Physics/Vehicles/TerrainLaws/DESIGN.md",
                     "Analysis/Derivatives/GeometryParameters/DESIGN.md",
                     "Physics/Flexible/FieldOutputs/DESIGN.md",
@@ -399,6 +401,12 @@ let package = Package(
                     exclude: ["DESIGN.md", "GeometryParametersQualification.swift"]),
         .testTarget(name: "MechanicsPoseIKTests", dependencies: ["SwiftMechanics"], path: "Verification/PoseIKQualification",
                     exclude: ["DESIGN.md", "PoseIKQualification.swift"]),
+        .target(name: "NonlinearEstimationQualificationSupport", dependencies: ["SwiftMechanics"], path: "Verification/NonlinearEstimationQualification",
+                exclude: ["DESIGN.md", "NonlinearEstimationQualification.swift", "NonlinearEstimationQualificationTests.swift"], sources: ["NonlinearEstimationQualificationCases.swift", "NonlinearEstimationQualificationError.swift", "NonlinearEstimationQualificationFixtures.swift", "NonlinearEstimationQualificationOracle.swift"]),
+        .executableTarget(name: "NonlinearEstimationPublicVerification", dependencies: ["NonlinearEstimationQualificationSupport"], path: "Verification/NonlinearEstimationQualification",
+                exclude: ["DESIGN.md", "NonlinearEstimationQualificationCases.swift", "NonlinearEstimationQualificationError.swift", "NonlinearEstimationQualificationFixtures.swift", "NonlinearEstimationQualificationOracle.swift", "NonlinearEstimationQualificationTests.swift"], sources: ["NonlinearEstimationQualification.swift"]),
+        .testTarget(name: "MechanicsNonlinearEstimationTests", dependencies: ["SwiftMechanics", "NonlinearEstimationQualificationSupport"], path: "Verification/NonlinearEstimationQualification",
+                exclude: ["DESIGN.md", "NonlinearEstimationQualification.swift", "NonlinearEstimationQualificationCases.swift", "NonlinearEstimationQualificationError.swift", "NonlinearEstimationQualificationFixtures.swift", "NonlinearEstimationQualificationOracle.swift"], sources: ["NonlinearEstimationQualificationTests.swift"]),
     ],
     swiftLanguageModes: [.v6]
 )
