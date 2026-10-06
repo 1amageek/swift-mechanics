@@ -638,3 +638,6 @@ AF38.1 registers Flat-Q4 Mindlin/MITC4 mechanics after original Native7/public6 
 
 
 AF38.2 registers Discrete cable force, tangent and evolution after original Native10/public9 on fresh2387. Production laws and original physical/tolerance/work/refusal oracles preserved; causal fixture admission/calibration repairs retain independent intended inputs and historical failures where present. Receiptfb99c04c35b6333440c10ac1baa2f618d933def70deaffdf06cd8a719a9ff358. Portable and broader domains remain independently open.
+
+
+AF38.3 registers Implicit linear and nonlinear integration after original Native8/public7 on fresh2387. Production laws and original physical/tolerance/work/refusal oracles preserved; causal fixture admission/calibration repairs retain independent intended inputs and historical failures where present. Receipt9f2a92e7d04ec64895f4da3dc26f63dfdbb40ef42d6bfc960bc22dbaf8647af8. Portable and broader domains remain independently open.
